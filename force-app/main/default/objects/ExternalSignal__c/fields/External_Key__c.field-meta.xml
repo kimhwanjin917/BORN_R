@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_Key__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>DART 공시의 자연키(corp_code + &apos;_&apos; + rcept_no). 외부 시스템(DART) 기준 중복 없이 upsert 하기 위한 External ID.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>DART 기업코드와 공시 접수번호를 결합한 고유 키입니다. 동일 공시의 중복 적재를 방지합니다.</inlineHelpText>
+    <label>외부 키</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

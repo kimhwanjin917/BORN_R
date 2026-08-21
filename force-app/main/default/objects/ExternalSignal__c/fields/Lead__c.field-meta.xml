@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>발굴 리드</label>
+    <description>DART corp_code(Assigned_Company_Code__c)가 일치하는 발굴 리드(Lead). 공시 시그널 수집 시 corp_code로 매칭되는 Lead가 있으면 이 룩업을 채워 아직 Account로 전환되지 않은 발굴 대상과 외부 영업신호를 연결한다.</description>
+    <inlineHelpText>DART 기업 코드가 일치하는 발굴 리드가 자동 연결됩니다. 매칭되는 리드가 없으면 비워집니다.</inlineHelpText>
+    <referenceTo>Lead</referenceTo>
+    <relationshipLabel>외부 시그널</relationshipLabel>
+    <relationshipName>External_Signals</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

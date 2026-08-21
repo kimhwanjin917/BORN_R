@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Business_Registration_Number__c</fullName>
+    <label>사업자등록번호</label>
+    <description>발굴 단계 Lead의 업무 식별자. 잠재 고객사를 식별하는 사업자등록번호(하이픈 제외 10자리, 여유분 포함 12자)로, 중복 등록을 방지하고 외부 시스템 데이터 적재 시 매칭 키로 사용한다.</description>
+    <inlineHelpText>하이픈 없이 숫자만 입력하세요 (예: 1234567890). 사업자등록번호는 Lead당 고유해야 합니다.</inlineHelpText>
+    <type>Text</type>
+    <length>12</length>
+    <unique>true</unique>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+</CustomField>

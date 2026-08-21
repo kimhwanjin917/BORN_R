@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Signal_Type__c</fullName>
+    <label>시그널 유형</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>뉴스</fullName>
+                <default>false</default>
+                <label>뉴스</label>
+            </value>
+            <value>
+                <fullName>공시</fullName>
+                <default>false</default>
+                <label>공시</label>
+            </value>
+            <value>
+                <fullName>수주</fullName>
+                <default>false</default>
+                <label>수주</label>
+            </value>
+            <value>
+                <fullName>기타</fullName>
+                <default>false</default>
+                <label>기타</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
