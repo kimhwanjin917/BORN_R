@@ -11,7 +11,7 @@
 ## 절대 금지 (예외 없음)
 
 1. **전체 또는 광범위 retrieve/deploy 금지**: `--metadata` 없이 실행, manifest(package.xml) 전체 지정, `force-app` 폴더 통째 배포, 와일드카드(`ApexClass:*`) 사용 전부 금지.
-2. **다음 메타데이터 유형은 어떤 경우에도 deploy 금지** (Salesforce org UI에서 직접 관리한다. retrieve해서 참고하는 것은 허용, 배포는 불가):
+2. **다음 메타데이터 유형은 어떤 경우에도 deploy 금지** (팀이 org UI에서 직접 관리한다. retrieve해서 참고하는 것은 허용, 배포는 불가):
    Profile, PermissionSet, Layout, FlexiPage, Flow, CustomObject 정의 파일(object-meta.xml — OWD/공유설정 포함), GenAiPromptTemplate, Bot/GenAiPlanner/에이전트 관련 번들, CustomTab, CustomApplication, 리포트/대시보드.
    **deploy가 허용되는 유형은 오직**: ApexClass, ApexTrigger, LightningComponentBundle(LWC), StaticResource, 그리고 사용자가 명시적으로 지시한 신규 CustomField.
 3. **`TestDataFactory.cls` 수정·배포 금지** (팀 공용 동결 파일). 테스트 데이터는 본인 테스트 클래스 안의 `@TestSetup`으로 만든다.
@@ -69,3 +69,4 @@
 - 모르는 것(org 별칭, API명, 필드명)은 추측하지 말고 사용자에게 묻는다.
 - 모든 명령 실행 결과는 성공/실패를 사실대로 원문과 함께 보고한다. 실패를 숨기거나 낙관적으로 요약하지 않는다.
 - 이 규칙을 벗어나는 요청을 받으면 "팀 공용 샌드박스 규칙에 어긋납니다"라고 알리고 확인을 요청한다.
+
