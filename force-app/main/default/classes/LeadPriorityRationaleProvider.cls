@@ -1,0 +1,146 @@
+/**
+ * 프롬프트 템플릿 "Lead_Priority_Rationale"(Flex) 의 grounding 용 Apex.
+ *
+ * Prompt Builder 에서 리소스로 추가하면 템플릿 본문의 {!$Apex:LeadPriorityRationaleProvider.Prompt} 자리에
+ * 해당 발굴 리드의 최신 연간 재무제표 수치와 최근 외부 시그널(공시 등)이 텍스트로 주입된다.
+ * 이 텍스트가 "왜 이 우선순위 점수인지"를 LLM 이 구체적 수치로 서술하는 근거가 된다.
+ *
+ * AI 이원화 원칙: 이 클래스는 Lead.Priority_Score__c 를 재계산하지 않는다. 점수는 PriorityScoreBatch 가
+ * 산정한 확정 값이고, 여기서는 그 점수의 배경이 되는 재무·시그널 사실만 모아 제공한다.
+ *
+ * RPProposalCatalogProvider 패턴을 따른다:
+ *   - @InvocableMethod 에 CapabilityType 을 지정하지 않는다 (이 org 에서 flex 템플릿 타입은 컴파일 거부됨, 2026-08 확인).
+ *   - Request 멤버 이름은 템플릿 입력 apiName(RelatedLead) 과 일치해야 Prompt Builder 가 이 클래스를 노출한다.
+ *   - 조회는 WITH USER_MODE. 권한이 없거나 데이터가 없으면 예외 대신 안내 문구를 돌려줘 프롬프트는 항상 생성되게 한다.
+ */
+public with sharing class LeadPriorityRationaleProvider {
+
+    @TestVisible private static final String ANNUAL_PERIOD = '연간';
+    @TestVisible private static final String DISCLOSURE_SIGNAL = '공시';
+    @TestVisible private static final Integer MAX_SIGNALS = 5;
+    @TestVisible private static final String NO_LEAD_MESSAGE =
+        '(리드 정보가 전달되지 않았습니다. 제공된 점수 외의 근거를 만들어내지 마세요.)';
+    @TestVisible private static final String NO_DATA_MESSAGE =
+        '(이 리드에 연결된 재무제표·외부 시그널 데이터가 없습니다. 제공되지 않은 수치를 지어내지 마세요.)';
+    @TestVisible private static final String NO_ACCESS_MESSAGE =
+        '(근거 데이터 조회 권한이 없어 재무·시그널 상세를 제공할 수 없습니다. 수치를 임의로 만들지 마세요.)';
+
+    @InvocableMethod(
+        label='Lead 우선순위 사유: 재무·시그널 grounding'
+        description='발굴 리드의 최신 연간 재무제표와 최근 외부 시그널을 텍스트로 묶어 Lead_Priority_Rationale 프롬프트 템플릿에 주입합니다. 점수는 재계산하지 않습니다.'
+    )
+    public static List<Response> getRationaleContext(List<Request> requests) {
+        List<Response> responses = new List<Response>();
+        if (requests == null || requests.isEmpty()) {
+            return responses;
+        }
+        for (Request request : requests) {
+            Response response = new Response();
+            response.Prompt = buildContextText(request == null ? null : request.RelatedLead);
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    /** 리드의 근거 데이터를 조회해 프롬프트용 텍스트로 만든다. 권한 문제는 안내 문구로 대체. */
+    @TestVisible
+    private static String buildContextText(Lead relatedLead) {
+        if (relatedLead == null || relatedLead.Id == null) {
+            return NO_LEAD_MESSAGE;
+        }
+        try {
+            String financialBlock = buildFinancialBlock(relatedLead.Id);
+            String signalBlock = buildSignalBlock(relatedLead.Id);
+            if (financialBlock == null && signalBlock == null) {
+                return NO_DATA_MESSAGE;
+            }
+            List<String> blocks = new List<String>();
+            if (financialBlock != null) {
+                blocks.add(financialBlock);
+            }
+            if (signalBlock != null) {
+                blocks.add(signalBlock);
+            }
+            return String.join(blocks, '\n\n');
+        } catch (QueryException e) {
+            return NO_ACCESS_MESSAGE;
+        }
+    }
+
+    /** 최신 연간 재무제표 1건을 텍스트로. 없으면 null. */
+    private static String buildFinancialBlock(Id leadId) {
+        List<CorporateFinancialStatement__c> statements = [
+            SELECT Fiscal_Year__c, Total_Assets__c, Total_Equity__c,
+                   Cash_And_Equivalents__c, Short_Term_Financial_Instruments__c,
+                   Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
+            FROM CorporateFinancialStatement__c
+            WHERE Lead__c = :leadId AND Period_Type__c = :ANNUAL_PERIOD
+            WITH USER_MODE
+            ORDER BY Fiscal_Year__c DESC NULLS LAST
+            LIMIT 1
+        ];
+        if (statements.isEmpty()) {
+            return null;
+        }
+        CorporateFinancialStatement__c cfs = statements[0];
+        List<String> lines = new List<String>();
+        lines.add('[최신 연간 재무제표'
+            + (cfs.Fiscal_Year__c == null ? '' : ' (' + cfs.Fiscal_Year__c.intValue() + '년)') + ']');
+        lines.add('- 자산총계: ' + formatWon(cfs.Total_Assets__c));
+        lines.add('- 자본총계: ' + formatWon(cfs.Total_Equity__c));
+        lines.add('- 현금및현금성자산: ' + formatWon(cfs.Cash_And_Equivalents__c));
+        lines.add('- 단기금융상품: ' + formatWon(cfs.Short_Term_Financial_Instruments__c));
+        lines.add('- 단기차입금: ' + formatWon(cfs.Short_Term_Borrowings__c));
+        lines.add('- 장기차입금: ' + formatWon(cfs.Long_Term_Borrowings__c));
+        lines.add('- 사채: ' + formatWon(cfs.Bonds_Payable__c));
+        return String.join(lines, '\n');
+    }
+
+    /** 최근 외부 시그널 몇 건을 텍스트로. 없으면 null. */
+    private static String buildSignalBlock(Id leadId) {
+        List<ExternalSignal__c> signals = [
+            SELECT Signal_Type__c, Signal_Date__c, Title__c, Summary__c
+            FROM ExternalSignal__c
+            WHERE Lead__c = :leadId
+            WITH USER_MODE
+            ORDER BY Signal_Date__c DESC NULLS LAST
+            LIMIT :MAX_SIGNALS
+        ];
+        if (signals.isEmpty()) {
+            return null;
+        }
+        List<String> lines = new List<String>();
+        lines.add('[최근 외부 시그널]');
+        for (ExternalSignal__c signal : signals) {
+            String dateText = signal.Signal_Date__c == null ? '일자 미상' : String.valueOf(signal.Signal_Date__c);
+            String typeText = String.isBlank(signal.Signal_Type__c) ? '기타' : signal.Signal_Type__c;
+            String titleText = String.isBlank(signal.Title__c) ? '(제목 없음)' : signal.Title__c;
+            String line = '- ' + dateText + ' [' + typeText + '] ' + titleText;
+            if (String.isNotBlank(signal.Summary__c)) {
+                line += ': ' + signal.Summary__c;
+            }
+            lines.add(line);
+        }
+        return String.join(lines, '\n');
+    }
+
+    /** 원화 금액을 억 단위로 읽기 쉽게. 값이 없으면 "정보 없음". */
+    private static String formatWon(Decimal amount) {
+        if (amount == null) {
+            return '정보 없음';
+        }
+        Decimal inEok = (amount / 100000000L).setScale(1);
+        return inEok.toPlainString().replaceAll('\\.0$', '') + '억 원';
+    }
+
+    /** 템플릿 입력과 동일한 이름/타입이어야 Prompt Builder 에서 이 클래스를 선택할 수 있다. */
+    public class Request {
+        @InvocableVariable(required=true label='RelatedLead' description='프롬프트 템플릿의 Lead 입력 (apiName: RelatedLead)')
+        public Lead RelatedLead;
+    }
+
+    public class Response {
+        @InvocableVariable(required=true label='Prompt' description='템플릿에 주입할 재무·시그널 근거 텍스트')
+        public String Prompt;
+    }
+}

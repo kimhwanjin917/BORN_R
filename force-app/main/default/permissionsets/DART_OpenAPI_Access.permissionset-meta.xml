@@ -17,6 +17,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Bonds_Payable__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>CorporateFinancialStatement__c.Cash_And_Equivalents__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -32,12 +37,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Fiscal_Year__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>CorporateFinancialStatement__c.Lead__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CorporateFinancialStatement__c.Fiscal_Year__c</field>
+        <field>CorporateFinancialStatement__c.Long_Term_Borrowings__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -57,6 +67,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Short_Term_Borrowings__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Short_Term_Financial_Instruments__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>CorporateFinancialStatement__c.Total_Assets__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -67,17 +87,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Total_Equity__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>ExternalSignal__c.Account__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>ExternalSignal__c.Amount__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Lead.Assigned_Company_Code__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -128,6 +148,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>ExternalSignal__c.Title__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Lead.Assigned_Company_Code__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>

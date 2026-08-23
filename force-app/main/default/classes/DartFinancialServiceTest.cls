@@ -23,13 +23,80 @@ private class DartFinancialServiceTest {
                 'status' => '000',
                 'message' => '정상',
                 'list' => new List<Map<String, Object>>{
-                    new Map<String, Object>{ 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '1,000,000' },
-                    new Map<String, Object>{ 'account_nm' => '자산총계', 'thstrm_amount' => '5,000,000' },
-                    new Map<String, Object>{ 'account_nm' => '부채총계', 'thstrm_amount' => '2,000,000' },
-                    new Map<String, Object>{ 'account_nm' => '매출액', 'thstrm_amount' => '8,000,000' },
-                    new Map<String, Object>{ 'account_nm' => '영업이익', 'thstrm_amount' => '1,200,000' }
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '1,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '자산총계', 'thstrm_amount' => '5,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '부채총계', 'thstrm_amount' => '2,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_nm' => '매출액', 'thstrm_amount' => '8,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_nm' => '영업이익', 'thstrm_amount' => '1,200,000' },
+                    // 표준계정코드(account_id) 기반 신규 필드 — 재무상태표(BS)
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_ShorttermDepositsNotClassifiedAsCashEquivalents', 'account_nm' => '단기금융상품', 'thstrm_amount' => '500,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_Equity', 'account_nm' => '자본총계', 'thstrm_amount' => '3,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_ShorttermBorrowings', 'account_nm' => '단기차입금', 'thstrm_amount' => '400,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_CurrentLoansReceivedAndCurrentPortionOfNoncurrentLoansReceived', 'account_nm' => '유동성장기차입금', 'thstrm_amount' => '100,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_NoncurrentPortionOfNoncurrentLoansReceived', 'account_nm' => '비유동 장기차입금', 'thstrm_amount' => '600,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_CurrentBondsIssuedAndCurrentPortionOfNoncurrentBondsIssued', 'account_nm' => '유동성사채', 'thstrm_amount' => '200,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_NoncurrentPortionOfNoncurrentBondsIssued', 'account_nm' => '사채', 'thstrm_amount' => '300,000' },
+                    // 자본변동표(SCE)의 자본총계 중복 행 — BS 만 담기므로 무시되어야 한다
+                    new Map<String, Object>{ 'sj_div' => 'SCE', 'account_id' => 'ifrs-full_Equity', 'account_nm' => '자본총계', 'thstrm_amount' => '99,999,999' }
                 }
             });
+        }
+    }
+
+    /**
+     * 단일법인(연결재무제표 미작성)을 흉내내는 mock.
+     * CFS 요청에는 013(데이터 없음), OFS 요청에는 정상(000)을 반환한다.
+     */
+    private class SeparateOnlyMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest request) {
+            HttpResponse response = new HttpResponse();
+            response.setStatusCode(200);
+            if (request.getEndpoint().contains('fs_div=OFS')) {
+                // 무차입 단일법인: 자본총계는 있으나 차입금·사채 표준계정코드가 전혀 없다.
+                response.setBody(JSON.serialize(new Map<String, Object>{
+                    'status' => '000',
+                    'message' => '정상',
+                    'list' => new List<Map<String, Object>>{
+                        new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '3,000,000' },
+                        new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '자산총계', 'thstrm_amount' => '10,000,000' },
+                        new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_Equity', 'account_nm' => '자본총계', 'thstrm_amount' => '7,000,000' }
+                    }
+                }));
+            } else {
+                response.setBody(JSON.serialize(new Map<String, Object>{
+                    'status' => '013',
+                    'message' => '조회된 데이타가 없습니다.'
+                }));
+            }
+            return response;
+        }
+    }
+
+    /**
+     * 차입금 표준계정코드를 쓰지 않는 회사(예: 성우하이텍)를 흉내내는 mock.
+     * 차입금은 리스부채 포함 합산 계정명으로만, 사채는 별도 계정으로 공시한다.
+     */
+    private class NameOnlyBorrowingMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest request) {
+            HttpResponse response = new HttpResponse();
+            response.setStatusCode(200);
+            response.setBody(JSON.serialize(new Map<String, Object>{
+                'status' => '000',
+                'message' => '정상',
+                'list' => new List<Map<String, Object>>{
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '2,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '자산총계', 'thstrm_amount' => '20,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_Equity', 'account_nm' => '자본총계', 'thstrm_amount' => '8,000,000' },
+                    // 차입금: 표준계정코드 없이 계정명으로만. 유동=단기, 비유동=장기로 잡혀야 한다.
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '유동 리스부채를 포함한 유동 차입금 및 비유동차입금의 유동성 대체 부분 합계', 'thstrm_amount' => '1,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '비유동 리스부채를 포함한 총 비유동차입금의 비유동성 부분', 'thstrm_amount' => '700,000' },
+                    // 사채는 별도 계정명으로 공시
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '사채', 'thstrm_amount' => '500,000' },
+                    // 차입금과 사채를 합친 상위 합계 계정 — 이중계상 방지를 위해 무시되어야 한다
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '차입금및사채', 'thstrm_amount' => '9,999,999' }
+                }
+            }));
+            return response;
         }
     }
 
@@ -63,7 +130,9 @@ private class DartFinancialServiceTest {
             CorporateFinancialStatement__c saved = [
                 SELECT External_Key__c, Account__c, Fiscal_Year__c, Period_Type__c,
                        Cash_And_Equivalents__c, Total_Assets__c, Total_Debt__c,
-                       Revenue__c, Operating_Income__c, Cash_Asset_Ratio__c
+                       Revenue__c, Operating_Income__c, Cash_Asset_Ratio__c,
+                       Short_Term_Financial_Instruments__c, Total_Equity__c,
+                       Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
                 FROM CorporateFinancialStatement__c
                 WHERE External_Key__c = :(CORP_CODE + '_' + BUSINESS_YEAR + '_' + REPORT_CODE)
             ];
@@ -76,6 +145,71 @@ private class DartFinancialServiceTest {
             Assert.areEqual(8000000, saved.Revenue__c, '매출액');
             Assert.areEqual(1200000, saved.Operating_Income__c, '영업이익');
             Assert.areEqual(20.00, saved.Cash_Asset_Ratio__c, '현금자산비율 = 1,000,000/5,000,000*100');
+            Assert.areEqual(500000, saved.Short_Term_Financial_Instruments__c, '단기금융상품(표준계정코드)');
+            Assert.areEqual(3000000, saved.Total_Equity__c, '자본총계는 BS 값(3,000,000)이어야 하고 SCE 중복행(99,999,999)은 무시되어야 한다');
+            Assert.areEqual(500000, saved.Short_Term_Borrowings__c, '단기차입금 = 단기차입금 400,000 + 유동성장기차입금 100,000');
+            Assert.areEqual(600000, saved.Long_Term_Borrowings__c, '비유동 장기차입금 600,000');
+            Assert.areEqual(500000, saved.Bonds_Payable__c, '사채 = 유동성사채 200,000 + 비유동사채 300,000');
+        }
+    }
+
+    @isTest
+    static void shouldFallBackToSeparate_WhenConsolidatedHasNoData() {
+        // Given: 연결재무제표(CFS)는 013, 별도재무제표(OFS)는 정상인 단일법인
+        User dartUser = TestDataFactory.createDartUser();
+        DartFinancialService.testCrtfcKey = 'TEST_KEY';
+        Test.setMock(HttpCalloutMock.class, new SeparateOnlyMock());
+
+        // When
+        System.runAs(dartUser) {
+            TestDataFactory.createAccount(CORP_CODE, true);
+            Test.startTest();
+            DartFinancialService.collectFinancials(CORP_CODE, BUSINESS_YEAR, REPORT_CODE);
+            Test.stopTest();
+
+            // Then: CFS 013 후 OFS 로 폴백해 별도재무제표 값이 저장되어야 한다
+            CorporateFinancialStatement__c saved = [
+                SELECT Cash_And_Equivalents__c, Total_Assets__c, Cash_Asset_Ratio__c,
+                       Total_Equity__c, Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
+                FROM CorporateFinancialStatement__c
+                WHERE External_Key__c = :(CORP_CODE + '_' + BUSINESS_YEAR + '_' + REPORT_CODE)
+            ];
+            Assert.areEqual(3000000, saved.Cash_And_Equivalents__c, 'OFS 현금및현금성자산이 저장되어야 한다');
+            Assert.areEqual(10000000, saved.Total_Assets__c, 'OFS 자산총계가 저장되어야 한다');
+            Assert.areEqual(30.00, saved.Cash_Asset_Ratio__c, '현금자산비율 = 3,000,000/10,000,000*100');
+            Assert.areEqual(7000000, saved.Total_Equity__c, 'OFS 자본총계(표준계정코드)가 저장되어야 한다');
+            // 무차입 회사: 차입금·사채 표준계정코드가 없으면 0 이 아니라 null 이어야 한다
+            Assert.isNull(saved.Short_Term_Borrowings__c, '차입금 항목이 없으면 단기차입금은 null');
+            Assert.isNull(saved.Long_Term_Borrowings__c, '차입금 항목이 없으면 장기차입금은 null');
+            Assert.isNull(saved.Bonds_Payable__c, '사채 항목이 없으면 사채는 null');
+        }
+    }
+
+    @isTest
+    static void shouldFallBackToAccountName_WhenNoBorrowingStdCodes() {
+        // Given: 차입금 표준계정코드가 없고 계정명으로만 공시하는 회사
+        User dartUser = TestDataFactory.createDartUser();
+        DartFinancialService.testCrtfcKey = 'TEST_KEY';
+        Test.setMock(HttpCalloutMock.class, new NameOnlyBorrowingMock());
+
+        // When
+        System.runAs(dartUser) {
+            TestDataFactory.createAccount(CORP_CODE, true);
+            Test.startTest();
+            DartFinancialService.collectFinancials(CORP_CODE, BUSINESS_YEAR, REPORT_CODE);
+            Test.stopTest();
+
+            // Then: 계정명 폴백으로 유동=단기, 비유동=장기, 사채가 잡히고 합계 계정은 무시되어야 한다
+            CorporateFinancialStatement__c saved = [
+                SELECT Total_Equity__c, Short_Term_Borrowings__c,
+                       Long_Term_Borrowings__c, Bonds_Payable__c
+                FROM CorporateFinancialStatement__c
+                WHERE External_Key__c = :(CORP_CODE + '_' + BUSINESS_YEAR + '_' + REPORT_CODE)
+            ];
+            Assert.areEqual(8000000, saved.Total_Equity__c, '자본총계는 표준계정코드로 정상 저장');
+            Assert.areEqual(1000000, saved.Short_Term_Borrowings__c, '유동 차입금 계정명 → 단기차입금');
+            Assert.areEqual(700000, saved.Long_Term_Borrowings__c, '비유동 차입금 계정명 → 장기차입금');
+            Assert.areEqual(500000, saved.Bonds_Payable__c, '사채 계정명 → 사채');
         }
     }
 

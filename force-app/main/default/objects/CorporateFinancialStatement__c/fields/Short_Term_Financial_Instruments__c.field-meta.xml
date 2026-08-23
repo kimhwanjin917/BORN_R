@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Short_Term_Financial_Instruments__c</fullName>
+    <label>단기금융상품</label>
+    <description>DART 재무제표의 단기금융상품 금액. 현금자산비율 계산 시 현금및현금성자산과 합산해 RP 운용 여유자금을 산정한다.</description>
+    <inlineHelpText>DART 공시 기준 단기금융상품 금액(원). 현금및현금성자산과 합쳐 현금자산비율을 계산한다.</inlineHelpText>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

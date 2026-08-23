@@ -13,13 +13,29 @@ public with sharing class DartFinancialService {
     // fs_div 파라미터로 연결/별도를 서버에서 필터링해 응답에 한 재무제표 세트만 반환한다.
     private static final String API_PATH = '/api/fnlttSinglAcntAll.json';
     private static final Integer TIMEOUT_MS = 120000;
+    // 연결재무제표(CFS)를 우선 조회하고, 종속회사가 없어 연결재무제표를 작성하지 않는
+    // 단일법인(DART status 013 응답)은 별도재무제표(OFS)로 폴백한다.
+    private static final String FS_DIV_CONSOLIDATED = 'CFS';
+    private static final String FS_DIV_SEPARATE = 'OFS';
+    private static final String STATUS_NO_DATA = '013';
 
-    // DART 재무제표 계정명 → 대상 필드 매핑
+    // DART 재무제표 계정명(account_nm) → 대상 필드 매핑
     private static final String ACCT_CASH = '현금및현금성자산';
     private static final String ACCT_TOTAL_ASSETS = '자산총계';
     private static final String ACCT_TOTAL_DEBT = '부채총계';
     private static final String ACCT_REVENUE = '매출액';
     private static final String ACCT_OPERATING_INCOME = '영업이익';
+
+    // DART 표준계정코드(account_id) → 대상 필드 매핑.
+    // 차입금·사채는 회사마다 account_nm 표기가 제각각이라, IFRS/DART 표준계정코드로 매핑해야 결정적이다.
+    // 총차입금 = 단기차입금 + 유동성장기차입금 + 비유동장기차입금 + 사채 + 유동성사채.
+    private static final String ID_SHORT_TERM_FINANCIAL = 'ifrs-full_ShorttermDepositsNotClassifiedAsCashEquivalents';
+    private static final String ID_TOTAL_EQUITY = 'ifrs-full_Equity';
+    private static final String ID_SHORT_TERM_BORROWINGS = 'ifrs-full_ShorttermBorrowings';
+    private static final String ID_CURRENT_LONG_TERM_BORROWINGS = 'ifrs-full_CurrentLoansReceivedAndCurrentPortionOfNoncurrentLoansReceived';
+    private static final String ID_NONCURRENT_LONG_TERM_BORROWINGS = 'ifrs-full_NoncurrentPortionOfNoncurrentLoansReceived';
+    private static final String ID_CURRENT_BONDS = 'ifrs-full_CurrentBondsIssuedAndCurrentPortionOfNoncurrentBondsIssued';
+    private static final String ID_NONCURRENT_BONDS = 'ifrs-full_NoncurrentPortionOfNoncurrentBondsIssued';
 
     public class DartServiceException extends Exception {}
 
@@ -41,7 +57,18 @@ public with sharing class DartFinancialService {
             throw new DartServiceException('corpCode, businessYear, reportCode 는 필수입니다.');
         }
 
-        HttpResponse response = sendRequest(corpCode, businessYear, reportCode);
+        String body = fetchBody(corpCode, businessYear, reportCode, FS_DIV_CONSOLIDATED);
+        // 연결재무제표가 없어 013(데이터 없음)이면 별도재무제표로 폴백한다.
+        if (isNoData(body)) {
+            body = fetchBody(corpCode, businessYear, reportCode, FS_DIV_SEPARATE);
+        }
+
+        return parseAndUpsert(body, corpCode, businessYear, reportCode);
+    }
+
+    // 지정한 재무제표 구분(fs_div)으로 콜아웃하고, HTTP 상태를 검증해 응답 본문을 반환한다.
+    private static String fetchBody(String corpCode, String businessYear, String reportCode, String fsDiv) {
+        HttpResponse response = sendRequest(corpCode, businessYear, reportCode, fsDiv);
         Integer status = response.getStatusCode();
         if (status >= 500 || status == 429) {
             // 일시적 오류 — 호출자가 재시도하도록 신호
@@ -50,11 +77,21 @@ public with sharing class DartFinancialService {
         if (status != 200) {
             throw new DartServiceException('DART 호출 실패(HTTP ' + status + '): ' + response.getBody());
         }
-
-        return parseAndUpsert(response.getBody(), corpCode, businessYear, reportCode);
+        return response.getBody();
     }
 
-    private static HttpResponse sendRequest(String corpCode, String businessYear, String reportCode) {
+    // DART 응답이 013(조회된 데이터 없음)인지 판별한다. 파싱 실패/기타 상태는 false 로 두어
+    // parseAndUpsert 의 기존 오류 처리에 위임한다.
+    private static Boolean isNoData(String body) {
+        try {
+            Map<String, Object> parsed = (Map<String, Object>) JSON.deserializeUntyped(body);
+            return STATUS_NO_DATA.equals((String) parsed.get('status'));
+        } catch (System.JSONException e) {
+            return false;
+        }
+    }
+
+    private static HttpResponse sendRequest(String corpCode, String businessYear, String reportCode, String fsDiv) {
         String crtfcKey = getCrtfcKey();
         String endpoint =
             NAMED_CREDENTIAL +
@@ -63,7 +100,7 @@ public with sharing class DartFinancialService {
             '&corp_code=' + EncodingUtil.urlEncode(corpCode, 'UTF-8') +
             '&bsns_year=' + EncodingUtil.urlEncode(businessYear, 'UTF-8') +
             '&reprt_code=' + EncodingUtil.urlEncode(reportCode, 'UTF-8') +
-            '&fs_div=CFS';
+            '&fs_div=' + fsDiv;
 
         HttpRequest request = new HttpRequest();
         request.setEndpoint(endpoint);
@@ -122,15 +159,28 @@ public with sharing class DartFinancialService {
         }
 
         Map<String, Decimal> amountByAccount = new Map<String, Decimal>();
+        // 표준계정코드(account_id)는 재무상태표(BS)에서만 수집한다. 자본총계 등 동일 코드가
+        // 자본변동표(SCE)에 중복 등장해 값이 덮이는 것을 막는다.
+        Map<String, Decimal> amountByStdCodeBS = new Map<String, Decimal>();
+        // BS 계정명 목록(폴백용). 표준계정코드를 쓰지 않는 회사의 차입금·사채를 계정명으로 잡는다.
+        List<BsAccount> bsAccounts = new List<BsAccount>();
         List<Object> rows = (List<Object>) parsed.get('list');
         if (rows != null) {
             for (Object rowObj : rows) {
                 Map<String, Object> row = (Map<String, Object>) rowObj;
+                Decimal amount = parseAmount((String) row.get('thstrm_amount'));
                 String accountName = (String) row.get('account_nm');
-                if (String.isBlank(accountName)) {
-                    continue;
+                if (String.isNotBlank(accountName)) {
+                    amountByAccount.put(accountName.trim(), amount);
                 }
-                amountByAccount.put(accountName.trim(), parseAmount((String) row.get('thstrm_amount')));
+                Boolean isBS = 'BS'.equals((String) row.get('sj_div'));
+                String stdCode = (String) row.get('account_id');
+                if (String.isNotBlank(stdCode) && isBS) {
+                    amountByStdCodeBS.put(stdCode.trim(), amount);
+                }
+                if (isBS && String.isNotBlank(accountName) && amount != null) {
+                    bsAccounts.add(new BsAccount(accountName.trim(), amount));
+                }
             }
         }
 
@@ -146,6 +196,29 @@ public with sharing class DartFinancialService {
         record.Revenue__c = amountByAccount.get(ACCT_REVENUE);
         record.Operating_Income__c = amountByAccount.get(ACCT_OPERATING_INCOME);
 
+        // 표준계정코드 기반 신규 필드. 단기차입금 = 순수 단기차입금 + 유동성장기차입금,
+        // 사채 = 유동성사채 + 비유동사채. 세 차입금 필드의 합이 총차입금이 된다.
+        record.Short_Term_Financial_Instruments__c = amountByStdCodeBS.get(ID_SHORT_TERM_FINANCIAL);
+        record.Total_Equity__c = amountByStdCodeBS.get(ID_TOTAL_EQUITY);
+        record.Short_Term_Borrowings__c = sumStdCodes(amountByStdCodeBS, new List<String>{
+            ID_SHORT_TERM_BORROWINGS, ID_CURRENT_LONG_TERM_BORROWINGS
+        });
+        record.Long_Term_Borrowings__c = sumStdCodes(amountByStdCodeBS, new List<String>{
+            ID_NONCURRENT_LONG_TERM_BORROWINGS
+        });
+        record.Bonds_Payable__c = sumStdCodes(amountByStdCodeBS, new List<String>{
+            ID_CURRENT_BONDS, ID_NONCURRENT_BONDS
+        });
+
+        // 차입금 표준계정코드를 하나도 안 쓰는 회사(예: 성우하이텍은 리스부채 포함 합산 계정으로만 공시)는
+        // 차입금이 전부 null 이 된다. 이 경우에만 계정명 기반으로 폴백 집계한다.
+        // (표준코드가 하나라도 있으면 폴백하지 않아 정상 회사의 값이 오염되지 않는다.)
+        if (record.Short_Term_Borrowings__c == null
+            && record.Long_Term_Borrowings__c == null
+            && record.Bonds_Payable__c == null) {
+            applyBorrowingNameFallback(record, bsAccounts);
+        }
+
         Decimal cash = record.Cash_And_Equivalents__c;
         Decimal totalAssets = record.Total_Assets__c;
         if (cash != null && totalAssets != null && totalAssets != 0) {
@@ -154,6 +227,67 @@ public with sharing class DartFinancialService {
 
         Database.upsert(record, CorporateFinancialStatement__c.External_Key__c, AccessLevel.USER_MODE);
         return record;
+    }
+
+    // 폴백용 BS 계정명·금액 쌍.
+    @TestVisible
+    private class BsAccount {
+        String name;
+        Decimal amount;
+        BsAccount(String name, Decimal amount) {
+            this.name = name;
+            this.amount = amount;
+        }
+    }
+
+    // 표준계정코드를 쓰지 않는 회사의 차입금·사채를 계정명으로 집계해 record 에 채운다.
+    // 계정명에 '차입'/'사채'가 포함된 BS 항목만 보되, '차입금및사채'처럼 둘을 합친 상위 합계
+    // 계정은 이중계상을 막기 위해 제외한다. 비유동으로 시작하면 장기, 그 외 차입은 단기로 본다.
+    // 이 경로의 차입금은 리스부채가 포함될 수 있어 금액이 과대될 수 있다(분류 정확성 우선).
+    @TestVisible
+    private static void applyBorrowingNameFallback(
+        CorporateFinancialStatement__c record,
+        List<BsAccount> bsAccounts
+    ) {
+        Decimal shortTerm = null;
+        Decimal longTerm = null;
+        Decimal bonds = null;
+        for (BsAccount acct : bsAccounts) {
+            String name = acct.name;
+            Boolean hasBorrowing = name.contains('차입');
+            Boolean hasBond = name.contains('사채');
+            if (!hasBorrowing && !hasBond) {
+                continue;
+            }
+            // 차입금과 사채를 함께 묶은 합계성 계정은 개별 계정과 중복되므로 건너뛴다.
+            if (hasBorrowing && hasBond) {
+                continue;
+            }
+            if (hasBond) {
+                bonds = (bonds == null ? acct.amount : bonds + acct.amount);
+            } else if (name.startsWith('비유동')) {
+                longTerm = (longTerm == null ? acct.amount : longTerm + acct.amount);
+            } else {
+                shortTerm = (shortTerm == null ? acct.amount : shortTerm + acct.amount);
+            }
+        }
+        record.Short_Term_Borrowings__c = shortTerm;
+        record.Long_Term_Borrowings__c = longTerm;
+        record.Bonds_Payable__c = bonds;
+    }
+
+    // 주어진 표준계정코드들의 금액을 합산한다. 하나도 존재하지 않으면 null(미공시)을 반환해
+    // 값이 0인 회사(예: 사채 0)와 항목 자체가 없는 회사(무차입)를 구분한다.
+    @TestVisible
+    private static Decimal sumStdCodes(Map<String, Decimal> amountByStdCode, List<String> codes) {
+        Decimal total = null;
+        for (String code : codes) {
+            Decimal amount = amountByStdCode.get(code);
+            if (amount != null) {
+                total = (total == null ? amount : total + amount);
+            }
+        }
+        return total;
     }
 
     @TestVisible
