@@ -1,0 +1,26 @@
+{
+  "name": "CorpFinancialStmt_Home",
+  "label": "CorpFinancialStmt Home",
+  "category": "OTHER",
+  "dataSpaceName": "default",
+  "fields": [
+    { "name": "Id_c", "label": "Id", "dataType": "Text", "isPrimaryKey": true },
+    { "name": "Name_c", "label": "Name", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Account_c_c", "label": "Account", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Lead_c_c", "label": "Lead", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "External_Key_c_c", "label": "External Key", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Period_Type_c_c", "label": "Period Type", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Fiscal_Year_c_c", "label": "Fiscal Year", "dataType": "Number", "isPrimaryKey": false },
+    { "name": "Revenue_c_c", "label": "Revenue", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Operating_Income_c_c", "label": "Operating Income", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Total_Assets_c_c", "label": "Total Assets", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Total_Debt_c_c", "label": "Total Debt", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Total_Equity_c_c", "label": "Total Equity", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Cash_And_Equivalents_c_c", "label": "Cash And Equivalents", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Cash_Asset_Ratio_c_c", "label": "Cash Asset Ratio", "dataType": "Percent", "isPrimaryKey": false },
+    { "name": "Short_Term_Borrowings_c_c", "label": "Short Term Borrowings", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Long_Term_Borrowings_c_c", "label": "Long Term Borrowings", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Bonds_Payable_c_c", "label": "Bonds Payable", "dataType": "Currency", "isPrimaryKey": false },
+    { "name": "Short_Term_Financial_Instruments_c_c", "label": "Short Term Financial Instruments", "dataType": "Currency", "isPrimaryKey": false }
+  ]
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Industry__c</fullName>
+    <label>산업군</label>
+    <description>산업군 단위 뉴스 시그널을 특정 회사(Account/Lead) 룩업 없이 분류·적재하기 위한 필드. 기업 고유 뉴스는 Account__c/Lead__c 룩업으로 연결하고, 산업군 뉴스는 이 필드 값으로 연결해 뉴스 요약 프롬프트가 담당 산업군 뉴스를 별도로 grounding 한다.</description>
+    <inlineHelpText>산업군 뉴스일 때만 담당 산업군을 선택하세요. 특정 회사 뉴스는 비워두고 Account/Lead 룩업으로 연결합니다.</inlineHelpText>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>반도체전자</fullName>
+                <default>false</default>
+                <label>반도체·전자</label>
+            </value>
+            <value>
+                <fullName>자동차부품</fullName>
+                <default>false</default>
+                <label>자동차부품</label>
+            </value>
+            <value>
+                <fullName>화장품ODM</fullName>
+                <default>false</default>
+                <label>화장품ODM</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
