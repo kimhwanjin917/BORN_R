@@ -57,7 +57,8 @@ private class DartFinancialLeadMatchTest {
             LastName = 'Lead ' + corpCode,
             Company = company,
             Assigned_Company_Code__c = corpCode,
-            Business_Registration_Number__c = ('9' + corpCode + '000').substring(0, 12)
+            Business_Registration_Number__c = ('9' + corpCode + '000').substring(0, 10),
+            name_new__c = 'L' + corpCode
         );
     }
 

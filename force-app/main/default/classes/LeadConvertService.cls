@@ -176,6 +176,9 @@ public with sharing class LeadConvertService {
                 continue;
             }
             Request req = requests[requestIndex];
+            if (req.createMeetingEvent == false) {
+                continue; // caller keeps its own Event as the meeting record
+            }
             Id opportunityId = opportunityIdByLeadId.get(req.leadId);
             events.add(new Event(
                 Subject = EVENT_SUBJECT,
@@ -290,6 +293,9 @@ public with sharing class LeadConvertService {
 
         @InvocableVariable(label='Meeting Date/Time' description='Start date and time of the customer meeting' required=true)
         public Datetime meetingDateTime;
+
+        @InvocableVariable(label='Create Meeting Event' description='When false, skips creating the meeting Event (caller supplies its own). Defaults to true when null.')
+        public Boolean createMeetingEvent;
     }
 
     /**
