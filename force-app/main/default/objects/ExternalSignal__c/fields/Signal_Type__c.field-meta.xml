@@ -28,6 +28,11 @@
                 <default>false</default>
                 <label>기타</label>
             </value>
+            <value>
+                <fullName>일일요약</fullName>
+                <default>false</default>
+                <label>일일요약</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

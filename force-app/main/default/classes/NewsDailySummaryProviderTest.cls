@@ -17,12 +17,19 @@ private class NewsDailySummaryProviderTest {
     }
 
     private static void insertCompanyNews(Id accountId, String key, Date signalDate, String title, String summary) {
+        insertCompanyNews(accountId, key, signalDate, title, summary, null);
+    }
+
+    private static void insertCompanyNews(
+        Id accountId, String key, Date signalDate, String title, String summary, String sourceUrl
+    ) {
         insert new ExternalSignal__c(
             Account__c = accountId,
             Signal_Type__c = '뉴스',
             Signal_Date__c = signalDate,
             Title__c = title,
             Summary__c = summary,
+            Source_URL__c = sourceUrl,
             External_Key__c = key
         );
     }
@@ -43,7 +50,7 @@ private class NewsDailySummaryProviderTest {
         Account topAccount = createAccount('리노공업', 'C0001', 80);
         insertCompanyNews(topAccount.Id, 'N_1', Date.today().addDays(-1),
             'AI 반도체 테스트 소켓 수요 급증', '고부가 소켓 비중 확대');
-        insertIndustryNews('반도체전자', 'N_IND_1', Date.today().addDays(-1),
+        insertIndustryNews('제조업', 'N_IND_1', Date.today().addDays(-1),
             '[산업군] AI·HBM 붐에 후공정 투자 확대', '메모리 업황 반등');
 
         Test.startTest();
@@ -54,7 +61,21 @@ private class NewsDailySummaryProviderTest {
         Assert.isTrue(text.contains('리노공업'), '기업명이 인용돼야 한다');
         Assert.isTrue(text.contains('AI 반도체 테스트 소켓'), '기업 뉴스 제목이 인용돼야 한다');
         Assert.isTrue(text.contains('담당 산업군 뉴스'), '산업군 뉴스 블록이 포함돼야 한다');
-        Assert.isTrue(text.contains('반도체전자'), '산업군 태그가 인용돼야 한다');
+        Assert.isTrue(text.contains('제조업'), '산업군 태그가 인용돼야 한다');
+    }
+
+    @isTest
+    static void shouldIncludeSourceUrl_WhenNewsHasSourceUrl() {
+        Account topAccount = createAccount('출처 있는 기업', 'C0009', 80);
+        insertCompanyNews(topAccount.Id, 'N_URL', Date.today().addDays(-1),
+            '신제품 공급계약 체결', '연 매출 기여 예상', 'https://news.example.com/a1');
+
+        String text = NewsDailySummaryProvider.buildContextText();
+
+        Assert.isTrue(
+            text.contains('(출처: https://news.example.com/a1)'),
+            '출처 URL 이 있으면 근거 텍스트에 링크가 포함돼야 한다'
+        );
     }
 
     @isTest

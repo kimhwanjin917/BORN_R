@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Priority_Rationale_Updated_At__c</fullName>
+    <label>우선순위 사유 갱신 시각</label>
+    <description>AccountRationaleQueueable가 이 Account의 우선순위 사유(요약·상세)를 마지막으로 생성해 저장한 시각. 사유가 최신인지 판단하는 데 사용한다.</description>
+    <inlineHelpText>AI 우선순위 사유(요약·상세)가 마지막으로 갱신된 시각입니다.</inlineHelpText>
+    <type>DateTime</type>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+</CustomField>

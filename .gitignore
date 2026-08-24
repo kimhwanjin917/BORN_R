@@ -8,6 +8,13 @@
 .localdevserver/
 deploy-options.json
 
+# Deploy/validation result artifacts
+deploy_result.json
+dryrun_result.json
+
+# Temp anonymous apex scratch scripts
+scripts/apex/_tmp_*.apex
+
 # LWC VSCode autocomplete
 **/lwc/jsconfig.json
 

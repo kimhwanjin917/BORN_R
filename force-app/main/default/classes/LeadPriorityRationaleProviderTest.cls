@@ -94,14 +94,22 @@ private class LeadPriorityRationaleProviderTest {
 
     // ─── 헬퍼 ──────────────────────────────────────────────────────────────
 
+    private static Integer brnSeq = 4000000;
+
     private static Lead createLead(String company) {
+        Integer seq = brnSeq++;
         Lead lead = new Lead(
-            LastName = 'Tester',
+            LastName = 'Tester' + seq,
             Company = company,
             Status = 'New',
             IsConverted = false,
-            name_new__c = 'Tester'
+            Email = 'tester' + seq + '@example.com',
+            name_new__c = 'Tester',
+            Business_Registration_Number__c = String.valueOf(seq)
         );
+        Database.DMLOptions dml = new Database.DMLOptions();
+        dml.DuplicateRuleHeader.AllowSave = true;
+        lead.setOptions(dml);
         insert lead;
         return lead;
     }

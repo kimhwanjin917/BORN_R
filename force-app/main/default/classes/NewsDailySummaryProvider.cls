@@ -89,7 +89,7 @@ public with sharing class NewsDailySummaryProvider {
 
         // 회사별 최근 뉴스를 담되, 회사당 MAX_NEWS_PER_ACCOUNT 건으로 제한한다.
         List<ExternalSignal__c> signals = [
-            SELECT Account__c, Signal_Date__c, Title__c, Summary__c
+            SELECT Account__c, Signal_Date__c, Title__c, Summary__c, Source_URL__c
             FROM ExternalSignal__c
             WHERE Signal_Type__c = :NEWS_SIGNAL AND Account__c IN :nameByAccountId.keySet()
             WITH USER_MODE
@@ -121,7 +121,7 @@ public with sharing class NewsDailySummaryProvider {
             }
             lines.add('# ' + acct.Name);
             for (ExternalSignal__c s : bucket) {
-                lines.add(formatSignalLine(s.Signal_Date__c, s.Title__c, s.Summary__c));
+                lines.add(formatSignalLine(s.Signal_Date__c, s.Title__c, s.Summary__c, s.Source_URL__c));
             }
         }
         return lines.size() > 1 ? String.join(lines, '\n') : null;
@@ -130,7 +130,7 @@ public with sharing class NewsDailySummaryProvider {
     /** Industry__c 로 분류된 산업군 뉴스를 텍스트로. 없으면 null. */
     private static String buildIndustryBlock() {
         List<ExternalSignal__c> signals = [
-            SELECT Industry__c, Signal_Date__c, Title__c, Summary__c
+            SELECT Industry__c, Signal_Date__c, Title__c, Summary__c, Source_URL__c
             FROM ExternalSignal__c
             WHERE Signal_Type__c = :NEWS_SIGNAL AND Industry__c != null
             WITH USER_MODE
@@ -144,17 +144,20 @@ public with sharing class NewsDailySummaryProvider {
         lines.add('[담당 산업군 뉴스]');
         for (ExternalSignal__c s : signals) {
             String industryTag = String.isBlank(s.Industry__c) ? '' : '(' + s.Industry__c + ') ';
-            lines.add(formatSignalLine(s.Signal_Date__c, industryTag + s.Title__c, s.Summary__c));
+            lines.add(formatSignalLine(s.Signal_Date__c, industryTag + s.Title__c, s.Summary__c, s.Source_URL__c));
         }
         return String.join(lines, '\n');
     }
 
-    private static String formatSignalLine(Date signalDate, String title, String summary) {
+    private static String formatSignalLine(Date signalDate, String title, String summary, String sourceUrl) {
         String dateText = signalDate == null ? '일자 미상' : String.valueOf(signalDate);
         String titleText = String.isBlank(title) ? '(제목 없음)' : title;
         String line = '- ' + dateText + ' ' + titleText;
         if (String.isNotBlank(summary)) {
             line += ': ' + summary;
+        }
+        if (String.isNotBlank(sourceUrl)) {
+            line += ' (출처: ' + sourceUrl + ')';
         }
         return line;
     }

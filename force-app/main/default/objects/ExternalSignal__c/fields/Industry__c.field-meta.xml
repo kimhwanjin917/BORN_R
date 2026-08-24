@@ -2,8 +2,8 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Industry__c</fullName>
     <label>산업군</label>
-    <description>산업군 단위 뉴스 시그널을 특정 회사(Account/Lead) 룩업 없이 분류·적재하기 위한 필드. 기업 고유 뉴스는 Account__c/Lead__c 룩업으로 연결하고, 산업군 뉴스는 이 필드 값으로 연결해 뉴스 요약 프롬프트가 담당 산업군 뉴스를 별도로 grounding 한다.</description>
-    <inlineHelpText>산업군 뉴스일 때만 담당 산업군을 선택하세요. 특정 회사 뉴스는 비워두고 Account/Lead 룩업으로 연결합니다.</inlineHelpText>
+    <description>산업군 단위 뉴스 시그널을 특정 회사(Account/Lead) 룩업 없이 분류·적재하기 위한 필드. 값 세트는 Account.Industry(KSIC 대분류)와 동일하게 맞춰 산업군 뉴스를 Account 산업군 기준으로 grounding 한다. 기업 고유 뉴스는 Account__c/Lead__c 룩업으로 연결하고, 산업군 뉴스는 이 필드 값으로 연결한다.</description>
+    <inlineHelpText>산업군 뉴스일 때만 Account 산업군(KSIC 대분류)과 동일한 값을 선택하세요. 특정 회사 뉴스는 비워두고 Account/Lead 룩업으로 연결합니다.</inlineHelpText>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
@@ -12,19 +12,109 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>반도체전자</fullName>
+                <fullName>농업, 임업 및 어업</fullName>
                 <default>false</default>
-                <label>반도체·전자</label>
+                <label>농업, 임업 및 어업</label>
             </value>
             <value>
-                <fullName>자동차부품</fullName>
+                <fullName>광업</fullName>
                 <default>false</default>
-                <label>자동차부품</label>
+                <label>광업</label>
             </value>
             <value>
-                <fullName>화장품ODM</fullName>
+                <fullName>제조업</fullName>
                 <default>false</default>
-                <label>화장품ODM</label>
+                <label>제조업</label>
+            </value>
+            <value>
+                <fullName>전기, 가스, 증기 및 수도사업</fullName>
+                <default>false</default>
+                <label>전기, 가스, 증기 및 수도사업</label>
+            </value>
+            <value>
+                <fullName>하수·폐기물 처리, 원료재생 및 환경복원업</fullName>
+                <default>false</default>
+                <label>하수·폐기물 처리, 원료재생 및 환경복원업</label>
+            </value>
+            <value>
+                <fullName>건설업</fullName>
+                <default>false</default>
+                <label>건설업</label>
+            </value>
+            <value>
+                <fullName>도매 및 소매업</fullName>
+                <default>false</default>
+                <label>도매 및 소매업</label>
+            </value>
+            <value>
+                <fullName>운수업</fullName>
+                <default>false</default>
+                <label>운수업</label>
+            </value>
+            <value>
+                <fullName>숙박 및 음식점업</fullName>
+                <default>false</default>
+                <label>숙박 및 음식점업</label>
+            </value>
+            <value>
+                <fullName>출판, 영상, 방송통신 및 정보서비스업</fullName>
+                <default>false</default>
+                <label>출판, 영상, 방송통신 및 정보서비스업</label>
+            </value>
+            <value>
+                <fullName>금융 및 보험업</fullName>
+                <default>false</default>
+                <label>금융 및 보험업</label>
+            </value>
+            <value>
+                <fullName>부동산업 및 임대업</fullName>
+                <default>false</default>
+                <label>부동산업 및 임대업</label>
+            </value>
+            <value>
+                <fullName>전문, 과학 및 기술 서비스업</fullName>
+                <default>false</default>
+                <label>전문, 과학 및 기술 서비스업</label>
+            </value>
+            <value>
+                <fullName>사업시설관리 및 사업지원 서비스업</fullName>
+                <default>false</default>
+                <label>사업시설관리 및 사업지원 서비스업</label>
+            </value>
+            <value>
+                <fullName>공공행정, 국방 및 사회보장 행정</fullName>
+                <default>false</default>
+                <label>공공행정, 국방 및 사회보장 행정</label>
+            </value>
+            <value>
+                <fullName>교육 서비스업</fullName>
+                <default>false</default>
+                <label>교육 서비스업</label>
+            </value>
+            <value>
+                <fullName>보건업 및 사회복지 서비스업</fullName>
+                <default>false</default>
+                <label>보건업 및 사회복지 서비스업</label>
+            </value>
+            <value>
+                <fullName>예술, 스포츠 및 여가관련 서비스업</fullName>
+                <default>false</default>
+                <label>예술, 스포츠 및 여가관련 서비스업</label>
+            </value>
+            <value>
+                <fullName>협회 및 단체, 수리 및 기타 개인 서비스업</fullName>
+                <default>false</default>
+                <label>협회 및 단체, 수리 및 기타 개인 서비스업</label>
+            </value>
+            <value>
+                <fullName>가구내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</fullName>
+                <default>false</default>
+                <label>가구내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</label>
+            </value>
+            <value>
+                <fullName>국제 및 외국기관</fullName>
+                <default>false</default>
+                <label>국제 및 외국기관</label>
             </value>
         </valueSetDefinition>
     </valueSet>

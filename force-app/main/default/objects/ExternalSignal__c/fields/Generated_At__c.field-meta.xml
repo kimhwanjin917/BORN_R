@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Generated_At__c</fullName>
+    <label>생성 시각</label>
+    <description>NewsDailySummarySaveQueueable가 이 일일 요약을 마지막으로 생성해 저장한 시각. 요약이 최신인지 판단하는 데 사용한다.</description>
+    <inlineHelpText>일일 요약이 마지막으로 생성된 시각입니다.</inlineHelpText>
+    <type>DateTime</type>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+</CustomField>

@@ -1,0 +1,12 @@
+{
+  "relationships": [
+    {
+      "sourceObjectName": "CorpFinancialStmt_Home__dlm",
+      "targetObjectName": "ssot__Account__dlm",
+      "cardinality": "ManyToOne",
+      "sourceFieldName": "Account_c_c__c",
+      "targetFieldName": "ssot__Id__c",
+      "relationshipOwner": "DataCloud"
+    }
+  ]
+}
