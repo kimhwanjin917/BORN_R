@@ -32,6 +32,10 @@ public with sharing class DartFinancialService {
     private static final String ID_REVENUE = 'ifrs-full_Revenue';
     private static final String ID_OPERATING_INCOME = 'dart_OperatingIncomeLoss';
 
+    // 자산총계 표준계정코드(BS). 계정명 '자산총계' 행이 응답에 없는 회사(예: 고영 2025)에서
+    // Total_Assets 가 null 이 되어 점수 산정에서 제외되는 것을 막는 폴백이다.
+    private static final String ID_TOTAL_ASSETS = 'ifrs-full_Assets';
+
     // DART 표준계정코드(account_id) → 대상 필드 매핑.
     // 차입금·사채는 회사마다 account_nm 표기가 제각각이라, IFRS/DART 표준계정코드로 매핑해야 결정적이다.
     // 총차입금 = 단기차입금 + 유동성장기차입금 + 비유동장기차입금 + 사채 + 유동성사채.
@@ -205,7 +209,10 @@ public with sharing class DartFinancialService {
         record.Fiscal_Year__c = Integer.valueOf(businessYear);
         record.Period_Type__c = mapPeriodType(reportCode);
         record.Cash_And_Equivalents__c = amountByAccount.get(ACCT_CASH);
-        record.Total_Assets__c = amountByAccount.get(ACCT_TOTAL_ASSETS);
+        // 자산총계는 계정명 우선, 없으면 BS 표준계정코드로 폴백한다(회사별 계정명 편차 흡수).
+        record.Total_Assets__c = firstNonNull(
+            amountByAccount.get(ACCT_TOTAL_ASSETS), amountByStdCodeBS.get(ID_TOTAL_ASSETS)
+        );
         record.Total_Debt__c = amountByAccount.get(ACCT_TOTAL_DEBT);
         // 매출·영업이익은 표준계정코드 우선, 없으면 계정명으로 폴백한다.
         // (회사별 계정명 편차 '매출액'/'수익(매출액)', '영업이익'/'영업이익(손실)' 흡수)

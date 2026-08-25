@@ -6,14 +6,15 @@
  * 채점(총 100점):
  *   1) 상품 적합도 40점 — 현금자산비율(RP) 과 차입금의존도(회사채) 중 점수가 높은 쪽을 그 기업의 상품으로 정한다.
  *   2) 니즈 규모 30점 — 정해진 상품의 운용 가능 자금(절대 금액)으로 채점.
- *   3) 최신 공시 30점 — 정해진 상품 자금의 전년 동기(직전 연간) 대비 증가율.
+ *   3) 최신 공시 30점 — 정해진 상품 자금의 전년 동기 대비 증가율.
  *
  * 제외(점수 null 로 저장 → 목록에서 빠짐):
  *   - 자본잠식(Total_Equity__c <= 0)
  *   - 이미 영업 진행 중(Lead: Status != 'New' 는 애초 대상에서 빠짐 / Account: 열린 Opportunity 보유)
  * 적합도 0점 기업은 제외가 아니라 낮은 점수로 남겨 최하위로 깔린다.
  *
- * 결정성: 최신/직전 연간은 Period_Type__c='연간' 중 Fiscal_Year__c 로 선택하며,
+ * 결정성: 최신은 연간·반기·분기 전체에서 (Fiscal_Year__c, 보고서 서수)가 가장 최근인 공시를 고르고,
+ * 직전은 그 전년 동기(동일 보고서 코드, Fiscal_Year__c-1)로 잡는다. 보고서 코드는 External_Key__c 에서 파싱한다.
  * 모든 계산이 필드 값의 순수 함수라 재실행 시 동일 결과를 보장한다.
  * 정렬(동점 시 자금 큰 순)은 리포트/리스트뷰의 몫이며 배치는 정수 점수만 저장한다.
  *
@@ -46,7 +47,6 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
     private static final Decimal YOY_T30 = 0.30; // 30% 이상 증가
     private static final Decimal YOY_T20 = 0.10; // 10~30% 증가
 
-    private static final String ANNUAL_PERIOD = '연간';
     private static final String DISCLOSURE_SIGNAL = '공시';
     private static final Integer DEFAULT_BATCH_SIZE = 200;
 
@@ -105,7 +105,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
         Map<Id, CorporateFinancialStatement__c> latestByTarget = new Map<Id, CorporateFinancialStatement__c>();
         Map<Id, CorporateFinancialStatement__c> priorByTarget = new Map<Id, CorporateFinancialStatement__c>();
-        loadAnnualStatements(targetIds, latestByTarget, priorByTarget);
+        loadRecentStatements(targetIds, latestByTarget, priorByTarget);
 
         Set<Id> excludedByOpenDeal = targetKind == Target.ACCOUNT
             ? loadAccountsWithOpenOpportunity(targetIds)
@@ -223,9 +223,9 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
     }
 
     /**
-     * 최신 공시 점수(30점). 상품 자금의 전년(직전 연간) 대비 증가율로 채점하되,
+     * 최신 공시 점수(30점). 상품 자금의 전년 동기 대비 증가율로 채점하되,
      * 최신 CFS 보다 미래 연도의 공시 시그널이 있으면(=새 공시는 떴으나 재무 미수집) 0점.
-     * 직전 연간이 없어 비교 불가하면 규정에 따라 10점.
+     * 전년 동기가 없어 비교 불가하면 규정에 따라 10점.
      */
     private Integer scoreDisclosure(
         CorporateFinancialStatement__c latest,
@@ -275,13 +275,15 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
     // ─── 관련 레코드 로딩 ─────────────────────────────────────────────────
 
     /**
-     * 대상별 최신·직전 연간 재무제표를 채운다.
-     * Fiscal_Year__c DESC, Id ASC 로 조회해 대상별 1번째=최신, 2번째=직전으로 결정적으로 선택한다.
+     * 대상별 '가장 최근 공시' 재무제표와 그 전년 동기 재무제표를 채운다.
+     * 최신은 연간·반기·분기 전체에서 recencyKey(Fiscal_Year*10 + 보고서 서수)가 가장 큰 것으로 결정한다.
+     * 전년 동기(prior)는 최신과 동일 보고서 코드의 Fiscal_Year__c-1 레코드로, YoY 를 동일 분기끼리 비교한다.
+     * (분기 잔액 기반 적합도·니즈는 연간과 동일 스케일이라 임계값을 그대로 쓴다.)
      * @param targetIds 대상 Id 집합
-     * @param latestByTarget (출력) 대상 Id → 최신 연간
-     * @param priorByTarget (출력) 대상 Id → 직전 연간
+     * @param latestByTarget (출력) 대상 Id → 최신 공시
+     * @param priorByTarget (출력) 대상 Id → 전년 동기
      */
-    private void loadAnnualStatements(
+    private void loadRecentStatements(
         Set<Id> targetIds,
         Map<Id, CorporateFinancialStatement__c> latestByTarget,
         Map<Id, CorporateFinancialStatement__c> priorByTarget
@@ -292,33 +294,102 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
         String relationship = relationshipField();
         List<CorporateFinancialStatement__c> statements = targetKind == Target.LEAD
             ? [
-                SELECT Id, Lead__c, Fiscal_Year__c, Total_Assets__c, Total_Equity__c,
+                SELECT Id, Lead__c, Fiscal_Year__c, Period_Type__c, External_Key__c,
+                       Total_Assets__c, Total_Equity__c,
                        Cash_And_Equivalents__c, Short_Term_Financial_Instruments__c,
                        Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
                 FROM CorporateFinancialStatement__c
-                WHERE Lead__c IN :targetIds AND Period_Type__c = :ANNUAL_PERIOD
+                WHERE Lead__c IN :targetIds
                 ORDER BY Fiscal_Year__c DESC NULLS LAST, Id ASC
             ]
             : [
-                SELECT Id, Account__c, Fiscal_Year__c, Total_Assets__c, Total_Equity__c,
+                SELECT Id, Account__c, Fiscal_Year__c, Period_Type__c, External_Key__c,
+                       Total_Assets__c, Total_Equity__c,
                        Cash_And_Equivalents__c, Short_Term_Financial_Instruments__c,
                        Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
                 FROM CorporateFinancialStatement__c
-                WHERE Account__c IN :targetIds AND Period_Type__c = :ANNUAL_PERIOD
+                WHERE Account__c IN :targetIds
                 ORDER BY Fiscal_Year__c DESC NULLS LAST, Id ASC
             ];
 
+        // 대상별로 모아 두고, 최신(최대 recencyKey)과 전년 동기를 각각 결정한다.
+        Map<Id, List<CorporateFinancialStatement__c>> byTarget =
+            new Map<Id, List<CorporateFinancialStatement__c>>();
         for (CorporateFinancialStatement__c statement : statements) {
             Id targetId = (Id) statement.get(relationship);
             if (targetId == null) {
                 continue;
             }
-            if (!latestByTarget.containsKey(targetId)) {
-                latestByTarget.put(targetId, statement);
-            } else if (!priorByTarget.containsKey(targetId)) {
-                priorByTarget.put(targetId, statement);
+            if (!byTarget.containsKey(targetId)) {
+                byTarget.put(targetId, new List<CorporateFinancialStatement__c>());
+            }
+            byTarget.get(targetId).add(statement);
+        }
+
+        for (Id targetId : byTarget.keySet()) {
+            List<CorporateFinancialStatement__c> stmts = byTarget.get(targetId);
+            CorporateFinancialStatement__c latest = null;
+            Integer latestKey = null;
+            for (CorporateFinancialStatement__c statement : stmts) {
+                Integer key = recencyKey(statement);
+                if (latest == null || key > latestKey) {
+                    latest = statement;
+                    latestKey = key;
+                }
+            }
+            if (latest == null) {
+                continue;
+            }
+            latestByTarget.put(targetId, latest);
+
+            // 전년 동기: 최신과 같은 보고서 코드 & Fiscal_Year-1 (없으면 prior 없음 → 공시 10점 규정 적용)
+            String latestCode = reportCodeOf(latest);
+            Integer priorYear = latest.Fiscal_Year__c == null ? null : latest.Fiscal_Year__c.intValue() - 1;
+            if (priorYear == null) {
+                continue;
+            }
+            for (CorporateFinancialStatement__c statement : stmts) {
+                Integer year = statement.Fiscal_Year__c == null ? null : statement.Fiscal_Year__c.intValue();
+                if (year == priorYear && sameCode(reportCodeOf(statement), latestCode)) {
+                    priorByTarget.put(targetId, statement);
+                    break;
+                }
             }
         }
+    }
+
+    // (Fiscal_Year*10 + 보고서 서수). 연도·분기를 단조 증가 정수 하나로 만들어 최신 공시를 결정한다.
+    private Integer recencyKey(CorporateFinancialStatement__c statement) {
+        Integer year = statement.Fiscal_Year__c == null ? 0 : statement.Fiscal_Year__c.intValue();
+        return year * 10 + periodOrdinal(statement);
+    }
+
+    // 보고서 코드/기간유형 → 연내 서수(1분기 11013=1, 반기 11012=2, 3분기 11014=3, 연간 11011=4).
+    // External_Key 파싱 실패 시 Period_Type__c 로 폴백한다('분기'는 세부 구분 불가라 1분기로 간주).
+    private Integer periodOrdinal(CorporateFinancialStatement__c statement) {
+        String code = reportCodeOf(statement);
+        if ('11013'.equals(code)) { return 1; }
+        if ('11012'.equals(code)) { return 2; }
+        if ('11014'.equals(code)) { return 3; }
+        if ('11011'.equals(code)) { return 4; }
+        if ('연간'.equals(statement.Period_Type__c)) { return 4; }
+        if ('반기'.equals(statement.Period_Type__c)) { return 2; }
+        if ('분기'.equals(statement.Period_Type__c)) { return 1; }
+        return 0;
+    }
+
+    // External_Key__c(corpCode_year_reportCode)의 마지막 세그먼트(보고서 코드)를 반환한다.
+    private String reportCodeOf(CorporateFinancialStatement__c statement) {
+        if (String.isBlank(statement.External_Key__c)) {
+            return null;
+        }
+        List<String> parts = statement.External_Key__c.split('_');
+        return parts.size() >= 3 ? parts[parts.size() - 1] : null;
+    }
+
+    // 두 보고서 코드가 모두 존재하고 동일한지. null(파싱 실패)끼리는 같지 않음으로 처리해 오매칭을 막는다.
+    private Boolean sameCode(String a, String b) {
+        return a != null && a == b;
     }
 
     /**

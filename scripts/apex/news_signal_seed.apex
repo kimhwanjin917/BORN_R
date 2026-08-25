@@ -9,6 +9,33 @@ final String NEWS = '뉴스';
 final Date TODAY = Date.today();
 final String VIEWER = 'https://dummy.news.local/';
 
+// External_Key__c → 실제 관련 뉴스 기사 URL.
+// 창작 시그널이라 원문 1:1 기사는 없으므로, 해당 기업·주제와 관련된 실존 기사를 연결한다.
+Map<String, String> realUrlByKey = new Map<String, String>{
+    // 성우하이텍
+    'NEWS_00132992_0' => 'https://www.pinpointnews.co.kr/news/articleView.html?idxno=362364',
+    'NEWS_00132992_1' => 'https://www.swhitech.com/kr/?pCode=newsroom&mode=view&idx=1961',
+    // 리노공업
+    'NEWS_00369657_2' => 'https://www.cbci.co.kr/news/articleView.html?idxno=598439',
+    'NEWS_00369657_3' => 'https://news.nate.com/view/20260423n03337',
+    // 하나마이크론
+    'NEWS_00445054_4' => 'https://www.sisajournal-e.com/news/articleView.html?idxno=409280',
+    'NEWS_00445054_5' => 'http://www.dailyinvest.kr/news/articleView.html?idxno=61068',
+    // 하나기술
+    'NEWS_00601191_6' => 'https://www.etnews.com/20220825000211',
+    'NEWS_00601191_7' => 'https://www.newsis.com/view/NISX20250116_0003034504',
+    // 씨앤씨인터내셔널
+    'NEWS_01226410_8' => 'https://www.cosinkorea.com/news/article.html?no=56834',
+    'NEWS_01226410_9' => 'https://www.asiatoday.co.kr/kn/view.php?key=20260216010005221',
+    // 코스메카코리아
+    'NEWS_00763473_10' => 'https://dealsite.co.kr/articles/112288',
+    'NEWS_00763473_11' => 'https://www.hankyung.com/article/202608114308i',
+    // 산업군 뉴스
+    'NEWS_IND_반도체전자' => 'https://www.sisajournal-e.com/news/articleView.html?idxno=422681',
+    'NEWS_IND_자동차부품' => 'https://www.hellot.net/mobile/article.html?no=50753',
+    'NEWS_IND_화장품ODM' => 'https://cosinkorea.com/mobile/article.html?no=57196'
+};
+
 // corp_code → Account/Lead Id 매핑(담당 기업 전체)
 Map<String, Id> acctByCorp = new Map<String, Id>();
 for (Account a : [
@@ -60,7 +87,9 @@ for (List<Object> row : corpNews) {
     s.Title__c = (String) row[2];
     s.Summary__c = (String) row[3];
     s.Signal_Date__c = TODAY.addDays(-((Integer) row[1]));
-    s.Source_URL__c = VIEWER + s.External_Key__c;
+    s.Source_URL__c = realUrlByKey.containsKey(s.External_Key__c)
+        ? realUrlByKey.get(s.External_Key__c)
+        : VIEWER + s.External_Key__c;
     s.Relevance_Score__c = (Integer) row[4];
     s.Confidence__c = 60;
     signals.add(s);
@@ -84,7 +113,9 @@ for (List<Object> row : industryNews) {
     s.Title__c = '[산업군] ' + (String) row[3];
     s.Summary__c = (String) row[4];
     s.Signal_Date__c = TODAY.addDays(-((Integer) row[2]));
-    s.Source_URL__c = VIEWER + s.External_Key__c;
+    s.Source_URL__c = realUrlByKey.containsKey(s.External_Key__c)
+        ? realUrlByKey.get(s.External_Key__c)
+        : VIEWER + s.External_Key__c;
     s.Relevance_Score__c = (Integer) row[5];
     s.Confidence__c = 60;
     signals.add(s);

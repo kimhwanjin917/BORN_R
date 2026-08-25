@@ -49,19 +49,19 @@ public with sharing class HomeDashboardController {
     }
 
     /**
-     * The running user's most recent stored daily AI news summary. Returns
-     * null when none exists.
+     * The most recent stored daily AI news summary shared across the whole
+     * team. Returns the latest non-blank summary org-wide (not per-user), or
+     * null when none exists. Object sharing (ReadWrite) plus WITH USER_MODE
+     * still enforce record- and field-level access.
      */
     @AuraEnabled(cacheable=true)
     public static String getDailySummary() {
-        Id userId = UserInfo.getUserId();
         // Summary_Text__c is a Long Text Area and cannot be filtered in SOQL,
         // so the most recent non-blank value is selected in Apex.
         for (ExternalSignal__c signal : [
             SELECT Summary_Text__c
             FROM ExternalSignal__c
-            WHERE OwnerId = :userId
-              AND Summary_Date__c != null
+            WHERE Summary_Date__c != null
             WITH USER_MODE
             ORDER BY Summary_Date__c DESC
             LIMIT 50

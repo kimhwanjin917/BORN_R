@@ -141,6 +141,41 @@ private class PriorityScoreBatchTest {
     }
 
     @isTest
+    static void shouldUseMostRecentQuarter_WhenQuarterlyNewerThanAnnual() {
+        // Given: 2025 연간(현금 100억=10% → 적합20, 니즈15) vs 2026 반기(현금 300억=30% → 적합40, 니즈30)
+        //        최신 공시는 2026 반기여야 하며, 전년 동기(2025 반기) 없음 → 공시 10 = 총 80.
+        //        만약 연간을 최신으로 잘못 고르면 20+15+10=45 가 된다(구분 가능).
+        Lead lead = createLead('Recent Quarter Lead');
+        insertStatement(lead.Id, null, 2025, '11011', ASSETS, ASSETS, 10000000000L, 0);
+        insertStatement(lead.Id, null, 2026, '11012', ASSETS, ASSETS, RP_FUND_FULL, 0);
+
+        Test.startTest();
+        Database.executeBatch(new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD), 200);
+        Test.stopTest();
+
+        Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
+        Assert.areEqual(80, result.Priority_Score__c, '더 최근 분기(2026 반기) 재무로 채점되어 80 이어야 한다');
+    }
+
+    @isTest
+    static void shouldCompareSameQuarterYoY_WhenLatestIsQuarter() {
+        // Given: 최신 2026 반기(300억). 전년 동기 2025 반기(200억) → +50% → 공시 30.
+        //        2025 연간(290억)은 방해용: 전년 동기를 연간으로 잘못 매칭하면 +3.4% → 공시 10(총 80)이 된다.
+        //        올바르게 반기끼리 비교하면 적합40+니즈30+공시30 = 100.
+        Lead lead = createLead('Quarter YoY Lead');
+        insertStatement(lead.Id, null, 2025, '11012', ASSETS, ASSETS, 20000000000L, 0);
+        insertStatement(lead.Id, null, 2025, '11011', ASSETS, ASSETS, 29000000000L, 0);
+        insertStatement(lead.Id, null, 2026, '11012', ASSETS, ASSETS, RP_FUND_FULL, 0);
+
+        Test.startTest();
+        Database.executeBatch(new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD), 200);
+        Test.stopTest();
+
+        Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
+        Assert.areEqual(100, result.Priority_Score__c, '전년 동기(2025 반기) 대비 +50% → 공시 30 → 총 100 이어야 한다');
+    }
+
+    @isTest
     static void shouldExcludeAccount_WhenOpenOpportunityExists() {
         // Given: 재무는 만점급이지만 열린 Opportunity 보유 → 영업 진행 중 제외 → null
         Account account = TestDataFactory.createAccount('90000001', true);
@@ -207,25 +242,38 @@ private class PriorityScoreBatchTest {
             Company = company,
             Status = 'New',
             IsConverted = false,
-            name_new__c = 'Tester'
+            name_new__c = 'Tester',
+            Email = 'tester@example.com'
         );
         insert lead;
         return lead;
     }
 
     /**
-     * 연간 재무제표 1건 생성. RP 자금은 현금및현금성자산에, 회사채 자금은 사채에 넣어
-     * 상품별 합산 산식을 단순 검증한다(현금비율/차입금비율 = fund / assets).
+     * 연간 재무제표 1건 생성(기본 보고서=사업보고서 11011). RP 자금은 현금및현금성자산에,
+     * 회사채 자금은 사채에 넣어 상품별 합산 산식을 단순 검증한다(현금비율/차입금비율 = fund / assets).
      */
     private static void insertStatement(
         Id leadId, Id accountId, Integer fiscalYear,
+        Decimal totalAssets, Decimal totalEquity, Decimal rpFund, Decimal bondFund
+    ) {
+        insertStatement(leadId, accountId, fiscalYear, '11011', totalAssets, totalEquity, rpFund, bondFund);
+    }
+
+    /**
+     * 재무제표 1건 생성. reportCode 로 보고서를 지정한다(11011 연간/11012 반기/11013 1분기/11014 3분기).
+     * External_Key 는 실제 형식(마지막 세그먼트가 보고서 코드)을 따라, PriorityScoreBatch 의
+     * 보고서 코드 파싱·최신 공시 선택·전년 동기 매칭을 검증할 수 있게 한다.
+     */
+    private static void insertStatement(
+        Id leadId, Id accountId, Integer fiscalYear, String reportCode,
         Decimal totalAssets, Decimal totalEquity, Decimal rpFund, Decimal bondFund
     ) {
         insert new CorporateFinancialStatement__c(
             Lead__c = leadId,
             Account__c = accountId,
             Fiscal_Year__c = fiscalYear,
-            Period_Type__c = '연간',
+            Period_Type__c = periodTypeOf(reportCode),
             Total_Assets__c = totalAssets,
             Total_Equity__c = totalEquity,
             Cash_And_Equivalents__c = rpFund,
@@ -233,8 +281,14 @@ private class PriorityScoreBatchTest {
             Bonds_Payable__c = bondFund,
             Short_Term_Borrowings__c = 0,
             Long_Term_Borrowings__c = 0,
-            External_Key__c = 'K_' + leadId + '_' + accountId + '_' + fiscalYear
+            External_Key__c = 'K_' + leadId + '_' + accountId + '_' + fiscalYear + '_' + reportCode
         );
+    }
+
+    private static String periodTypeOf(String reportCode) {
+        if (reportCode == '11011') { return '연간'; }
+        if (reportCode == '11012') { return '반기'; }
+        return '분기';
     }
 
     private static void insertDisclosureSignal(Id leadId, Id accountId, Date signalDate) {
