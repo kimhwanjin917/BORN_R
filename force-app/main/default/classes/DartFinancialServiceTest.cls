@@ -26,8 +26,8 @@ private class DartFinancialServiceTest {
                     new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '1,000,000' },
                     new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '자산총계', 'thstrm_amount' => '5,000,000' },
                     new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '부채총계', 'thstrm_amount' => '2,000,000' },
-                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_nm' => '매출액', 'thstrm_amount' => '8,000,000' },
-                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_nm' => '영업이익', 'thstrm_amount' => '1,200,000' },
+                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_id' => 'ifrs-full_Revenue', 'account_nm' => '매출액', 'thstrm_amount' => '8,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'IS', 'account_id' => 'dart_OperatingIncomeLoss', 'account_nm' => '영업이익', 'thstrm_amount' => '1,200,000' },
                     // 표준계정코드(account_id) 기반 신규 필드 — 재무상태표(BS)
                     new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_ShorttermDepositsNotClassifiedAsCashEquivalents', 'account_nm' => '단기금융상품', 'thstrm_amount' => '500,000' },
                     new Map<String, Object>{ 'sj_div' => 'BS', 'account_id' => 'ifrs-full_Equity', 'account_nm' => '자본총계', 'thstrm_amount' => '3,000,000' },
@@ -101,6 +101,30 @@ private class DartFinancialServiceTest {
     }
 
     /**
+     * 매출을 계정명 '매출액' 이 아니라 '수익(매출액)' 으로, 영업이익을 '영업이익(손실)' 로
+     * 공시하는 회사(예: 성우하이텍·하나마이크론)를 흉내내는 mock.
+     * 계정명 매칭으로는 잡히지 않고 표준계정코드로만 잡혀야 한다.
+     */
+    private class StdCodeRevenueMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest request) {
+            HttpResponse response = new HttpResponse();
+            response.setStatusCode(200);
+            response.setBody(JSON.serialize(new Map<String, Object>{
+                'status' => '000',
+                'message' => '정상',
+                'list' => new List<Map<String, Object>>{
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '현금및현금성자산', 'thstrm_amount' => '1,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'BS', 'account_nm' => '자산총계', 'thstrm_amount' => '5,000,000' },
+                    // 매출·영업이익: 계정명은 '매출액'/'영업이익'과 다르지만 표준계정코드는 존재
+                    new Map<String, Object>{ 'sj_div' => 'CIS', 'account_id' => 'ifrs-full_Revenue', 'account_nm' => '수익(매출액)', 'thstrm_amount' => '9,000,000' },
+                    new Map<String, Object>{ 'sj_div' => 'CIS', 'account_id' => 'dart_OperatingIncomeLoss', 'account_nm' => '영업이익(손실)', 'thstrm_amount' => '1,500,000' }
+                }
+            }));
+            return response;
+        }
+    }
+
+    /**
      * HTTP 500 을 반환하는 일시적 오류 mock.
      */
     private class ServerErrorMock implements HttpCalloutMock {
@@ -150,6 +174,31 @@ private class DartFinancialServiceTest {
             Assert.areEqual(500000, saved.Short_Term_Borrowings__c, '단기차입금 = 단기차입금 400,000 + 유동성장기차입금 100,000');
             Assert.areEqual(600000, saved.Long_Term_Borrowings__c, '비유동 장기차입금 600,000');
             Assert.areEqual(500000, saved.Bonds_Payable__c, '사채 = 유동성사채 200,000 + 비유동사채 300,000');
+        }
+    }
+
+    @isTest
+    static void shouldCaptureRevenue_ViaStandardCode_WhenAccountNameDiffers() {
+        // Given: 매출을 '수익(매출액)', 영업이익을 '영업이익(손실)'로 공시하는 회사
+        User dartUser = TestDataFactory.createDartUser();
+        DartFinancialService.testCrtfcKey = 'TEST_KEY';
+        Test.setMock(HttpCalloutMock.class, new StdCodeRevenueMock());
+
+        // When
+        System.runAs(dartUser) {
+            TestDataFactory.createAccount(CORP_CODE, true);
+            Test.startTest();
+            DartFinancialService.collectFinancials(CORP_CODE, BUSINESS_YEAR, REPORT_CODE);
+            Test.stopTest();
+
+            // Then: 계정명이 '매출액'/'영업이익'이 아니어도 표준계정코드로 값이 잡혀야 한다
+            CorporateFinancialStatement__c saved = [
+                SELECT Revenue__c, Operating_Income__c
+                FROM CorporateFinancialStatement__c
+                WHERE External_Key__c = :(CORP_CODE + '_' + BUSINESS_YEAR + '_' + REPORT_CODE)
+            ];
+            Assert.areEqual(9000000, saved.Revenue__c, 'ifrs-full_Revenue 표준계정코드로 매출이 잡혀야 한다');
+            Assert.areEqual(1500000, saved.Operating_Income__c, 'dart_OperatingIncomeLoss 표준계정코드로 영업이익이 잡혀야 한다');
         }
     }
 

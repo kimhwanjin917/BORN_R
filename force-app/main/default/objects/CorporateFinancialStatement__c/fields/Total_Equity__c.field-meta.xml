@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Equity__c</fullName>
-    <label>자본총계</label>
     <description>DART 재무제표의 자본총계 금액. 0 이하이면 자본잠식으로 판정해 영업 우선순위 채점에서 제외한다.</description>
     <inlineHelpText>DART 공시 기준 자본총계 금액(원). 0 이하이면 자본잠식으로 우선순위 대상에서 제외된다.</inlineHelpText>
+    <label>자본총계</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

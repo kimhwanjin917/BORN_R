@@ -66,23 +66,26 @@ for (List<Object> row : corpNews) {
     signals.add(s);
 }
 
-// ── 산업군 뉴스 (Industry__c, 회사 룩업 없음) ──
+// ── 산업군 뉴스 (Industry__c 는 org 제한 피클리스트라 KSIC 값으로 매핑) ──
+// 반도체전자/자동차부품/화장품ODM 은 모두 제조사 → KSIC '제조업'.
+// External_Key__c 는 원 산업 라벨로 구분해 3건이 하나로 합쳐지지 않게 한다.
 List<List<Object>> industryNews = new List<List<Object>>{
-    new List<Object>{ '반도체전자', 1, 'AI·HBM 붐에 후공정·테스트 장비 투자 확대', '메모리 업황 반등으로 소부장 수혜 전망', 75 },
-    new List<Object>{ '자동차부품', 2, '전기차 전환에 차체 경량화 부품 수요 증가', '알루미늄·핫스탬핑 채택 확대', 70 },
-    new List<Object>{ '화장품ODM', 2, 'K-뷰티 수출 사상 최대…ODM 수주 러시', '인디 브랜드 성장으로 색조 물량 급증', 70 }
+    new List<Object>{ '반도체전자', '제조업', 1, 'AI·HBM 붐에 후공정·테스트 장비 투자 확대', '메모리 업황 반등으로 소부장 수혜 전망', 75 },
+    new List<Object>{ '자동차부품', '제조업', 2, '전기차 전환에 차체 경량화 부품 수요 증가', '알루미늄·핫스탬핑 채택 확대', 70 },
+    new List<Object>{ '화장품ODM', '제조업', 2, 'K-뷰티 수출 사상 최대…ODM 수주 러시', '인디 브랜드 성장으로 색조 물량 급증', 70 }
 };
 for (List<Object> row : industryNews) {
-    String ind = (String) row[0];
+    String label = (String) row[0];
+    String ksic = (String) row[1];
     ExternalSignal__c s = new ExternalSignal__c();
-    s.Industry__c = ind;
-    s.External_Key__c = 'NEWS_IND_' + ind;
+    s.Industry__c = ksic;
+    s.External_Key__c = 'NEWS_IND_' + label;
     s.Signal_Type__c = NEWS;
-    s.Title__c = '[산업군] ' + (String) row[2];
-    s.Summary__c = (String) row[3];
-    s.Signal_Date__c = TODAY.addDays(-((Integer) row[1]));
+    s.Title__c = '[산업군] ' + (String) row[3];
+    s.Summary__c = (String) row[4];
+    s.Signal_Date__c = TODAY.addDays(-((Integer) row[2]));
     s.Source_URL__c = VIEWER + s.External_Key__c;
-    s.Relevance_Score__c = (Integer) row[4];
+    s.Relevance_Score__c = (Integer) row[5];
     s.Confidence__c = 60;
     signals.add(s);
 }

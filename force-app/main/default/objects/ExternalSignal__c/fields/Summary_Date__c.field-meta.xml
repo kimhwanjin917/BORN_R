@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Summary_Date__c</fullName>
-    <label>요약 일자</label>
     <description>일일 뉴스 요약이 대상으로 하는 날짜. NewsDailySummarySaveQueueable가 이 날짜로 기존 일일요약 레코드를 찾아 하루 한 건만 유지(있으면 갱신, 없으면 생성)한다.</description>
     <inlineHelpText>일일 요약이 대상으로 하는 날짜입니다. 날짜당 한 건만 유지됩니다.</inlineHelpText>
-    <type>Date</type>
+    <label>요약 일자</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
+    <type>Date</type>
 </CustomField>

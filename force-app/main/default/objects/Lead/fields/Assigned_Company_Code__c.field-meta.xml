@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Assigned_Company_Code__c</fullName>
-    <label>DART 기업 코드</label>
     <description>DART(전자공시시스템) 매칭 키. 발굴 대상 기업의 DART corp_code(8자리)를 저장하며, DART 외부 데이터 조회 및 upsert 시 기존 corp_code + 조합 외부 키 체계의 매칭 키로 사용한다.</description>
-    <inlineHelpText>DART에서 발급하는 8자리 기업 고유 코드(corp_code)를 입력하세요. 외부 데이터 매칭에 사용됩니다.</inlineHelpText>
-    <type>Text</type>
-    <length>8</length>
     <externalId>true</externalId>
+    <inlineHelpText>DART에서 발급하는 8자리 기업 고유 코드(corp_code)를 입력하세요. 외부 데이터 매칭에 사용됩니다.</inlineHelpText>
+    <label>DART 기업 코드</label>
+    <length>8</length>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
-    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
 </CustomField>

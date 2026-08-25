@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Priority_Rationale_Detail__c</fullName>
-    <label>우선순위 사유 상세</label>
     <description>이 발굴 Lead의 우선순위 점수 근거를 재무·시그널 수치로 설명하는 상세 서술. Lead_Priority_Rationale 프롬프트 템플릿의 상세 출력을 LeadRationaleQueueable가 매일 저장한다. Lead 상세 화면용.</description>
     <inlineHelpText>AI가 생성한 우선순위 근거 상세 설명입니다. 매일 오전 6시 자동 갱신됩니다.</inlineHelpText>
-    <type>LongTextArea</type>
+    <label>우선순위 사유 상세</label>
     <length>2000</length>
-    <visibleLines>4</visibleLines>
-    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
-    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
 </CustomField>

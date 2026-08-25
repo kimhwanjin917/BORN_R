@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Long_Term_Borrowings__c</fullName>
-    <label>장기차입금</label>
     <description>DART 재무제표의 장기차입금 금액. 단기차입금·사채와 합산해 총차입금을 산정하며, 차입금의존도(회사채 적합도) 계산에 쓰인다.</description>
     <inlineHelpText>DART 공시 기준 장기차입금 금액(원). 총차입금 = 단기차입금 + 장기차입금 + 사채.</inlineHelpText>
+    <label>장기차입금</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

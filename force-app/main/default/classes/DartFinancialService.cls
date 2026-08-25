@@ -26,6 +26,12 @@ public with sharing class DartFinancialService {
     private static final String ACCT_REVENUE = '매출액';
     private static final String ACCT_OPERATING_INCOME = '영업이익';
 
+    // 손익계산서(IS/CIS) 표준계정코드(account_id) → 대상 필드 매핑.
+    // 매출은 회사마다 계정명이 '매출액'/'수익(매출액)'/'영업수익' 등으로 갈려 계정명 매칭만으로는
+    // 성우하이텍·하나마이크론 같은 회사에서 누락된다. IFRS 표준계정코드로 잡으면 결정적이다.
+    private static final String ID_REVENUE = 'ifrs-full_Revenue';
+    private static final String ID_OPERATING_INCOME = 'dart_OperatingIncomeLoss';
+
     // DART 표준계정코드(account_id) → 대상 필드 매핑.
     // 차입금·사채는 회사마다 account_nm 표기가 제각각이라, IFRS/DART 표준계정코드로 매핑해야 결정적이다.
     // 총차입금 = 단기차입금 + 유동성장기차입금 + 비유동장기차입금 + 사채 + 유동성사채.
@@ -162,6 +168,8 @@ public with sharing class DartFinancialService {
         // 표준계정코드(account_id)는 재무상태표(BS)에서만 수집한다. 자본총계 등 동일 코드가
         // 자본변동표(SCE)에 중복 등장해 값이 덮이는 것을 막는다.
         Map<String, Decimal> amountByStdCodeBS = new Map<String, Decimal>();
+        // 손익계산서(IS/CIS) 표준계정코드 맵. 매출·영업이익을 계정명 편차와 무관하게 결정적으로 잡는다.
+        Map<String, Decimal> amountByStdCodeIS = new Map<String, Decimal>();
         // BS 계정명 목록(폴백용). 표준계정코드를 쓰지 않는 회사의 차입금·사채를 계정명으로 잡는다.
         List<BsAccount> bsAccounts = new List<BsAccount>();
         List<Object> rows = (List<Object>) parsed.get('list');
@@ -173,10 +181,16 @@ public with sharing class DartFinancialService {
                 if (String.isNotBlank(accountName)) {
                     amountByAccount.put(accountName.trim(), amount);
                 }
-                Boolean isBS = 'BS'.equals((String) row.get('sj_div'));
+                String sjDiv = (String) row.get('sj_div');
+                Boolean isBS = 'BS'.equals(sjDiv);
+                Boolean isIS = 'IS'.equals(sjDiv) || 'CIS'.equals(sjDiv);
                 String stdCode = (String) row.get('account_id');
                 if (String.isNotBlank(stdCode) && isBS) {
                     amountByStdCodeBS.put(stdCode.trim(), amount);
+                }
+                // 손익계산서 표준코드는 첫 등장값만 취한다(IS·CIS 양쪽에 중복 등장 시 덮임 방지).
+                if (String.isNotBlank(stdCode) && isIS && !amountByStdCodeIS.containsKey(stdCode.trim())) {
+                    amountByStdCodeIS.put(stdCode.trim(), amount);
                 }
                 if (isBS && String.isNotBlank(accountName) && amount != null) {
                     bsAccounts.add(new BsAccount(accountName.trim(), amount));
@@ -193,8 +207,12 @@ public with sharing class DartFinancialService {
         record.Cash_And_Equivalents__c = amountByAccount.get(ACCT_CASH);
         record.Total_Assets__c = amountByAccount.get(ACCT_TOTAL_ASSETS);
         record.Total_Debt__c = amountByAccount.get(ACCT_TOTAL_DEBT);
-        record.Revenue__c = amountByAccount.get(ACCT_REVENUE);
-        record.Operating_Income__c = amountByAccount.get(ACCT_OPERATING_INCOME);
+        // 매출·영업이익은 표준계정코드 우선, 없으면 계정명으로 폴백한다.
+        // (회사별 계정명 편차 '매출액'/'수익(매출액)', '영업이익'/'영업이익(손실)' 흡수)
+        record.Revenue__c = firstNonNull(amountByStdCodeIS.get(ID_REVENUE), amountByAccount.get(ACCT_REVENUE));
+        record.Operating_Income__c = firstNonNull(
+            amountByStdCodeIS.get(ID_OPERATING_INCOME), amountByAccount.get(ACCT_OPERATING_INCOME)
+        );
 
         // 표준계정코드 기반 신규 필드. 단기차입금 = 순수 단기차입금 + 유동성장기차입금,
         // 사채 = 유동성사채 + 비유동사채. 세 차입금 필드의 합이 총차입금이 된다.
@@ -288,6 +306,12 @@ public with sharing class DartFinancialService {
             }
         }
         return total;
+    }
+
+    // 표준계정코드 값(우선)과 계정명 값(폴백) 중 먼저 null 이 아닌 값을 반환한다.
+    @TestVisible
+    private static Decimal firstNonNull(Decimal preferred, Decimal fallback) {
+        return preferred != null ? preferred : fallback;
     }
 
     @TestVisible
