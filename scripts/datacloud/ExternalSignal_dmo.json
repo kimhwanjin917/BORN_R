@@ -1,0 +1,18 @@
+{
+  "name": "ExternalSignal_Home",
+  "label": "ExternalSignal Home",
+  "category": "OTHER",
+  "dataSpaceName": "default",
+  "fields": [
+    { "name": "Id_c", "label": "Id", "dataType": "Text", "isPrimaryKey": true },
+    { "name": "Name_c", "label": "Name", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Account_c_c", "label": "Account", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Lead_c_c", "label": "Lead", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "External_Key_c_c", "label": "External Key", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Signal_Type_c_c", "label": "Signal Type", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Title_c_c", "label": "Title", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Summary_c_c", "label": "Summary", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Industry_c_c", "label": "Industry", "dataType": "Text", "isPrimaryKey": false },
+    { "name": "Source_URL_c_c", "label": "Source URL", "dataType": "Text", "isPrimaryKey": false }
+  ]
+}
