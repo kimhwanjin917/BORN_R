@@ -53,3 +53,76 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# ============================================================
+# Salesforce Standard Metadata - Do NOT track in git
+# These are auto-managed by Salesforce and bloat the repo.
+# Custom objects (__c, __mdt, __e) are tracked separately.
+# ============================================================
+
+# Standard picklist values (always standard, never custom)
+force-app/main/default/standardValueSets/
+
+# Standard Salesforce apps
+force-app/main/default/applications/
+
+# Other standard metadata
+force-app/main/default/matchingRules/
+force-app/main/default/milestoneTypes/
+force-app/main/default/notificationtypes/
+force-app/main/default/notificationTypeConfig/
+force-app/main/default/homePageLayouts/
+force-app/main/default/lightningExperienceThemes/
+force-app/main/default/profilePasswordPolicies/
+force-app/main/default/profileSessionSettings/
+force-app/main/default/forecastingSourceDefinitions/
+force-app/main/default/forecastingTypeSources/
+force-app/main/default/forecastingTypes/
+force-app/main/default/cleanDataServices/
+force-app/main/default/campaignInfluenceModels/
+force-app/main/default/appMenus/
+force-app/main/default/apexEmailNotifications/
+force-app/main/default/iframeWhiteListUrlSettings/
+force-app/main/default/installedPackages/
+force-app/main/default/objectTranslations/
+force-app/main/default/managedContentTypes/
+force-app/main/default/samlssoconfigs/
+force-app/main/default/internalDataConnectors/
+force-app/main/default/LeadConvertSettings/
+force-app/main/default/actionableListDefinitions/
+force-app/main/default/aiAgentScorerDefinitions/
+force-app/main/default/ExplainabilityActionVersions/
+force-app/main/default/ApplicationSubtypeDefinitions/
+force-app/main/default/BusinessProcessTypeDefinitions/
+force-app/main/default/ExplainabilityActionDefinitions/
+force-app/main/default/appointmentSchedulingPolicies/
+force-app/main/default/policyRuleDefinitions/
+force-app/main/default/policyRuleDefinitionSets/
+force-app/main/default/presenceUserConfigs/
+force-app/main/default/pricingRecipe/
+force-app/main/default/queueRoutingConfigs/
+force-app/main/default/serviceChannels/
+force-app/main/default/timelineObjectDefinitions/
+force-app/main/default/topicsForObjects/
+force-app/main/default/decisionTableDatasetLinks/
+force-app/main/default/decisionTables/
+force-app/main/default/dataSources/
+force-app/main/default/dataSourceObjects/
+force-app/main/default/dataSourceTenants/
+force-app/main/default/emailservices/
+force-app/main/default/entitlementProcesses/
+force-app/main/default/fieldServiceMobileConfigs/
+force-app/main/default/duplicateRules/
+force-app/main/default/expressionSetObjectAlias/
+force-app/main/default/extlClntAppOauthPolicies/
+force-app/main/default/extlClntAppOauthSecuritySettings/
+force-app/main/default/extlClntAppOauthSettings/
+force-app/main/default/extlClntAppGlobalOauthSets/
+force-app/main/default/extlClntAppPolicies/
+force-app/main/default/certs/
+force-app/main/default/profiles/
+force-app/main/default/profilePasswordPolicies/
+force-app/main/default/flowDefinitions/
+force-app/main/default/reports/
+force-app/main/default/reportTypes/
+force-app/main/default/callCenters/

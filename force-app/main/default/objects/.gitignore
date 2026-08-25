@@ -1,0 +1,12 @@
+# Ignore standard Salesforce objects.
+# Custom objects (ending in __c, __mdt, __e, __b) are tracked normally.
+*
+!.gitignore
+!*__c/
+!*__c/**
+!*__mdt/
+!*__mdt/**
+!*__e/
+!*__e/**
+!*__b/
+!*__b/**
