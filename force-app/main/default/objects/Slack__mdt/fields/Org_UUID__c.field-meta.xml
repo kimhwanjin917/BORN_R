@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Org_UUID__c</fullName>
+    <description>UUID of the connected Slack Demo Org (e.g. 5f94d676-4955-11f1-8eab-0e9051f61df9). From Demo Zone /detail response.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Org UUID</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

@@ -1,0 +1,70 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountIndustry" : {
+      "title" : "고객사 산업군",
+      "description" : "Account.Industry",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "accountName" : {
+      "title" : "고객사명",
+      "description" : "Account.Name",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "hasMaturingAsset" : {
+      "title" : "만기 임박 보유상품 여부",
+      "description" : "true 이면 만기가 90일 이내이거나 이미 지난 보유상품이 있다 (D구간 크로스셀 컨텍스트). false 이면 크로스셀로 확장하지 않는다",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "heldAssets" : {
+      "title" : "보유상품 목록",
+      "description" : "고객사가 이미 보유 중인 상품 목록: assetName(보유상품명), productName(상품), status, principalAmount(원금), interestRate(금리), startDate, maturityDate(만기일), daysToMaturity(만기까지 남은 일수, 음수면 이미 만기 경과). 비어 있으면 보유상품이 없거나 접근할 수 없음",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__ProductRecommendationAction$HeldAsset"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "heldAssetText" : {
+      "title" : "보유상품 요약",
+      "description" : "보유상품과 만기 정보를 사람이 읽을 수 있게 정리한 문장",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "opportunityAmount" : {
+      "title" : "기회 금액",
+      "description" : "Opportunity.Amount (접근 가능한 경우)",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "recommendations" : {
+      "title" : "상품 후보 목록",
+      "description" : "상품 후보: productName, eligibilityBasis(적격 규칙), feeRate(수수료율), minTermDays, maxTermDays. 비어 있으면 기회에 접근할 수 없거나 없음",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__ProductRecommendationAction$Recommendation"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

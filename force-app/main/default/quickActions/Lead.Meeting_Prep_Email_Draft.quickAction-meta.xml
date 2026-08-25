@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lead 상세에서 기업 브리핑 맥락과 추천 상품을 근거로 첫 접촉 메일 초안을 생성하는 버튼 (Flow: Lead_Meeting_Prep_Email_Draft)</description>
+    <flowDefinition>Lead_Meeting_Prep_Email_Draft</flowDefinition>
+    <label>첫 접촉 메일 초안</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

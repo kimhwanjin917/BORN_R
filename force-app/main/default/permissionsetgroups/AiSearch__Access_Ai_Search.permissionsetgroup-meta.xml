@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Permission Set Group for Agentforce Coworker</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Agentforce Coworker User</label>
+    <permissionSets>SentOS_Agent_Access</permissionSets>
+    <permissionSets>force__AISearchUser</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

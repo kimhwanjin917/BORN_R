@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommerceSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <b2CMerchantAgentEnabled>false</b2CMerchantAgentEnabled>
+    <buyerGroupExtensibility>false</buyerGroupExtensibility>
+    <commerceAppEnabled>false</commerceAppEnabled>
+    <commerceConciergeEnabled>false</commerceConciergeEnabled>
+    <commerceContractPricing>false</commerceContractPricing>
+    <commerceCopilotEcomEnabled>false</commerceCopilotEcomEnabled>
+    <commerceDCSegmentEnabled>false</commerceDCSegmentEnabled>
+    <commerceDiscoveryExpansion>false</commerceDiscoveryExpansion>
+    <commerceEnabled>true</commerceEnabled>
+    <commerceHighPrecisionQtyNGP>false</commerceHighPrecisionQtyNGP>
+    <commerceNGPEnabled>false</commerceNGPEnabled>
+    <commerceProcedurePlan>false</commerceProcedurePlan>
+    <commerceRLMSubs>false</commerceRLMSubs>
+    <convCommShopCopilotEnabled>true</convCommShopCopilotEnabled>
+    <extendCommerceContext>false</extendCommerceContext>
+    <generateInvPerSubscription>false</generateInvPerSubscription>
+    <lowestUnitPriceTracking>false</lowestUnitPriceTracking>
+    <messagingEngagementDataKit>false</messagingEngagementDataKit>
+</CommerceSettings>

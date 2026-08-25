@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IndustriesLoyaltySettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableAutomaticMemberTierAssessmentSelection>false</enableAutomaticMemberTierAssessmentSelection>
+    <enableAutomaticVoucherCodeGeneration>true</enableAutomaticVoucherCodeGeneration>
+    <enableConfigureClubs>false</enableConfigureClubs>
+    <enableFixedTypeNQPAggregation>false</enableFixedTypeNQPAggregation>
+    <enableLoyaltyActivityNQPTrace>false</enableLoyaltyActivityNQPTrace>
+    <enableLoyaltyApiAccessForExternalSiteUsers>false</enableLoyaltyApiAccessForExternalSiteUsers>
+    <enableLoyaltyGenerativeAi>false</enableLoyaltyGenerativeAi>
+    <enableLoyaltyRedeemedPointsExpirationInfoPref>false</enableLoyaltyRedeemedPointsExpirationInfoPref>
+    <enableLoyaltyRulesVerifyCdpMemberSegment>false</enableLoyaltyRulesVerifyCdpMemberSegment>
+    <enableLoyaltyServiceExcellence>false</enableLoyaltyServiceExcellence>
+    <enableNQPRealTimePointBalance>true</enableNQPRealTimePointBalance>
+    <enableNegativePointBalance>false</enableNegativePointBalance>
+    <enableNonQualifyingPointsConsolidation>true</enableNonQualifyingPointsConsolidation>
+    <enablePointsLifecycleTracking>false</enablePointsLifecycleTracking>
+    <enableProcessTraceableTrxnAsync>false</enableProcessTraceableTrxnAsync>
+    <enablePromSetupProcRuleStatusInheritDplymt>false</enablePromSetupProcRuleStatusInheritDplymt>
+    <enableQPRealTimePointBalance>true</enableQPRealTimePointBalance>
+    <enableSegmentQueryApiMultipleDataSpace>false</enableSegmentQueryApiMultipleDataSpace>
+    <enableSegmentQueryByDataGraph>false</enableSegmentQueryByDataGraph>
+    <enableTJOnRewardOnly>false</enableTJOnRewardOnly>
+    <enableTransferPointsToMemberGroupsRealtime>false</enableTransferPointsToMemberGroupsRealtime>
+    <enableUsePromPtyUsageForEngmtTrail>false</enableUsePromPtyUsageForEngmtTrail>
+</IndustriesLoyaltySettings>

@@ -1,0 +1,188 @@
+<template>
+    <div class="dashboard">
+        <!-- ─── 오늘 일정 ─────────────────────────────────────── -->
+        <article class="card">
+            <header class="card-head">
+                <div class="card-head__title">
+                    <lightning-icon
+                        icon-name="standard:event"
+                        size="small"
+                        alternative-text="오늘 일정"
+                    ></lightning-icon>
+                    <span>오늘 일정</span>
+                </div>
+                <template lwc:if={hasEvents}>
+                    <span class="card-head__count">{events.length}</span>
+                </template>
+            </header>
+
+            <template lwc:if={hasEvents}>
+                <ul class="rows">
+                    <template for:each={events} for:item="evt">
+                        <li key={evt.Id} class="row">
+                            <div class="row__body">
+                                <span class="row__name" title={evt.Subject}>{evt.Subject}</span>
+                                <template lwc:if={evt.relatedName}>
+                                    <span class="row__reason">{evt.relatedName}</span>
+                                </template>
+                            </div>
+                            <lightning-formatted-date-time
+                                value={evt.StartDateTime}
+                                hour="2-digit"
+                                minute="2-digit"
+                                class="row__time"
+                            ></lightning-formatted-date-time>
+                            <lightning-button
+                                label="미팅 시작"
+                                variant="brand"
+                                data-what-id={evt.opportunityId}
+                                onclick={handleStartMeeting}
+                                disabled={evt.startDisabled}
+                            ></lightning-button>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:elseif={eventsError}>
+                <div class="state state_error">{eventsError}</div>
+            </template>
+            <template lwc:else>
+                <div class="state state_empty">오늘 예정된 미팅이 없습니다.</div>
+            </template>
+        </article>
+
+        <!-- ─── 만기 알림 배지 ────────────────────────────────── -->
+        <article class="card">
+            <header class="card-head card-head_button" onclick={toggleTaskList}>
+                <div class="card-head__title">
+                    <lightning-icon
+                        icon-name="standard:task"
+                        size="small"
+                        alternative-text="만기 알림"
+                    ></lightning-icon>
+                    <span>만기 알림</span>
+                </div>
+                <span class="badge" title="열린 만기 알림 건수">{taskCount}</span>
+            </header>
+
+            <template lwc:if={showTaskList}>
+                <template lwc:if={hasTasks}>
+                    <ul class="rows">
+                        <template for:each={tasks} for:item="tsk">
+                            <li key={tsk.Id} class="row" data-id={tsk.Id} onclick={handleOpenTask}>
+                                <div class="row__body">
+                                    <span class="row__name" title={tsk.Subject}>{tsk.Subject}</span>
+                                    <template lwc:if={tsk.What.Name}>
+                                        <span class="row__reason">{tsk.What.Name}</span>
+                                    </template>
+                                </div>
+                                <lightning-formatted-date-time
+                                    value={tsk.ActivityDate}
+                                    class="row__time"
+                                ></lightning-formatted-date-time>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template lwc:elseif={tasksError}>
+                    <div class="state state_error">{tasksError}</div>
+                </template>
+                <template lwc:else>
+                    <div class="state state_empty">열린 만기 알림이 없습니다.</div>
+                </template>
+            </template>
+        </article>
+
+        <!-- ─── 뉴스 요약 ────────────────────────────────────── -->
+        <article class="card">
+            <header class="card-head">
+                <div class="card-head__title">
+                    <lightning-icon
+                        icon-name="standard:news"
+                        size="small"
+                        alternative-text="뉴스 요약"
+                    ></lightning-icon>
+                    <span>뉴스 요약</span>
+                </div>
+            </header>
+
+            <template lwc:if={hasSummary}>
+                <div class="summary">
+                    <lightning-formatted-text value={summary}></lightning-formatted-text>
+                </div>
+            </template>
+
+            <template lwc:if={hasNews}>
+                <ul class="rows">
+                    <template for:each={news} for:item="signal">
+                        <li key={signal.Id} class="row row_news">
+                            <div class="row__body">
+                                <span class="row__name" title={signal.Title__c}>{signal.Title__c}</span>
+                                <template lwc:if={signal.Summary__c}>
+                                    <span class="row__reason" title={signal.Summary__c}>{signal.Summary__c}</span>
+                                </template>
+                                <div class="row__meta">
+                                    <template lwc:if={signal.partyName}>
+                                        <span class="tag">{signal.partyName}</span>
+                                    </template>
+                                    <lightning-formatted-date-time
+                                        value={signal.Signal_Date__c}
+                                    ></lightning-formatted-date-time>
+                                </div>
+                            </div>
+                            <template lwc:if={signal.Source_URL__c}>
+                                <a href={signal.Source_URL__c} target="_blank" rel="noopener noreferrer" class="news-link">
+                                    <lightning-icon
+                                        icon-name="utility:new_window"
+                                        size="x-small"
+                                        alternative-text="원문 보기"
+                                    ></lightning-icon>
+                                </a>
+                            </template>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:elseif={newsError}>
+                <div class="state state_error">{newsError}</div>
+            </template>
+            <template lwc:else>
+                <template lwc:if={hasSummary}></template>
+                <template lwc:else>
+                    <div class="state state_empty">표시할 뉴스가 없습니다.</div>
+                </template>
+            </template>
+        </article>
+    </div>
+
+    <!-- ─── 미팅 Flow 모달 ──────────────────────────────────── -->
+    <template lwc:if={showFlowModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-label="미팅 시작" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="닫기"
+                        onclick={closeFlowModal}
+                    >
+                        <lightning-icon
+                            icon-name="utility:close"
+                            size="small"
+                            alternative-text="닫기"
+                            variant="inverse"
+                        ></lightning-icon>
+                    </button>
+                    <h2 class="slds-modal__title slds-hyphenate">미팅 시작</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-flow
+                        flow-api-name={flowApiName}
+                        flow-input-variables={flowInputVariables}
+                        onstatuschange={handleFlowStatusChange}
+                    ></lightning-flow>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

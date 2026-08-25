@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata">
+    <backgroundEndColor>#FFFFFF</backgroundEndColor>
+    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>
+    <backgroundStartColor>#FFFFFF</backgroundStartColor>
+    <dashboardType>LoggedInUser</dashboardType>
+    <isGridLayout>false</isGridLayout>
+    <leftSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+            <componentType>Gauge</componentType>
+            <displayUnits>Auto</displayUnits>
+            <gaugeMax>50.0</gaugeMax>
+            <gaugeMin>0.0</gaugeMin>
+            <groupingSortProperties/>
+            <header>총 딜 건수</header>
+            <indicatorBreakpoint1>20.0</indicatorBreakpoint1>
+            <indicatorBreakpoint2>35.0</indicatorBreakpoint2>
+            <indicatorHighColor>#00716B</indicatorHighColor>
+            <indicatorLowColor>#C23934</indicatorLowColor>
+            <indicatorMiddleColor>#CA8501</indicatorMiddleColor>
+            <report>Team_Performance_Reports/RM_Deal_Count_Report</report>
+            <showPercentage>false</showPercentage>
+            <showRange>true</showRange>
+            <showTotal>true</showTotal>
+            <showValues>false</showValues>
+            <title>팀 전체 총계</title>
+        </components>
+    </leftSection>
+    <middleSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>false</expandOthers>
+            <groupingSortProperties/>
+            <header>RM별 건수</header>
+            <report>Team_Performance_Reports/RM_Deal_Count_Report</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowValueDescending</sortBy>
+            <sortLegendValues>false</sortLegendValues>
+            <title>RM별 딜 건수</title>
+            <useReportChart>true</useReportChart>
+        </components>
+    </middleSection>
+    <owner>trailsignup.6e973b0119b58d@salesforce.com</owner>
+    <rightSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Donut</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>true</expandOthers>
+            <groupingSortProperties/>
+            <header>단계별 분포</header>
+            <legendPosition>Right</legendPosition>
+            <report>Team_Performance_Reports/Stage_Distribution_Report</report>
+            <showPercentage>true</showPercentage>
+            <showTotal>true</showTotal>
+            <showValues>false</showValues>
+            <sortBy>RowValueDescending</sortBy>
+            <sortLegendValues>false</sortLegendValues>
+            <title>단계별 딜 분포</title>
+            <useReportChart>true</useReportChart>
+        </components>
+    </rightSection>
+    <runningUser>trailsignup.6e973b0119b58d@salesforce.com</runningUser>
+    <textColor>#000000</textColor>
+    <title>팀 실적 대시보드</title>
+    <titleColor>#000099</titleColor>
+    <titleSize>14</titleSize>
+</Dashboard>

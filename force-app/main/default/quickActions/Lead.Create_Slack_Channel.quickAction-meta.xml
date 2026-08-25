@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lead 전용 Slack 비공개 채널을 만들고 고객에게 채널 링크가 포함된 영업 이메일을 보내는 버튼 (Flow: Lead_Create_Slack_Channel_And_Email)</description>
+    <flowDefinition>Lead_Create_Slack_Channel_And_Email</flowDefinition>
+    <label>Slack 채널 + 이메일 발송</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

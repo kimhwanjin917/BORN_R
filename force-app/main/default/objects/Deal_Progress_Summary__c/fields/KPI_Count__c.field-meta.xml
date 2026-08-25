@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>KPI_Count__c</fullName>
+    <description>딜 건수. DealSummaryAggregator.cls의 Aggregate SOQL(COUNT)가 write하는 익명 집계 값 (스펙 §1.1). Formula가 아닌 일반 Number라야 집계가 값을 채울 수 있음.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>집계 대상 Opportunity 건수(COUNT)입니다. 개별 딜이 아니라 팀 단위 건수입니다.</inlineHelpText>
+    <label>KPI 카운트</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

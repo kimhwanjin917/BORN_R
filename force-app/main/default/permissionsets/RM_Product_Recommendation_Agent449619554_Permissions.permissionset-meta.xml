@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows custom permissions for Agentforce Agent : RM_Product_Recommendation_Agent&apos;s agent user : rm_product_recommendation_agent@00daj000011rq4g1767609960.ext.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>RM_Product_Recommendation_Agent449619554 Permissions</label>
+    <license>Einstein Agent</license>
+</PermissionSet>

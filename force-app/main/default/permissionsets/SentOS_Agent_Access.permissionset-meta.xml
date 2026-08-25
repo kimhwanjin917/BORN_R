@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <agentAccesses>
+        <agentName>SearchAgent</agentName>
+        <enabled>true</enabled>
+    </agentAccesses>
+    <description>Permission set for Search Agent access</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Search Agent Access</label>
+</PermissionSet>

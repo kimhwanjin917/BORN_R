@@ -1,0 +1,14 @@
+{
+  "required" : [ "member_email" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "member_email" : {
+      "title" : "member_email",
+      "description" : "This is the current user's email",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

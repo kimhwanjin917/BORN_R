@@ -1,0 +1,7 @@
+.editor {
+    --slds-c-textarea-sizing-min-height: 18rem;
+}
+
+.editor lightning-input-rich-text {
+    display: block;
+}

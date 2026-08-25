@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Raw_Content__c</fullName>
+    <description>마스킹 전 미팅 메모 원문(Raw). 개인정보 포함 가능 - 접근 제한 필요.</description>
+    <label>Raw Content</label>
+    <length>32768</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>25</visibleLines>
+</CustomField>

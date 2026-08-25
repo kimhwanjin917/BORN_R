@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Max_Retry__c</fullName>
+    <description>일시적 오류(타임아웃/5xx) 발생 시 수집을 재시도할 최대 횟수.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>재시도 최대 횟수를 입력하세요. 예: 3</inlineHelpText>
+    <label>최대 재시도 횟수</label>
+    <precision>2</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

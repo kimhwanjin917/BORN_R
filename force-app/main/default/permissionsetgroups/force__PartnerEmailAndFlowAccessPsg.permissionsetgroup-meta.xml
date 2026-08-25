@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>PartnerEmailAndFlowAccessPsg</label>
+    <permissionSets>force__DistributedMarketingAndAlertsUserPermSet</permissionSets>
+    <permissionSets>force__MarketingCloudAdmin</permissionSets>
+    <permissionSets>force__PartnerEmailAndFlowAccessPartnerCommunityLoginUser</permissionSets>
+    <permissionSets>force__PartnerEmailAndFlowAccessPartnerCommunityUser</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

@@ -1,0 +1,57 @@
+<template>
+    <article class="kpi-card">
+        <header class="card-head">
+            <div class="card-head__title">
+                <lightning-icon
+                    icon-name="standard:lead"
+                    size="small"
+                    alternative-text="리드"
+                ></lightning-icon>
+                <span>Lead KPI</span>
+            </div>
+            <span class="card-head__total">전체 {totalCount}</span>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <template lwc:if={hasData}>
+                <div class="rows">
+                    <template for:each={segments} for:item="segment">
+                        <div
+                            key={segment.key}
+                            class="row row_clickable"
+                            role="button"
+                            tabindex="0"
+                            data-object={segment.objectApiName}
+                            onclick={handleSegmentClick}
+                            onkeydown={handleSegmentKeydown}
+                        >
+                            <span class="row__icon" style={segment.iconStyle}>
+                                <lightning-icon
+                                    icon-name={segment.icon}
+                                    size="x-small"
+                                    variant="inverse"
+                                    alternative-text={segment.label}
+                                ></lightning-icon>
+                            </span>
+                            <span class="row__label">{segment.label}</span>
+                            <div class="row__track">
+                                <div class="row__fill" style={segment.fillStyle}></div>
+                            </div>
+                            <span class="row__num">{segment.count}건</span>
+                            <span class="row__divider"></span>
+                            <span class="row__percent" style={segment.percentStyle}>{segment.percent}%</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="state state_empty">표시할 리드가 없습니다.</div>
+            </template>
+        </template>
+    </article>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enterprise_ID__c</fullName>
+    <description>Enterprise Slack ID of the connected Slack Demo Org (e.g. E0B1QEQB4E7). From Demo Zone /detail response. Used to build https://app.slack.com/client/{enterprise_id} URLs.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Enterprise ID</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

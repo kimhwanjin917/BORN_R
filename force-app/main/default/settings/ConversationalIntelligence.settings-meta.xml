@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConversationalIntelligenceSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableCallCoaching>true</enableCallCoaching>
+    <enableCallCoachingZoom>true</enableCallCoachingZoom>
+    <enableCallExplorer>false</enableCallExplorer>
+    <enableCallSummarization>false</enableCallSummarization>
+    <enableConversationMining>false</enableConversationMining>
+    <enableDiarizationPref>false</enableDiarizationPref>
+    <enableECIOOTBFlows>false</enableECIOOTBFlows>
+    <enableGenECI>false</enableGenECI>
+    <enableGenerativeConvInsights>false</enableGenerativeConvInsights>
+    <enableManualUpload>false</enableManualUpload>
+    <enableOpptyMatching>true</enableOpptyMatching>
+    <enableUnifiedActivities>false</enableUnifiedActivities>
+</ConversationalIntelligenceSettings>

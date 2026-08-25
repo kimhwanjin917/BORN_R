@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Use this action to get the customer&apos;s order. Provide it back in this bullet-point format:
+
+Order Number: (Order Number)
+Order Amount: (Order Amount)
+Order Type: (Order Type)
+Order Items: (Order items)
+Order Summary: (Order Summary)</description>
+    <developerName>Get_Customer_Order</developerName>
+    <invocationTarget>Get_Customer_Order</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>Get_Customer_Order</localDeveloperName>
+    <masterLabel>Get Customer Order</masterLabel>
+</GenAiFunction>

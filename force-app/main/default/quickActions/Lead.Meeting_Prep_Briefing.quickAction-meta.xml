@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lead 상세에서 Data Cloud 통합 재무·시그널·CRM 을 근거로 미팅 준비 브리핑을 생성하는 버튼 (Flow: Lead_Meeting_Prep_Briefing)</description>
+    <flowDefinition>Lead_Meeting_Prep_Briefing</flowDefinition>
+    <label>미팅 준비 브리핑</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

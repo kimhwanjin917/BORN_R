@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>화면 공유·녹화 중 노출을 막기 위해 기본 마스킹 처리된 Contact의 전화번호·이메일 등 PII 원본 값을 조회할 수 있는 권한. 승인된 인원에게만 부여한다.</description>
+    <isLicensed>false</isLicensed>
+    <label>원본 개인정보(PII) 조회</label>
+</CustomPermission>

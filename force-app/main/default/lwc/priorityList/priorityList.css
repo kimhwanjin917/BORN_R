@@ -1,0 +1,218 @@
+.priority-card {
+    display: block;
+    background: var(--slds-g-color-surface-1, #fff);
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.section + .section {
+    border-top: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+}
+
+.card-head__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--slds-g-color-neutral-base-10, #181818);
+}
+
+.card-head__count {
+    min-width: 1.5rem;
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    color: var(--slds-g-color-neutral-base-30, #444);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--slds-g-color-border-base-1, #f0f0f0);
+    transition: background-color 0.12s ease;
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.rank-badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: var(--slds-g-color-neutral-base-90, #ecebea);
+    color: var(--slds-g-color-neutral-base-30, #514f4d);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.row__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.row__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slds-g-color-neutral-base-10, #181818);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.score-pill {
+    flex: 0 0 auto;
+    min-width: 2rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* 호버 팝오버 - 추천 사유 */
+.reason-popover {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    top: calc(100% - 0.25rem);
+    z-index: 10;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--slds-g-color-neutral-base-10, #181818);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.25rem);
+    transition: opacity 0.12s ease, transform 0.12s ease, visibility 0.12s;
+    pointer-events: none;
+}
+
+.row:hover .reason-popover,
+.row:focus-within .reason-popover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 마지막 행은 아래에 카드 경계가 바로 있어 팝오버가 잘리므로 위로 펼친다. */
+.row:last-child .reason-popover {
+    top: auto;
+    bottom: calc(100% - 0.25rem);
+    transform: translateY(0.25rem);
+}
+
+.row:last-child:hover .reason-popover,
+.row:last-child:focus-within .reason-popover {
+    transform: translateY(0);
+}
+
+.reason-popover__label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    opacity: 0.7;
+    margin-bottom: 0.1875rem;
+}
+
+.reason-popover__text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    white-space: normal;
+}
+
+.state {
+    padding: 1.25rem 1rem;
+    font-size: 0.8125rem;
+    text-align: center;
+}
+
+.state_empty {
+    color: var(--slds-g-color-neutral-base-50, #706e6b);
+}
+
+.state_error {
+    color: var(--slds-g-color-error, #ba0517);
+}
+
+/* 신규기업 (파랑) */
+.section_lead .card-head {
+    background: var(--slds-g-color-palette-blue-95, #eef4ff);
+    border-left: 4px solid var(--slds-g-color-palette-blue-50, #0176d3);
+}
+
+.section_lead .card-head__title {
+    color: var(--slds-g-color-palette-blue-30, #014486);
+}
+
+.section_lead .row:hover {
+    background: var(--slds-g-color-neutral-base-95, #f5f7fb);
+}
+
+.section_lead .rank-badge_top {
+    background: var(--slds-g-color-palette-blue-50, #0176d3);
+    color: #fff;
+}
+
+.section_lead .score-pill {
+    background: var(--slds-g-color-palette-blue-95, #eef4ff);
+    color: var(--slds-g-color-palette-blue-30, #014486);
+}
+
+/* 기존기업 (초록) */
+.section_account .card-head {
+    background: var(--slds-g-color-palette-green-95, #ebf7ee);
+    border-left: 4px solid var(--slds-g-color-palette-green-50, #2e844a);
+}
+
+.section_account .card-head__title {
+    color: var(--slds-g-color-palette-green-20, #1a5330);
+}
+
+.section_account .row:hover {
+    background: var(--slds-g-color-neutral-base-95, #f4faf6);
+}
+
+.section_account .rank-badge_top {
+    background: var(--slds-g-color-palette-green-50, #2e844a);
+    color: #fff;
+}
+
+.section_account .score-pill {
+    background: var(--slds-g-color-palette-green-95, #ebf7ee);
+    color: var(--slds-g-color-palette-green-20, #1a5330);
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>연결된 영업기회. Apex Managed Sharing(RM_Access) 사용을 위해 Master-Detail이 아닌 Lookup으로 연결한다(ADR).</description>
+    <label>영업기회</label>
+    <referenceTo>Opportunity</referenceTo>
+    <relationshipLabel>Meeting Notes</relationshipLabel>
+    <relationshipName>Meeting_Notes</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

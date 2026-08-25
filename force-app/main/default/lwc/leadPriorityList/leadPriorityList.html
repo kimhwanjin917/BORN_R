@@ -1,0 +1,52 @@
+<template>
+    <article class="priority-card">
+        <header class="card-head">
+            <div class="card-head__title">
+                <lightning-icon
+                    icon-name="standard:lead"
+                    size="small"
+                    alternative-text="신규기업"
+                ></lightning-icon>
+                <span>우선순위 신규기업</span>
+            </div>
+            <template lwc:if={hasLeads}>
+                <span class="card-head__count">{leadCount}</span>
+            </template>
+        </header>
+
+        <template lwc:if={hasLeads}>
+            <ul class="rows">
+                <template for:each={leads} for:item="lead">
+                    <li
+                        key={lead.Id}
+                        class="row"
+                        data-id={lead.Id}
+                        onclick={handleOpen}
+                    >
+                        <span class={lead.rankClass}>{lead.rank}</span>
+                        <div class="row__body">
+                            <span class="row__name" title={lead.Company}>{lead.Company}</span>
+                            <template lwc:if={lead.Priority_Rationale_Summary__c}>
+                                <span
+                                    class="row__reason"
+                                    title={lead.Priority_Rationale_Summary__c}
+                                >{lead.Priority_Rationale_Summary__c}</span>
+                            </template>
+                        </div>
+                        <span class="score-pill" title="우선순위 점수">
+                            {lead.Priority_Score__c}
+                        </span>
+                    </li>
+                </template>
+            </ul>
+        </template>
+
+        <template lwc:elseif={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <div class="state state_empty">우선순위 점수가 있는 신규기업이 없습니다.</div>
+        </template>
+    </article>
+</template>

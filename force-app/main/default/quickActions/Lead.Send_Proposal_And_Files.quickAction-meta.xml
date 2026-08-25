@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lead 의 Slack 채널에 준비 자료(첨부파일)와 AI 생성 RP 제안 메시지를 보내는 버튼 (Flow: Lead_Send_Proposal_And_Files, 백로그 15)</description>
+    <flowDefinition>Lead_Send_Proposal_And_Files</flowDefinition>
+    <label>자료·RP 제안 발송</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

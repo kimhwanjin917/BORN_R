@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <developerName>Account_AI_Test</developerName>
+    <masterLabel>Account_AI_Test</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>Write a short professional summary of this account using the available information.
+
+Keep the response within 3 sentences.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>previousOutput</apiName>
+            <definition>primitive://String</definition>
+            <referenceName>Input:previousOutput</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>userRequest</apiName>
+            <definition>primitive://String</definition>
+            <referenceName>Input:userRequest</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT5Mini</primaryModel>
+        <status>Draft</status>
+        <versionIdentifier>NbJ1snlQDkoZHQhYhF4jkb0IDduKvbgfl1ZG3OExBrc=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__fieldRefinementValidationType</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

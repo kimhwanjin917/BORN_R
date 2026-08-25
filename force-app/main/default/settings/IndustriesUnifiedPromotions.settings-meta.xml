@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IndustriesUnifiedPromotionsSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableGlblPrmtConstraintModel>false</enableGlblPrmtConstraintModel>
+    <enableGlobalPromotionsEvaluation>false</enableGlobalPromotionsEvaluation>
+    <enableGlobalPromotionsForRevenueCloud>false</enableGlobalPromotionsForRevenueCloud>
+    <enableGlobalPromotionsProductCatalogManagement>false</enableGlobalPromotionsProductCatalogManagement>
+    <enableUnifiedPromotions>false</enableUnifiedPromotions>
+</IndustriesUnifiedPromotionsSettings>

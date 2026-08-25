@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Use this action to validate the customer&apos;s verification code</description>
+    <developerName>Validate_Customer_Verification_Code</developerName>
+    <invocationTarget>Validate_Customer_Verification_Code</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>Validate_Customer_Verification_Code</localDeveloperName>
+    <masterLabel>Validate Customer Verification Code</masterLabel>
+</GenAiFunction>

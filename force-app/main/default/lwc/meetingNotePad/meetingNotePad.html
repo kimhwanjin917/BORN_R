@@ -1,0 +1,149 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters panels">
+        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
+            <article class="slds-card panel-card">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">미팅 메모</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner panel-body">
+                    <lightning-textarea
+                        data-id="raw-content"
+                        label="미팅 내용"
+                        placeholder="고객의 주요 관심사, 요청사항, 논의한 상품과 후속 조치를 입력해주세요."
+                        value={rawContentValue}
+                        onchange={handleRawContentChange}
+                        class="memo-input"
+                    ></lightning-textarea>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                        {rawContentLength}자
+                    </p>
+                </div>
+            </article>
+        </section>
+
+        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
+            <article class="slds-card panel-card">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">수수료 조건</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner panel-body">
+                    <lightning-input
+                        type="number"
+                        label="거래 금액 (원)"
+                        min="0"
+                        step="1000000"
+                        value={dealAmount}
+                        data-field="dealAmount"
+                        onchange={handleCalculatorChange}
+                    ></lightning-input>
+                    <div class="slds-grid slds-gutters_x-small slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input
+                                type="number"
+                                label="제안 수익률 (%)"
+                                min="0"
+                                step="0.01"
+                                value={annualYield}
+                                data-field="annualYield"
+                                onchange={handleCalculatorChange}
+                            ></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input
+                                type="number"
+                                label="수수료율 (%)"
+                                min="0"
+                                step="0.01"
+                                value={feeRate}
+                                data-field="feeRate"
+                                onchange={handleCalculatorChange}
+                            ></lightning-input>
+                        </div>
+                    </div>
+                    <lightning-input
+                        type="number"
+                        label="기간 (일)"
+                        min="1"
+                        step="1"
+                        value={termDays}
+                        data-field="termDays"
+                        onchange={handleCalculatorChange}
+                        class="slds-m-top_small"
+                    ></lightning-input>
+
+                    <div class="result-box slds-m-top_medium">
+                        <dl>
+                            <div class="result-row">
+                                <dt>상대기업 순이익</dt>
+                                <dd>{formattedClientBenefit}</dd>
+                            </div>
+                            <div class="result-row">
+                                <dt>상대기업 순수익률</dt>
+                                <dd>{formattedClientNetYield}</dd>
+                            </div>
+                            <div class="result-row">
+                                <dt>증권사 수익</dt>
+                                <dd>{formattedFirmRevenue}</dd>
+                            </div>
+                            <div class="result-row">
+                                <dt>증권사 수익률</dt>
+                                <dd>{formattedFirmYield}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+                        단순 일할 계산(365일 기준)이며 실제 계약 조건과 세금은 별도 확인이 필요합니다.
+                    </p>
+                </div>
+            </article>
+        </section>
+
+        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
+            <article class="slds-card panel-card">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">에이전트 추천</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner panel-body">
+                    <template if:true={hasRecommendation}>
+                        <div class="recommendation-output" aria-live="polite">{recommendation}</div>
+                    </template>
+                    <template if:false={hasRecommendation}>
+                        <div class="empty-state slds-text-color_weak" aria-live="polite">
+                            추천 내용이 아직 생성되지 않았습니다.
+                        </div>
+                    </template>
+
+                    <lightning-textarea
+                        data-id="follow-up"
+                        label="추가 질문"
+                        placeholder="추천에 대해 추가로 질문할 내용을 입력해주세요."
+                        value={followUpQuestionValue}
+                        onchange={handleFollowUpQuestionChange}
+                        class="slds-m-top_medium"
+                    ></lightning-textarea>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+        <lightning-button
+            variant="brand"
+            label={primaryButtonLabel}
+            onclick={handlePrimaryAction}
+            disabled={isSubmitting}
+        ></lightning-button>
+    </div>
+</template>

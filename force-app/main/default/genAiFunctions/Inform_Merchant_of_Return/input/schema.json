@@ -1,0 +1,14 @@
+{
+  "required" : [ "return_order_number" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "return_order_number" : {
+      "title" : "return_order_number",
+      "description" : "This is the RMA Number from the Return Order generated for the user previously",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

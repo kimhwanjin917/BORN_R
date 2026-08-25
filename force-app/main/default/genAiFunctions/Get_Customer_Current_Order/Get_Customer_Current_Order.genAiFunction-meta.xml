@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Use this action to find the customer&apos;s current order. Provide it back in this bullet-point format:
+
+Use this action to get the customer&apos;s order. Provide it back in this bullet-point format:
+
+Order Number: (Order Number)
+Order Amount: (Order Amount)
+Order Items: (Order items)
+Order Summary: (Order Summary)</description>
+    <developerName>Get_Customer_Current_Order</developerName>
+    <invocationTarget>Get_Customer_Current_Order</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>Get_Customer_Current_Order</localDeveloperName>
+    <masterLabel>Get Customer Current Order</masterLabel>
+</GenAiFunction>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Org_Name__c</fullName>
+    <description>Display name of the connected Slack Demo Org (e.g. Slack Demo 20143). From Demo Zone /detail response.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Org Name</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

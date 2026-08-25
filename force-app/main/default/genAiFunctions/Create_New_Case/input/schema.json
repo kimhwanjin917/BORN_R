@@ -1,0 +1,28 @@
+{
+  "required" : [ "case_description", "case_subject", "contact_id" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "case_description" : {
+      "title" : "case_description",
+      "description" : "This is the description the user should provide for the case they want to open",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "case_subject" : {
+      "title" : "case_subject",
+      "description" : "This is the subject the user wants to name their Case as",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contact_id" : {
+      "title" : "contact_id",
+      "description" : "This is the user's Contact's Record ID",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Amount__c</fullName>
+    <description>딜 금액 합계. DealSummaryAggregator.cls의 Aggregate SOQL(SUM)로만 채워지는 익명 집계 값 (스펙 §1.1).</description>
+    <inlineHelpText>Opportunity 금액의 합계(SUM)로 집계됩니다. 개별 딜 금액이 아니라 팀 단위 합계입니다.</inlineHelpText>
+    <label>금액 합계</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

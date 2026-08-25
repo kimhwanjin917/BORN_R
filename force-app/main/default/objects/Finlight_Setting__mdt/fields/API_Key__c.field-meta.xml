@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>API_Key__c</fullName>
+    <description>Finlight News API 호출 시 X-API-KEY 헤더로 전달하는 API 키.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Finlight에서 발급받은 API 키(sk_...)를 입력하세요.</inlineHelpText>
+    <label>API 키</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

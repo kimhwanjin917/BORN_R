@@ -1,0 +1,55 @@
+<template>
+    <article class="kpi-card">
+        <header class="card-head">
+            <div class="card-head__title">
+                <lightning-icon
+                    icon-name="standard:opportunity"
+                    size="small"
+                    alternative-text="상담"
+                ></lightning-icon>
+                <span>진행중인 상담</span>
+            </div>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <div class="hero">
+                <span class="hero__num">{openCount}</span>
+                <span class="hero__label">진행 중 건수</span>
+            </div>
+
+            <template lwc:if={hasStages}>
+                <div class="gauge">
+                    <div class="gauge__track">
+                        <template for:each={stages} for:item="stage">
+                            <div
+                                key={stage.stageName}
+                                class="gauge__segment"
+                                style={stage.segmentStyle}
+                                title={stage.stageName}
+                            ></div>
+                        </template>
+                    </div>
+
+                    <ul class="legend">
+                        <template for:each={stages} for:item="stage">
+                            <li key={stage.stageName} class="legend__item">
+                                <span class="legend__dot" style={stage.dotStyle}></span>
+                                <span class="legend__name" title={stage.stageName}>{stage.stageName}</span>
+                                <span class="legend__count">{stage.count}</span>
+                                <span class="legend__percent">{stage.percent}%</span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="state state_empty">진행 중인 상담이 없습니다.</div>
+            </template>
+        </template>
+    </article>
+</template>

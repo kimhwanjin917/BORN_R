@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Sanitized_Content</name>
+        <label>마스킹본 출력 변수에 할당</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>sanitizedContent</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Latest_Sanitized_Note.Sanitized_Content__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>영업기회 ID로 Meeting_Note__c 최신 1건을 찾아 Sanitized_Content__c(마스킹본)만 반환한다. Raw_Content__c(원문)는 조회 필드에 포함되지 않는다.</description>
+    <environments>Default</environments>
+    <interviewLabel>GetSanitizedMeetingNote {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>GetSanitizedMeetingNote</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Opportunity__c가 opportunityId와 같은 Meeting_Note__c 중 최신 1건. Sanitized_Content__c만 가져온다.</description>
+        <name>Get_Latest_Sanitized_Note</name>
+        <label>최신 마스킹본 조회</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Sanitized_Content</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>opportunityId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Meeting_Note__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Sanitized_Content__c</queriedFields>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Latest_Sanitized_Note</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>에이전트가 전달하는 영업기회 ID. 이 ID로 Meeting_Note__c 최신 1건을 찾는다.</description>
+        <name>opportunityId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>마스킹본 본문(Sanitized_Content__c). 원문 Raw_Content__c는 이 Flow에서 조회하지 않는다.</description>
+        <name>sanitizedContent</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

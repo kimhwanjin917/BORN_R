@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Default</label>
+    <protected>false</protected>
+    <values>
+        <field>Admin_Email__c</field>
+        <value xsi:type="xsd:string">baldeagle9603@gmail.com</value>
+    </values>
+    <values>
+        <field>Crtfc_Key__c</field>
+        <value xsi:type="xsd:string">ff3930f23898261b783f946fb375af547f4b9aec</value>
+    </values>
+    <values>
+        <field>Max_Retry__c</field>
+        <value xsi:type="xsd:double">3.0</value>
+    </values>
+    <values>
+        <field>Signal_Confidence_Threshold__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Signal_Relevance_Threshold__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

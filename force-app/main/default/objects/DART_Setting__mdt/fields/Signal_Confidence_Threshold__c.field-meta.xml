@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Signal_Confidence_Threshold__c</fullName>
+    <description>이 값 이상의 Confidence__c(%) 를 가진 ExternalSignal__c 발생 시 담당 RM 에게 알림을 보낸다. 미설정 시 알림 로직의 기본값을 사용한다.</description>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>RM 알림을 트리거할 신뢰도(%) 임계값을 입력하세요. 예: 60</inlineHelpText>
+    <label>시그널 신뢰도 임계값</label>
+    <precision>5</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <type>Percent</type>
+</CustomField>

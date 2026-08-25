@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Latest_Note_Found</name>
+        <label>최신 미팅 메모 있음?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>없음 (종료)</defaultConnectorLabel>
+        <rules>
+            <name>Has_Note</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Latest_Note</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Meeting_Log__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Summary</targetReference>
+            </connector>
+            <label>있음</label>
+        </rules>
+    </decisions>
+    <description>백로그 28: Opportunity.Meeting_Log__c 가 변경되면(&apos;저장·확정&apos;(26) 완료 신호) 비동기 경로에서 해당 영업기회의 최신 미팅 메모를 찾아 Meeting_Summary_To_Slack(요약 생성 + #상품팀-검토 전송)을 호출한다. 원문(Raw_Content__c)은 전달하지 않는다.</description>
+    <environments>Default</environments>
+    <interviewLabel>Opportunity_Meeting_Log_To_Slack {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>영업기회 미팅 로그 변경 → 상품팀 Slack 요약 전송</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>이 영업기회의 최신 Meeting_Note__c 1건 (Id만 — 마스킹본 조회·요약은 Subflow 담당)</description>
+        <name>Get_Latest_Note</name>
+        <label>최신 미팅 메모 조회</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Latest_Note_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Meeting_Note__c</object>
+        <queriedFields>Id</queriedFields>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Meeting_Log__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Get_Latest_Note</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>요약 생성 + Slack 전송 (채널 기본값 #상품팀-검토)</description>
+        <name>Send_Summary</name>
+        <label>미팅 요약 → 상품팀 Slack</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>Meeting_Summary_To_Slack</flowName>
+        <inputAssignments>
+            <name>meetingNoteId</name>
+            <value>
+                <elementReference>Get_Latest_Note.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>meetingLog</name>
+            <value>
+                <elementReference>$Record.Meeting_Log__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

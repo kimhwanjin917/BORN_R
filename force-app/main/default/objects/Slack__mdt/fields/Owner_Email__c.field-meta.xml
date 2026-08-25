@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Owner_Email__c</fullName>
+    <description>Salesforce email of the SE who claimed the Slack Demo Org via Demo Zone (human_owner.human_salesforce_fid). Required by the magic-login API as the Owner Salesforce ID.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Owner Email</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

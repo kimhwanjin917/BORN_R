@@ -27,6 +27,7 @@
 [출력 형식]
 요약: (홈 Top3 카드용 - 핵심 근거 1문장, 40자 이내)
 상세: (Account 상세용 - 2~3문장, 점수 근거를 재무·시그널 수치로 설명)</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
         <inputs>
             <apiName>RelatedAccount</apiName>
             <definition>SOBJECT://Account</definition>
@@ -36,7 +37,7 @@
         </inputs>
         <isCitationEnabled>false</isCitationEnabled>
         <primaryModel>sfdc_ai__DefaultGPT5Mini</primaryModel>
-        <status>Draft</status>
+        <status>Published</status>
         <templateDataProviders>
             <definition>apex://AccountPriorityRationaleProvider</definition>
             <description>기업(Account)의 최신 연간 재무제표와 최근 외부 시그널을 텍스트로 묶어 Account_Priority_Rationale 프롬프트 템플릿에 주입합니다. 점수는 재계산하지 않습니다.</description>

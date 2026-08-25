@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RM_Required</fullName>
+    <active>true</active>
+    <description>ERD 설계상 딜 진행 요약에는 담당 RM이 필수다. User 참조 Lookup 은 필드 수준 required 를 지원하지 않으므로 검증 규칙으로 강제한다.</description>
+    <errorConditionFormula>ISBLANK(RM__c)</errorConditionFormula>
+    <errorDisplayField>RM__c</errorDisplayField>
+    <errorMessage>담당 RM은 필수입니다.</errorMessage>
+</ValidationRule>

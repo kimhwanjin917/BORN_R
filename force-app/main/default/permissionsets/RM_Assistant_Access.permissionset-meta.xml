@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <agentAccesses>
+        <agentName>RM_Assistant</agentName>
+        <enabled>true</enabled>
+    </agentAccesses>
+    <classAccesses>
+        <apexClass>OpportunityListAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>OpportunityLookupAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ProductRecommendationAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SimilarWonAnalysisAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>근본증권 RM 어시스턴트(Employee 에이전트) 접근 + 에이전트 액션 Apex 실행 권한. 백로그 22/20. Agentforce 패널 자체는 표준 권한 세트 CopilotSalesforceUser + PSL EinsteinGPTCopilotPsl 이 별도로 필요.</description>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>GetSanitizedMeetingNote</flow>
+    </flowAccesses>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>RM Assistant Access</label>
+</PermissionSet>
