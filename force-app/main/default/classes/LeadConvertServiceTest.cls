@@ -10,6 +10,7 @@ private class LeadConvertServiceTest {
     private static final Decimal LEAD_PRIORITY = 42;
     private static final String LEAD_BRN = '1234567890';
     private static final String LEAD_COMPANY_CODE = 'CODE-001';
+    private static final String LEAD_DEPARTMENT = '재경팀';
     private static final String TEST_USER_NAME = 'lcs.tester@leadconvert.test.example.com';
 
     @TestSetup
@@ -28,7 +29,7 @@ private class LeadConvertServiceTest {
                 LastName = 'Kim',
                 FirstName = 'Test',
                 Company = 'Acme Corp',
-                Status = 'Open - Not Contacted',
+                Status = '신규',
                 // Industry/Email are carried by the standard conversion mapping to
                 // Account.Industry / Contact.Email, satisfying the org's active
                 // Required_PL (Account) and Required (Contact) validation rules.
@@ -39,7 +40,8 @@ private class LeadConvertServiceTest {
                 name_new__c = '김담당',
                 Priority_Score__c = LEAD_PRIORITY,
                 Business_Registration_Number__c = LEAD_BRN,
-                Assigned_Company_Code__c = LEAD_COMPANY_CODE
+                Assigned_Company_Code__c = LEAD_COMPANY_CODE,
+                Department__c = LEAD_DEPARTMENT
             );
             insert lead;
 
@@ -93,6 +95,9 @@ private class LeadConvertServiceTest {
             newFieldPerm(ps.Id, 'Lead', 'Lead.Priority_Score__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Business_Registration_Number__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Assigned_Company_Code__c', false),
+            newFieldPerm(ps.Id, 'Lead', 'Lead.Department__c', false),
+            // Contact.Department is written when transferring the Lead's department.
+            newFieldPerm(ps.Id, 'Contact', 'Contact.Department', true),
             // Account fields are read and written. Business_Registration_Number__c
             // is a required (non-nillable) field, so its FLS is implicit and
             // cannot be granted via FieldPermissions — it is omitted here.
@@ -260,6 +265,29 @@ private class LeadConvertServiceTest {
             'Business registration number should transfer when Account value is blank');
         Assert.areEqual(LEAD_COMPANY_CODE, acc.Assigned_Company_Code__c,
             'Assigned company code should transfer when Account value is blank');
+    }
+
+    @isTest
+    static void shouldTransferDepartmentToContact_WhenConverted() {
+        // Given
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        LeadConvertService.Request req = new LeadConvertService.Request();
+        req.leadId = lead.Id;
+        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 13, 0, 0);
+
+        // When
+        List<LeadConvertService.Response> responses;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
+        }
+        Test.stopTest();
+
+        // Then
+        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
+        Contact contact = [SELECT Department FROM Contact LIMIT 1];
+        Assert.areEqual(LEAD_DEPARTMENT, contact.Department,
+            'Lead Department__c should transfer to the standard Contact.Department field');
     }
 
     // ─── Negative Tests ───────────────────────────────────────────────────

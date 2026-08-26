@@ -5,7 +5,7 @@ public with sharing class LeadPriorityController {
         return [
             SELECT Id, Company, Priority_Score__c, Priority_Rationale_Summary__c
             FROM Lead
-            WHERE IsConverted = false AND Status = 'New' AND Priority_Score__c != null
+            WHERE IsConverted = false AND Status = '신규' AND Priority_Score__c != null
             WITH USER_MODE
             ORDER BY Priority_Score__c DESC, Name ASC
             LIMIT :rowLimit

@@ -111,7 +111,7 @@ private class MeetingPrepEmailProviderTest {
         Lead lead = new Lead(
             LastName = 'Tester' + seq,
             Company = company,
-            Status = 'New',
+            Status = '신규',
             IsConverted = false,
             Email = 'tester' + seq + '@example.com',
             name_new__c = 'Tester',
@@ -130,7 +130,7 @@ private class MeetingPrepEmailProviderTest {
         insert new CorporateFinancialStatement__c(
             Lead__c = leadId,
             Fiscal_Year__c = fiscalYear,
-            Period_Type__c = '연간',
+            Period_Type__c = '4분기',
             Total_Assets__c = totalAssets,
             Total_Equity__c = totalEquity,
             Cash_And_Equivalents__c = cash,

@@ -9,19 +9,24 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>연간</fullName>
+                <fullName>1분기</fullName>
                 <default>false</default>
-                <label>연간</label>
+                <label>1분기</label>
             </value>
             <value>
-                <fullName>반기</fullName>
+                <fullName>2분기</fullName>
                 <default>false</default>
-                <label>반기</label>
+                <label>2분기</label>
             </value>
             <value>
-                <fullName>분기</fullName>
+                <fullName>3분기</fullName>
                 <default>false</default>
-                <label>분기</label>
+                <label>3분기</label>
+            </value>
+            <value>
+                <fullName>4분기</fullName>
+                <default>false</default>
+                <label>4분기</label>
             </value>
         </valueSetDefinition>
     </valueSet>

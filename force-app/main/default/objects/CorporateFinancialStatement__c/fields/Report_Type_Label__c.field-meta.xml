@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Report_Type_Label__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(RIGHT(External_Key__c, 5),
+  &quot;11013&quot;, &quot;1분기보고서&quot;,
+  &quot;11012&quot;, &quot;2분기보고서&quot;,
+  &quot;11014&quot;, &quot;3분기보고서&quot;,
+  &quot;11011&quot;, &quot;4분기보고서&quot;,
+  CASE(TEXT(Period_Type__c),
+    &quot;1분기&quot;, &quot;1분기보고서&quot;,
+    &quot;2분기&quot;, &quot;2분기보고서&quot;,
+    &quot;3분기&quot;, &quot;3분기보고서&quot;,
+    &quot;4분기&quot;, &quot;4분기보고서&quot;,
+    &quot;--&quot;))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <inlineHelpText>DART 보고서코드 기준 분기 보고서 구분. 11013=1분기, 11012=2분기(반기), 11014=3분기, 11011=4분기(사업보고서).</inlineHelpText>
+    <label>보고서 구분</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>admin_team</label>
+    <description>재무제표 신규 Formula 필드(공시기준 년/월, 보고서 구분) 읽기 권한. 지정된 관리 팀원에게만 부여.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <fieldPermissions>
+        <field>CorporateFinancialStatement__c.Disclosure_Period_YM__c</field>
+        <editable>false</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>CorporateFinancialStatement__c.Fiscal_Year_Text__c</field>
+        <editable>false</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>CorporateFinancialStatement__c.Report_Type_Label__c</field>
+        <editable>false</editable>
+        <readable>true</readable>
+    </fieldPermissions>
+</PermissionSet>

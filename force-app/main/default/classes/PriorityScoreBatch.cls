@@ -1,7 +1,7 @@
 /**
  * 기업 영업 우선순위 점수(Priority_Score__c, 0~100 정수)를 결정적으로 재계산하는 배치.
  *
- * 대상: 발굴 Lead(IsConverted=false, Status='New') 와 Account. 스케줄러가 두 대상을 각각 기동한다.
+ * 대상: 발굴 Lead(IsConverted=false, Status='신규') 와 Account. 스케줄러가 두 대상을 각각 기동한다.
  *
  * 채점(총 100점):
  *   1) 상품 적합도 40점 — 현금자산비율(RP) 과 차입금의존도(회사채) 중 점수가 높은 쪽을 그 기업의 상품으로 정한다.
@@ -76,7 +76,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
     /**
      * 점수 산정 후보 레코드를 조회한다.
-     * Lead 는 발굴 단계(Status='New')만, Account 는 전체를 조회하고 execute 에서 제외 판정을 적용한다.
+     * Lead 는 발굴 단계(Status='신규')만, Account 는 전체를 조회하고 execute 에서 제외 판정을 적용한다.
      * @param context 배치 컨텍스트
      * @return 대상 레코드 QueryLocator
      */
@@ -85,7 +85,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
             return Database.getQueryLocator([
                 SELECT Id, Priority_Score__c
                 FROM Lead
-                WHERE IsConverted = false AND Status = 'New'
+                WHERE IsConverted = false AND Status = '신규'
             ]);
         }
         return Database.getQueryLocator([
@@ -364,17 +364,18 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
         return year * 10 + periodOrdinal(statement);
     }
 
-    // 보고서 코드/기간유형 → 연내 서수(1분기 11013=1, 반기 11012=2, 3분기 11014=3, 연간 11011=4).
-    // External_Key 파싱 실패 시 Period_Type__c 로 폴백한다('분기'는 세부 구분 불가라 1분기로 간주).
+    // 보고서 코드/기간유형 → 연내 서수(1분기 11013=1, 반기 11012=2, 3분기 11014=3, 사업보고서 11011=4).
+    // External_Key 파싱 실패 시 Period_Type__c(1~4분기) 로 폴백한다.
     private Integer periodOrdinal(CorporateFinancialStatement__c statement) {
         String code = reportCodeOf(statement);
         if ('11013'.equals(code)) { return 1; }
         if ('11012'.equals(code)) { return 2; }
         if ('11014'.equals(code)) { return 3; }
         if ('11011'.equals(code)) { return 4; }
-        if ('연간'.equals(statement.Period_Type__c)) { return 4; }
-        if ('반기'.equals(statement.Period_Type__c)) { return 2; }
-        if ('분기'.equals(statement.Period_Type__c)) { return 1; }
+        if ('4분기'.equals(statement.Period_Type__c)) { return 4; }
+        if ('3분기'.equals(statement.Period_Type__c)) { return 3; }
+        if ('2분기'.equals(statement.Period_Type__c)) { return 2; }
+        if ('1분기'.equals(statement.Period_Type__c)) { return 1; }
         return 0;
     }
 

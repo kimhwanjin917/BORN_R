@@ -240,7 +240,7 @@ private class PriorityScoreBatchTest {
         Lead lead = new Lead(
             LastName = 'Tester',
             Company = company,
-            Status = 'New',
+            Status = '신규',
             IsConverted = false,
             name_new__c = 'Tester',
             Email = 'tester@example.com'
@@ -286,9 +286,10 @@ private class PriorityScoreBatchTest {
     }
 
     private static String periodTypeOf(String reportCode) {
-        if (reportCode == '11011') { return '연간'; }
-        if (reportCode == '11012') { return '반기'; }
-        return '분기';
+        if (reportCode == '11011') { return '4분기'; }
+        if (reportCode == '11012') { return '2분기'; }
+        if (reportCode == '11014') { return '3분기'; }
+        return '1분기';
     }
 
     private static void insertDisclosureSignal(Id leadId, Id accountId, Date signalDate) {

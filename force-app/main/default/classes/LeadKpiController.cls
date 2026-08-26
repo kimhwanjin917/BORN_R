@@ -4,7 +4,7 @@
  */
 public with sharing class LeadKpiController {
 
-    private static final String STATUS_NEW = 'New';
+    private static final String STATUS_NEW = '신규';
 
     /**
      * A single KPI segment: label, count and share of the total.

@@ -111,7 +111,7 @@ private class AccountPriorityRationaleProviderTest {
         insert new CorporateFinancialStatement__c(
             Account__c = accountId,
             Fiscal_Year__c = fiscalYear,
-            Period_Type__c = '연간',
+            Period_Type__c = '4분기',
             Total_Assets__c = totalAssets,
             Total_Equity__c = totalEquity,
             Cash_And_Equivalents__c = cash,

@@ -13,7 +13,7 @@ private class LeadEventConvertHandlerTest {
         insert new Lead(
             LastName = '담당자',
             Company = 'TEST-전환대상(주)',
-            Status = 'Open - Not Contacted',
+            Status = '신규',
             Industry = 'Insurance',
             Email = 'lead.tester@leadeventconvert.test.example.com',
             name_new__c = '담당자',

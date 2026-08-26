@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disclosure_Period_YM__c</fullName>
+    <externalId>false</externalId>
+    <formula>TEXT(Fiscal_Year__c) &amp; &quot;/&quot; &amp;
+CASE(RIGHT(External_Key__c, 5),
+  &quot;11011&quot;, &quot;12&quot;,
+  &quot;11012&quot;, &quot;06&quot;,
+  &quot;11013&quot;, &quot;03&quot;,
+  &quot;11014&quot;, &quot;09&quot;,
+  CASE(TEXT(Period_Type__c),
+    &quot;4분기&quot;, &quot;12&quot;,
+    &quot;2분기&quot;, &quot;06&quot;,
+    &quot;1분기&quot;, &quot;03&quot;,
+    &quot;3분기&quot;, &quot;09&quot;,
+    &quot;--&quot;))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <inlineHelpText>DART 보고서코드(11011 사업보고서→12월, 11012 반기→06월, 11013 1분기→03월, 11014 3분기→09월) 기준 공시 연월. External_Key가 비정형이면 기간 구분으로 폴백.</inlineHelpText>
+    <label>공시기준(년/월)</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

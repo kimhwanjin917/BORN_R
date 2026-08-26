@@ -152,7 +152,7 @@ private class DartFinancialServiceTest {
 
             // Then
             CorporateFinancialStatement__c saved = [
-                SELECT External_Key__c, Account__c, Fiscal_Year__c, Period_Type__c,
+                SELECT External_Key__c, Account__c, Fiscal_Year__c, Period_Type__c, CurrencyIsoCode,
                        Cash_And_Equivalents__c, Total_Assets__c, Total_Debt__c,
                        Revenue__c, Operating_Income__c, Cash_Asset_Ratio__c,
                        Short_Term_Financial_Instruments__c, Total_Equity__c,
@@ -162,7 +162,8 @@ private class DartFinancialServiceTest {
             ];
             Assert.areEqual(account.Id, saved.Account__c, 'corp_code 로 Account 가 매핑되어야 한다');
             Assert.areEqual(2023, saved.Fiscal_Year__c, '사업연도가 저장되어야 한다');
-            Assert.areEqual('연간', saved.Period_Type__c, '11011 은 연간으로 매핑되어야 한다');
+            Assert.areEqual('4분기', saved.Period_Type__c, '11011(사업보고서) 은 4분기로 매핑되어야 한다');
+            Assert.areEqual('KRW', saved.CurrencyIsoCode, 'DART 재무는 원 단위이므로 통화는 KRW로 고정되어야 한다');
             Assert.areEqual(1000000, saved.Cash_And_Equivalents__c, '현금및현금성자산');
             Assert.areEqual(5000000, saved.Total_Assets__c, '자산총계');
             Assert.areEqual(2000000, saved.Total_Debt__c, '부채총계');
@@ -385,5 +386,21 @@ private class DartFinancialServiceTest {
             ];
             Assert.areEqual(1, count, 'Queueable 정상 실행 시 재무제표 1건이 수집되어야 한다');
         }
+    }
+
+    @isTest
+    static void subtractIfCumulative_onlyWhenAnnualExceedsQuarterSum() {
+        // 연간(누적)이 세 분기 합보다 크면 당분기(연간-합)로 차감
+        Assert.areEqual(25,
+            DartFinancialService.subtractIfCumulative(100, 30, 25, 20),
+            '연간 100 - (30+25+20)=25 당분기가 되어야 한다');
+        // 이미 당분기(합 이하)면 원값 유지(멱등)
+        Assert.areEqual(25,
+            DartFinancialService.subtractIfCumulative(25, 30, 25, 20),
+            '이미 당분기면 변경되지 않아야 한다');
+        // 분기값이 하나라도 null 이면 원값 유지
+        Assert.areEqual(100,
+            DartFinancialService.subtractIfCumulative(100, null, 25, 20),
+            '분기값 누락 시 연간 원값을 유지해야 한다');
     }
 }

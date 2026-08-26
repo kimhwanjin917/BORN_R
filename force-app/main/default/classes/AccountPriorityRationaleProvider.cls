@@ -15,7 +15,7 @@
  */
 public with sharing class AccountPriorityRationaleProvider {
 
-    @TestVisible private static final String ANNUAL_PERIOD = '연간';
+    @TestVisible private static final String ANNUAL_PERIOD = '4분기';
     @TestVisible private static final Integer MAX_SIGNALS = 5;
     @TestVisible private static final String NO_ACCOUNT_MESSAGE =
         '(기업 정보가 전달되지 않았습니다. 제공된 점수 외의 근거를 만들어내지 마세요.)';

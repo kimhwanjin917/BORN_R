@@ -13,7 +13,7 @@
  */
 public with sharing class MeetingPrepEmailProvider {
 
-    @TestVisible private static final String ANNUAL_PERIOD = '연간';
+    @TestVisible private static final String ANNUAL_PERIOD = '4분기';
     @TestVisible private static final String RP_FAMILY_KEYWORD = 'RP';
     @TestVisible private static final Integer MAX_SIGNALS = 3;
     @TestVisible private static final String NO_LEAD_MESSAGE =

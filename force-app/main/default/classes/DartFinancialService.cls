@@ -203,6 +203,10 @@ public with sharing class DartFinancialService {
         }
 
         CorporateFinancialStatement__c record = new CorporateFinancialStatement__c();
+        // DART 재무수치는 전부 원(KRW) 단위다. 조직 기준통화도 KRW지만, 멀티커런시에서
+        // 신규 레코드는 실행 유저의 기본통화를 기본값으로 쓰므로 여기서 KRW를 명시 고정한다.
+        // (명시하지 않으면 배치를 돌린 유저 설정에 따라 USD 등으로 잘못 적재된다.)
+        record.CurrencyIsoCode = 'KRW';
         record.External_Key__c = buildExternalKey(corpCode, businessYear, reportCode);
         record.Account__c = resolveAccountId(corpCode);
         record.Lead__c = resolveLeadId(corpCode);
@@ -220,6 +224,13 @@ public with sharing class DartFinancialService {
         record.Operating_Income__c = firstNonNull(
             amountByStdCodeIS.get(ID_OPERATING_INCOME), amountByAccount.get(ACCT_OPERATING_INCOME)
         );
+
+        // 4분기(사업보고서, 11011)의 매출·영업이익은 DART가 '연간 누적(1~12월)'으로 준다.
+        // 당분기(10~12월 3개월) = 연간 - (1분기 + 2분기 + 3분기). 같은 회사·연도의 세 분기가
+        // org 에 모두 수집돼 있으면 여기서 차감해 '당분기'로 적재한다(연간 총합을 그대로 쓰지 않는다).
+        if ('11011'.equals(reportCode)) {
+            applyQ4Standalone(record, corpCode, businessYear);
+        }
 
         // 표준계정코드 기반 신규 필드. 단기차입금 = 순수 단기차입금 + 유동성장기차입금,
         // 사채 = 유동성사채 + 비유동사채. 세 차입금 필드의 합이 총차입금이 된다.
@@ -365,11 +376,60 @@ public with sharing class DartFinancialService {
         return corpCode + '_' + businessYear + '_' + reportCode;
     }
 
+    // 4분기(사업보고서) 매출·영업이익을 '연간 누적'에서 '당분기 3개월'로 보정한다.
+    // 당분기 = 연간 - (1분기 + 2분기 + 3분기). 세 분기 레코드가 org 에 모두 있어야 계산하고,
+    // 하나라도 없으면 연간값을 유지한다(세 분기 확보 후 재수집 시 보정됨).
+    @TestVisible
+    private static void applyQ4Standalone(
+        CorporateFinancialStatement__c annual,
+        String corpCode,
+        String businessYear
+    ) {
+        String q1Key = corpCode + '_' + businessYear + '_11013';
+        String q2Key = corpCode + '_' + businessYear + '_11012';
+        String q3Key = corpCode + '_' + businessYear + '_11014';
+        Map<String, CorporateFinancialStatement__c> byKey = new Map<String, CorporateFinancialStatement__c>();
+        for (CorporateFinancialStatement__c c : [
+            SELECT External_Key__c, Revenue__c, Operating_Income__c
+            FROM CorporateFinancialStatement__c
+            WHERE External_Key__c IN :new Set<String>{ q1Key, q2Key, q3Key }
+            WITH USER_MODE
+        ]) {
+            byKey.put(c.External_Key__c, c);
+        }
+        CorporateFinancialStatement__c q1 = byKey.get(q1Key);
+        CorporateFinancialStatement__c q2 = byKey.get(q2Key);
+        CorporateFinancialStatement__c q3 = byKey.get(q3Key);
+        if (q1 == null || q2 == null || q3 == null) {
+            return;
+        }
+        annual.Revenue__c = subtractIfCumulative(
+            annual.Revenue__c, q1.Revenue__c, q2.Revenue__c, q3.Revenue__c
+        );
+        annual.Operating_Income__c = subtractIfCumulative(
+            annual.Operating_Income__c, q1.Operating_Income__c, q2.Operating_Income__c, q3.Operating_Income__c
+        );
+    }
+
+    // annual 이 세 분기 합보다 클 때(=아직 연간 누적)만 (annual - 합)을 반환한다.
+    // 이미 당분기(합 이하)거나 값이 하나라도 null 이면 원값을 유지해, 재수집·재실행에도 안전하다(멱등).
+    @TestVisible
+    private static Decimal subtractIfCumulative(Decimal annual, Decimal q1, Decimal q2, Decimal q3) {
+        if (annual == null || q1 == null || q2 == null || q3 == null) {
+            return annual;
+        }
+        Decimal sum3 = q1 + q2 + q3;
+        return annual > sum3 ? annual - sum3 : annual;
+    }
+
+    // DART 보고서코드 → 분기 구분. 반기(11012)=2분기, 사업보고서(11011)=4분기.
+    // 4분기 매출·영업이익은 applyQ4Standalone 에서 당분기(3개월)로 보정한다.
     private static String mapPeriodType(String reportCode) {
         switch on reportCode {
-            when '11011' { return '연간'; }
-            when '11012' { return '반기'; }
-            when '11013', '11014' { return '분기'; }
+            when '11013' { return '1분기'; }
+            when '11012' { return '2분기'; }
+            when '11014' { return '3분기'; }
+            when '11011' { return '4분기'; }
             when else { return null; }
         }
     }

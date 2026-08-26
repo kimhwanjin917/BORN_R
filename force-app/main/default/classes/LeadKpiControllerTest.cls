@@ -21,11 +21,11 @@ private class LeadKpiControllerTest {
     static void setupTestData() {
         List<Lead> leads = new List<Lead>();
         // Not-converted (New) leads
-        leads.addAll(buildLeads(3, 'New', 0));
+        leads.addAll(buildLeads(3, '신규', 0));
         // In-progress (open, non-New) leads
-        leads.addAll(buildLeads(2, 'Working', 100));
+        leads.addAll(buildLeads(2, '연결', 100));
         // Leads to convert into Won
-        List<Lead> toConvert = buildLeads(4, 'New', 200);
+        List<Lead> toConvert = buildLeads(4, '신규', 200);
         leads.addAll(toConvert);
         insert leads;
 

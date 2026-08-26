@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>근본증권 · Salesforce 보안 아키텍처</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root{
+    --bg:#0a1120; --panel:#111b2e; --panel2:#0e1727; --line:#223049;
+    --txt:#e6ecf5; --sub:#9fb0c7; --dim:#7b8aa3;
+    --blue:#4da3ff; --violet:#a98bff; --green:#5fd39a; --amber:#ffc255; --teal:#39d0c8; --red:#ff7a7a;
+  }
+  body{ font-family:"Pretendard","Malgun Gothic",-apple-system,sans-serif; background:
+    radial-gradient(1200px 500px at 50% -100px, #16233d 0%, var(--bg) 60%); color:var(--txt);
+    padding:38px 22px; line-height:1.5; }
+  .wrap{ max-width:1280px; margin:0 auto; }
+
+  /* ---------- header ---------- */
+  .hero{ text-align:center; margin-bottom:24px; }
+  .hero .kick{ font-size:12px; letter-spacing:3px; color:var(--blue); font-weight:700; }
+  .hero h1{ font-size:32px; font-weight:800; letter-spacing:-0.5px; margin:8px 0; }
+  .hero h1 .g{ background:linear-gradient(90deg,#4da3ff,#39d0c8); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero p{ color:var(--sub); font-size:14px; }
+
+  /* keyword chip cloud */
+  .cloud{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:18px auto 8px; max-width:1000px;}
+  .chip{ font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px; border:1px solid; background:rgba(255,255,255,0.02);}
+  .c-blue{ color:#a9d3ff; border-color:rgba(77,163,255,.45);}
+  .c-violet{ color:#cbb8ff; border-color:rgba(169,139,255,.45);}
+  .c-green{ color:#9fe8c2; border-color:rgba(95,211,154,.45);}
+  .c-amber{ color:#ffdd9c; border-color:rgba(255,194,85,.45);}
+  .c-teal{ color:#9df0eb; border-color:rgba(57,208,200,.45);}
+
+  .section-t{ display:flex; align-items:center; gap:10px; margin:34px 0 14px; }
+  .section-t .no{ width:26px; height:26px; border-radius:7px; background:var(--blue); color:#04101f;
+    font-weight:800; font-size:14px; display:grid; place-items:center; }
+  .section-t h2{ font-size:18px; font-weight:800; }
+  .section-t .hint{ color:var(--dim); font-size:12px; margin-left:auto; }
+
+  /* ---------- defense layers (stacked bands) ---------- */
+  .layers{ display:flex; flex-direction:column; gap:10px; }
+  .band{ display:flex; align-items:center; gap:16px; background:var(--panel); border:1px solid var(--line);
+    border-left-width:5px; border-radius:12px; padding:14px 18px; }
+  .band .ic{ width:46px; height:52px; flex:none; display:grid; place-items:center; font-size:22px;
+    background:#0c1526; border:1px solid var(--line); clip-path:polygon(50% 0,100% 22%,100% 72%,50% 100%,0 72%,0 22%); }
+  .band .body{ flex:1; min-width:0; }
+  .band .body .h{ font-size:15px; font-weight:800; margin-bottom:2px; }
+  .band .body .q{ font-size:12px; color:var(--sub); }
+  .band .kw{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .band .kw span{ font-size:11px; font-weight:700; padding:3px 9px; border-radius:6px; background:#0c1526; border:1px solid var(--line); color:#c6d3e6;}
+  .band .role{ flex:none; text-align:center; font-size:11px; color:var(--dim); width:96px; }
+  .band .role b{ display:block; font-size:20px; color:var(--txt); }
+  .b-blue{ border-left-color:var(--blue);} .b-blue .ic{ color:var(--blue);}
+  .b-violet{ border-left-color:var(--violet);} .b-violet .ic{ color:var(--violet);}
+  .b-green{ border-left-color:var(--green);} .b-green .ic{ color:var(--green);}
+  .b-amber{ border-left-color:var(--amber);} .b-amber .ic{ color:var(--amber);}
+  .b-teal{ border-left-color:var(--teal);} .b-teal .ic{ color:var(--teal);}
+
+  /* ---------- solution cards (tech -> problem) ---------- */
+  .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .sol{ background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:16px; position:relative; overflow:hidden;}
+  .sol::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--blue);}
+  .sol.v::before{background:var(--violet);} .sol.g::before{background:var(--green);}
+  .sol.a::before{background:var(--amber);} .sol.t::before{background:var(--teal);} .sol.r::before{background:var(--red);}
+  .sol .top{ display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .sol .hx{ width:36px; height:36px; flex:none; display:grid; place-items:center; font-size:17px; color:#04101f;
+    background:var(--blue); clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+  .sol.v .hx{background:var(--violet);} .sol.g .hx{background:var(--green);}
+  .sol.a .hx{background:var(--amber);} .sol.t .hx{background:var(--teal);} .sol.r .hx{background:var(--red);}
+  .sol .tech{ font-size:14px; font-weight:800; line-height:1.25;}
+  .sol .tech small{ display:block; font-weight:600; color:var(--dim); font-size:10.5px; letter-spacing:.5px;}
+  .sol .row{ font-size:12px; display:flex; gap:6px; margin-top:7px; }
+  .sol .row .lab{ flex:none; width:38px; font-weight:800; }
+  .sol .row.p .lab{ color:var(--red);} .sol .row.s .lab{ color:var(--green);}
+  .sol .row .val{ color:var(--sub);}
+  .sol .seen{ margin-top:10px; font-size:10.5px; font-weight:700; color:var(--green);
+    background:rgba(95,211,154,.1); border:1px solid rgba(95,211,154,.35); border-radius:6px; padding:4px 8px; display:inline-block;}
+  .sol .plan{ margin-top:10px; font-size:10.5px; font-weight:700; color:var(--amber);
+    background:rgba(255,194,85,.1); border:1px solid rgba(255,194,85,.35); border-radius:6px; padding:4px 8px; display:inline-block;}
+
+  /* ---------- AI flow strip ---------- */
+  .ai{ display:flex; align-items:stretch; gap:0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; }
+  .ai .node{ flex:1; text-align:center; padding:6px 10px; }
+  .ai .node .cir{ width:52px; height:52px; margin:0 auto 8px; border-radius:50%; display:grid; place-items:center; font-size:22px;
+    border:2px solid var(--line); background:#0c1526;}
+  .ai .node .nm{ font-size:12.5px; font-weight:800;}
+  .ai .node .ds{ font-size:11px; color:var(--sub); margin-top:3px;}
+  .ai .node.trust .cir{ border-color:var(--green); box-shadow:0 0 0 4px rgba(95,211,154,.14);}
+  .ai .node.trust .nm{ color:var(--green);}
+  .ai .sep{ display:grid; place-items:center; color:var(--blue); font-size:22px; font-weight:800; min-width:30px;}
+  .ai-note{ margin-top:12px; background:#101f16; border:1px solid rgba(95,211,154,.4); border-radius:12px; padding:12px 16px;
+    font-size:12.5px; color:var(--sub); }
+  .ai-note b{ color:var(--green); }
+  .ai-warn{ margin-top:8px; background:#1f1710; border:1px solid rgba(255,194,85,.4); border-radius:12px; padding:11px 16px;
+    font-size:12.5px; color:var(--sub);}
+  .ai-warn b{ color:var(--amber);}
+
+  footer{ text-align:center; color:#5f6f88; font-size:11.5px; margin-top:30px; }
+
+  @media (max-width:1080px){ .grid{ grid-template-columns:1fr 1fr;} .ai{ flex-wrap:wrap;} .ai .sep{ transform:rotate(90deg);} }
+  @media (max-width:680px){ .grid{ grid-template-columns:1fr;} .band{ flex-wrap:wrap;} .band .role{ width:auto;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kick">근본증권 · SALESFORCE SECURITY</div>
+    <h1>금융권 등급 <span class="g">다층 보안 아키텍처</span></h1>
+    <p>온프레미스로는 재현하기 어려운 방어를 플랫폼이 기본 제공 — 우리는 증권사 업무구조에 맞게 실제로 설정했습니다</p>
+    <div class="cloud">
+      <span class="chip c-blue">MFA</span>
+      <span class="chip c-blue">SAML SSO</span>
+      <span class="chip c-blue">IP Allowlist</span>
+      <span class="chip c-blue">TLS 1.2+</span>
+      <span class="chip c-blue">Session Timeout</span>
+      <span class="chip c-violet">Profile</span>
+      <span class="chip c-violet">Permission Set</span>
+      <span class="chip c-violet">OWD</span>
+      <span class="chip c-violet">FLS</span>
+      <span class="chip c-violet">SoD 직무분리</span>
+      <span class="chip c-green">Shield Encryption</span>
+      <span class="chip c-green">Field Audit Trail</span>
+      <span class="chip c-green">Data Mask</span>
+      <span class="chip c-amber">Event Monitoring</span>
+      <span class="chip c-amber">Transaction Security</span>
+      <span class="chip c-amber">Setup Audit Trail</span>
+      <span class="chip c-teal">Einstein Trust Layer</span>
+      <span class="chip c-teal">PII Masking</span>
+      <span class="chip c-teal">Zero-Retention</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1 : DEFENSE IN DEPTH -->
+  <div class="section-t"><div class="no">1</div><h2>다층 방어 (Defense in Depth)</h2><div class="hint">5개 계층이 모든 데이터에 동시 적용</div></div>
+  <div class="layers">
+
+    <div class="band b-blue">
+      <div class="ic">🔐</div>
+      <div class="body">
+        <div class="h">인증 · 접속 통제</div>
+        <div class="q">"누가 들어오는가" — 신원과 접속 위치를 먼저 검증</div>
+        <div class="kw"><span>MFA(보안키·OTP)</span><span>SAML SSO</span><span>프로필별 IP 제한</span><span>HTTPS 강제</span><span>세션 2h 자동로그아웃</span><span>Clickjack·CSRF 방어</span></div>
+      </div>
+      <div class="role"><b>①</b>Perimeter</div>
+    </div>
+
+    <div class="band b-violet">
+      <div class="ic">👥</div>
+      <div class="body">
+        <div class="h">접근 통제 · 권한분리</div>
+        <div class="q">"무엇을 볼 수 있는가" — 직무별 최소권한 + 5단 필터</div>
+        <div class="kw"><span>Profile(본부장·팀장·RM·상품·심사)</span><span>Permission Set</span><span>Role Hierarchy</span><span>OWD(Private)</span><span>Field-Level Security</span><span>상품↔심사 SoD</span></div>
+      </div>
+      <div class="role"><b>②</b>Access</div>
+    </div>
+
+    <div class="band b-green">
+      <div class="ic">🛡️</div>
+      <div class="body">
+        <div class="h">데이터 보호</div>
+        <div class="q">"저장·유출을 어떻게 막는가" — 암호화와 격리</div>
+        <div class="kw"><span>Shield Platform Encryption</span><span>고객관리 암호키(BYOK)</span><span>Field Audit Trail</span><span>Data Mask(샌드박스 익명화)</span><span>위험파일 강제 다운로드</span></div>
+      </div>
+      <div class="role"><b>③</b>Data</div>
+    </div>
+
+    <div class="band b-amber">
+      <div class="ic">📡</div>
+      <div class="body">
+        <div class="h">탐지 · 감사</div>
+        <div class="q">"이상행위를 잡고 증적을 남기는가" — 실시간 모니터링</div>
+        <div class="kw"><span>Event Monitoring</span><span>Transaction Security Policy</span><span>Setup Audit Trail</span><span>Login History</span><span>대량 다운로드 탐지·차단</span></div>
+      </div>
+      <div class="role"><b>④</b>Detect</div>
+    </div>
+
+    <div class="band b-teal">
+      <div class="ic">🤖</div>
+      <div class="body">
+        <div class="h">AI 신뢰 계층</div>
+        <div class="q">"AI가 데이터를 새게 하지 않는가" — 생성형 AI 전용 방어</div>
+        <div class="kw"><span>Einstein Trust Layer</span><span>PII 마스킹</span><span>Zero-Retention</span><span>학습 미사용</span><span>유해성 필터</span><span>AI 감사로그</span></div>
+      </div>
+      <div class="role"><b>⑤</b>AI</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : TECH -> PROBLEM -->
+  <div class="section-t"><div class="no">2</div><h2>어떤 기술로 · 어떤 문제를 · 해결하는가</h2><div class="hint">✓실측 = 이 org에 이미 설정됨 · ◇제안 = 추가 도입 권장</div></div>
+  <div class="grid">
+
+    <div class="sol">
+      <div class="top"><div class="hx">🔑</div><div class="tech">MFA + SSO<small>다중인증 · 통합인증</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">비밀번호 탈취 · 계정 도용</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">보안키/OTP 2차 인증 + 사내 IdP SSO</span></div>
+      <div class="seen">✓ 실측 · MFA_Required 권한셋 + SAML 다중구성</div>
+    </div>
+
+    <div class="sol">
+      <div class="top"><div class="hx">📍</div><div class="tech">IP Allowlist<small>프로필별 로그인 IP 제한</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">외부망·비인가 위치에서 접속</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">사내망 대역에서만 로그인 허용</span></div>
+      <div class="seen">✓ 실측 · 근본증권 본사 사내망 대역 등록</div>
+    </div>
+
+    <div class="sol v">
+      <div class="top"><div class="hx">👤</div><div class="tech">최소권한<small>Profile + Permission Set</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">권한 오남용 · 과다권한</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">직무별 프로필 + 기능단위 권한셋</span></div>
+      <div class="seen">✓ 실측 · RM·심사·상품·팀장·본부장 프로필</div>
+    </div>
+
+    <div class="sol v">
+      <div class="top"><div class="hx">🙈</div><div class="tech">OWD + FLS<small>레코드·필드 접근통제</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">고객·상담정보 무단 열람</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">기본 비공개 + 민감필드 소수만 접근</span></div>
+      <div class="seen">✓ 실측 · 상담메모 Private · 재무필드 권한셋</div>
+    </div>
+
+    <div class="sol a">
+      <div class="top"><div class="hx">🚨</div><div class="tech">Event Monitoring<small>+ Transaction Security</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">내부자 대량 다운로드·유출</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">이상행위 실시간 탐지·경보·차단</span></div>
+      <div class="plan">◇ 제안 · 내부통제·FDS 강화</div>
+    </div>
+
+    <div class="sol g">
+      <div class="top"><div class="hx">🔒</div><div class="tech">Shield Encryption<small>저장 데이터 암호화</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">저장 데이터·재무정보 탈취</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">저장 시 암호화 · 키는 고객이 관리</span></div>
+      <div class="plan">◇ 제안 · 민감식별·재무필드 대상</div>
+    </div>
+
+    <div class="sol g">
+      <div class="top"><div class="hx">🧾</div><div class="tech">Field Audit Trail<small>+ Setup Audit Trail</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">변경·삭제 은폐 · 증적 부재</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">필드값 변경이력 최대 10년 보존</span></div>
+      <div class="plan">◇ 제안 · 감사·분쟁 대응</div>
+    </div>
+
+    <div class="sol g">
+      <div class="top"><div class="hx">🎭</div><div class="tech">Data Mask<small>샌드박스 익명화</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">테스트 환경에 실고객 데이터</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">비운영 환경 데이터 마스킹</span></div>
+      <div class="seen">✓ 실측 · DataMask 설정 존재</div>
+    </div>
+
+    <div class="sol t">
+      <div class="top"><div class="hx">🤖</div><div class="tech">Einstein Trust Layer<small>생성형 AI 데이터 보호</small></div></div>
+      <div class="row p"><span class="lab">문제</span><span class="val">AI로 고객정보 유출·학습</span></div>
+      <div class="row s"><span class="lab">해결</span><span class="val">마스킹 + 무보존 + 무학습 + 감사</span></div>
+      <div class="seen">✓ 실측 · 전 AI가 Trust Layer 경유</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : AI FLOW -->
+  <div class="section-t"><div class="no">3</div><h2>생성형 AI 데이터 흐름 (보수적 관리)</h2><div class="hint">추론은 해외 · 개인정보는 미전송</div></div>
+  <div class="ai">
+    <div class="node">
+      <div class="cir">🧑‍💼</div><div class="nm">사용자</div><div class="ds">RM · 팀장 · 심사</div>
+    </div>
+    <div class="sep">→</div>
+    <div class="node">
+      <div class="cir">☁️</div><div class="nm">Salesforce</div><div class="ds">권한 범위 내 그라운딩<br>Prompt Template</div>
+    </div>
+    <div class="sep">→</div>
+    <div class="node trust">
+      <div class="cir">🛡️</div><div class="nm">Trust Layer</div><div class="ds">PII 마스킹 · 무보존<br>무학습 · 감사로그</div>
+    </div>
+    <div class="sep">→</div>
+    <div class="node">
+      <div class="cir">🌐</div><div class="nm">LLM (해외)</div><div class="ds">Claude · OpenAI · Gemini<br>국내 리전 미지원</div>
+    </div>
+  </div>
+  <div class="ai-note">
+    🔒 <b>보수적 관리 원칙</b> &nbsp; ① 민감 고객·신용정보는 <b>AI에 미전송</b> (공개 DART·비식별 데이터만) &nbsp;·&nbsp; ② 전송분은 <b>마스킹</b> &nbsp;·&nbsp; ③ 응답 후 원문 <b>무보존·무학습</b> &nbsp;·&nbsp; ④ 전 호출 <b>감사로그</b>
+  </div>
+  <div class="ai-warn">
+    ⚠️ <b>정직한 고지</b> &nbsp; AI 추론은 국내 리전이 없어 <b>반드시 해외에서 발생</b> — 기술적으로 제거 불가. '해외로 안 나간다'가 아니라 <b>'개인정보는 안 나가고, 나간 것도 저장·학습되지 않으며, 전 과정이 기록된다'</b>가 원칙입니다. 국외이전은 <b>고지·동의 절차</b>로 처리.
+  </div>
+
+  <footer>다층 방어 · 설정으로 증명되는 보안 &nbsp;|&nbsp; 근본증권 발표 자료 &nbsp;·&nbsp; ✓실측 = org 실제 설정 / ◇제안 = 도입 권장</footer>
+
+</div>
+</body>
+</html>

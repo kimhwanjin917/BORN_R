@@ -60,7 +60,7 @@ public with sharing class LeadConvertService {
         }
 
         Map<Id, Lead> leadsById = new Map<Id, Lead>([
-            SELECT Id, Priority_Score__c, Business_Registration_Number__c, Assigned_Company_Code__c
+            SELECT Id, Priority_Score__c, Business_Registration_Number__c, Assigned_Company_Code__c, Department__c
             FROM Lead
             WHERE Id IN :leadIds
             WITH USER_MODE
@@ -127,6 +127,7 @@ public with sharing class LeadConvertService {
         createMeetingEvents(requests, conversionIndexes, responsesByIndex,
             contactIdByLeadId, opportunityIdByLeadId);
         transferLeadFieldsToAccounts(leadsById, accountIdByLeadId);
+        transferDepartmentToContacts(leadsById, contactIdByLeadId);
         reconnectExternalRecords(accountIdByLeadId.keySet(), accountIdByLeadId);
 
         return responses;
@@ -232,6 +233,34 @@ public with sharing class LeadConvertService {
         }
         if (!accountsToUpdate.isEmpty()) {
             update as user accountsToUpdate;
+        }
+    }
+
+    /**
+     * Copies the Lead's Department__c onto the created Contact's standard
+     * Department field. Salesforce's declarative lead-conversion mapping cannot
+     * target a standard Contact field from a custom Lead field, so it is set
+     * explicitly here. Blank Lead values are skipped so a Contact is never cleared.
+     * @param leadsById Source Leads keyed by Id
+     * @param contactIdByLeadId Created Contact Id keyed by Lead Id
+     */
+    private static void transferDepartmentToContacts(
+        Map<Id, Lead> leadsById,
+        Map<Id, Id> contactIdByLeadId
+    ) {
+        List<Contact> contactsToUpdate = new List<Contact>();
+        for (Id leadId : contactIdByLeadId.keySet()) {
+            Lead sourceLead = leadsById.get(leadId);
+            if (sourceLead == null || String.isBlank(sourceLead.Department__c)) {
+                continue;
+            }
+            contactsToUpdate.add(new Contact(
+                Id = contactIdByLeadId.get(leadId),
+                Department = sourceLead.Department__c
+            ));
+        }
+        if (!contactsToUpdate.isEmpty()) {
+            update as user contactsToUpdate;
         }
     }
 

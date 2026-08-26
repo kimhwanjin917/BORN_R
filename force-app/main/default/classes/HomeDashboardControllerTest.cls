@@ -21,7 +21,7 @@ private class HomeDashboardControllerTest {
         Lead topLead = new Lead(
             LastName = 'Lead',
             Company = 'Top Priority Lead Co',
-            Status = 'New',
+            Status = '신규',
             Email = 'test.lead@example.com',
             Business_Registration_Number__c = '3000000001',
             name_new__c = 'L001',
