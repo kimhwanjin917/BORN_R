@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Meeting_Attendees__c</fullName>
+    <description>리드 전환 전에 입력하는 미팅 참석자(자유 텍스트, 쉼표 구분). 전환 시 Meeting_Note__c.Attendees__c로 복사된다.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>참석자를 쉼표로 구분해 입력하세요 (예: 임서우, 홍길동).</inlineHelpText>
+    <label>미팅 참석자</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

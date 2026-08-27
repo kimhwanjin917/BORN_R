@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Meeting_Content__c</fullName>
+    <description>리드 전환 전에 입력하는 미팅 내용. 전환 시 Meeting_Note__c.Raw_Content__c로 복사되며 MeetingNoteTriggerHandler가 개인정보를 마스킹해 Sanitized_Content__c를 채운다.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>미팅에서 논의한 내용을 입력하세요. 전환 시 미팅 기록으로 저장되고 개인정보는 자동 마스킹됩니다.</inlineHelpText>
+    <label>미팅 내용</label>
+    <length>32768</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>LongTextArea</type>
+    <visibleLines>10</visibleLines>
+</CustomField>
