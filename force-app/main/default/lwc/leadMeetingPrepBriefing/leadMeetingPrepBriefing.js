@@ -48,7 +48,7 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
 
     /**
      * 텍스트 → 카드 배열. 섹션 구분(◆) 없이 모든 "■ 항목"을 하나의 그리드로 펼친다.
-     * 요청에 따라 "한줄 요약"·"AI 한줄 리뷰" 카드는 제외하고, 번호는 남은 카드 기준 01부터 다시 매긴다.
+     * "AI 한줄 리뷰" 카드만 제외하고, 번호는 남은 카드 기준 01부터 다시 매긴다.
      */
     get cards() {
         const raw = this.briefing;
@@ -79,8 +79,8 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
                     body = t.slice(ci + 1).trim();
                 }
 
-                // 제외 대상: "한줄 요약", "AI 한줄 리뷰"
-                if (/한줄\s*요약/.test(label) || /AI\s*한줄\s*리뷰/i.test(label)) {
+                // 제외 대상: "AI 한줄 리뷰" (템플릿엔 없지만 방어적으로 유지)
+                if (/AI\s*한줄\s*리뷰/i.test(label)) {
                     return;
                 }
 
