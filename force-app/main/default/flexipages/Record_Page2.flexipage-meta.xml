@@ -50,6 +50,12 @@
                 <identifier>runtime_sales_lead_pathAssistant</identifier>
             </componentInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>leadMeetingPrepBriefing</componentName>
+                <identifier>c_leadMeetingPrepBriefing</identifier>
+            </componentInstance>
+        </itemInstances>
         <mode>Replace</mode>
         <name>subheader</name>
         <type>Region</type>
@@ -96,16 +102,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Title</fieldItem>
-                <identifier>RecordTitleField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Department__c</fieldItem>
                 <identifier>RecordDepartment_cField</identifier>
             </fieldInstance>
@@ -126,18 +122,8 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.CurrencyIsoCode</fieldItem>
-                <identifier>RecordCurrencyIsoCodeField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Assigned_Company_Code__c</fieldItem>
-                <identifier>RecordAssigned_Company_Code_cField</identifier>
+                <fieldItem>Record.Business_Registration_Number__c</fieldItem>
+                <identifier>RecordBusiness_Registration_Number_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-fa236237-d493-4d53-ac87-502f461c8fd8</name>
@@ -160,6 +146,26 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Priority_Score__c</fieldItem>
+                <identifier>RecordPriority_Score_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Title</fieldItem>
+                <identifier>RecordTitleField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Phone</fieldItem>
                 <identifier>RecordPhoneField</identifier>
             </fieldInstance>
@@ -172,26 +178,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Email</fieldItem>
                 <identifier>RecordEmailField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Business_Registration_Number__c</fieldItem>
-                <identifier>RecordBusiness_Registration_Number_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Priority_Score__c</fieldItem>
-                <identifier>RecordPriority_Score_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-be572be3-185d-490d-bb78-723d7678603b</name>
@@ -219,58 +205,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-5eb12f60-4628-4de3-aecb-5c9717e02fff</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Recommended_Product_Family__c</fieldItem>
-                <identifier>RecordRecommended_Product_Family_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-ec8c5414-882c-4f70-91aa-255cfa9e34c8</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Recommended_Product_Rationale__c</fieldItem>
-                <identifier>RecordRecommended_Product_Rationale_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-faa4831d-4b93-4c36-a1c1-16a9747652e2</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-ec8c5414-882c-4f70-91aa-255cfa9e34c8</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-faa4831d-4b93-4c36-a1c1-16a9747652e2</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column4</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-6cb5ffcc-141e-41f5-8d80-3e0f854fcaaf</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -500,24 +434,6 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-6cb5ffcc-141e-41f5-8d80-3e0f854fcaaf</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>추천 상품군</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
                     <value>Facet-f2f1c037-4299-45f9-a357-a182903de776</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -650,20 +566,6 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>scoreTypes</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>behavior</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentName>runtime_sales_leadiq:recordHomeInsightsContainer</componentName>
-                <identifier>runtime_sales_leadiq_recordHomeInsightsContainer</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
                     <value>NONE</value>
                 </componentInstanceProperties>
@@ -679,34 +581,46 @@
                 <identifier>force_relatedListContainer</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
-        <name>relatedListTabContent</name>
+        <name>Facet-5bdbf85f-3d19-4435-828b-063ce4de1122</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>active</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
                     <name>body</name>
-                    <value>relatedListTabContent</value>
+                    <value>Facet-5bdbf85f-3d19-4435-828b-063ce4de1122</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>title</name>
+                    <name>label</name>
                     <value>Standard.Tab.relatedLists</value>
                 </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>relatedListTab</identifier>
+                <componentInstanceProperties>
+                    <name>name</name>
+                    <value>accordionSection1</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:accordionSection</componentName>
+                <identifier>flexipage_accordionSection</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
-        <name>sidebartabs</name>
+        <name>Facet-ed34dbff-3ec5-4db0-9587-6fa964abf803</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>accordionSections</name>
+                    <value>Facet-ed34dbff-3ec5-4db0-9587-6fa964abf803</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>allowMultipleSectionsOpen</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:accordion</componentName>
+                <identifier>flexipage_accordion</identifier>
+            </componentInstance>
+        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -736,15 +650,15 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Tabs</value>
+                    <name>scoreTypes</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>behavior</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>tabs</name>
-                    <value>sidebartabs</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tabset</componentName>
-                <identifier>flexipage_sidebar_tabset</identifier>
+                <componentName>runtime_sales_leadiq:recordHomeInsightsContainer</componentName>
+                <identifier>runtime_sales_leadiq_recordHomeInsightsContainer</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

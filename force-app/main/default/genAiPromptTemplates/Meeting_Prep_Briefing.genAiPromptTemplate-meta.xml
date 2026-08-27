@@ -12,13 +12,7 @@
 [중요 - 수치 지어내기 금지]
 아래 근거 데이터(Data Cloud 로 통합된 재무·시그널·CRM)에 있는 값만 사용하세요. 제공되지 않은 매출·자산·수치나 사건은 절대 만들어내지 마세요. 안내 문구(괄호로 시작하는 문장)가 오면 그 지시를 따르세요.
 
-[기업 기본 정보]
-회사명: {!$Input:RelatedLead.Company}
-담당자: {!$Input:RelatedLead.Name} ({!$Input:RelatedLead.Title})
-업종: {!$Input:RelatedLead.Industry}
-DART 기업 코드: {!$Input:RelatedLead.Assigned_Company_Code__c}
-
-[근거 데이터 - Data Cloud 통합 재무 추이·외부 시그널·CRM. 이 안의 수치만 사용할 것]
+[근거 데이터 - Data Cloud 통합 재무 추이·외부 시그널·CRM. 기업 기본 정보(회사명·담당자·업종·DART 코드)와 수치가 모두 이 안에 있으며, 이 값만 사용할 것]
 {!$Apex:MeetingPrepBriefingProvider.Prompt}
 
 [작성 규칙]

@@ -25,6 +25,16 @@
         <enabled>true</enabled>
         <flow>GetSanitizedMeetingNote</flow>
     </flowAccesses>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Meeting_Prep_Briefing__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Meeting_Prep_Briefing_Updated_At__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>RM Assistant Access</label>
 </PermissionSet>
