@@ -28,44 +28,8 @@
         <fieldNames>Amount</fieldNames>
         <fieldNames>Approval_Status__c</fieldNames>
         <fieldNames>CloseDate</fieldNames>
-        <info>&lt;p&gt;진입 기준: 최종 승인이 완료되어 RP 계약·거래확인·전산등록·결제를 진행하는 상태입니다. 수행 가이드: RP 거래 체결, 약정 확인과 자금·증권 결제 상태를 확인합니다.&lt;/p&gt;</info>
-        <picklistValueName>거래체결</picklistValueName>
-    </pathAssistantSteps>
-    <pathAssistantSteps>
-        <fieldNames>RP_Yield__c</fieldNames>
-        <fieldNames>RP_Maturity_Date__c</fieldNames>
-        <fieldNames>Amount</fieldNames>
-        <fieldNames>Approval_Status__c</fieldNames>
-        <fieldNames>CloseDate</fieldNames>
-        <info>&lt;p&gt;진입 기준: 고객과 핵심 RP 조건이 잠정 합의되어 최종 내부 승인을 요청한 상태입니다. 수행 가이드: 최종 조건과 조건부 승인 이행 여부를 확인하고 승인 완료 전에는 거래체결로 이동하지 않습니다.&lt;/p&gt;</info>
-        <picklistValueName>내부승인</picklistValueName>
-    </pathAssistantSteps>
-    <pathAssistantSteps>
-        <fieldNames>RP_Yield__c</fieldNames>
-        <fieldNames>RP_Maturity_Date__c</fieldNames>
-        <fieldNames>Amount</fieldNames>
-        <fieldNames>Approval_Status__c</fieldNames>
-        <fieldNames>AccountId</fieldNames>
-        <info>&lt;p&gt;진입 기준: RP 제안 초안과 필수 고객정보가 준비되어 내부 심사를 요청한 상태입니다. 수행 가이드: 고객확인, 거래한도, 담보증권, 만기·수익률, 유동성 위험과 컴플라이언스 사항을 검토하고 심사 결과를 기록합니다.&lt;/p&gt;</info>
-        <picklistValueName>내부심사</picklistValueName>
-    </pathAssistantSteps>
-    <pathAssistantSteps>
-        <fieldNames>RP_Maturity_Date__c</fieldNames>
-        <fieldNames>RP_Yield__c</fieldNames>
-        <fieldNames>Amount</fieldNames>
-        <fieldNames>CloseDate</fieldNames>
-        <fieldNames>Customer_Need__c</fieldNames>
-        <info>&lt;p&gt;진입 기준: 고객 니즈와 RP 거래 가능성이 확인되어 구체 조건 설계를 시작한 상태입니다. 수행 가이드: 거래금액, 만기, 약정수익률, 환매·중도해지 조건과 제안 유효기간을 정리합니다.&lt;/p&gt;</info>
-        <picklistValueName>제안</picklistValueName>
-    </pathAssistantSteps>
-    <pathAssistantSteps>
-        <fieldNames>RP_Yield__c</fieldNames>
-        <fieldNames>RP_Maturity_Date__c</fieldNames>
-        <fieldNames>Amount</fieldNames>
-        <fieldNames>Approval_Status__c</fieldNames>
-        <fieldNames>NextStep</fieldNames>
-        <info>&lt;p&gt;진입 기준: 내부 허용 조건이 확정되어 고객과 공식 협상을 시작한 상태입니다. 수행 가이드: 약정수익률, 만기, 거래금액과 환매·중도해지 조건을 협상하고 미결 사항을 기록합니다.&lt;/p&gt;</info>
-        <picklistValueName>조건협상</picklistValueName>
+        <info>&lt;p&gt;진입 기준: 최종 승인이 완료되어 RP 계약·거래확인·전산등록을 진행하는 상태입니다. 수행 가이드: RP 약정 확인, 담보증권 인도와 자금·증권 결제 준비 상태를 확인합니다.&lt;/p&gt;</info>
+        <picklistValueName>계약 체결</picklistValueName>
     </pathAssistantSteps>
     <pathAssistantSteps>
         <fieldNames>AccountId</fieldNames>
@@ -74,7 +38,34 @@
         <fieldNames>Customer_Need__c</fieldNames>
         <fieldNames>Product_Family__c</fieldNames>
         <info>&lt;p&gt;진입 기준: 법인 고객·담당자와 담당 RM의 미팅 일정이 확정된 상태입니다. 수행 가이드: 단기자금 운용 목적, 가용자금 규모, 관심 상품과 예상 거래시기를 확인하고 미팅 결과와 Next Step을 기록합니다.&lt;/p&gt;</info>
-        <picklistValueName>탐색</picklistValueName>
+        <picklistValueName>미팅</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>RP_Yield__c</fieldNames>
+        <fieldNames>RP_Maturity_Date__c</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>Approval_Status__c</fieldNames>
+        <fieldNames>Product_Family__c</fieldNames>
+        <info>&lt;p&gt;진입 기준: 고객에게 제공할 RP 상품과 거래 구조가 확정된 상태입니다. 수행 가이드: 담보증권, 거래금액, 만기, 약정수익률을 확정하고 제안 초안과 필수 고객정보를 준비합니다.&lt;/p&gt;</info>
+        <picklistValueName>상품 확정</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>RP_Maturity_Date__c</fieldNames>
+        <fieldNames>RP_Yield__c</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Customer_Need__c</fieldNames>
+        <info>&lt;p&gt;진입 기준: 고객 니즈와 RP 거래 가능성이 확인되어 수수료·수익률 조건 협의를 시작한 상태입니다. 수행 가이드: 거래금액, 만기, 약정수익률, 적용 수수료율과 환매·중도해지 조건을 정리하고 제안 유효기간을 확인합니다.&lt;/p&gt;</info>
+        <picklistValueName>수수료 협의</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>RP_Yield__c</fieldNames>
+        <fieldNames>RP_Maturity_Date__c</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <fieldNames>Approval_Status__c</fieldNames>
+        <fieldNames>CloseDate</fieldNames>
+        <info>&lt;p&gt;진입 기준: 확정된 상품·조건에 대해 내부 심사와 최종 승인을 진행하는 상태입니다. 수행 가이드: 고객확인, 거래한도, 담보증권, 만기·수익률, 유동성 위험과 컴플라이언스 사항을 검토하고 심사 결과를 기록합니다. 승인 완료 전에는 계약 체결로 이동하지 않습니다.&lt;/p&gt;</info>
+        <picklistValueName>심사</picklistValueName>
     </pathAssistantSteps>
     <recordTypeName>RP_Deal</recordTypeName>
 </PathAssistant>

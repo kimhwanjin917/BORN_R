@@ -14,16 +14,6 @@
     </classAccesses>
     <description>홈 우선순위 대시보드(신규기업/기존기업/상담 KPI) 3개 LWC가 사용하는 Apex 컨트롤러와 우선순위 필드 접근 권한.</description>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.Meeting_Prep_Briefing__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.Meeting_Prep_Briefing_Updated_At__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>Account.Account_Auto_number__c</field>
         <readable>true</readable>
@@ -156,6 +146,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Lead.Industry</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Meeting_Prep_Briefing_Updated_At__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Meeting_Prep_Briefing__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

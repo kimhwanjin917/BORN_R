@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>docs/51 D구간: RM 어시스턴트 후속 추천(업셀·크로스셀) + PDF 생성</description>
+    <flowDefinition>Opportunity_Followup_Recommendation</flowDefinition>
+    <label>후속 추천</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

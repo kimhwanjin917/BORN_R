@@ -21,7 +21,7 @@ private class HomeDashboardControllerTest {
         Lead topLead = new Lead(
             LastName = 'Lead',
             Company = 'Top Priority Lead Co',
-            Status = '신규',
+            Status = 'New',
             Email = 'test.lead@example.com',
             Business_Registration_Number__c = '3000000001',
             name_new__c = 'L001',
@@ -32,10 +32,30 @@ private class HomeDashboardControllerTest {
 
         Id userId = UserInfo.getUserId();
 
+        // A today's meeting has the shape a converted Lead leaves behind:
+        // WhoId is the Contact and WhatId is the Opportunity that '미팅 시작'
+        // hands to the Meeting_Session Flow. (A Lead WhoId cannot carry a
+        // WhatId, so the pre-conversion shape can never drive that button.)
+        Contact meetingContact = new Contact(
+            LastName = 'Meeting Contact',
+            AccountId = topAcct.Id,
+            name_new__c = 'C001'
+        );
+        insert meetingContact;
+
+        Opportunity meetingOpp = new Opportunity(
+            Name = 'Top Priority Opp',
+            AccountId = topAcct.Id,
+            StageName = '미팅',
+            CloseDate = Date.today().addDays(30)
+        );
+        insert meetingOpp;
+
         insert new Event(
             OwnerId = userId,
             Subject = '오늘 미팅',
-            WhoId = topLead.Id,
+            WhoId = meetingContact.Id,
+            WhatId = meetingOpp.Id,
             StartDateTime = Datetime.now(),
             DurationInMinutes = 30
         );
@@ -93,7 +113,16 @@ private class HomeDashboardControllerTest {
 
         System.assertEquals(1, events.size(), 'Today event owned by user must be returned');
         System.assertEquals('오늘 미팅', events[0].Subject, 'Subject should match');
-        System.assertNotEquals(null, events[0].WhoId, 'WhoId(Lead) must be populated for 미팅 시작');
+        System.assertNotEquals(
+            null,
+            events[0].WhatId,
+            'WhatId(Opportunity) must be populated — 미팅 시작 passes it to Meeting_Session'
+        );
+        System.assertNotEquals(
+            null,
+            events[0].What.Name,
+            'What.Name must be selected so the row can show the related Opportunity'
+        );
     }
 
     @isTest

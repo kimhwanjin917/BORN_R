@@ -3,9 +3,9 @@
     <fullName>Fiscal_Year_Text__c</fullName>
     <externalId>false</externalId>
     <formula>TEXT(Fiscal_Year__c)</formula>
-    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <label>회계연도</label>
     <required>false</required>
+    <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>
 </CustomField>

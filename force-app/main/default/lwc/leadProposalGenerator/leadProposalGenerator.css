@@ -1,0 +1,85 @@
+/* 클래스명은 전부 lpg- 로 시작한다. 이 org 은 synthetic shadow DOM 이라 흔한 이름을 쓰면
+   전역 SLDS 규칙이 새어 들어와 예기치 않게 스타일이 덮인다. */
+.lpg-rationale {
+    background: #f3f6fa;
+    border-left: 3px solid #1565ff;
+    padding: 0.75rem 0.85rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+.lpg-rationale-title {
+    font-weight: 700;
+    color: #0a1b3d;
+    margin-bottom: 0.2rem;
+}
+.lpg-fin {
+    margin-top: 0.4rem;
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+.lpg-label {
+    font-weight: 700;
+    color: #0a1b3d;
+    margin-bottom: 0.35rem;
+}
+.lpg-table {
+    border: 1px solid #e6ebf2;
+}
+.lpg-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid #f0f2f6;
+}
+.lpg-row:last-child {
+    border-bottom: 0;
+}
+.lpg-row-on {
+    background: #f7faff;
+}
+.lpg-cell-check {
+    flex: 0 0 1.5rem;
+}
+.lpg-cell-name {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.lpg-cell-yield {
+    flex: 0 0 7rem;
+}
+.lpg-name {
+    display: block;
+    font-size: 0.8125rem;
+    color: #0a1b3d;
+}
+.lpg-meta {
+    display: block;
+    font-size: 0.6875rem;
+    color: #8a93a6;
+}
+.lpg-hint {
+    font-size: 0.6875rem;
+    color: #8a93a6;
+    margin-top: 0.3rem;
+    line-height: 1.45;
+}
+.lpg-filename {
+    font-size: 0.8125rem;
+    word-break: break-all;
+}
+.lpg-done {
+    background: #f3f6fa;
+    padding: 0.7rem 0.85rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+}
+
+.lpg-rationale-none {
+    background: #fdf6e8;
+    border-left-color: #b7791f;
+}
+.lpg-rationale-none .lpg-rationale-title {
+    color: #8a5a12;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>만기 도래 윈도우(일)</label>
+    <protected>false</protected>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">이 기간 내 만기면 만기차환 1순위</value>
+    </values>
+    <values>
+        <field>Value__c</field>
+        <value xsi:type="xsd:double">90.0</value>
+    </values>
+</CustomMetadata>

@@ -32,7 +32,7 @@ private class SimilarWonAnalysisActionTest {
             new Opportunity(Name = 'A-Won-Bond',  AccountId = accA.Id, StageName = 'Closed Won',  CloseDate = d, Primary_Product__c = bond.Id),
             new Opportunity(Name = 'A-Lost-RP',   AccountId = accA.Id, StageName = 'Closed Lost', CloseDate = d, Primary_Product__c = rp.Id),
             new Opportunity(Name = 'A-Lost-None', AccountId = accA.Id, StageName = 'Closed Lost', CloseDate = d),
-            new Opportunity(Name = 'A-Open-RP',   AccountId = accA.Id, StageName = '탐색',        CloseDate = d, Primary_Product__c = rp.Id),
+            new Opportunity(Name = 'A-Open-RP',   AccountId = accA.Id, StageName = '미팅',        CloseDate = d, Primary_Product__c = rp.Id),
             // 산업군 B: Lost 2
             new Opportunity(Name = 'B-Lost-1', AccountId = accB.Id, StageName = 'Closed Lost', CloseDate = d, Primary_Product__c = rp.Id),
             new Opportunity(Name = 'B-Lost-2', AccountId = accB.Id, StageName = 'Closed Lost', CloseDate = d)

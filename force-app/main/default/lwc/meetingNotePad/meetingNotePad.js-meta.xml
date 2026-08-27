@@ -10,6 +10,13 @@
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property
+                name="recordId"
+                type="String"
+                label="컨텍스트 레코드 ID"
+                description="Flow URL 또는 진입 버튼에서 전달된 Lead, Account, Contact, Opportunity, Event ID"
+                role="inputOnly"
+            />
+            <property
                 name="rawContent"
                 type="String"
                 label="미팅 원문"
@@ -29,10 +36,45 @@
                 role="inputOnly"
             />
             <property
+                name="sanitizedContent"
+                type="String"
+                label="마스킹된 메모"
+                description="PII가 마스킹된 미팅 메모 내용"
+                role="inputOnly"
+            />
+            <property
+                name="maskedCount"
+                type="Integer"
+                label="마스킹 건수"
+                description="마스킹 처리된 PII 항목 수"
+                role="inputOnly"
+            />
+            <property
+                name="isSubmitting"
+                type="Boolean"
+                label="제출 중"
+                description="Flow에서 제어하는 로딩 상태"
+                role="inputOnly"
+            />
+            <property
                 name="normalizedRecommendation"
                 type="String"
                 label="정규화된 에이전트 추천"
                 description="Agentforce 응답에서 사용자에게 표시할 추천 메시지만 추출"
+                role="outputOnly"
+            />
+            <property
+                name="selectedProductName"
+                type="String"
+                label="선택된 상품명"
+                description="사용자가 선택 확정한 추천 상품명"
+                role="outputOnly"
+            />
+            <property
+                name="selectedRecommendationText"
+                type="String"
+                label="선택된 추천 텍스트"
+                description="선택 확정 시점의 추천 전문"
                 role="outputOnly"
             />
         </targetConfig>

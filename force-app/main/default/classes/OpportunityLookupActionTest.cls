@@ -17,13 +17,13 @@ private class OpportunityLookupActionTest {
 
         Date d = Date.today().addDays(30);
         List<Opportunity> opps = new List<Opportunity>{
-            new Opportunity(Name = 'OLA 근본테스트 RP 제안', AccountId = acc.Id, StageName = '제안', CloseDate = d, Amount = 100000000, Primary_Product__c = rp.Id),
-            new Opportunity(Name = 'OLA 두번째 기회', AccountId = acc.Id, StageName = '탐색', CloseDate = d),
-            new Opportunity(Name = 'OLA 다른회사 딜', AccountId = acc2.Id, StageName = '탐색', CloseDate = d)
+            new Opportunity(Name = 'OLA 근본테스트 RP 제안', AccountId = acc.Id, StageName = '수수료 협의', CloseDate = d, Amount = 100000000, Primary_Product__c = rp.Id),
+            new Opportunity(Name = 'OLA 두번째 기회', AccountId = acc.Id, StageName = '미팅', CloseDate = d),
+            new Opportunity(Name = 'OLA 다른회사 딜', AccountId = acc2.Id, StageName = '미팅', CloseDate = d)
         };
         // 상한(5건) 검증용: 같은 고객사에 추가 4건 → 고객사 키워드로 총 6건 매칭
         for (Integer i = 0; i < 4; i++) {
-            opps.add(new Opportunity(Name = 'OLA 추가 ' + i, AccountId = acc.Id, StageName = '탐색', CloseDate = d));
+            opps.add(new Opportunity(Name = 'OLA 추가 ' + i, AccountId = acc.Id, StageName = '미팅', CloseDate = d));
         }
         insert opps;
     }
@@ -49,7 +49,7 @@ private class OpportunityLookupActionTest {
         System.assertEquals('OLA 근본테스트 주식회사', m.accountName);
         System.assertEquals('Manufacturing', m.accountIndustry);
         System.assertEquals(100000000, m.amount);
-        System.assertEquals('제안', m.stageName);
+        System.assertEquals('수수료 협의', m.stageName);
         System.assertNotEquals(null, m.opportunityId);
         System.assert(r.message.contains('1건'), r.message);
     }

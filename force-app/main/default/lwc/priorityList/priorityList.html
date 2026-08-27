@@ -4,11 +4,14 @@
         <section class="section section_lead">
             <header class="card-head">
                 <div class="card-head__title">
-                    <lightning-icon
-                        icon-name="standard:lead"
-                        size="small"
-                        alternative-text="신규기업"
-                    ></lightning-icon>
+                    <span class="card-head__icon">
+                        <lightning-icon
+                            icon-name="utility:lead"
+                            size="small"
+                            variant="inverse"
+                            alternative-text="신규기업"
+                        ></lightning-icon>
+                    </span>
                     <span>우선순위 신규기업</span>
                 </div>
                 <template lwc:if={hasLeads}>
@@ -54,11 +57,14 @@
         <section class="section section_account">
             <header class="card-head">
                 <div class="card-head__title">
-                    <lightning-icon
-                        icon-name="standard:account"
-                        size="small"
-                        alternative-text="기존기업"
-                    ></lightning-icon>
+                    <span class="card-head__icon">
+                        <lightning-icon
+                            icon-name="utility:account"
+                            size="small"
+                            variant="inverse"
+                            alternative-text="기존기업"
+                        ></lightning-icon>
+                    </span>
                     <span>우선순위 기존기업</span>
                 </div>
                 <template lwc:if={hasAccounts}>

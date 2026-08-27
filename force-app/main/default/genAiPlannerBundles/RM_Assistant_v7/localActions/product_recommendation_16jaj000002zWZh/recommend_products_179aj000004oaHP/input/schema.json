@@ -1,0 +1,21 @@
+{
+  "required" : [ "opportunityId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "opportunityId" : {
+      "title" : "기회 Id",
+      "description" : "기회 검색 결과의 opportunityId (Salesforce 레코드 Id)",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "sanitizedNote" : {
+      "title" : "미팅 메모 마스킹본",
+      "description" : "미팅 메모 마스킹본 조회 결과(sanitizedContent). 원문은 절대 넣지 않는다. 메모가 없으면 비워 둔다.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

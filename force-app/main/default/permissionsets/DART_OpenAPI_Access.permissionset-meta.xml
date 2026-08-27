@@ -51,13 +51,13 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>CorporateFinancialStatement__c.Fiscal_Year__c</field>
+        <editable>false</editable>
+        <field>CorporateFinancialStatement__c.Fiscal_Year_Text__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
-        <field>CorporateFinancialStatement__c.Fiscal_Year_Text__c</field>
+        <editable>true</editable>
+        <field>CorporateFinancialStatement__c.Fiscal_Year__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

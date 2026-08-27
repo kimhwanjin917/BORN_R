@@ -64,7 +64,6 @@
                 <header>Consumption by Agent</header>
                 <report>sfdw_20250618_Digital_Wallet_Consumption_Insights_By_Tags/sfdw_20260820T061422Z_Consumption_By_Agent</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -95,7 +94,6 @@
                 <header>Flex Credits Consumption by Action</header>
                 <report>sfdw_20250618_Digital_Wallet_Consumption_Insights_By_Tags/sfdw_20260820T061422Z_Flex_Credits_Consumption_By_Action</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -126,7 +124,6 @@
                 <header>Consumption by Feature</header>
                 <report>sfdw_20250618_Digital_Wallet_Consumption_Insights_By_Tags/sfdw_20260820T061422Z_Consumption_By_Feature</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -157,7 +154,6 @@
                 <header>Consumption by Sources</header>
                 <report>sfdw_20250618_Digital_Wallet_Consumption_Insights_By_Tags/sfdw_20260820T061422Z_Consumption_By_Product_Tags</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -188,7 +184,6 @@
                 <header>Consumption by Usage Type</header>
                 <report>sfdw_20250618_Digital_Wallet_Consumption_Insights_By_Tags/sfdw_20260820T061422Z_Consumption_By_Usage_Type</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>

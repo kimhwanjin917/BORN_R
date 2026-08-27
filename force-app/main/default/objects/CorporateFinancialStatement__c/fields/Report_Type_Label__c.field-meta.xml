@@ -13,10 +13,10 @@
     &quot;3분기&quot;, &quot;3분기보고서&quot;,
     &quot;4분기&quot;, &quot;4분기보고서&quot;,
     &quot;--&quot;))</formula>
-    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
     <inlineHelpText>DART 보고서코드 기준 분기 보고서 구분. 11013=1분기, 11012=2분기(반기), 11014=3분기, 11011=4분기(사업보고서).</inlineHelpText>
     <label>보고서 구분</label>
     <required>false</required>
+    <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>
 </CustomField>

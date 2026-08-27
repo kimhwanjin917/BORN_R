@@ -16,8 +16,8 @@ private class PriorityScoreBatchTest {
 
     @isTest
     static void shouldScoreRpLead_WhenCashRatioHighAndFundLarge() {
-        // Given: 현금자산비율 = (300억+0)/1000억*... → 현금 300억, 자산 1000억 = 30% ≥12% → 적합도 40
-        //        RP 자금 300억 → 니즈 30 / 직전 연간 없음 → 공시 10 = 총 80
+        // Given: 현금자산비율 = 300억/1000억 = 30% → 적합도 40(만점)
+        //        RP 자금 300억 → 니즈 로그보간 19.9 / 직전 연간 없음 → 공시 10 = 총 69.9
         Lead lead = createLead('RP Lead');
         insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
 
@@ -26,13 +26,13 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(80, result.Priority_Score__c, '적합도40 + 니즈30 + 공시10 = 80 이어야 한다');
+        Assert.areEqual(69.9, result.Priority_Score__c, '적합도40 + 니즈19.9 + 공시10 = 69.9 이어야 한다');
     }
 
     @isTest
     static void shouldChooseBond_WhenDebtRatioBeatsCashRatio() {
-        // Given: 현금 60억(6% → 적합도20), 차입금 3,000억(30% → 적합도40) → 회사채 선택
-        //        회사채 자금 3,000억 → 니즈30 / 직전 없음 → 공시10 = 총 80
+        // Given: 현금 60억(6% → 적합도 7), 차입금 3,000억(자산比 300% → 적합도 40) → 회사채 선택
+        //        회사채 자금 3,000억 → 니즈 로그보간 19.9 / 직전 없음 → 공시 10 = 총 69.9
         Lead lead = createLead('Bond Lead');
         insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, 6000000000L, BOND_FUND_FULL);
 
@@ -41,7 +41,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(80, result.Priority_Score__c, '회사채 적합도40 + 니즈30 + 공시10 = 80 이어야 한다');
+        Assert.areEqual(69.9, result.Priority_Score__c, '회사채 적합도40 + 니즈19.9 + 공시10 = 69.9 이어야 한다');
     }
 
     @isTest
@@ -73,8 +73,8 @@ private class PriorityScoreBatchTest {
 
     @isTest
     static void shouldKeepZeroFit_WhenBothRatiosLow() {
-        // Given: 현금 10억(1%), 차입금 10억(1%) → 둘 다 적합도 0, 상품=RP(동점 규칙)
-        //        RP 자금 10억 → 니즈0 / 직전 없음 → 공시10 = 총 10 (제외 아님, 최하위)
+        // Given: 현금 10억(1% → 적합도 1.2), 차입금 10억(1% → 적합도 0.6) → 상품 RP(높은 쪽)
+        //        RP 자금 10억(FLOOR) → 니즈 0 / 직전 없음 → 공시 10 = 총 11.2 (제외 아님, 최하위)
         Lead lead = createLead('Low Fit Lead');
         insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, 1000000000L, 1000000000L);
 
@@ -83,13 +83,13 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(10, result.Priority_Score__c, '적합도0 기업도 제외 아닌 낮은 점수(10)로 남아야 한다');
+        Assert.areEqual(11.2, result.Priority_Score__c, '적합도 낮은 기업도 제외 아닌 낮은 점수(11.2)로 남아야 한다');
     }
 
     @isTest
-    static void shouldScoreDisclosure30_WhenFundGrewOver30Pct() {
-        // Given: 직전 RP 자금 200억, 최신 300억 → +50% → 공시 30
-        //        적합도40(30%) + 니즈30(300억) + 공시30 = 100
+    static void shouldScoreDisclosure30_WhenFundGrewOver50Pct() {
+        // Given: 직전 RP 자금 200억, 최신 300억 → +50% → 공시 30(만점)
+        //        적합도 40(30%) + 니즈 19.9(300억) + 공시 30 = 89.9
         Lead lead = createLead('Growth Lead');
         insertStatement(lead.Id, null, 2022, ASSETS, ASSETS, 20000000000L, 0);
         insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
@@ -99,13 +99,13 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(100, result.Priority_Score__c, '자금 30% 이상 증가 시 공시 30점 → 총 100 이어야 한다');
+        Assert.areEqual(89.9, result.Priority_Score__c, 'YoY +50% → 공시 만점 30 → 총 89.9 이어야 한다');
     }
 
     @isTest
     static void shouldScoreDisclosure0_WhenNewDisclosureNotYetCollected() {
         // Given: 최신 재무는 2023, 그런데 2024 공시 시그널이 이미 존재 → 재무 미수집 → 공시 0
-        //        적합도40 + 니즈30 + 공시0 = 70
+        //        적합도 40 + 니즈 19.9 + 공시 0 = 59.9
         Lead lead = createLead('Pending Disclosure Lead');
         insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
         insertDisclosureSignal(lead.Id, null, Date.newInstance(2024, 3, 15));
@@ -115,7 +115,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(70, result.Priority_Score__c, '새 공시가 떴으나 재무 미수집이면 공시 0점 → 총 70');
+        Assert.areEqual(59.9, result.Priority_Score__c, '새 공시가 떴으나 재무 미수집이면 공시 0점 → 총 59.9');
     }
 
     @isTest
@@ -128,23 +128,23 @@ private class PriorityScoreBatchTest {
         Test.startTest();
         Database.executeBatch(new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD), 200);
         Test.stopTest();
-        Integer firstRun = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id].Priority_Score__c.intValue();
+        Decimal firstRun = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id].Priority_Score__c;
 
         // 2회차: 값을 오염시킨 뒤 execute() 직접 재호출 → 동일 결과로 복원되는지 확인
         update new Lead(Id = lead.Id, Priority_Score__c = 1);
         List<SObject> scope = [SELECT Id, Priority_Score__c FROM Lead WHERE Id = :lead.Id];
         new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD).execute((Database.BatchableContext) null, scope);
-        Integer secondRun = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id].Priority_Score__c.intValue();
+        Decimal secondRun = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id].Priority_Score__c;
 
-        Assert.areEqual(80, firstRun, '1회차 점수는 80 이어야 한다');
+        Assert.areEqual(69.9, firstRun, '1회차 점수는 69.9 이어야 한다');
         Assert.areEqual(firstRun, secondRun, '재실행해도 점수가 동일해야 한다');
     }
 
     @isTest
     static void shouldUseMostRecentQuarter_WhenQuarterlyNewerThanAnnual() {
-        // Given: 2025 연간(현금 100억=10% → 적합20, 니즈15) vs 2026 반기(현금 300억=30% → 적합40, 니즈30)
-        //        최신 공시는 2026 반기여야 하며, 전년 동기(2025 반기) 없음 → 공시 10 = 총 80.
-        //        만약 연간을 최신으로 잘못 고르면 20+15+10=45 가 된다(구분 가능).
+        // Given: 2025 연간(현금 100억=10% → 적합 15.7, 니즈 13.5) vs 2026 반기(현금 300억=30% → 적합 40, 니즈 19.9)
+        //        최신 공시는 2026 반기여야 하며, 전년 동기(2025 반기) 없음 → 공시 10 = 총 69.9.
+        //        만약 연간을 최신으로 잘못 고르면 15.7+13.5+10=39.2 가 된다(구분 가능).
         Lead lead = createLead('Recent Quarter Lead');
         insertStatement(lead.Id, null, 2025, '11011', ASSETS, ASSETS, 10000000000L, 0);
         insertStatement(lead.Id, null, 2026, '11012', ASSETS, ASSETS, RP_FUND_FULL, 0);
@@ -154,14 +154,14 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(80, result.Priority_Score__c, '더 최근 분기(2026 반기) 재무로 채점되어 80 이어야 한다');
+        Assert.areEqual(69.9, result.Priority_Score__c, '더 최근 분기(2026 반기) 재무로 채점되어 69.9 이어야 한다');
     }
 
     @isTest
     static void shouldCompareSameQuarterYoY_WhenLatestIsQuarter() {
         // Given: 최신 2026 반기(300억). 전년 동기 2025 반기(200억) → +50% → 공시 30.
-        //        2025 연간(290억)은 방해용: 전년 동기를 연간으로 잘못 매칭하면 +3.4% → 공시 10(총 80)이 된다.
-        //        올바르게 반기끼리 비교하면 적합40+니즈30+공시30 = 100.
+        //        2025 연간(290억)은 방해용: 전년 동기를 연간으로 잘못 매칭하면 +3.4% → 공시 6.7(총 66.7)이 된다.
+        //        올바르게 반기끼리 비교하면 적합40+니즈19.9+공시30 = 89.9.
         Lead lead = createLead('Quarter YoY Lead');
         insertStatement(lead.Id, null, 2025, '11012', ASSETS, ASSETS, 20000000000L, 0);
         insertStatement(lead.Id, null, 2025, '11011', ASSETS, ASSETS, 29000000000L, 0);
@@ -172,7 +172,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(100, result.Priority_Score__c, '전년 동기(2025 반기) 대비 +50% → 공시 30 → 총 100 이어야 한다');
+        Assert.areEqual(89.9, result.Priority_Score__c, '전년 동기(2025 반기) 대비 +50% → 공시 30 → 총 89.9 이어야 한다');
     }
 
     @isTest
@@ -197,7 +197,7 @@ private class PriorityScoreBatchTest {
 
     @isTest
     static void shouldScoreAccount_WhenNoOpenOpportunity() {
-        // Given: 열린 딜 없음, RP 만점 경로 → 80
+        // Given: 열린 딜 없음, RP 300억 경로 → 69.9
         Account account = TestDataFactory.createAccount('90000002', true);
         insertStatement(null, account.Id, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
 
@@ -206,7 +206,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Account result = [SELECT Priority_Score__c FROM Account WHERE Id = :account.Id];
-        Assert.areEqual(80, result.Priority_Score__c, 'Account 정상 채점 시 80 이어야 한다');
+        Assert.areEqual(69.9, result.Priority_Score__c, 'Account 정상 채점 시 69.9 이어야 한다');
     }
 
     @isTest
@@ -231,7 +231,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
-        Assert.areEqual(80, result.Priority_Score__c, '스케줄러가 배치를 기동해 Lead 점수를 산정해야 한다');
+        Assert.areEqual(69.9, result.Priority_Score__c, '스케줄러가 배치를 기동해 Lead 점수를 산정해야 한다');
     }
 
     // ─── 테스트 데이터 헬퍼 (TestDataFactory 동결로 이 클래스에 둔다) ──────────

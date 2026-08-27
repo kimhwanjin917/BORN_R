@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_LastName</name>
+        <label>LastName = 담당자 이름</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.LastName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.name_new__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>담당자 이름(name_new__c)이 표시·입력 필드이므로 표준 LastName을 항상 같은 값으로 맞춘다. LastName은 표준 필수 필드라 삭제할 수 없고 Convert 시 Contact 이름의 원천이 된다 (docs/50 결정 6).</description>
+    <environments>Default</environments>
+    <interviewLabel>Lead: LastName 동기화 {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead: 담당자 이름 → LastName 동기화</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_LastName</targetReference>
+        </connector>
+        <filterFormula>NOT(ISBLANK({!$Record.name_new__c})) &amp;&amp; {!$Record.name_new__c} &lt;&gt; {!$Record.LastName}</filterFormula>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

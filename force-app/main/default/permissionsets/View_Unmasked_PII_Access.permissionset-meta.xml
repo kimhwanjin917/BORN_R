@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>View_Unmasked_PII</name>
+    </customPermissions>
+    <description>원본 이메일·휴대전화 조회 및 입력 권한. RM·영업팀장 전용. Email_Masked__c/Phone_Masked__c 수식의 View_Unmasked_PII 스위치와 원본 필드 FLS를 함께 부여한다.</description>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Contact.Email</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Contact.MobilePhone</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Contact.Phone</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>원본 개인정보(PII) 조회</label>
+</PermissionSet>

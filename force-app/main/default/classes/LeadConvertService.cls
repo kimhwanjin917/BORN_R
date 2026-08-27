@@ -4,6 +4,7 @@
  *
  * For each request it:
  *  - Converts the Lead via Database.convertLead (creates Account, Contact, Opportunity)
+ *  - Fills the Opportunity's RecordType, 기준 상품, and Name ("{회사명} - {상품군}")
  *  - Creates a "고객 미팅" Event on the new Opportunity (WhatId) and Contact (WhoId)
  *  - Re-points related CorporateFinancialStatement__c / ExternalSignal__c records to the new Account
  *  - Transfers Lead fields to the new Account (Priority_Score always; the two
@@ -14,6 +15,38 @@
 public with sharing class LeadConvertService {
 
     private static final String EVENT_SUBJECT = '고객 미팅';
+
+    // ADR-0001: Lead.Recommended_Product_Family__c → Opportunity RecordType DeveloperName.
+    // 비어 있거나 매핑에 없으면 DEFAULT_OPP_RECORD_TYPE(RP Deal).
+    @TestVisible
+    private static final Map<String, String> OPP_RECORD_TYPE_BY_FAMILY = new Map<String, String>{
+        'RP' => 'RP_Deal',
+        '회사채' => 'Deal'
+    };
+    @TestVisible
+    private static final String DEFAULT_OPP_RECORD_TYPE = 'RP_Deal';
+
+    // docs/51: 추천 상품군 → Product2.Family. 전환된 Opportunity 의 기준 상품(Primary_Product__c)을
+    // 같은 상품군의 대표 상품으로 채운다. Product_Family__c 는 Formula 라 자동으로 따라온다.
+    @TestVisible
+    private static final Map<String, String> PRODUCT_FAMILY_BY_RECOMMENDATION = new Map<String, String>{
+        'RP' => 'RP',
+        '회사채' => '채권'
+    };
+
+    // 상품군의 대표 상품명. 예전에는 '활성 상품 중 이름순 첫 번째'였는데, 한글이 라틴 문자보다
+    // 먼저 정렬되는 탓에 RP 대표가 '외화 RP (USD) 30일물' 로 잡혔다. 기준 상품은 유사 Won 집계·
+    // 기회 레이더·지갑 점유율의 기준이라 정렬 우연에 맡기지 않고 명시한다.
+    @TestVisible
+    private static final Map<String, String> REPRESENTATIVE_PRODUCT_BY_FAMILY = new Map<String, String>{
+        'RP' => 'RP (환매조건부채권)',
+        '채권' => '회사채'
+    };
+    @TestVisible
+    private static final String DEFAULT_RECOMMENDATION = 'RP';
+
+    // Opportunity.Name 의 표준 길이 제한.
+    private static final Integer OPP_NAME_MAX_LENGTH = 120;
 
     // ─── Invocable Method ────────────────────────────────────────────────
 
@@ -60,7 +93,8 @@ public with sharing class LeadConvertService {
         }
 
         Map<Id, Lead> leadsById = new Map<Id, Lead>([
-            SELECT Id, Priority_Score__c, Business_Registration_Number__c, Assigned_Company_Code__c, Department__c
+            SELECT Id, Priority_Score__c, Business_Registration_Number__c, Assigned_Company_Code__c,
+                Recommended_Product_Family__c
             FROM Lead
             WHERE Id IN :leadIds
             WITH USER_MODE
@@ -124,16 +158,201 @@ public with sharing class LeadConvertService {
             return responses;
         }
 
+        // Opportunity 기본값은 LeadConvertedTrigger 가 이미 채웠다 (Database.convertLead 가
+        // Lead 를 업데이트하면서 발화). 여기서 다시 부르면 같은 레코드를 두 번 쓴다.
         createMeetingEvents(requests, conversionIndexes, responsesByIndex,
             contactIdByLeadId, opportunityIdByLeadId);
         transferLeadFieldsToAccounts(leadsById, accountIdByLeadId);
-        transferDepartmentToContacts(leadsById, contactIdByLeadId);
         reconnectExternalRecords(accountIdByLeadId.keySet(), accountIdByLeadId);
 
         return responses;
     }
 
+    // ─── Trigger Entry Point ─────────────────────────────────────────────
+
+    /**
+     * Applies the Opportunity defaults for Leads that were just converted, whatever
+     * converted them: the standard Convert button, the API, 「미팅 확정」, or the
+     * Event trigger. Called from LeadConvertedTrigger (Lead after update), which is
+     * the one point every conversion path passes through.
+     *
+     * Failures never block the conversion — the Opportunity already exists by this
+     * point, so a naming problem is logged rather than thrown.
+     *
+     * @param updatedLeads Trigger.new
+     * @param oldLeadsById Trigger.oldMap
+     */
+    public static void applyDefaultsForConvertedLeads(
+        List<Lead> updatedLeads,
+        Map<Id, Lead> oldLeadsById
+    ) {
+        if (defaultsInProgress) {
+            return; // our own Opportunity update must not re-enter
+        }
+        Map<Id, Lead> leadsById = new Map<Id, Lead>();
+        Map<Id, Id> opportunityIdByLeadId = new Map<Id, Id>();
+        Map<Id, Id> accountIdByLeadId = new Map<Id, Id>();
+        for (Lead updated : updatedLeads) {
+            Lead previous = oldLeadsById == null ? null : oldLeadsById.get(updated.Id);
+            Boolean justConverted = updated.IsConverted == true
+                && (previous == null || previous.IsConverted != true);
+            if (!justConverted
+                || updated.ConvertedOpportunityId == null
+                || updated.ConvertedAccountId == null) {
+                continue;
+            }
+            leadsById.put(updated.Id, updated);
+            opportunityIdByLeadId.put(updated.Id, updated.ConvertedOpportunityId);
+            accountIdByLeadId.put(updated.Id, updated.ConvertedAccountId);
+        }
+        if (opportunityIdByLeadId.isEmpty()) {
+            return;
+        }
+        defaultsInProgress = true;
+        try {
+            applyOpportunityDefaults(leadsById, opportunityIdByLeadId, accountIdByLeadId);
+        } catch (Exception e) {
+            System.debug(LoggingLevel.ERROR,
+                'Opportunity defaults skipped after conversion: ' + e.getMessage());
+        } finally {
+            defaultsInProgress = false;
+        }
+    }
+
+    private static Boolean defaultsInProgress = false;
+
     // ─── Private Helpers ─────────────────────────────────────────────────
+
+    /**
+     * Fills in what Database.convertLead cannot set on the created Opportunity:
+     * RecordType and 기준 상품 from the source Lead's 추천 상품군 (ADR-0001), and a
+     * deal-shaped Name ("{Account 명} - {기준 상품명}") in place of the bare Account
+     * name convertLead leaves behind. Each part is skipped independently when it
+     * cannot be resolved, so a missing RecordType or Product2 never blocks the rest.
+     * @param leadsById Source Leads keyed by Id
+     * @param opportunityIdByLeadId Created Opportunity Id keyed by Lead Id
+     * @param accountIdByLeadId Converted Account Id keyed by Lead Id
+     */
+    @TestVisible
+    private static void applyOpportunityDefaults(
+        Map<Id, Lead> leadsById,
+        Map<Id, Id> opportunityIdByLeadId,
+        Map<Id, Id> accountIdByLeadId
+    ) {
+        Map<String, Schema.RecordTypeInfo> rtByDevName =
+            Schema.SObjectType.Opportunity.getRecordTypeInfosByDeveloperName();
+        Map<String, Product2> productByFamily = queryDefaultProductByFamily();
+        Map<Id, String> accountNameById = queryAccountNames(accountIdByLeadId.values());
+        List<Opportunity> updates = new List<Opportunity>();
+        for (Id leadId : opportunityIdByLeadId.keySet()) {
+            Lead sourceLead = leadsById.get(leadId);
+            String recommendation = sourceLead == null ? null : sourceLead.Recommended_Product_Family__c;
+            if (!OPP_RECORD_TYPE_BY_FAMILY.containsKey(recommendation)) {
+                recommendation = DEFAULT_RECOMMENDATION;
+            }
+            Schema.RecordTypeInfo rt = rtByDevName.get(OPP_RECORD_TYPE_BY_FAMILY.get(recommendation));
+            Opportunity opp = new Opportunity(Id = opportunityIdByLeadId.get(leadId));
+            Boolean changed = false;
+            if (rt != null && rt.isAvailable()) {
+                opp.RecordTypeId = rt.getRecordTypeId();
+                changed = true;
+            }
+            Product2 product = productByFamily.get(PRODUCT_FAMILY_BY_RECOMMENDATION.get(recommendation));
+            if (product != null) {
+                opp.Primary_Product__c = product.Id; // 기준 상품 — 미팅 중 추천·유사 Won 의 기준
+                changed = true;
+            }
+            // 이름에는 구체 상품이 아니라 상품군을 쓴다 (RP / 회사채). 구체 상품은
+            // Primary_Product__c 가 들고 있고, 이름까지 특정 상품으로 못 박으면 실제
+            // 딜과 어긋나기 쉽다. 회사명을 못 읽으면 convertLead 가 넣어 둔 이름을 둔다.
+            String accountName = accountNameById.get(accountIdByLeadId.get(leadId));
+            if (String.isNotBlank(accountName)) {
+                opp.Name = buildOpportunityName(accountName, recommendation);
+                changed = true;
+            }
+            if (changed) {
+                updates.add(opp);
+            }
+        }
+        if (updates.isEmpty()) {
+            return;
+        }
+        // 이 시점엔 Opportunity 가 이미 만들어져 있다. 이름·기준 상품을 못 채우는 것이
+        // 전환 자체를 되돌리는 것보다 낫기 때문에 건별 실패를 허용하고 로그만 남긴다.
+        for (Database.SaveResult sr : Database.update(updates, false, AccessLevel.USER_MODE)) {
+            if (!sr.isSuccess()) {
+                System.debug(LoggingLevel.ERROR,
+                    'Opportunity defaults not applied to ' + sr.getId() + ': '
+                    + formatErrors(sr.getErrors()));
+            }
+        }
+    }
+
+    /**
+     * "{회사명} - {상품군}", truncated to the 120-character Opportunity.Name limit.
+     * @param accountName Converted Account name
+     * @param productFamily 추천 상품군 (RP / 회사채)
+     * @return Assembled Opportunity name
+     */
+    @TestVisible
+    private static String buildOpportunityName(String accountName, String productFamily) {
+        String assembled = accountName + ' - ' + productFamily;
+        return assembled.length() > OPP_NAME_MAX_LENGTH
+            ? assembled.left(OPP_NAME_MAX_LENGTH)
+            : assembled;
+    }
+
+    /**
+     * Account names for the converted Accounts. convertLead can attach to an
+     * existing Account, so the stored name is read back rather than assuming Lead.Company.
+     * @param accountIds Converted Account Ids
+     * @return Account Name keyed by Id; empty when the query is not permitted
+     */
+    private static Map<Id, String> queryAccountNames(List<Id> accountIds) {
+        Map<Id, String> nameById = new Map<Id, String>();
+        if (accountIds == null || accountIds.isEmpty()) {
+            return nameById;
+        }
+        try {
+            for (Account a : [
+                SELECT Id, Name FROM Account WHERE Id IN :accountIds WITH USER_MODE
+            ]) {
+                nameById.put(a.Id, a.Name);
+            }
+        } catch (QueryException e) {
+            System.debug(LoggingLevel.WARN, 'Account name lookup skipped: ' + e.getMessage());
+        }
+        return nameById;
+    }
+
+    /**
+     * Active Product2 per Family (first by Name) for the families the conversion can map to.
+     * Missing FLS/objects simply yield an empty map (기준 상품 미설정, RT 만 반영).
+     */
+    private static Map<String, Product2> queryDefaultProductByFamily() {
+        Map<String, Product2> productByFamily = new Map<String, Product2>();
+        Set<String> families = new Set<String>(PRODUCT_FAMILY_BY_RECOMMENDATION.values());
+        Set<String> representatives = new Set<String>(REPRESENTATIVE_PRODUCT_BY_FAMILY.values());
+        try {
+            for (Product2 p : [
+                SELECT Id, Name, Family FROM Product2
+                WHERE IsActive = true AND Family IN :families
+                WITH USER_MODE
+                ORDER BY Family, Name
+            ]) {
+                // 대표 상품이 있으면 그것을 쓰고, 그 상품이 비활성/삭제됐을 때만
+                // 같은 상품군의 아무 활성 상품으로 물러선다.
+                Boolean isRepresentative = representatives.contains(p.Name)
+                    && REPRESENTATIVE_PRODUCT_BY_FAMILY.get(p.Family) == p.Name;
+                if (isRepresentative || !productByFamily.containsKey(p.Family)) {
+                    productByFamily.put(p.Family, p);
+                }
+            }
+        } catch (QueryException e) {
+            System.debug(LoggingLevel.WARN, 'Product2 lookup skipped: ' + e.getMessage());
+        }
+        return productByFamily;
+    }
 
     /**
      * Resolves a converted Lead status, preferring the default converted status.
@@ -142,7 +361,7 @@ public with sharing class LeadConvertService {
      */
     private static String getConvertedStatus() {
         List<LeadStatus> statuses = [
-            SELECT MasterLabel
+            SELECT ApiName, MasterLabel
             FROM LeadStatus
             WHERE IsConverted = true
             WITH USER_MODE
@@ -152,7 +371,11 @@ public with sharing class LeadConvertService {
         if (statuses.isEmpty()) {
             throw new LeadConvertServiceException('No converted LeadStatus is configured in this org.');
         }
-        return statuses[0].MasterLabel;
+        // setConvertedStatus 는 ApiName 을 요구한다. MasterLabel 은 관리자가 표시명을
+        // 바꾸는 순간 (예: Converted → '전환 완료') 어긋나 전환이 전부 실패한다.
+        return String.isNotBlank(statuses[0].ApiName)
+            ? statuses[0].ApiName
+            : statuses[0].MasterLabel;
     }
 
     /**
@@ -233,34 +456,6 @@ public with sharing class LeadConvertService {
         }
         if (!accountsToUpdate.isEmpty()) {
             update as user accountsToUpdate;
-        }
-    }
-
-    /**
-     * Copies the Lead's Department__c onto the created Contact's standard
-     * Department field. Salesforce's declarative lead-conversion mapping cannot
-     * target a standard Contact field from a custom Lead field, so it is set
-     * explicitly here. Blank Lead values are skipped so a Contact is never cleared.
-     * @param leadsById Source Leads keyed by Id
-     * @param contactIdByLeadId Created Contact Id keyed by Lead Id
-     */
-    private static void transferDepartmentToContacts(
-        Map<Id, Lead> leadsById,
-        Map<Id, Id> contactIdByLeadId
-    ) {
-        List<Contact> contactsToUpdate = new List<Contact>();
-        for (Id leadId : contactIdByLeadId.keySet()) {
-            Lead sourceLead = leadsById.get(leadId);
-            if (sourceLead == null || String.isBlank(sourceLead.Department__c)) {
-                continue;
-            }
-            contactsToUpdate.add(new Contact(
-                Id = contactIdByLeadId.get(leadId),
-                Department = sourceLead.Department__c
-            ));
-        }
-        if (!contactsToUpdate.isEmpty()) {
-            update as user contactsToUpdate;
         }
     }
 

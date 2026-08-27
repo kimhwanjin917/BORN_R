@@ -7,7 +7,7 @@
         <name>RM_Assistant</name>
     </botMlDomain>
     <botSource>None</botSource>
-    <description>RM의 제안 준비를 돕는 내부 에이전트. ① 과거 유사 기회의 Won 비율을 Apex 집계로 조회해 해석 (백로그 22) ② 기회의 미팅 메모 마스킹본과 상품 카탈로그로 상품·조건 추천 (백로그 20).</description>
+    <description>RM의 제안 준비를 돕는 내부 에이전트. ① 과거 유사 기회의 Won 비율을 Apex 집계로 조회해 해석 (백로그 22) ② 기회의 미팅 메모 마스킹본과 상품 카탈로그로 상품·조건 추천 (백로그 20) ③ 미전환 Lead 의 DART 재무·외부시그널로 추천 상품군(RP/회사채)을 정해 Lead 에 기록 (docs/50).</description>
     <label>근본증권 RM 어시스턴트</label>
     <logPrivateConversationData>false</logPrivateConversationData>
     <richContentEnabled>true</richContentEnabled>

@@ -4,11 +4,14 @@
         <article class="card">
             <header class="card-head">
                 <div class="card-head__title">
-                    <lightning-icon
-                        icon-name="standard:event"
-                        size="small"
-                        alternative-text="오늘 일정"
-                    ></lightning-icon>
+                    <span class="card-head__icon">
+                        <lightning-icon
+                            icon-name="utility:event"
+                            size="small"
+                            variant="inverse"
+                            alternative-text="오늘 일정"
+                        ></lightning-icon>
+                    </span>
                     <span>오늘 일정</span>
                 </div>
                 <template lwc:if={hasEvents}>
@@ -55,11 +58,14 @@
         <article class="card">
             <header class="card-head card-head_button" onclick={toggleTaskList}>
                 <div class="card-head__title">
-                    <lightning-icon
-                        icon-name="standard:task"
-                        size="small"
-                        alternative-text="만기 알림"
-                    ></lightning-icon>
+                    <span class="card-head__icon">
+                        <lightning-icon
+                            icon-name="utility:clock"
+                            size="small"
+                            variant="inverse"
+                            alternative-text="만기 알림"
+                        ></lightning-icon>
+                    </span>
                     <span>만기 알림</span>
                 </div>
                 <span class="badge" title="열린 만기 알림 건수">{taskCount}</span>
@@ -69,7 +75,7 @@
                 <template lwc:if={hasTasks}>
                     <ul class="rows">
                         <template for:each={tasks} for:item="tsk">
-                            <li key={tsk.Id} class="row" data-id={tsk.Id} onclick={handleOpenTask}>
+                            <li key={tsk.Id} class="row row_link" data-id={tsk.Id} data-what-id={tsk.WhatId} onclick={handleOpenTask} title="클릭하면 기회 레이더에서 이 고객을 봅니다">
                                 <div class="row__body">
                                     <span class="row__name" title={tsk.Subject}>{tsk.Subject}</span>
                                     <template lwc:if={tsk.What.Name}>
@@ -80,6 +86,7 @@
                                     value={tsk.ActivityDate}
                                     class="row__time"
                                 ></lightning-formatted-date-time>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="row__chevron" alternative-text="기회 레이더로 이동"></lightning-icon>
                             </li>
                         </template>
                     </ul>
@@ -98,7 +105,7 @@
             <header class="news-head">
                 <span class="news-head__icon">
                     <lightning-icon
-                        icon-name="standard:news"
+                        icon-name="utility:news"
                         size="small"
                         variant="inverse"
                         alternative-text="뉴스 요약"

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>기회 레이더에서 전체 고객(타 담당 포함)을 볼 수 있음. 팀장·관리자용.</description>
+    <isLicensed>false</isLicensed>
+    <label>기회 레이더 전체 보기</label>
+</CustomPermission>

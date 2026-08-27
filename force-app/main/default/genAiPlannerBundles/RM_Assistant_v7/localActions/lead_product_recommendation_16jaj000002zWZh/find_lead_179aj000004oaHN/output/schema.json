@@ -1,0 +1,34 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "matchCount" : {
+      "title" : "검색 결과 수",
+      "description" : "반환된 Lead 수 (최대 5). 0이면 접근 가능한 미전환 Lead 가 없음",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "matches" : {
+      "title" : "Lead 목록",
+      "description" : "후보 Lead 목록: leadId, company, contactName, industry, status, priorityScore, recommendedProductFamily",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__LeadLookupAction$Match"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "message" : {
+      "title" : "메시지",
+      "description" : "검색 결과 요약",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

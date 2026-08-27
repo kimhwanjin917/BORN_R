@@ -55,7 +55,7 @@
 }
 
 .row:hover {
-    background: var(--slds-g-color-neutral-base-95, #f4faf6);
+    background: var(--slds-g-color-neutral-base-95, #EFFAF8);
 }
 
 .rank-badge {
@@ -73,7 +73,7 @@
 }
 
 .rank-badge_top {
-    background: var(--slds-g-color-palette-green-50, #2e844a);
+    background: #00B7A6;
     color: #fff;
 }
 
@@ -107,8 +107,8 @@
     min-width: 2rem;
     padding: 0.125rem 0.5rem;
     border-radius: 0.375rem;
-    background: var(--slds-g-color-palette-green-95, #ebf7ee);
-    color: var(--slds-g-color-palette-green-20, #1a5330);
+    background: #E1F6F2;
+    color: #005F56;
     font-size: 0.8125rem;
     font-weight: 700;
     text-align: center;

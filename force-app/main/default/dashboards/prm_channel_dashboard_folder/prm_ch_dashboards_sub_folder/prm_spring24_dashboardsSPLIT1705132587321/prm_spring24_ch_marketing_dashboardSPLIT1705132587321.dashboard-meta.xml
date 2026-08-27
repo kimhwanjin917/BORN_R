@@ -35,7 +35,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>prm_channel_reports_folder/prm_ch_reports_sub_folder/prm_spring24_reportsSPLIT1705132587321/prm_spring24_ch_marketing_reports_folderSPLIT1705132587321/prm_mdf_submitted_request_by_partnerSPLIT1705132587321</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -110,7 +109,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>prm_channel_reports_folder/prm_ch_reports_sub_folder/prm_spring24_reportsSPLIT1705132587321/prm_spring24_ch_marketing_reports_folderSPLIT1705132587321/prm_approved_claim_by_partnerSPLIT1705132587321</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -147,7 +145,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>prm_channel_reports_folder/prm_ch_reports_sub_folder/prm_spring24_reportsSPLIT1705132587321/prm_spring24_ch_marketing_reports_folderSPLIT1705132587321/prm_submitted_claim_by_partnerSPLIT1705132587321</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -184,7 +181,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>prm_channel_reports_folder/prm_ch_reports_sub_folder/prm_spring24_reportsSPLIT1705132587321/prm_spring24_ch_marketing_reports_folderSPLIT1705132587321/prm_mdf_approved_request_by_partnerSPLIT1705132587321</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>

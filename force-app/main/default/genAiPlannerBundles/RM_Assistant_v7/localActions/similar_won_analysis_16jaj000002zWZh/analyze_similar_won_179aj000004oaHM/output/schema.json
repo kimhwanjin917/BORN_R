@@ -1,0 +1,62 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "industry" : {
+      "title" : "적용된 산업군",
+      "description" : "집계에 사용한 산업군 값",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "insufficientData" : {
+      "title" : "데이터 부족 여부",
+      "description" : "true 이면 유사 건이 없어(모수 0) 확률을 말할 수 없다. 이 경우 수치를 추정하지 말 것",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "message" : {
+      "title" : "집계 요약",
+      "description" : "사람이 읽을 수 있는 집계 요약 또는 데이터 부족 안내 문장",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "productType" : {
+      "title" : "적용된 상품 유형",
+      "description" : "집계에 사용한 상품 유형 (미지정 시 빈 값)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "totalCount" : {
+      "title" : "전체 종결 건수",
+      "description" : "조건에 맞는 종결(Closed Won + Closed Lost) 기회 수",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "wonCount" : {
+      "title" : "Won 건수",
+      "description" : "그중 Closed Won 건수",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "wonRate" : {
+      "title" : "Won 비율(%)",
+      "description" : "wonCount / totalCount x 100, 소수 첫째 자리 반올림. 데이터 부족 시 0",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

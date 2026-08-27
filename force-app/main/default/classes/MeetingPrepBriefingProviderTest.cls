@@ -93,7 +93,7 @@ private class MeetingPrepBriefingProviderTest {
         Lead lead = new Lead(
             LastName = 'Tester' + seq,
             Company = company,
-            Status = '신규',
+            Status = 'New',
             IsConverted = false,
             Email = 'tester' + seq + '@example.com',
             name_new__c = 'Tester',

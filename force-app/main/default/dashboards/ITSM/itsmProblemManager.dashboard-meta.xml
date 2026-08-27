@@ -467,7 +467,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>ItsmReports/Avg_Time_to_Close_by_Priority_me9</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>true</sortLegendValues>
@@ -561,7 +560,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>ItsmReports/Problem_Resolution_Time_by_Fulfiller_KV3</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>true</sortLegendValues>

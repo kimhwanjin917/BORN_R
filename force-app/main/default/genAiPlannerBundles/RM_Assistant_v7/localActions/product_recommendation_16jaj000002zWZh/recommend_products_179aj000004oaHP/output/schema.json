@@ -1,0 +1,58 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountIndustry" : {
+      "title" : "고객사 산업군",
+      "description" : "Account.Industry",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "accountName" : {
+      "title" : "고객사명",
+      "description" : "Account.Name",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "hasMaturingAsset" : {
+      "title" : "만기 임박 여부",
+      "description" : "90일 내 만기 또는 만기 경과 보유상품이 있으면 true",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "heldAssetText" : {
+      "title" : "보유상품 요약",
+      "description" : "고객사가 이미 보유한 상품과 원금·금리·만기일 요약. 비어 있으면 보유상품 없음",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "opportunityAmount" : {
+      "title" : "기회 금액",
+      "description" : "Opportunity.Amount (접근 가능한 경우)",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "recommendations" : {
+      "title" : "상품 후보 목록",
+      "description" : "상품 후보: productName, eligibilityBasis(적격 규칙), feeRate(수수료율), minTermDays, maxTermDays. 비어 있으면 기회에 접근할 수 없거나 없음",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__ProductRecommendationAction$Recommendation"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

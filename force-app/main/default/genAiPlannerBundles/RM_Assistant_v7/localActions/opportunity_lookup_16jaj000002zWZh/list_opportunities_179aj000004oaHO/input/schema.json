@@ -1,0 +1,42 @@
+{
+  "required" : [ ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "keyword" : {
+      "title" : "고객사/기회 키워드",
+      "description" : "특정 고객사나 기회 이름(예: 성우하이텍)을 말했을 때 핵심 단어. 아니면 비워 둔다",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "mineOnly" : {
+      "title" : "내 기회만",
+      "description" : "사용자가 '내', '나의', '제가 담당하는' 기회를 말했으면 true. 그 외 false",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "openOnly" : {
+      "title" : "진행 중만",
+      "description" : "진행 중(미종결) 기회만 원하면 true(기본). 종결된 것도 포함하거나 '전체', '최근 생긴 것 전부'처럼 말하면 false",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "ownerName" : {
+      "title" : "담당자 이름",
+      "description" : "사용자가 특정 담당자(예: 김도현)의 기회를 물었을 때 그 이름. 아니면 비워 둔다",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "sortBy" : {
+      "title" : "정렬",
+      "description" : "recent(최근 생성순, 기본) / close(마감일 빠른순) / amount(금액 큰순). '최근', '새로 생긴'은 recent, '마감 임박'은 close, '큰 건'은 amount",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

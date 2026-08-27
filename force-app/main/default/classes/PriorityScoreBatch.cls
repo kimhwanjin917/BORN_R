@@ -1,17 +1,25 @@
 /**
- * 기업 영업 우선순위 점수(Priority_Score__c, 0~100 정수)를 결정적으로 재계산하는 배치.
+ * 기업 영업 우선순위 점수(Priority_Score__c, 0~100 · 소수 1자리)를 결정적으로 재계산하는 배치.
  *
  * 대상: 발굴 Lead(IsConverted=false, Status='신규') 와 Account. 스케줄러가 두 대상을 각각 기동한다.
  *
- * 채점(총 100점):
- *   1) 상품 적합도 40점 — 현금자산비율(RP) 과 차입금의존도(회사채) 중 점수가 높은 쪽을 그 기업의 상품으로 정한다.
- *   2) 니즈 규모 30점 — 정해진 상품의 운용 가능 자금(절대 금액)으로 채점.
- *   3) 최신 공시 30점 — 정해진 상품 자금의 전년 동기 대비 증가율.
+ * 채점(총 100점, 소수 1자리) — 각 항목은 계단식이 아니라 실제 값에 비례하는 "연속" 점수라
+ * 기업마다 서로 다른 점수가 나오고, 만점 기준을 높여 100.0 은 세 항목을 동시에 최상단으로
+ * 채운 사실상 1개 기업에서만 나온다:
+ *   1) 상품 적합도 40점 — 현금자산비율(RP)·차입금의존도(회사채)를 각각 연속 채점해 높은 쪽을 상품으로 정한다.
+ *        RP:   6%→7 · 12%→20 · 30%→40 (구간 선형보간).
+ *        회사채: 12%→7 · 25%→20 · 50%→40 (구간 선형보간).
+ *   2) 니즈 규모 30점 — 정해진 상품의 운용 가능 자금을 로그 보간(0~27) 후 규모 프리미엄(27→30 점근)으로 채점.
+ *        RP:   10억→0 · 100억→13.5 · 1,000억→27 · 이후 규모 클수록 30 근접(1조≈29.7).
+ *        회사채: 100억→0 · 1,000억→13.5 · 1조→27 · 이후 30 근접.
+ *        (같은 REF 초과 대형 기업끼리 자금 규모로 점수가 갈려 최상단 만점 동점이 사라진다.)
+ *   3) 최신 공시 30점 — 정해진 상품 자금의 전년 동기 대비 증가율(YoY)을 연속 채점.
+ *        -10%→0 · +10%→10 · +30%→22 · +50%→30 (구간 선형보간).
  *
  * 제외(점수 null 로 저장 → 목록에서 빠짐):
  *   - 자본잠식(Total_Equity__c <= 0)
  *   - 이미 영업 진행 중(Lead: Status != 'New' 는 애초 대상에서 빠짐 / Account: 열린 Opportunity 보유)
- * 적합도 0점 기업은 제외가 아니라 낮은 점수로 남겨 최하위로 깔린다.
+ * 적합도가 낮은 기업은 제외가 아니라 낮은 점수로 남겨 최하위로 깔린다.
  *
  * 결정성: 최신은 연간·반기·분기 전체에서 (Fiscal_Year__c, 보고서 서수)가 가장 최근인 공시를 고르고,
  * 직전은 그 전년 동기(동일 보고서 코드, Fiscal_Year__c-1)로 잡는다. 보고서 코드는 External_Key__c 에서 파싱한다.
@@ -31,21 +39,34 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
     /** 기업에 정해지는 금융 상품. */
     private enum Product { RP, BOND }
 
-    // ─── 적합도 임계값 (비율, 예: 0.12 = 12%) ────────────────────────────────
-    private static final Decimal CASH_RATIO_T40 = 0.12;
-    private static final Decimal CASH_RATIO_T20 = 0.06;
-    private static final Decimal DEBT_RATIO_T40 = 0.25;
-    private static final Decimal DEBT_RATIO_T20 = 0.12;
+    // ─── 항목별 최대 배점 ────────────────────────────────────────────────────
+    private static final Decimal NEED_MAX = 30;
+    // 니즈 상단 동점을 절대 규모로 갈라내는 "규모 프리미엄" 상한. REF 초과분에서 (NEED_MAX-PREMIUM)→NEED_MAX 에 점근.
+    private static final Decimal NEED_PREMIUM = 3;
 
-    // ─── 니즈 규모 임계값 (원화, 상품별) ─────────────────────────────────────
-    private static final Decimal RP_NEED_T30 = 30000000000L;    // RP 300억
-    private static final Decimal RP_NEED_T15 = 10000000000L;    // RP 100억
-    private static final Decimal BOND_NEED_T30 = 300000000000L; // 회사채 3,000억
-    private static final Decimal BOND_NEED_T15 = 100000000000L; // 회사채 1,000억
+    // ─── 적합도(연속) 구간 보간 앵커 — (비율, 점수). 오름차순. ─────────────────
+    //  RP 현금자산비율:   6%→7 · 12%→20 · 30%→40 (30% 이상 40점 클램프)
+    private static final List<Decimal> CASH_FIT_X = new List<Decimal>{ 0, 0.06, 0.12, 0.30 };
+    private static final List<Decimal> CASH_FIT_Y = new List<Decimal>{ 0, 7, 20, 40 };
+    //  회사채 차입금의존도: 12%→7 · 25%→20 · 50%→40 (50% 이상 40점 클램프)
+    private static final List<Decimal> DEBT_FIT_X = new List<Decimal>{ 0, 0.12, 0.25, 0.50 };
+    private static final List<Decimal> DEBT_FIT_Y = new List<Decimal>{ 0, 7, 20, 40 };
 
-    // ─── 최신 공시(YoY 증가율) 임계값 ────────────────────────────────────────
-    private static final Decimal YOY_T30 = 0.30; // 30% 이상 증가
-    private static final Decimal YOY_T20 = 0.10; // 10~30% 증가
+    // ─── 니즈(로그 보간+규모 프리미엄) 경계 — 원화. FLOOR→0점, REF→27점, 이후 규모 클수록 30 점근. ──
+    private static final Decimal RP_NEED_FLOOR = 1000000000L;    // RP 10억 → 0
+    private static final Decimal RP_NEED_REF = 100000000000L;    // RP 1,000억 → 27(이후 규모 클수록 30 근접)
+    private static final Decimal BOND_NEED_FLOOR = 10000000000L; // 회사채 100억 → 0
+    private static final Decimal BOND_NEED_REF = 1000000000000L; // 회사채 1조 → 27(이후 30 근접)
+
+    // ─── 최신 공시(YoY 증가율, 연속) 구간 보간 앵커 — (증가율, 점수). 오름차순. ──
+    //  -10%→0 · +10%→10 · +30%→22 · +50%→30 (-10% 이하 0, +50% 이상 30 클램프)
+    private static final List<Decimal> YOY_X = new List<Decimal>{ -0.10, 0.10, 0.30, 0.50 };
+    private static final List<Decimal> YOY_Y = new List<Decimal>{ 0, 10, 22, 30 };
+    // 직전 공시가 없어 YoY 비교가 불가할 때의 중립 점수.
+    private static final Decimal DISCLOSURE_NO_PRIOR = 10;
+
+    // 저장 소수 자리수(필드 scale 과 일치). 재실행 결정성을 위해 반올림 후 비교·저장한다.
+    private static final Integer SCORE_SCALE = 1;
 
     private static final String DISCLOSURE_SIGNAL = '공시';
     private static final Integer DEFAULT_BATCH_SIZE = 200;
@@ -116,15 +137,17 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
         for (SObject record : scope) {
             Id targetId = record.Id;
             CorporateFinancialStatement__c latest = latestByTarget.get(targetId);
-            Integer newScore = computeScore(
+            Decimal newScore = computeScore(
                 latest,
                 priorByTarget.get(targetId),
                 latestDisclosureYearByTarget.get(targetId),
                 excludedByOpenDeal.contains(targetId)
             );
-            Object currentScore = record.get('Priority_Score__c');
-            Integer currentInt = currentScore == null ? null : Integer.valueOf(currentScore);
-            if (newScore != currentInt) {
+            Object currentRaw = record.get('Priority_Score__c');
+            Decimal current = currentRaw == null
+                ? null
+                : ((Decimal) currentRaw).setScale(SCORE_SCALE, System.RoundingMode.HALF_UP);
+            if (newScore != current) {
                 record.put('Priority_Score__c', newScore);
                 recordsToUpdate.add(record);
             }
@@ -152,9 +175,9 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
      * @param prior 직전 연간 재무제표(없으면 null)
      * @param latestDisclosureYear 최신 공시 시그널의 연도(없으면 null)
      * @param excludedByOpenDeal 열린 Opportunity 로 영업 진행 중이면 true
-     * @return 0~100 정수 점수 또는 null(제외/데이터 없음)
+     * @return 0~100(소수 1자리) 점수 또는 null(제외/데이터 없음)
      */
-    private Integer computeScore(
+    private Decimal computeScore(
         CorporateFinancialStatement__c latest,
         CorporateFinancialStatement__c prior,
         Integer latestDisclosureYear,
@@ -173,61 +196,60 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
         Decimal cashFund = sumFund(latest, Product.RP);
         Decimal bondFund = sumFund(latest, Product.BOND);
-        Decimal cashRatio = cashFund / totalAssets;
-        Decimal debtRatio = bondFund / totalAssets;
-
-        Integer cashFitScore = scoreCashFit(cashRatio);
-        Integer debtFitScore = scoreDebtFit(debtRatio);
+        Decimal cashFitScore = scoreCashFit(cashFund / totalAssets);
+        Decimal debtFitScore = scoreDebtFit(bondFund / totalAssets);
 
         // 상품 결정: 적합도 점수가 높은 쪽. 동점이면 RP 우선.
         Product productKind = debtFitScore > cashFitScore ? Product.BOND : Product.RP;
-        Integer fitScore = productKind == Product.BOND ? debtFitScore : cashFitScore;
+        Decimal fitScore = productKind == Product.BOND ? debtFitScore : cashFitScore;
 
         Decimal fund = productKind == Product.RP ? cashFund : bondFund;
-        Integer needScore = scoreNeed(productKind, fund);
-        Integer disclosureScore = scoreDisclosure(latest, prior, latestDisclosureYear, productKind);
+        Decimal needScore = scoreNeed(productKind, fund);
+        Decimal disclosureScore = scoreDisclosure(latest, prior, latestDisclosureYear, productKind);
 
-        return fitScore + needScore + disclosureScore;
+        Decimal total = fitScore + needScore + disclosureScore;
+        return total.setScale(SCORE_SCALE, System.RoundingMode.HALF_UP);
     }
 
-    private Integer scoreCashFit(Decimal cashRatio) {
-        if (cashRatio >= CASH_RATIO_T40) {
-            return 40;
-        }
-        if (cashRatio >= CASH_RATIO_T20) {
-            return 20;
-        }
-        return 0;
+    // 현금자산비율을 앵커 구간(6%→7·12%→20·30%→40)으로 선형보간한다.
+    private Decimal scoreCashFit(Decimal cashRatio) {
+        return piecewise(cashRatio, CASH_FIT_X, CASH_FIT_Y);
     }
 
-    private Integer scoreDebtFit(Decimal debtRatio) {
-        if (debtRatio >= DEBT_RATIO_T40) {
-            return 40;
-        }
-        if (debtRatio >= DEBT_RATIO_T20) {
-            return 20;
-        }
-        return 0;
-    }
-
-    private Integer scoreNeed(Product productKind, Decimal fund) {
-        Decimal t30 = productKind == Product.RP ? RP_NEED_T30 : BOND_NEED_T30;
-        Decimal t15 = productKind == Product.RP ? RP_NEED_T15 : BOND_NEED_T15;
-        if (fund >= t30) {
-            return 30;
-        }
-        if (fund >= t15) {
-            return 15;
-        }
-        return 0;
+    // 차입금의존도를 앵커 구간(12%→7·25%→20·50%→40)으로 선형보간한다.
+    private Decimal scoreDebtFit(Decimal debtRatio) {
+        return piecewise(debtRatio, DEBT_FIT_X, DEBT_FIT_Y);
     }
 
     /**
-     * 최신 공시 점수(30점). 상품 자금의 전년 동기 대비 증가율로 채점하되,
-     * 최신 CFS 보다 미래 연도의 공시 시그널이 있으면(=새 공시는 떴으나 재무 미수집) 0점.
-     * 전년 동기가 없어 비교 불가하면 규정에 따라 10점.
+     * 니즈 규모(30점). 두 구간으로 채점한다.
+     *  1) FLOOR~REF: 자금을 로그 스케일로 0 ~ (NEED_MAX-PREMIUM=27) 점 보간(금액이 수십~수백 배 벌어져 로그).
+     *  2) REF 초과: 절대 규모가 클수록 27→30 에 점근하는 규모 프리미엄 PREMIUM*(1 - REF/fund) 가산.
+     * 덕분에 REF 를 넘긴 대형 기업끼리도 자금 규모로 점수가 갈려 최상단 동점(만점 몰림)이 사라진다.
      */
-    private Integer scoreDisclosure(
+    private Decimal scoreNeed(Product productKind, Decimal fund) {
+        Decimal floorFund = productKind == Product.RP ? RP_NEED_FLOOR : BOND_NEED_FLOOR;
+        Decimal refFund = productKind == Product.RP ? RP_NEED_REF : BOND_NEED_REF;
+        if (fund == null || fund <= floorFund) {
+            return 0;
+        }
+        Decimal baseMax = NEED_MAX - NEED_PREMIUM; // REF 에서의 기본 점수(27)
+        if (fund <= refFund) {
+            Double span = Math.log10(refFund.doubleValue()) - Math.log10(floorFund.doubleValue());
+            Double pos = Math.log10(fund.doubleValue()) - Math.log10(floorFund.doubleValue());
+            return baseMax * Decimal.valueOf(pos / span);
+        }
+        // REF 초과분: 규모가 클수록 0→PREMIUM 에 점근(fund=REF→0, fund=10·REF→0.9·PREMIUM …).
+        return baseMax + NEED_PREMIUM * (1 - refFund / fund);
+    }
+
+    /**
+     * 최신 공시 점수(30점). 상품 자금의 전년 동기 대비 증가율(YoY)을 앵커 구간
+     * (-10%→0·+10%→10·+30%→22·+50%→30)으로 선형보간한다. 단,
+     * 최신 CFS 보다 미래 연도의 공시 시그널이 있으면(=새 공시는 떴으나 재무 미수집) 0점,
+     * 전년 동기가 없어 비교 불가하면 중립 점수(10점).
+     */
+    private Decimal scoreDisclosure(
         CorporateFinancialStatement__c latest,
         CorporateFinancialStatement__c prior,
         Integer latestDisclosureYear,
@@ -238,21 +260,15 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
             return 0; // 새 공시 게시됐으나 재무 데이터 미수집
         }
         if (prior == null) {
-            return 10; // 비교할 직전 공시 없음
+            return DISCLOSURE_NO_PRIOR; // 비교할 직전 공시 없음 → 중립
         }
         Decimal priorFund = sumFund(prior, productKind);
         if (priorFund == null || priorFund <= 0) {
-            return 10;
+            return DISCLOSURE_NO_PRIOR;
         }
         Decimal latestFund = sumFund(latest, productKind);
         Decimal growth = (latestFund - priorFund) / priorFund;
-        if (growth >= YOY_T30) {
-            return 30;
-        }
-        if (growth >= YOY_T20) {
-            return 20;
-        }
-        return 10; // 10% 미만 증가 또는 감소
+        return piecewise(growth, YOY_X, YOY_Y);
     }
 
     /**
@@ -270,6 +286,34 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
     private Decimal zero(Decimal value) {
         return value == null ? 0 : value;
+    }
+
+    /**
+     * 오름차순 앵커 (xs[i], ys[i]) 사이를 선형보간한다. x 가 범위를 벗어나면 양 끝 y 로 클램프한다.
+     * 계단식 대신 실제 값에 비례한 연속 점수를 만들어 기업별 점수 다양성을 확보한다.
+     * @param x 채점 입력값(비율·증가율 등)
+     * @param xs 오름차순 경계값
+     * @param ys 각 경계의 점수
+     * @return 보간된 점수
+     */
+    private Decimal piecewise(Decimal x, List<Decimal> xs, List<Decimal> ys) {
+        Integer n = xs.size();
+        if (x <= xs[0]) {
+            return ys[0];
+        }
+        if (x >= xs[n - 1]) {
+            return ys[n - 1];
+        }
+        for (Integer i = 1; i < n; i++) {
+            if (x <= xs[i]) {
+                Decimal x0 = xs[i - 1];
+                Decimal x1 = xs[i];
+                Decimal y0 = ys[i - 1];
+                Decimal y1 = ys[i];
+                return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+            }
+        }
+        return ys[n - 1];
     }
 
     // ─── 관련 레코드 로딩 ─────────────────────────────────────────────────

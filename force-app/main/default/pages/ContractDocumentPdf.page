@@ -1,0 +1,52 @@
+<apex:page controller="ContractDocumentPdfController" renderAs="pdf" applyBodyTag="false" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false">
+<!-- docs/52 계약서 PDF (표준 항목 초안). 값은 URL 파라미터로 전달(미커밋 레코드 문제 회피). 한글: Arial Unicode MS -->
+<html>
+<head>
+<style type="text/css">
+    @page { size: A4; margin: 20mm 18mm; @bottom-center { content: "근본증권 · RP 매매 계약서 · " counter(page) " / " counter(pages); font-family: 'Arial Unicode MS'; font-size: 9pt; color: #666; } }
+    body { font-family: 'Arial Unicode MS'; font-size: 11pt; color: #111; }
+    h1 { text-align: center; font-size: 20pt; letter-spacing: 6pt; margin: 0 0 18pt 0; }
+    .no { text-align: right; font-size: 9pt; color: #555; margin-bottom: 8pt; }
+    table.t { border-collapse: collapse; width: 100%; margin-bottom: 14pt; }
+    table.t td { border: 1px solid #555; padding: 6pt 8pt; font-size: 10.5pt; vertical-align: middle; }
+    table.t td.k { background: #f0f0f0; width: 22%; font-weight: bold; }
+    h2 { font-size: 12pt; margin: 14pt 0 6pt 0; }
+    p.cl { margin: 0 0 6pt 0; line-height: 1.5; font-size: 10.5pt; }
+    table.sign { width: 100%; margin-top: 26pt; }
+    table.sign td { width: 50%; text-align: center; padding-top: 30pt; font-size: 10.5pt; }
+    .date { text-align: center; margin-top: 22pt; font-size: 11pt; }
+</style>
+</head>
+<body>
+    <div class="no">계약번호 {!contractNumber}</div>
+    <h1>환매조건부채권(RP) 매매 계약서</h1>
+    <table class="t">
+        <tr><td class="k">고객사(매수인)</td><td>{!accountName}</td><td class="k">사업자등록번호</td><td>{!brn}</td></tr>
+        <tr><td class="k">고객사 담당자</td><td>{!contactName}</td><td class="k">담당 RM</td><td>{!ownerName}</td></tr>
+        <tr><td class="k">관련 영업기회</td><td colspan="3">{!opportunityName}</td></tr>
+    </table>
+    <table class="t">
+        <tr><td class="k">계약 상품</td><td>{!productName}</td><td class="k">상품군</td><td>{!productFamily}</td></tr>
+        <tr><td class="k">약정 금액</td><td>{!amountText}</td><td class="k">약정 수익률(연)</td><td>{!yieldText}</td></tr>
+        <tr><td class="k">계약 시작일</td><td>{!startText}</td><td class="k">만기일</td><td>{!maturityText}</td></tr>
+        <tr><td class="k">계약 기간(개월)</td><td>{!termText}</td><td class="k">수수료율</td><td>{!feeText}</td></tr>
+        <tr><td class="k">대상 채권 발행회사</td><td>{!issuerName}</td><td class="k">표면금리</td><td>{!couponText}</td></tr>
+    </table>
+    <h2>제1조 (목적)</h2>
+    <p class="cl">본 계약은 근본증권 주식회사(이하 "회사")가 매수인에게 위 표시 채권을 매도하고 만기일에 약정 수익률을 적용한 금액으로 환매수하는 환매조건부채권 거래의 조건을 정함을 목적으로 한다.</p>
+    <h2>제2조 (거래 조건)</h2>
+    <p class="cl">① 약정 금액, 약정 수익률, 만기일 및 수수료율은 위 표에 기재된 바에 따른다. ② 만기일 이전 중도 환매 시 회사가 정한 중도환매 수익률을 적용한다. ③ 대상 채권의 보관 및 관리는 회사가 담당한다.</p>
+    <h2>제3조 (수수료 및 정산)</h2>
+    <p class="cl">회사는 위 표의 수수료율에 따라 산출한 수수료를 만기 정산 시 차감하며, 정산 내역은 매수인에게 서면 또는 전자적 방법으로 통지한다.</p>
+    <h2>제4조 (기타)</h2>
+    <p class="cl">본 계약에 정하지 아니한 사항은 회사의 환매조건부채권 매매약관 및 관계 법령에 따른다. 본 계약서는 2부를 작성하여 회사와 매수인이 각 1부씩 보관한다.</p>
+    <div class="date">{!contractDate}</div>
+    <table class="sign">
+        <tr>
+            <td>매도인: 근본증권 주식회사<br/><br/>담당 RM {!ownerName} (인)</td>
+            <td>매수인: {!accountName}<br/><br/>{!contactName} (인)</td>
+        </tr>
+    </table>
+</body>
+</html>
+</apex:page>

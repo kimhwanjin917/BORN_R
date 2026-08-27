@@ -2,12 +2,15 @@
     <article class="kpi-card">
         <header class="card-head">
             <div class="card-head__title">
-                <lightning-icon
-                    icon-name="standard:opportunity"
-                    size="small"
-                    alternative-text="상담"
-                ></lightning-icon>
-                <span>진행중인 상담</span>
+                <span class="card-head__icon">
+                    <lightning-icon
+                        icon-name="utility:opportunity"
+                        size="small"
+                        variant="inverse"
+                        alternative-text="영업기회"
+                    ></lightning-icon>
+                </span>
+                <span>영업기회 단계별 현황</span>
             </div>
         </header>
 
@@ -15,41 +18,73 @@
             <div class="state state_error">{error}</div>
         </template>
 
-        <template lwc:else>
-            <div class="hero">
-                <span class="hero__num">{openCount}</span>
-                <span class="hero__label">진행 중 건수</span>
+        <!-- 기회가 0건이어도 단계 칸은 그린다. 파이프라인의 골격 자체가 정보다. -->
+        <template lwc:elseif={pipeline}>
+            <div class="tiles">
+                <div class="tile">
+                    <span class="tile__label">전체</span>
+                    <span class="tile__value">{totalDisplay}</span>
+                    <span class="tile__sub">진행 중 + 이번 분기 수주</span>
+                </div>
+
+                <div class="tile">
+                    <span class="tile__label">파이프라인 수수료 수익</span>
+                    <span class="tile__value">{feeDisplay}</span>
+                    <span class="tile__sub">마감 전 기회 기준</span>
+                </div>
+
+                <div class="tile">
+                    <span class="tile__label">이번 주 액션</span>
+                    <span class="tile__value">{actionDisplay}</span>
+                    <span class="tile__sub">미완료 할 일</span>
+                </div>
             </div>
 
-            <template lwc:if={hasStages}>
-                <div class="gauge">
-                    <div class="gauge__track">
-                        <template for:each={stages} for:item="stage">
+            <div class="pk-track" role="list">
+                <template for:each={stages} for:item="stage">
+                    <div key={stage.stageName} class={stage.cardClass} role="listitem">
+                        <span class="pk-col__rail" style={stage.railStyle}></span>
+                        <span class="pk-col__name" title={stage.stageName}>{stage.stageName}</span>
+                        <span class="pk-col__count">
+                            <span class="pk-col__count-num">{stage.count}</span>
+                            <span class="pk-col__count-unit">건</span>
+                        </span>
+                        <div class="pk-col__plot">
                             <div
-                                key={stage.stageName}
-                                class="gauge__segment"
-                                style={stage.segmentStyle}
-                                title={stage.stageName}
+                                class="pk-col__bar"
+                                style={stage.barStyle}
+                                title={stage.barTitle}
+                                aria-label={stage.barTitle}
                             ></div>
-                        </template>
+                        </div>
+                        <span class="pk-col__fee">{stage.feeDisplay}</span>
                     </div>
+                </template>
+            </div>
 
-                    <ul class="legend">
-                        <template for:each={stages} for:item="stage">
-                            <li key={stage.stageName} class="legend__item">
-                                <span class="legend__dot" style={stage.dotStyle}></span>
-                                <span class="legend__name" title={stage.stageName}>{stage.stageName}</span>
-                                <span class="legend__count">{stage.count}</span>
-                                <span class="legend__percent">{stage.percent}%</span>
+            <footer class="pk-foot">
+                <template lwc:if={hasAlerts}>
+                    <span class="pk-foot__label">우선 확인</span>
+                    <ul class="pk-chips">
+                        <template for:each={alerts} for:item="alert">
+                            <li key={alert.key} class={alert.chipClass}>
+                                <lightning-icon
+                                    icon-name={alert.iconName}
+                                    size="xx-small"
+                                    alternative-text=""
+                                    class="pk-chips__icon"
+                                ></lightning-icon>
+                                <span>{alert.text}</span>
                             </li>
                         </template>
                     </ul>
-                </div>
-            </template>
+                </template>
+                <template lwc:else>
+                    <span class="pk-foot__clear">지금 확인이 필요한 기회는 없습니다.</span>
+                </template>
 
-            <template lwc:else>
-                <div class="state state_empty">진행 중인 상담이 없습니다.</div>
-            </template>
+                <button class="pk-cta" type="button" onclick={handleViewAll}>전체 기회 보기</button>
+            </footer>
         </template>
     </article>
 </template>

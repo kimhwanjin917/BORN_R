@@ -1,0 +1,21 @@
+{
+  "required" : [ "opportunityId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "opportunityId" : {
+      "title" : "기회 Id",
+      "description" : "확정된 기회 Id",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "sanitizedNote" : {
+      "title" : "미팅 메모 마스킹본",
+      "description" : "후속 추천에서는 비워 둔다",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Opportunity_Radar_View_All</name>
+    </customPermissions>
+    <description>Opportunity Radar 관리자/팀장: 전체 고객 범위 토글. Opportunity_Radar 권한 세트와 함께 할당.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>기회 레이더 (전체 보기)</label>
+</PermissionSet>
