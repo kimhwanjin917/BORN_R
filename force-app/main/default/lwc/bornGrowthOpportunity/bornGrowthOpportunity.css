@@ -1,0 +1,17 @@
+.chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+.trend-svg {
+    min-width: 320px;
+    height: auto;
+}
+.chart-legend {
+    font-weight: bold;
+}
+.chart-cash {
+    color: #2563eb;
+}
+.chart-st {
+    color: #f59e0b;
+}

@@ -1,0 +1,1887 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customTabs>
+        <label><!-- 고객 성장 기회 분석 --></label>
+        <name>Growth_Opportunity</name>
+    </customTabs>
+    <customTabs>
+        <label><!-- 기회 레이더 --></label>
+        <name>Opportunity_Radar</name>
+    </customTabs>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Create_Customer_Return_Order</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Create_New_Case</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>RecallText</name>
+                </fields>
+                <name>AI_Result_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Stop_Recall_Message</name>
+                </fields>
+                <name>Stop_Recall_Screen</name>
+            </screens>
+        </flows>
+        <fullName>D_Section_AI</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>StopMessage</name>
+                </fields>
+                <name>Stop_Notice</name>
+            </screens>
+        </flows>
+        <fullName>D_Section_AI_Task</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Daily_Schedule_Notification</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>GetSanitizedMeetingNote</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Get_Customer_Current_Order</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Get_Customer_Order</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Get_Verified_Customer_Information</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Inform_Merchant_of_Return</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Lead_Convert_Create_Meeting_Note</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Compose_Intro</name>
+                </fields>
+                <fields>
+                    <name>Compose_No_Email_Warning</name>
+                </fields>
+                <fields>
+                    <inputParameters>
+                        <name>label</name>
+                        <value/>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value/>
+                    </inputParameters>
+                    <name>Email_Body_Input</name>
+                </fields>
+                <fields>
+                    <name>Email_Subject_Input</name>
+                </fields>
+                <name>Compose_Email</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Error_Text</name>
+                </fields>
+                <name>Error_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Success_Already_Existed</name>
+                </fields>
+                <fields>
+                    <name>Success_Email_Sent</name>
+                </fields>
+                <fields>
+                    <name>Success_No_Email</name>
+                </fields>
+                <fields>
+                    <name>Success_Skipped</name>
+                </fields>
+                <fields>
+                    <name>Success_Title</name>
+                </fields>
+                <name>Success_Screen</name>
+            </screens>
+            <textTemplates>
+                <name>EmailBodyDefault</name>
+            </textTemplates>
+            <textTemplates>
+                <name>EmailSubject</name>
+            </textTemplates>
+        </flows>
+        <fullName>Lead_Create_Slack_Channel_And_Email</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Briefing_Intro</name>
+                </fields>
+                <fields>
+                    <name>Briefing_Output</name>
+                </fields>
+                <name>Briefing_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Error_Text</name>
+                </fields>
+                <name>Error_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Lead_Meeting_Prep_Briefing</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Email_Intro</name>
+                </fields>
+                <fields>
+                    <name>Email_Output</name>
+                </fields>
+                <name>Email_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Error_Text</name>
+                </fields>
+                <name>Error_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Lead_Meeting_Prep_Email_Draft</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Error_Text</name>
+                </fields>
+                <name>Error_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>No_Channel_Text</name>
+                </fields>
+                <name>No_Channel_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Proposal_Text_Input</name>
+                </fields>
+                <fields>
+                    <name>Review_Intro</name>
+                </fields>
+                <fields>
+                    <name>Share_Files_Toggle</name>
+                </fields>
+                <name>Review_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Success_Files</name>
+                </fields>
+                <fields>
+                    <name>Success_No_Files</name>
+                </fields>
+                <fields>
+                    <name>Success_Skipped</name>
+                </fields>
+                <fields>
+                    <name>Success_Title</name>
+                </fields>
+                <name>Success_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Lead_Send_Proposal_And_Files</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Lead_Sync_LastName</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>FailureMessage</name>
+                </fields>
+                <name>Screen_Failure</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>meetingDateTime</name>
+                </fields>
+                <name>Screen_MeetingInput</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>SuccessMessage</name>
+                </fields>
+                <name>Screen_Success</name>
+            </screens>
+        </flows>
+        <fullName>Meeting_Confirm</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Commit_Message</name>
+                </fields>
+                <name>Commit_Meeting_Note_Before_Agent</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Display_Final_Recommendation</name>
+                </fields>
+                <name>Screen_Confirm_Without_Follow_Up</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Meeting_Note_Pad</name>
+                </fields>
+                <name>Screen_MemoInput</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Display_Agent_Follow_Up_Response</name>
+                </fields>
+                <name>UniqueNameScreen_Agent_Follow_Up_Response</name>
+            </screens>
+            <screens>
+                <fields>
+                    <inputParameters>
+                        <name>recommendation</name>
+                        <value/>
+                    </inputParameters>
+                    <name>Agent_Recommendation_Panel</name>
+                </fields>
+                <name>UniqueNameScreen_Agent_Recommendation</name>
+            </screens>
+        </flows>
+        <fullName>Meeting_Session</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Meeting_Summary_To_Slack</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>NGA_Get_Case_by_Case_Number</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>Done_No_Pdf_Text</name>
+                </fields>
+                <name>Done_No_Pdf_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Done_Pdf_Text</name>
+                </fields>
+                <name>Done_Pdf_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Error_Text</name>
+                </fields>
+                <name>Error_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Generate_Pdf_Toggle</name>
+                </fields>
+                <fields>
+                    <name>Recommendation_Text</name>
+                </fields>
+                <name>Recommendation_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Opportunity_Followup_Recommendation</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Opportunity_Meeting_Log_To_Slack</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Route_from_ASA</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Send_Verification_Code_to_Customer</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Signal_RM_Alert_On_Create</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Slack_Create_Event</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Validate_Customer_Verification_Code</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>check_business_hours</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>contact_c_name_mapping</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
+            <choices>
+                <name>c_021bb1fc_c7ba_401e_8951_886e70540f64</name>
+            </choices>
+            <choices>
+                <name>c_04b985c6_4b2a_450f_827b_c7a3b2b2d8b1</name>
+            </choices>
+            <choices>
+                <name>c_0c0af968_e532_4281_9792_31992b69615a</name>
+            </choices>
+            <choices>
+                <name>c_169b8fef_dfa5_447f_82c3_4d0930a76e97</name>
+            </choices>
+            <choices>
+                <name>c_1d451ac0_a65f_4b67_9ee9_f0844204d1d8</name>
+            </choices>
+            <choices>
+                <name>c_33216fdd_1d3f_4778_9a64_b4058e4c5798</name>
+            </choices>
+            <choices>
+                <name>c_34a98fb7_fd2d_4a68_82d7_7c483bd7bf84</name>
+            </choices>
+            <choices>
+                <name>c_34b3f406_7581_4fe3_b4a0_3afb58df117a</name>
+            </choices>
+            <choices>
+                <name>c_474286c7_494e_4c3c_b6db_d491867089fa</name>
+            </choices>
+            <choices>
+                <name>c_549ef69e_48a1_413c_9e6b_a3437731511f</name>
+            </choices>
+            <choices>
+                <name>c_57606855_0adc_424f_9810_00e248ffecf4</name>
+            </choices>
+            <choices>
+                <name>c_76aa3652_2c65_4bb3_9d4b_e3417c2961d1</name>
+            </choices>
+            <choices>
+                <name>c_8564d98e_42cc_4b59_bfed_a015df280b31</name>
+            </choices>
+            <choices>
+                <name>c_90a944d2_3db4_4674_a5dd_a861e1aee8a2</name>
+            </choices>
+            <choices>
+                <name>c_93d9ce9d_63e0_4b7f_9f04_795c7c6456d5</name>
+            </choices>
+            <choices>
+                <name>c_99d953b9_bb4f_4977_9629_4f244545ae39</name>
+            </choices>
+            <choices>
+                <name>c_a40f53e5_c7a3_4ae2_881e_75c0822f9ab3</name>
+            </choices>
+            <choices>
+                <name>c_b43d2402_5ac9_4477_9dc1_6beb2b6f25ac</name>
+            </choices>
+            <choices>
+                <name>c_d4c18153_2382_427d_9779_4aff55da8963</name>
+            </choices>
+            <choices>
+                <name>c_d7936c2e_7513_4196_8108_123de14eb17a</name>
+            </choices>
+            <choices>
+                <name>c_db8d0610_1b4b_412f_ab47_791a841237f3</name>
+            </choices>
+            <choices>
+                <name>c_dd6a7069_cb99_46d7_8a99_1a255aa0176e</name>
+            </choices>
+            <choices>
+                <name>c_df2b725a_35b7_4151_b86b_4b7e22db818b</name>
+            </choices>
+            <choices>
+                <name>c_e3910409_2dfa_4243_a5d0_bff374a143fe</name>
+            </choices>
+            <choices>
+                <name>c_ed5ad64f_1b81_41c9_9398_0d9b29fc107f</name>
+            </choices>
+            <screens>
+                <fields>
+                    <name>q_12825d19_0310_4b5c_a522_b91648b61d0d</name>
+                </fields>
+                <fields>
+                    <name>q_147df858_c7c1_4ce6_99d2_5c9c31cd304a</name>
+                </fields>
+                <fields>
+                    <name>q_3ff85da8_e49b_426b_bfcb_f15f6a939a75</name>
+                </fields>
+                <fields>
+                    <name>q_6b3ff679_5937_46fd_ae85_f7efc249da9d</name>
+                </fields>
+                <fields>
+                    <name>q_8fc5ba56_867c_4251_a89a_1fd5f6fc7142</name>
+                </fields>
+                <fields>
+                    <name>q_d7dddbc6_9947_46fb_8ec3_aae1af5ba661</name>
+                </fields>
+                <fields>
+                    <name>q_da90d5b4_d12f_46dd_960d_38a7b6ebf552</name>
+                </fields>
+                <name>p_d2030b13_d523_4057_ad25_c2d8a602efe5</name>
+            </screens>
+            <textTemplates>
+                <name>thankYouDescriptionTextTemplate</name>
+            </textTemplates>
+            <textTemplates>
+                <name>thankYouLabelTextTemplate</name>
+            </textTemplates>
+        </flows>
+        <fullName>discovery_call_assessment</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>sfdc_default_ReportExport_Protection_Flow</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>validate_verification_code</fullName>
+    </flowDefinitions>
+    <quickActions>
+        <label><!-- LogACall --></label>
+        <name>LogACall</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewAccount --></label>
+        <name>NewAccount</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewCase --></label>
+        <name>NewCase</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewContact --></label>
+        <name>NewContact</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewEvent --></label>
+        <name>NewEvent</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewGroup --></label>
+        <name>NewGroup</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewLead --></label>
+        <name>NewLead</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewNote --></label>
+        <name>NewNote</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewOpportunity --></label>
+        <name>NewOpportunity</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewTask --></label>
+        <name>NewTask</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- SendEmail --></label>
+        <name>SendEmail</name>
+    </quickActions>
+    <reportTypes>
+        <description><!-- Bot Metrics Daily Winter &apos;24 --></description>
+        <label><!-- Bot Metrics Daily Winter &apos;24 --></label>
+        <name>Bot_Metrics_Daily_v6</name>
+        <sections>
+            <label><!-- Conversation Definition Dialog Daily Metrics --></label>
+            <name>Conversation Definition Dialog Daily Metrics</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Bot Metrics Hourly Winter &apos;24 --></description>
+        <label><!-- Bot Metrics Hourly Winter &apos;24 --></label>
+        <name>Bot_Metrics_Hourly_v6</name>
+        <sections>
+            <label><!-- Conversation Definition Dialog Hourly Metrics --></label>
+            <name>Conversation Definition Dialog Hourly Metrics</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Session Metrics Winter &apos;24 --></description>
+        <label><!-- Session Metrics Winter &apos;24 --></label>
+        <name>Bot_Sessions_v6</name>
+        <sections>
+            <label><!-- Conversation Definition Session Metrics --></label>
+            <name>Conversation Definition Session Metrics</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Feedback Responses Spring &apos;24 --></description>
+        <label><!-- Feedback Responses Spring &apos;24 --></label>
+        <name>Coaching_Feedback_sfdcSESv60</name>
+        <sections>
+            <columns>
+                <label><!-- Feedback Request Date --></label>
+                <name>Feedback Request Date</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Learning Item Submissions --></label>
+            <name>Learning Item Submissions</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Question --></label>
+                <name>Question</name>
+            </columns>
+            <columns>
+                <label><!-- Question Option --></label>
+                <name>Question Option</name>
+            </columns>
+            <columns>
+                <label><!-- Question Order --></label>
+                <name>Question Order</name>
+            </columns>
+            <columns>
+                <label><!-- Question Type --></label>
+                <name>Question Type</name>
+            </columns>
+            <columns>
+                <label><!-- Rating (Number) --></label>
+                <name>Rating (Number)</name>
+            </columns>
+            <columns>
+                <label><!-- Response --></label>
+                <name>Response</name>
+            </columns>
+            <label><!-- Survey Question Responses --></label>
+            <name>Survey Question Responses</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Responder --></label>
+                <name>Responder</name>
+            </columns>
+            <label><!-- Survey Responses --></label>
+            <name>Survey Responses</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Feedback Responses Summer &apos;24 --></description>
+        <label><!-- Feedback Responses Summer &apos;24 --></label>
+        <name>Coaching_Feedback_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Feedback Request Date --></label>
+                <name>Feedback Request Date</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Learning Item Submissions --></label>
+            <name>Learning Item Submissions</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Question --></label>
+                <name>Question</name>
+            </columns>
+            <columns>
+                <label><!-- Question Option --></label>
+                <name>Question Option</name>
+            </columns>
+            <columns>
+                <label><!-- Question Order --></label>
+                <name>Question Order</name>
+            </columns>
+            <columns>
+                <label><!-- Question Type --></label>
+                <name>Question Type</name>
+            </columns>
+            <columns>
+                <label><!-- Rating (Number) --></label>
+                <name>Rating (Number)</name>
+            </columns>
+            <columns>
+                <label><!-- Response --></label>
+                <name>Response</name>
+            </columns>
+            <label><!-- Survey Question Responses --></label>
+            <name>Survey Question Responses</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Responder --></label>
+                <name>Responder</name>
+            </columns>
+            <label><!-- Survey Responses --></label>
+            <name>Survey Responses</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Employee Enablement Program Definition --></description>
+        <label><!-- Employee Enablement Program Definition --></label>
+        <name>ES_Program_Definition_sfdcSESv64</name>
+        <sections>
+            <columns>
+                <label><!-- Added by --></label>
+                <name>Added by</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <label><!-- Employee Enablement Program Task Definitions --></label>
+            <name>Employee Enablement Program Task Definitions</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Employee Enablement Program Progress --></description>
+        <label><!-- Employee Enablement Program Progress --></label>
+        <name>ES_Program_Progress_sfdcSESv64</name>
+        <sections>
+            <columns>
+                <label><!-- Account ID --></label>
+                <name>Account ID</name>
+            </columns>
+            <columns>
+                <label><!-- Account Name --></label>
+                <name>Account Name</name>
+            </columns>
+            <columns>
+                <label><!-- Completed On Day --></label>
+                <name>Completed On Day</name>
+            </columns>
+            <columns>
+                <label><!-- Completed Rate --></label>
+                <name>Completed Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Status --></label>
+                <name>Completion Status</name>
+            </columns>
+            <columns>
+                <label><!-- Days In Progress --></label>
+                <name>Days In Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Total Days --></label>
+                <name>Total Days</name>
+            </columns>
+            <columns>
+                <label><!-- Username --></label>
+                <name>Username</name>
+            </columns>
+            <label><!-- Employee Enablement Learning Item Assignments --></label>
+            <name>Employee Enablement Learning Item Assignments</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Employee Enablement Program Item Progress --></description>
+        <label><!-- Employee Enablement Program Item Progress --></label>
+        <name>ES_Program_Task_Progress_sfdcSESv64</name>
+        <sections>
+            <columns>
+                <label><!-- Account ID --></label>
+                <name>Account ID</name>
+            </columns>
+            <columns>
+                <label><!-- Account Name --></label>
+                <name>Account Name</name>
+            </columns>
+            <columns>
+                <label><!-- Created By --></label>
+                <name>Created By</name>
+            </columns>
+            <columns>
+                <label><!-- Days In Progress --></label>
+                <name>Days In Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Minimum Sample Size --></label>
+                <name>Minimum Sample Size</name>
+            </columns>
+            <columns>
+                <label><!-- Name --></label>
+                <name>Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Progress --></label>
+                <name>Program Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Status --></label>
+                <name>Program Status</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Name --></label>
+                <name>Program Task Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Section Name --></label>
+                <name>Section Name</name>
+            </columns>
+            <columns>
+                <label><!-- Sequenced Section with Count --></label>
+                <name>Sequenced Section with Count</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Task Category --></label>
+                <name>Task Category</name>
+            </columns>
+            <columns>
+                <label><!-- Task Completion Status --></label>
+                <name>Task Completion Status</name>
+            </columns>
+            <columns>
+                <label><!-- Task Status --></label>
+                <name>Task Status</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <columns>
+                <label><!-- Username --></label>
+                <name>Username</name>
+            </columns>
+            <label><!-- Employee Enablement Program Task Progresses --></label>
+            <name>Employee Enablement Program Task Progresses</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Employee Service My Case --></description>
+        <label><!-- Employee Service My Case --></label>
+        <name>Employee_Service_My_Case</name>
+        <sections>
+            <label><!-- Cases --></label>
+            <name>Cases</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- ITSM Incident Milestones --></description>
+        <label><!-- ITSM Incident Milestones --></label>
+        <name>ITSM_Incident_Milestones</name>
+        <sections>
+            <label><!-- Incidents --></label>
+            <name>Incidents</name>
+        </sections>
+        <sections>
+            <label><!-- Object Milestones --></label>
+            <name>Object Milestones</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- ITSM Incidents --></description>
+        <label><!-- ITSM Incidents --></label>
+        <name>ITSM_Incidents</name>
+        <sections>
+            <label><!-- Incidents --></label>
+            <name>Incidents</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- ITSM Problem Milestones --></description>
+        <label><!-- ITSM Problem Milestones --></label>
+        <name>ITSM_Problem_Milestones</name>
+        <sections>
+            <label><!-- Object Milestones --></label>
+            <name>Object Milestones</name>
+        </sections>
+        <sections>
+            <label><!-- Problems --></label>
+            <name>Problems</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- ITSM_Problems --></description>
+        <label><!-- ITSM_Problems --></label>
+        <name>ITSM_Problems</name>
+        <sections>
+            <label><!-- Problems --></label>
+            <name>Problems</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Partner Fund Requests and Partner Fund Claims --></description>
+        <label><!-- Partner Fund Requests and Partner Fund Claims --></label>
+        <name>MDF_Claim_Request_Crt</name>
+        <sections>
+            <label><!-- Partner Fund Claims --></label>
+            <name>Partner Fund Claims</name>
+        </sections>
+        <sections>
+            <label><!-- Partner Fund Requests --></label>
+            <name>Partner Fund Requests</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Opportunities with Historical Trending --></description>
+        <label><!-- Opportunities with Historical Trending --></label>
+        <name>Opportunities_with_Historical_Trending</name>
+        <sections>
+            <label><!-- Opportunities --></label>
+            <name>Opportunities</name>
+        </sections>
+        <sections>
+            <label><!-- Opportunity (Historical) --></label>
+            <name>Opportunity (Historical)</name>
+        </sections>
+        <sections>
+            <label><!-- 영업기회 --></label>
+            <name>영업기회</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Progress Summer &apos;24 (Partners) --></description>
+        <label><!-- Program Progress Summer &apos;24 (Partners) --></label>
+        <name>PRM_Program_Progress_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Account ID --></label>
+                <name>Account ID</name>
+            </columns>
+            <columns>
+                <label><!-- Account Name --></label>
+                <name>Account Name</name>
+            </columns>
+            <columns>
+                <label><!-- Completed On Day --></label>
+                <name>Completed On Day</name>
+            </columns>
+            <columns>
+                <label><!-- Completed Rate --></label>
+                <name>Completed Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Days In Progress --></label>
+                <name>Days In Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Total Days --></label>
+                <name>Total Days</name>
+            </columns>
+            <columns>
+                <label><!-- Username --></label>
+                <name>Username</name>
+            </columns>
+            <label><!-- Learning Item Assignments --></label>
+            <name>Learning Item Assignments</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Item Progress Summer &apos;24 (Partners) --></description>
+        <label><!-- Program Item Progress Summer &apos;24 (Partners) --></label>
+        <name>PRM_Program_Task_Progress_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Account ID --></label>
+                <name>Account ID</name>
+            </columns>
+            <columns>
+                <label><!-- Account Name --></label>
+                <name>Account Name</name>
+            </columns>
+            <columns>
+                <label><!-- Created By --></label>
+                <name>Created By</name>
+            </columns>
+            <columns>
+                <label><!-- Days In Progress --></label>
+                <name>Days In Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Is Milestone An Outcome --></label>
+                <name>Is Milestone An Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Milestone Target --></label>
+                <name>Milestone Target</name>
+            </columns>
+            <columns>
+                <label><!-- Minimum Sample Size --></label>
+                <name>Minimum Sample Size</name>
+            </columns>
+            <columns>
+                <label><!-- Name --></label>
+                <name>Name</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Progress --></label>
+                <name>Program Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Status --></label>
+                <name>Program Status</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Name --></label>
+                <name>Program Task Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Section Name --></label>
+                <name>Section Name</name>
+            </columns>
+            <columns>
+                <label><!-- Sequenced Section with Count --></label>
+                <name>Sequenced Section with Count</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Task Category --></label>
+                <name>Task Category</name>
+            </columns>
+            <columns>
+                <label><!-- Task Completion Status --></label>
+                <name>Task Completion Status</name>
+            </columns>
+            <columns>
+                <label><!-- Task Status --></label>
+                <name>Task Status</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <columns>
+                <label><!-- Username --></label>
+                <name>Username</name>
+            </columns>
+            <label><!-- Enablement Program Task Progresses --></label>
+            <name>Enablement Program Task Progresses</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Definition Winter &apos;24 --></description>
+        <label><!-- Program Definition Winter &apos;24 --></label>
+        <name>Program_Definition_sfdcSESv59</name>
+        <sections>
+            <columns>
+                <label><!-- Added by --></label>
+                <name>Added by</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Target Result --></label>
+                <name>Target Result</name>
+            </columns>
+            <label><!-- Program Task Definitions --></label>
+            <name>Program Task Definitions</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Definition Spring &apos;24 --></description>
+        <label><!-- Program Definition Spring &apos;24 --></label>
+        <name>Program_Definition_sfdcSESv60</name>
+        <sections>
+            <columns>
+                <label><!-- Added by --></label>
+                <name>Added by</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Target Result --></label>
+                <name>Target Result</name>
+            </columns>
+            <label><!-- Program Task Definitions --></label>
+            <name>Program Task Definitions</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Definition Summer &apos;24 --></description>
+        <label><!-- Program Definition Summer &apos;24 --></label>
+        <name>Program_Definition_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Added by --></label>
+                <name>Added by</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Target Result --></label>
+                <name>Target Result</name>
+            </columns>
+            <label><!-- Program Task Definitions --></label>
+            <name>Program Task Definitions</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Progress Winter &apos;24 --></description>
+        <label><!-- Program Progress Winter &apos;24 --></label>
+        <name>Program_Progress_sfdcSESv59</name>
+        <sections>
+            <columns>
+                <label><!-- Assignee --></label>
+                <name>Assignee</name>
+            </columns>
+            <columns>
+                <label><!-- Completed On Day --></label>
+                <name>Completed On Day</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Total Days --></label>
+                <name>Total Days</name>
+            </columns>
+            <label><!-- Program Progress --></label>
+            <name>Program Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Progress Spring &apos;24 --></description>
+        <label><!-- Program Progress Spring &apos;24 --></label>
+        <name>Program_Progress_sfdcSESv60</name>
+        <sections>
+            <columns>
+                <label><!-- Completed On Day --></label>
+                <name>Completed On Day</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Status --></label>
+                <name>Completion Status</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Total Days --></label>
+                <name>Total Days</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Program Progress --></label>
+            <name>Program Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Progress Summer &apos;24 --></description>
+        <label><!-- Program Progress Summer &apos;24 --></label>
+        <name>Program_Progress_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Completed On Day --></label>
+                <name>Completed On Day</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Status --></label>
+                <name>Completion Status</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Outcome Progress --></label>
+                <name>Outcome Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Total Days --></label>
+                <name>Total Days</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Program Progress --></label>
+            <name>Program Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Task Progress Winter &apos;24 --></description>
+        <label><!-- Program Task Progress Winter &apos;24 --></label>
+        <name>Program_Task_Progress_sfdcSESv59</name>
+        <sections>
+            <columns>
+                <label><!-- Assignee --></label>
+                <name>Assignee</name>
+            </columns>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Created By --></label>
+                <name>Created By</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Days to Complete --></label>
+                <name>Days to Complete</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Milestone Target --></label>
+                <name>Milestone Target</name>
+            </columns>
+            <columns>
+                <label><!-- Minimum Sample Size --></label>
+                <name>Minimum Sample Size</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Status --></label>
+                <name>Program Status</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Name --></label>
+                <name>Program Task Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Progress ID --></label>
+                <name>Program Task Progress ID</name>
+            </columns>
+            <columns>
+                <label><!-- Section --></label>
+                <name>Section</name>
+            </columns>
+            <columns>
+                <label><!-- Section Name --></label>
+                <name>Section Name</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Task Category --></label>
+                <name>Task Category</name>
+            </columns>
+            <label><!-- Program Task Progress --></label>
+            <name>Program Task Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Item Progress Spring &apos;24 --></description>
+        <label><!-- Program Item Progress Spring &apos;24 --></label>
+        <name>Program_Task_Progress_sfdcSESv60</name>
+        <sections>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Created By --></label>
+                <name>Created By</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Days to Complete --></label>
+                <name>Days to Complete</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Milestone Target --></label>
+                <name>Milestone Target</name>
+            </columns>
+            <columns>
+                <label><!-- Minimum Sample Size --></label>
+                <name>Minimum Sample Size</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Status --></label>
+                <name>Program Status</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Name --></label>
+                <name>Program Task Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Progress ID --></label>
+                <name>Program Task Progress ID</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Section --></label>
+                <name>Section</name>
+            </columns>
+            <columns>
+                <label><!-- Section Name --></label>
+                <name>Section Name</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Task Category --></label>
+                <name>Task Category</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Program Task Progress --></label>
+            <name>Program Task Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Program Item Progress Summer &apos;24 --></description>
+        <label><!-- Program Item Progress Summer &apos;24 --></label>
+        <name>Program_Task_Progress_sfdcSESv61</name>
+        <sections>
+            <columns>
+                <label><!-- Completion Rate --></label>
+                <name>Completion Rate</name>
+            </columns>
+            <columns>
+                <label><!-- Created By --></label>
+                <name>Created By</name>
+            </columns>
+            <columns>
+                <label><!-- Days in Progress --></label>
+                <name>Days in Progress</name>
+            </columns>
+            <columns>
+                <label><!-- Days to Complete --></label>
+                <name>Days to Complete</name>
+            </columns>
+            <columns>
+                <label><!-- Email --></label>
+                <name>Email</name>
+            </columns>
+            <columns>
+                <label><!-- Is Outcome --></label>
+                <name>Is Outcome</name>
+            </columns>
+            <columns>
+                <label><!-- Manager --></label>
+                <name>Manager</name>
+            </columns>
+            <columns>
+                <label><!-- Milestone Target --></label>
+                <name>Milestone Target</name>
+            </columns>
+            <columns>
+                <label><!-- Minimum Sample Size --></label>
+                <name>Minimum Sample Size</name>
+            </columns>
+            <columns>
+                <label><!-- Program Name --></label>
+                <name>Program Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Status --></label>
+                <name>Program Status</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task --></label>
+                <name>Program Task</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Name --></label>
+                <name>Program Task Name</name>
+            </columns>
+            <columns>
+                <label><!-- Program Task Progress ID --></label>
+                <name>Program Task Progress ID</name>
+            </columns>
+            <columns>
+                <label><!-- Program Type --></label>
+                <name>Program Type</name>
+            </columns>
+            <columns>
+                <label><!-- Section --></label>
+                <name>Section</name>
+            </columns>
+            <columns>
+                <label><!-- Section Name --></label>
+                <name>Section Name</name>
+            </columns>
+            <columns>
+                <label><!-- Target Day --></label>
+                <name>Target Day</name>
+            </columns>
+            <columns>
+                <label><!-- Task Category --></label>
+                <name>Task Category</name>
+            </columns>
+            <columns>
+                <label><!-- User --></label>
+                <name>User</name>
+            </columns>
+            <label><!-- Program Task Progress --></label>
+            <name>Program Task Progress</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Rep Voice Call Conversation Data --></description>
+        <label><!-- Rep Voice Call Conversation Data --></label>
+        <name>SfdcVoiceCallConvDataByRep</name>
+        <sections>
+            <label><!-- Agent Work --></label>
+            <name>Agent Work</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Transfer Received By --></label>
+                <name>Transfer Received By</name>
+            </columns>
+            <columns>
+                <label><!-- Transfer Requested By --></label>
+                <name>Transfer Requested By</name>
+            </columns>
+            <label><!-- Agent Work Conversational Data --></label>
+            <name>Agent Work Conversational Data</name>
+        </sections>
+        <sections>
+            <label><!-- Voice Calls --></label>
+            <name>Voice Calls</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Voice Calls --></description>
+        <label><!-- Voice Calls --></label>
+        <name>SfdcVoiceCalls</name>
+        <sections>
+            <label><!-- Voice Calls --></label>
+            <name>Voice Calls</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Voice Calls by Rep --></description>
+        <label><!-- Voice Calls by Rep --></label>
+        <name>SfdcVoiceCallsByServiceRep</name>
+        <sections>
+            <label><!-- Agent Work --></label>
+            <name>Agent Work</name>
+        </sections>
+        <sections>
+            <label><!-- Voice Calls --></label>
+            <name>Voice Calls</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Voice Calls with Callback Attempts --></description>
+        <label><!-- Voice Calls with Callback Attempts --></label>
+        <name>SfdcVoiceCallsWithCallbackAttempts</name>
+        <sections>
+            <label><!-- Contact Requests --></label>
+            <name>Contact Requests</name>
+        </sections>
+        <sections>
+            <label><!-- Voice Calls --></label>
+            <name>Voice Calls</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Voice Calls with Callback Requests --></description>
+        <label><!-- Voice Calls with Callback Requests --></label>
+        <name>SfdcVoiceCallsWithCallbackRequests</name>
+        <sections>
+            <label><!-- Contact Requests --></label>
+            <name>Contact Requests</name>
+        </sections>
+        <sections>
+            <label><!-- Voice Calls --></label>
+            <name>Voice Calls</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Orchestration Run Logs Spring &apos;24 --></description>
+        <label><!-- Orchestration Run Logs Spring &apos;24 --></label>
+        <name>flow_orchestration_log_ootb_crt_two_four_eight</name>
+        <sections>
+            <label><!-- Orchestration Run Log --></label>
+            <name>Orchestration Run Log</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Orchestration Runs Spring &apos;24 --></description>
+        <label><!-- Orchestration Runs Spring &apos;24 --></label>
+        <name>flow_orchestration_run_ootb_crt_two_four_eight</name>
+        <sections>
+            <label><!-- Orchestration Runs --></label>
+            <name>Orchestration Runs</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Orchestration Stage Runs Spring &apos;24 --></description>
+        <label><!-- Orchestration Stage Runs Spring &apos;24 --></label>
+        <name>flow_orchestration_stage_run_ootb_crt_two_four_eight</name>
+        <sections>
+            <label><!-- Orchestration Stage Runs --></label>
+            <name>Orchestration Stage Runs</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Orchestration Step Runs Spring &apos;24 --></description>
+        <label><!-- Orchestration Step Runs Spring &apos;24 --></label>
+        <name>flow_orchestration_step_run_ootb_crt_two_four_eight</name>
+        <sections>
+            <label><!-- Orchestration Step Runs --></label>
+            <name>Orchestration Step Runs</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Orchestration Work Items Spring &apos;24 --></description>
+        <label><!-- Orchestration Work Items Spring &apos;24 --></label>
+        <name>flow_orchestration_work_item_ootb_crt_two_four_eight</name>
+        <sections>
+            <columns>
+                <label><!-- Orchestration Step Run: Label --></label>
+                <name>Orchestration Step Run: Label</name>
+            </columns>
+            <columns>
+                <label><!-- Orchestration Step Run: Name --></label>
+                <name>Orchestration Step Run: Name</name>
+            </columns>
+            <columns>
+                <label><!-- Orchestration Step Run: Status --></label>
+                <name>Orchestration Step Run: Status</name>
+            </columns>
+            <label><!-- Orchestration Step Runs --></label>
+            <name>Orchestration Step Runs</name>
+        </sections>
+        <sections>
+            <columns>
+                <label><!-- Assigned Group or Queue --></label>
+                <name>Assigned Group or Queue</name>
+            </columns>
+            <columns>
+                <label><!-- Assigned User --></label>
+                <name>Assigned User</name>
+            </columns>
+            <label><!-- Orchestration Work Items --></label>
+            <name>Orchestration Work Items</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Partner Fund Requests --></description>
+        <label><!-- Partner Fund Requests --></label>
+        <name>prm_partner_fund_request_crt</name>
+        <sections>
+            <label><!-- Partner Fund Requests --></label>
+            <name>Partner Fund Requests</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Partner Marketing Budgets --></description>
+        <label><!-- Partner Marketing Budgets --></label>
+        <name>prm_partner_marketing_budget_crt</name>
+        <sections>
+            <label><!-- Partner Marketing Budgets --></label>
+            <name>Partner Marketing Budgets</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Login History for Experience Cloud Site Users --></description>
+        <label><!-- Login History for Experience Cloud Site Users --></label>
+        <name>prm_total_portal_login_crt</name>
+        <sections>
+            <label><!-- Login History --></label>
+            <name>Login History</name>
+        </sections>
+        <sections>
+            <label><!-- Network Members --></label>
+            <name>Network Members</name>
+        </sections>
+        <sections>
+            <label><!-- Networks --></label>
+            <name>Networks</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- User Details --></description>
+        <label><!-- User Details --></label>
+        <name>prm_unique_portal_crt</name>
+        <sections>
+            <label><!-- Users --></label>
+            <name>Users</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Screen Flows --></description>
+        <label><!-- Screen Flows --></label>
+        <name>screen_flows_prebuilt_crt</name>
+        <sections>
+            <label><!-- Flow Interview Log Entries --></label>
+            <name>Flow Interview Log Entries</name>
+        </sections>
+        <sections>
+            <label><!-- Flow Interview Logs --></label>
+            <name>Flow Interview Logs</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Payment Authorizations --></description>
+        <label><!-- Payment Authorizations --></label>
+        <name>sfdc_payments_auth_crt</name>
+        <sections>
+            <label><!-- Payment Authorizations --></label>
+            <name>Payment Authorizations</name>
+        </sections>
+        <sections>
+            <label><!-- Payments --></label>
+            <name>Payments</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Payment Authorizations by Merchant --></description>
+        <label><!-- Payment Authorizations by Merchant --></label>
+        <name>sfdc_payments_auth_groupby_merchant_crt</name>
+        <sections>
+            <label><!-- Merchant Accounts --></label>
+            <name>Merchant Accounts</name>
+        </sections>
+        <sections>
+            <label><!-- Payment Authorizations --></label>
+            <name>Payment Authorizations</name>
+        </sections>
+        <sections>
+            <label><!-- Payment Gateways --></label>
+            <name>Payment Gateways</name>
+        </sections>
+        <sections>
+            <label><!-- Payments --></label>
+            <name>Payments</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Payment Captures --></description>
+        <label><!-- Payment Captures --></label>
+        <name>sfdc_payments_capture_crt</name>
+        <sections>
+            <columns>
+                <label><!-- Merchant Name --></label>
+                <name>Merchant Name</name>
+            </columns>
+            <label><!-- Merchant Accounts --></label>
+            <name>Merchant Accounts</name>
+        </sections>
+        <sections>
+            <label><!-- Payments --></label>
+            <name>Payments</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Payment Captures by Merchant --></description>
+        <label><!-- Payment Captures by Merchant --></label>
+        <name>sfdc_payments_capture_groupby_merchant_crt</name>
+        <sections>
+            <label><!-- Merchant Accounts --></label>
+            <name>Merchant Accounts</name>
+        </sections>
+        <sections>
+            <label><!-- Payment Gateways --></label>
+            <name>Payment Gateways</name>
+        </sections>
+        <sections>
+            <label><!-- Payments --></label>
+            <name>Payments</name>
+        </sections>
+    </reportTypes>
+    <timelineObjectDefinitions>
+        <name>Loyalty_Member_Timeline</name>
+    </timelineObjectDefinitions>
+    <timelineObjectDefinitions>
+        <name>Benefit_Disbursements_Timeline</name>
+    </timelineObjectDefinitions>
+    <timelineObjectDefinitions>
+        <name>Employee_Timeline</name>
+    </timelineObjectDefinitions>
+</Translations>

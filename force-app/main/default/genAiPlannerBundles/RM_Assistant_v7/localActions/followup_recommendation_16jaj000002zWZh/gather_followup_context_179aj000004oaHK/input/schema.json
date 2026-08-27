@@ -1,0 +1,14 @@
+{
+  "required" : [ "opportunityId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "opportunityId" : {
+      "title" : "기회 Id",
+      "description" : "기회 검색 결과의 opportunityId 또는 발화에 포함된 기회 Id",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

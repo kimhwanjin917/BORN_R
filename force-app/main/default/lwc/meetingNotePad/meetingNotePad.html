@@ -1,149 +1,354 @@
 <template>
-    <div class="slds-grid slds-wrap slds-gutters panels">
-        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
-            <article class="slds-card panel-card">
-                <div class="slds-card__header slds-grid">
-                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                        <div class="slds-media__body">
-                            <h2 class="slds-card__header-title">미팅 메모</h2>
-                        </div>
-                    </header>
-                </div>
-                <div class="slds-card__body slds-card__body_inner panel-body">
-                    <lightning-textarea
-                        data-id="raw-content"
-                        label="미팅 내용"
-                        placeholder="고객의 주요 관심사, 요청사항, 논의한 상품과 후속 조치를 입력해주세요."
-                        value={rawContentValue}
-                        onchange={handleRawContentChange}
-                        class="memo-input"
-                    ></lightning-textarea>
-                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                        {rawContentLength}자
-                    </p>
-                </div>
-            </article>
-        </section>
-
-        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
-            <article class="slds-card panel-card">
-                <div class="slds-card__header slds-grid">
-                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                        <div class="slds-media__body">
-                            <h2 class="slds-card__header-title">수수료 조건</h2>
-                        </div>
-                    </header>
-                </div>
-                <div class="slds-card__body slds-card__body_inner panel-body">
-                    <lightning-input
-                        type="number"
-                        label="거래 금액 (원)"
-                        min="0"
-                        step="1000000"
-                        value={dealAmount}
-                        data-field="dealAmount"
-                        onchange={handleCalculatorChange}
-                    ></lightning-input>
-                    <div class="slds-grid slds-gutters_x-small slds-m-top_small">
-                        <div class="slds-col slds-size_1-of-2">
-                            <lightning-input
-                                type="number"
-                                label="제안 수익률 (%)"
-                                min="0"
-                                step="0.01"
-                                value={annualYield}
-                                data-field="annualYield"
-                                onchange={handleCalculatorChange}
-                            ></lightning-input>
-                        </div>
-                        <div class="slds-col slds-size_1-of-2">
-                            <lightning-input
-                                type="number"
-                                label="수수료율 (%)"
-                                min="0"
-                                step="0.01"
-                                value={feeRate}
-                                data-field="feeRate"
-                                onchange={handleCalculatorChange}
-                            ></lightning-input>
-                        </div>
+    <!-- ===== MASKING DETAIL MODAL ===== -->
+    <template lwc:if={showMaskingModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="masking-modal-heading" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container mnp-mask-modal">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="닫기" onclick={handleCloseMaskingModal}>
+                        <lightning-icon icon-name="utility:close" size="small" alternative-text="닫기"></lightning-icon>
+                    </button>
+                    <h2 id="masking-modal-heading" class="slds-modal__title">마스킹 처리 결과</h2>
+                    <p class="slds-m-top_x-small mnp-modal-subtitle">Agentforce에는 아래 마스킹본만 전달됩니다.</p>
+                </header>
+                <div class="slds-modal__content slds-p-around_large">
+                    <div class="mnp-mask-summary">
+                        <span class="mnp-mask-summary__icon"><lightning-icon icon-name="utility:shield" size="small" alternative-text="보호"></lightning-icon></span>
+                        <div><strong>{maskingStatusLabel}</strong><p>개인정보 보호 상태를 확인한 뒤 메모를 계속 수정할 수 있습니다.</p></div>
                     </div>
-                    <lightning-input
-                        type="number"
-                        label="기간 (일)"
-                        min="1"
-                        step="1"
-                        value={termDays}
-                        data-field="termDays"
-                        onchange={handleCalculatorChange}
-                        class="slds-m-top_small"
-                    ></lightning-input>
-
-                    <div class="result-box slds-m-top_medium">
-                        <dl>
-                            <div class="result-row">
-                                <dt>상대기업 순이익</dt>
-                                <dd>{formattedClientBenefit}</dd>
-                            </div>
-                            <div class="result-row">
-                                <dt>상대기업 순수익률</dt>
-                                <dd>{formattedClientNetYield}</dd>
-                            </div>
-                            <div class="result-row">
-                                <dt>증권사 수익</dt>
-                                <dd>{formattedFirmRevenue}</dd>
-                            </div>
-                            <div class="result-row">
-                                <dt>증권사 수익률</dt>
-                                <dd>{formattedFirmYield}</dd>
-                            </div>
-                        </dl>
+                    <div class="mnp-mask-content">
+                        <div class="mnp-masked-preview__label">마스킹된 메모</div>
+                        <template lwc:if={hasSanitizedContent}>
+                            <p class="mnp-masked-preview__text mnp-masked-preview__text--modal">{sanitizedContent}</p>
+                        </template>
+                        <template lwc:else>
+                            <p class="mnp-empty-copy">메모 등록 후 마스킹 결과가 이곳에 표시됩니다.</p>
+                        </template>
                     </div>
-                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
-                        단순 일할 계산(365일 기준)이며 실제 계약 조건과 세금은 별도 확인이 필요합니다.
-                    </p>
                 </div>
-            </article>
+                <footer class="slds-modal__footer"><button class="slds-button slds-button_brand" onclick={handleCloseMaskingModal}>확인</button></footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- ===== CONFIRMATION MODAL ===== -->
+    <template lwc:if={showConfirmModal}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="mnp-modal-heading"
+            aria-describedby="mnp-modal-body"
+            class="slds-modal slds-fade-in-open"
+        >
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="닫기"
+                        onclick={handleModalCancel}
+                    >
+                        <lightning-icon icon-name="utility:close" size="small" alternative-text="닫기"></lightning-icon>
+                    </button>
+                    <h2 id="mnp-modal-heading" class="slds-modal__title slds-hyphenate">상품 선택 확인</h2>
+                </header>
+                <div id="mnp-modal-body" class="slds-modal__content slds-p-around_medium">
+                    <p class="mnp-modal-text">{confirmModalMessage}</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleModalCancel}>취소</button>
+                    <button class="slds-button slds-button_brand" onclick={handleModalConfirm}>확인</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- ===== THREE-COLUMN PANELS ===== -->
+    <div class="mnp-page">
+        <!-- Customer context stays visible across every Flow screen. -->
+        <section class="mnp-context" aria-label="미팅 고객 컨텍스트">
+            <div class="mnp-context__main">
+                <div class="mnp-context__mark"><lightning-icon icon-name="standard:account" size="small" alternative-text="고객"></lightning-icon></div>
+                <div class="mnp-context__identity">
+                    <p class="mnp-eyebrow">MEETING SESSION</p>
+                    <div class="mnp-context__title-row">
+                        <h1 class="mnp-context__title">{contextName}</h1>
+                        <span class="mnp-context__badge">{contextObjectLabel}</span>
+                    </div>
+                    <p class="mnp-context__company">{contextCompany}</p>
+                </div>
+                <div class="mnp-context__facts">
+                    <span><lightning-icon icon-name="utility:user" size="xx-small" alternative-text="담당자"></lightning-icon>{contextOwner}</span>
+                    <span><lightning-icon icon-name="utility:record" size="xx-small" alternative-text="상태"></lightning-icon>{contextStatus}</span>
+                </div>
+                <button type="button" class="mnp-briefing-button" onclick={handleToggleBriefing}>
+                    <lightning-icon icon-name="utility:knowledge_base" size="x-small" alternative-text="브리핑"></lightning-icon>
+                    {briefingButtonLabel}
+                    <lightning-icon icon-name={briefingChevron} size="xx-small" alternative-text="열기/닫기"></lightning-icon>
+                </button>
+            </div>
+            <template lwc:if={contextError}><p class="mnp-context__error">{contextError}</p></template>
+            <template lwc:if={showBriefing}>
+                <div class="mnp-briefing-drawer">
+                    <div><p class="mnp-briefing-drawer__label">기업 브리핑</p><p>{contextBriefing}</p></div>
+                    <div><p class="mnp-briefing-drawer__label">RP 추천 관점</p><p>{contextRecommendationReason}</p></div>
+                </div>
+            </template>
         </section>
 
-        <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 panel-column">
-            <article class="slds-card panel-card">
-                <div class="slds-card__header slds-grid">
-                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                        <div class="slds-media__body">
-                            <h2 class="slds-card__header-title">에이전트 추천</h2>
-                        </div>
-                    </header>
-                </div>
-                <div class="slds-card__body slds-card__body_inner panel-body">
-                    <template if:true={hasRecommendation}>
-                        <div class="recommendation-output" aria-live="polite">{recommendation}</div>
-                    </template>
-                    <template if:false={hasRecommendation}>
-                        <div class="empty-state slds-text-color_weak" aria-live="polite">
-                            추천 내용이 아직 생성되지 않았습니다.
-                        </div>
-                    </template>
+        <div class="slds-grid slds-wrap slds-gutters mnp-panels">
 
-                    <lightning-textarea
-                        data-id="follow-up"
-                        label="추가 질문"
-                        placeholder="추천에 대해 추가로 질문할 내용을 입력해주세요."
-                        value={followUpQuestionValue}
-                        onchange={handleFollowUpQuestionChange}
-                        class="slds-m-top_medium"
-                    ></lightning-textarea>
-                </div>
-            </article>
-        </section>
-    </div>
+            <!-- ── PANEL 1 : MEMO INPUT / SAVED STATUS ── -->
+            <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 mnp-col">
+                <article class="mnp-card">
+                    <div class="mnp-card__header">
+                        <lightning-icon icon-name="utility:note" size="x-small" alternative-text="메모"></lightning-icon>
+                        <h2 class="mnp-card__title">미팅 메모</h2>
 
-    <div class="slds-grid slds-grid_align-end slds-m-top_medium">
-        <lightning-button
-            variant="brand"
-            label={primaryButtonLabel}
-            onclick={handlePrimaryAction}
-            disabled={isSubmitting}
-        ></lightning-button>
-    </div>
+                        <!-- Pill badge shown once saved -->
+                        <template lwc:if={isSaved}>
+                            <span class="mnp-pill mnp-pill--saved">
+                                <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="저장됨"></lightning-icon>
+                                저장 · 마스킹 완료
+                            </span>
+                        </template>
+                    </div>
+                    <div class="mnp-card__body">
+
+                        <!-- Raw content editor stays visible and editable after recommendation. -->
+                        <template lwc:if={showMemoEditor}>
+                            <lightning-textarea
+                                data-id="raw-content"
+                                label="미팅 내용"
+                                placeholder="고객의 주요 관심사, 요청사항, 논의한 상품과 후속 조치를 입력해주세요."
+                                value={rawContentValue}
+                                onchange={handleRawContentChange}
+                                class="mnp-memo-textarea"
+                            ></lightning-textarea>
+                            <p class="mnp-char-count">{rawContentLength}자</p>
+                            <div class="mnp-memo-status-row">
+                                <span class="mnp-status-dot"></span>
+                                <span>{maskingStatusLabel}</span>
+                                <button type="button" class="mnp-inline-button" onclick={handleOpenMaskingModal}>상세 보기</button>
+                            </div>
+                        </template>
+
+                        <!-- Saved / masked status timeline (shown once saved) -->
+                        <template lwc:if={isSaved}>
+                            <ol class="mnp-timeline" aria-label="처리 단계">
+                                <li class="mnp-timeline__item">
+                                    <span class="mnp-timeline__dot mnp-timeline__dot--done"></span>
+                                    <div class="mnp-timeline__content">
+                                        <span class="mnp-timeline__title">메모 저장 완료</span>
+                                        <span class="mnp-timeline__sub">원문이 안전하게 저장되었습니다.</span>
+                                    </div>
+                                </li>
+                                <li class="mnp-timeline__item">
+                                    <span class="mnp-timeline__dot mnp-timeline__dot--done"></span>
+                                    <div class="mnp-timeline__content">
+                                        <span class="mnp-timeline__title">PII 마스킹 완료</span>
+                                        <span class="mnp-timeline__sub">개인정보가 마스킹본({maskedCount}건)으로 대체되었습니다.</span>
+                                    </div>
+                                </li>
+                                <li class="mnp-timeline__item">
+                                    <span class="mnp-timeline__dot mnp-timeline__dot--done"></span>
+                                    <div class="mnp-timeline__content">
+                                        <span class="mnp-timeline__title">Agentforce 입력 준비</span>
+                                        <span class="mnp-timeline__sub">Agentforce는 마스킹본만 사용합니다.</span>
+                                    </div>
+                                </li>
+                            </ol>
+
+                            <button type="button" class="mnp-mask-detail-button" onclick={handleOpenMaskingModal}>
+                                <lightning-icon icon-name="utility:shield" size="xx-small" alternative-text="보호"></lightning-icon>
+                                마스킹 결과 자세히 보기
+                            </button>
+                        </template>
+
+                    </div>
+                </article>
+            </section>
+
+            <!-- ── PANEL 2 : FEE / DEAL CALCULATOR ── -->
+            <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 mnp-col">
+                <article class="mnp-card">
+                    <div class="mnp-card__header">
+                        <lightning-icon icon-name="utility:currency" size="x-small" alternative-text="수수료"></lightning-icon>
+                        <h2 class="mnp-card__title">수수료 조건</h2>
+                    </div>
+                    <div class="mnp-card__body">
+                        <lightning-input
+                            type="number"
+                            label="거래 금액 (원)"
+                            min="0"
+                            step="1000000"
+                            value={dealAmount}
+                            data-field="dealAmount"
+                            onchange={handleCalculatorChange}
+                        ></lightning-input>
+                        <div class="slds-grid slds-gutters_x-small slds-m-top_small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input
+                                    type="number"
+                                    label="제안 수익률 (%)"
+                                    min="0"
+                                    step="0.01"
+                                    value={annualYield}
+                                    data-field="annualYield"
+                                    onchange={handleCalculatorChange}
+                                ></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input
+                                    type="number"
+                                    label="수수료율 (%)"
+                                    min="0"
+                                    step="0.01"
+                                    value={feeRate}
+                                    data-field="feeRate"
+                                    onchange={handleCalculatorChange}
+                                ></lightning-input>
+                            </div>
+                        </div>
+                        <lightning-input
+                            type="number"
+                            label="기간 (일)"
+                            min="1"
+                            step="1"
+                            value={termDays}
+                            data-field="termDays"
+                            onchange={handleCalculatorChange}
+                            class="slds-m-top_small"
+                        ></lightning-input>
+
+                        <div class="mnp-result-box slds-m-top_medium">
+                            <dl>
+                                <div class="mnp-result-row">
+                                    <dt class="mnp-result-row__label">상대기업 순이익</dt>
+                                    <dd class="mnp-result-row__value">{formattedClientBenefit}</dd>
+                                </div>
+                                <div class="mnp-result-row">
+                                    <dt class="mnp-result-row__label">상대기업 순수익률</dt>
+                                    <dd class="mnp-result-row__value">{formattedClientNetYield}</dd>
+                                </div>
+                                <div class="mnp-result-row">
+                                    <dt class="mnp-result-row__label">증권사 수익</dt>
+                                    <dd class="mnp-result-row__value mnp-result-row__value--accent">{formattedFirmRevenue}</dd>
+                                </div>
+                                <div class="mnp-result-row">
+                                    <dt class="mnp-result-row__label">증권사 수익률</dt>
+                                    <dd class="mnp-result-row__value mnp-result-row__value--accent">{formattedFirmYield}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                        <p class="mnp-disclaimer">
+                            단순 일할 계산(365일 기준)이며 실제 계약 조건과 세금은 별도 확인이 필요합니다.
+                        </p>
+                    </div>
+                </article>
+            </section>
+
+            <!-- ── PANEL 3 : AGENTFORCE RECOMMENDATION + FOLLOW-UP ── -->
+            <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 mnp-col">
+                <article class="mnp-card">
+                    <div class="mnp-card__header">
+                        <lightning-icon icon-name="utility:einstein" size="x-small" alternative-text="Agentforce"></lightning-icon>
+                        <h2 class="mnp-card__title">에이전트 추천</h2>
+                    </div>
+                    <div class="mnp-card__body">
+
+                        <!-- Recommendation area -->
+                        <template lwc:if={hasRecommendation}>
+
+                            <!-- Product cards (JSON with items array) -->
+                            <template lwc:if={hasProductCards}>
+                                <div class="mnp-product-list" role="list">
+                                    <template for:each={productCards} for:item="card">
+                                        <div key={card.id} class={card.cardClass} role="listitem">
+                                            <div class="mnp-product-card__header">
+                                                <span class="mnp-product-card__name">{card.name}</span>
+                                                <template lwc:if={card.score}>
+                                                    <span class="mnp-product-card__score">{card.score}</span>
+                                                </template>
+                                            </div>
+                                            <p class="mnp-product-card__reason">{card.reason}</p>
+                                            <template lwc:if={card.fit}>
+                                                <p class="mnp-product-card__fit">적합도: {card.fit}</p>
+                                            </template>
+                                            <div class="mnp-product-card__footer">
+                                                <lightning-button
+                                                    label="이 상품 선택"
+                                                    variant={card.buttonVariant}
+                                                    data-product-id={card.id}
+                                                    data-product-name={card.name}
+                                                    onclick={handleSelectProduct}
+                                                ></lightning-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <!-- Plain text recommendation -->
+                            <template lwc:else>
+                                <div class="mnp-reco-text" aria-live="polite">{recommendationSummary}</div>
+                            </template>
+
+                            <!-- Selected product banner -->
+                            <template lwc:if={selectedProductName}>
+                                <div class="mnp-selected-banner" role="status" aria-live="polite">
+                                    <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="선택됨"></lightning-icon>
+                                    선택된 상품: <strong>{selectedProductName}</strong>
+                                </div>
+                            </template>
+
+                        </template>
+
+                        <template lwc:else>
+                            <div class="mnp-empty-reco" aria-live="polite">
+                                추천 내용이 아직 생성되지 않았습니다.
+                            </div>
+                        </template>
+
+                        <!-- Expandable follow-up question -->
+                        <div class="mnp-followup slds-m-top_medium">
+                            <button
+                                type="button"
+                                class="mnp-followup__toggle"
+                                onclick={handleToggleFollowUp}
+                                aria-expanded={isFollowUpExpanded}
+                                aria-controls="mnp-followup-panel"
+                            >
+                                <lightning-icon icon-name={followUpChevron} size="xx-small" alternative-text="펼치기/접기"></lightning-icon>
+                                Agentforce에 추가 질문
+                            </button>
+                            <div id="mnp-followup-panel" class={followUpPanelClass}>
+                                <lightning-textarea
+                                    data-id="follow-up"
+                                    label="추가 질문"
+                                    placeholder="추천에 대해 추가로 질문할 내용을 입력해주세요."
+                                    value={followUpQuestionValue}
+                                    onchange={handleFollowUpQuestionChange}
+                                    class="slds-m-top_x-small"
+                                ></lightning-textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+            </section>
+
+        </div><!-- /slds-grid -->
+
+        <!-- Bottom action row -->
+        <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+            <lightning-button
+                variant="brand"
+                label={primaryButtonLabel}
+                onclick={handlePrimaryAction}
+                disabled={isSubmitting}
+            ></lightning-button>
+        </div>
+    </div><!-- /mnp-page -->
 </template>

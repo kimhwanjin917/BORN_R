@@ -1,0 +1,9 @@
+<template>
+    <div class="launcher">
+        <lightning-spinner alternative-text="Meeting Session 여는 중" size="small"></lightning-spinner>
+        <p>Meeting Session으로 이동하고 있습니다.</p>
+        <template lwc:if={showFallback}>
+            <lightning-button variant="brand" label="Meeting Session 열기" onclick={openMeetingSession}></lightning-button>
+        </template>
+    </div>
+</template>

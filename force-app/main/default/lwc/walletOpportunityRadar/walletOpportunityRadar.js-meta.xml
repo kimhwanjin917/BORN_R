@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>고객 성장 기회 레이더</masterLabel>
+    <description>지갑 점유율 × 성공 가능성 레이더와 추천 액션 (docs/55)</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects><object>Account</object></objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

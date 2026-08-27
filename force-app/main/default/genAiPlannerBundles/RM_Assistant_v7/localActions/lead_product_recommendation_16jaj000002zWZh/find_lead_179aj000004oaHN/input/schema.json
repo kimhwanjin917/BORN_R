@@ -1,0 +1,14 @@
+{
+  "required" : [ "keyword" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "keyword" : {
+      "title" : "검색어",
+      "description" : "회사명 또는 담당자 이름의 일부. 사용자가 말한 회사명에서 핵심 단어만 넣는다. 예: 대성정밀",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,94 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-p-around_large slds-align_absolute-center">
+            <lightning-spinner alternative-text="메일 초안 생성 중..." size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <template if:true={errorMessage}>
+        <div class="slds-p-around_medium">
+            <p class="slds-text-color_error slds-m-bottom_small">{errorMessage}</p>
+            <lightning-button label="닫기" onclick={handleClose}></lightning-button>
+        </div>
+    </template>
+
+    <template if:true={hasDraft}>
+        <div class="slds-p-around_medium">
+            <h2 class="slds-text-heading_medium slds-align_absolute-center slds-m-bottom_medium">Email</h2>
+
+            <lightning-combobox
+                label="From"
+                value={fromAddress}
+                options={fromOptions}
+                onchange={handleFromChange}
+                class="slds-m-bottom_x-small"
+            ></lightning-combobox>
+
+            <div class="slds-form-element slds-m-bottom_x-small">
+                <label class="slds-form-element__label">To</label>
+                <div class="slds-form-element__control">
+                    <template if:true={hasRecipients}>
+                        <lightning-pill-container
+                            items={recipientItems}
+                            onitemremove={handleRemoveRecipient}
+                        ></lightning-pill-container>
+                    </template>
+                    <lightning-record-picker
+                        data-id="to-picker"
+                        label="받는 사람 추가"
+                        variant="label-hidden"
+                        placeholder="받는 사람 이름 검색..."
+                        object-api-name="Contact"
+                        onchange={handleAddRecipient}
+                    ></lightning-record-picker>
+                </div>
+            </div>
+
+            <lightning-input
+                label="Subject"
+                value={subject}
+                onchange={handleSubjectChange}
+                class="slds-m-bottom_x-small"
+            ></lightning-input>
+
+            <template if:true={bodyLoading}>
+                <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                    ⏳ AI가 제목·본문 초안을 작성 중입니다...
+                </div>
+            </template>
+
+            <lightning-input-rich-text
+                value={htmlBody}
+                onchange={handleBodyChange}
+                class="slds-m-bottom_x-small"
+            ></lightning-input-rich-text>
+
+            <div class="slds-form-element slds-m-top_small slds-m-bottom_medium">
+                <label class="slds-form-element__label">Related To</label>
+                <div class="slds-form-element__control">
+                    <lightning-record-picker
+                        label="Related To"
+                        variant="label-hidden"
+                        placeholder="관련 대상 검색..."
+                        object-api-name={leadObjectApiName}
+                        value={relatedToId}
+                        onchange={handleRelatedChange}
+                    ></lightning-record-picker>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-grid_align-end">
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleClose}
+                    class="slds-m-right_x-small"
+                ></lightning-button>
+                <lightning-button
+                    variant="brand"
+                    label="Send"
+                    onclick={handleSend}
+                ></lightning-button>
+            </div>
+        </div>
+    </template>
+</template>

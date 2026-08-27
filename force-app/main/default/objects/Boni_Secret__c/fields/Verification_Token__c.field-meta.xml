@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Verification_Token__c</fullName>
+    <description>Slack 앱 Verification Token (Basic Information → App Credentials). form-urlencoded 인터랙션 요청 검증용 — Apex REST 가 본문을 분해해 서명 재계산이 불가능하므로 payload.token 으로 검증한다.</description>
+    <externalId>false</externalId>
+    <label>Verification Token</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

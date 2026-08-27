@@ -1,0 +1,104 @@
+<template>
+    <div class="slds-p-around_medium">
+
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="불러오는 중" size="small"></lightning-spinner>
+            <div class="slds-align_absolute-center slds-p-vertical_large slds-text-color_weak">
+                리드 정보와 상품을 불러오는 중입니다…
+            </div>
+        </template>
+
+        <template lwc:elseif={result}>
+            <!-- 생성 완료 -->
+            <div class="slds-align_absolute-center slds-p-vertical_medium">
+                <lightning-icon icon-name="action:approval" size="small"></lightning-icon>
+            </div>
+            <p class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-small">제안서가 생성되었습니다</p>
+            <p class="slds-text-align_center slds-text-color_weak lpg-filename">{result.fileName}</p>
+            <div class="lpg-done">
+                <p class="slds-p-bottom_xx-small"><b>문서번호</b> {result.docNumber}</p>
+                <p>이 리드의 <b>파일</b>에 저장되었습니다. 활동 탭 &gt; 이메일 &gt; 첨부에서
+                   <b>Salesforce 파일 선택</b>으로 첨부해 발송하세요.</p>
+            </div>
+            <div class="slds-align_absolute-center slds-p-top_medium">
+                <lightning-button label="파일 열기" onclick={handleOpenFile} class="slds-p-right_x-small"></lightning-button>
+                <lightning-button label="닫기" variant="brand" onclick={handleClose}></lightning-button>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <template lwc:if={errorMessage}>
+                <div class="slds-p-bottom_small">
+                    <lightning-icon icon-name="utility:error" variant="error" size="x-small"></lightning-icon>
+                    <span class="slds-p-left_x-small slds-text-color_error">{errorMessage}</span>
+                </div>
+            </template>
+
+            <!-- 에이전트 추천 (미팅 준비 브리핑과 같은 값) -->
+            <template lwc:if={context.rationale}>
+                <div class={rationaleClass}>
+                    <p class="lpg-rationale-title">{rationaleTitle}</p>
+                    <p>{context.rationale}</p>
+                    <template lwc:if={hasFinancials}>
+                        <p class="lpg-fin">{financeLine}</p>
+                    </template>
+                </div>
+            </template>
+
+            <!-- 상품 선택 -->
+            <p class="lpg-label slds-p-top_medium">제안 상품과 적용 수익률</p>
+            <div class="lpg-table">
+                <template for:each={displayRows} for:item="row">
+                    <div key={row.productId} class={row.rowClass}>
+                        <div class="lpg-cell-check">
+                            <lightning-input type="checkbox" variant="label-hidden" label={row.name}
+                                data-id={row.productId} checked={row.selected} onchange={handleToggle}>
+                            </lightning-input>
+                        </div>
+                        <div class="lpg-cell-name">
+                            <span class="lpg-name">{row.name}</span>
+                            <span class="lpg-meta">{row.family} · {row.termText} · 수수료 {row.feeText}</span>
+                        </div>
+                        <div class="lpg-cell-yield">
+                            <template lwc:if={row.selected}>
+                                <lightning-input type="number" variant="label-hidden" label="적용 수익률"
+                                    placeholder="연 %" step="0.01" formatter="decimal"
+                                    data-id={row.productId} value={row.yieldRate} onchange={handleYieldChange}>
+                                </lightning-input>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <p class="lpg-hint">수수료율은 RM 참고용이며 고객용 PDF에는 출력되지 않습니다. 적용 수익률은 작성일 기준 고시금리를 입력하세요.</p>
+
+            <!-- 예치 가정 금액 -->
+            <div class="slds-p-top_medium">
+                <lightning-input type="number" label="예치 가정 금액 (원)" placeholder="예: 10000000000"
+                    value={assumedAmount} onchange={handleAmountChange} field-level-help="예상 수익 비교표의 기준 금액입니다.">
+                </lightning-input>
+                <p class="lpg-hint">{assumedAmountHelp}</p>
+            </div>
+
+            <!-- 제안 배경 -->
+            <div class="slds-p-top_medium">
+                <lightning-textarea label="제안 배경 (선택)" value={backgroundMemo} onchange={handleMemoChange}
+                    placeholder="고객과 오간 맥락을 적으면 PDF 상단에 그대로 들어갑니다. 비워두면 해당 항목이 출력되지 않습니다."
+                    max-length="1500">
+                </lightning-textarea>
+            </div>
+
+            <div class="slds-align_absolute-center slds-p-top_large">
+                <lightning-button label="취소" onclick={handleClose} class="slds-p-right_x-small"></lightning-button>
+                <lightning-button label="PDF 생성" variant="brand" onclick={handleGenerate}
+                    disabled={isGenerateDisabled}></lightning-button>
+            </div>
+            <template lwc:if={isGenerating}>
+                <div class="slds-align_absolute-center slds-p-top_small slds-text-color_weak">
+                    제안서를 만드는 중입니다…
+                </div>
+            </template>
+        </template>
+
+    </div>
+</template>

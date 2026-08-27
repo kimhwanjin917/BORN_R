@@ -504,7 +504,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>ItsmReports/AvgTime_to_Resolve_by_Priority</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>
@@ -605,7 +604,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>ItsmReports/Incidents_Resolution_Time_by_Agent</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>

@@ -19,7 +19,7 @@
 @isTest
 private class DealProgressSummaryBatchTest {
     private static final String STANDARD_USER_PROFILE = 'Standard User';
-    private static final String STAGE = '탐색';
+    private static final String STAGE = '미팅';
     private static final String TEAM_CODE = 'T-100';
     // Sentinel tokens are deliberately unusual so any leak into a Summary field
     // is unambiguous. Neither may ever appear in a snapshot.

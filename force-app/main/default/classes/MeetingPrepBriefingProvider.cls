@@ -82,7 +82,7 @@ public with sharing class MeetingPrepBriefingProvider {
     /** CRM(Lead) 프로필. 회사·업종·직함·담당 RM 등. Data Cloud 통합의 CRM 축. */
     private static String buildCrmBlock(Id leadId) {
         List<Lead> leads = [
-            SELECT Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name
+            SELECT Name, Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name
             FROM Lead
             WHERE Id = :leadId
             WITH USER_MODE
@@ -95,6 +95,7 @@ public with sharing class MeetingPrepBriefingProvider {
         List<String> lines = new List<String>();
         lines.add('[CRM 프로필]');
         lines.add('- 회사명: ' + textOrUnknown(lead.Company));
+        lines.add('- 담당자: ' + textOrUnknown(lead.Name));
         lines.add('- 업종: ' + textOrUnknown(lead.Industry));
         lines.add('- 담당자 직함: ' + textOrUnknown(lead.Title));
         lines.add('- 리드 상태: ' + textOrUnknown(lead.Status));

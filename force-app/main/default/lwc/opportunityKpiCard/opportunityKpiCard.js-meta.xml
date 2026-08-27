@@ -2,7 +2,45 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>67.0</apiVersion>
     <isExposed>true</isExposed>
+    <masterLabel>영업기회 단계별 현황</masterLabel>
+    <description>로그인한 사용자가 담당하는 영업기회의 단계별 건수와 파이프라인 수수료 수익, 우선 확인이 필요한 기회를 보여줍니다.</description>
     <targets>
         <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage,lightning__AppPage">
+            <property
+                name="stalledStage"
+                type="String"
+                label="접촉 끊김 감시 단계"
+                description="이 단계에 머무는 기회만 '접촉 끊김' 칩으로 표시합니다. 비워두면 조건협상."
+                default="조건협상"
+            />
+            <property
+                name="stalledDays"
+                type="Integer"
+                label="접촉 끊김 기준 (일)"
+                description="감시 단계의 기회가 최근 미팅 없이 이 일수를 넘기면 접촉 끊김으로 봅니다."
+                default="14"
+                min="1"
+            />
+            <property
+                name="inactiveDays"
+                type="Integer"
+                label="미활동 기준 (일)"
+                description="전 단계 공통. 최근 미팅 없이 이 일수를 넘긴 진행 중 기회를 미활동으로 봅니다."
+                default="30"
+                min="1"
+            />
+            <property
+                name="closingDays"
+                type="Integer"
+                label="마감 임박 기준 (일)"
+                description="종료 예정일이 오늘부터 이 일수 안에 있는 기회를 마감 임박으로 봅니다."
+                default="7"
+                min="1"
+            />
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

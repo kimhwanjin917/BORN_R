@@ -48,7 +48,7 @@ private class MeetingNoteSharingServiceTest {
 
         Opportunity opp = new Opportunity(
             Name = 'Mtg Note Test Opp',
-            StageName = '탐색',
+            StageName = '미팅',
             CloseDate = Date.today().addDays(30),
             OwnerId = oppOwnerRm.Id
         );
@@ -125,7 +125,7 @@ private class MeetingNoteSharingServiceTest {
 
         Opportunity newOpp = new Opportunity(
             Name = 'Reassigned Opp',
-            StageName = '탐색',
+            StageName = '미팅',
             CloseDate = Date.today().addDays(30),
             OwnerId = newOwnerRm.Id
         );

@@ -27,6 +27,8 @@
         <members>RM_Assistant_3</members>
         <members>RM_Assistant_4</members>
         <members>RM_Assistant_5</members>
+        <members>RM_Assistant_6</members>
+        <members>RM_Assistant_7</members>
         <members>RM_Product_Recommendation_Agent_1</members>
         <members>real_pronto_customer_support_assistant_1</members>
         <name>AiAuthoringBundle</name>
@@ -40,6 +42,27 @@
         <members>AccountRationaleQueueableTest</members>
         <members>AccountRationaleSchedulable</members>
         <members>AccountRationaleSchedulableTest</members>
+        <members>AgentApiClient</members>
+        <members>AgentApiClientTest</members>
+        <members>BORNGrowthOppController</members>
+        <members>BORNGrowthOppControllerTest</members>
+        <members>BoniBlockKitBuilder</members>
+        <members>BoniBlockKitBuilderTest</members>
+        <members>BoniBriefingScheduler</members>
+        <members>BoniDashboardData</members>
+        <members>BoniDashboardService</members>
+        <members>BoniDashboardServiceTest</members>
+        <members>BoniHomeRefreshScheduler</members>
+        <members>BoniPublisher</members>
+        <members>BoniPublisherTest</members>
+        <members>BoniSchedulerTest</members>
+        <members>BoniSlackClient</members>
+        <members>BoniSlackClientTest</members>
+        <members>BoniSlackEventHandler</members>
+        <members>BoniSlackEventHandlerTest</members>
+        <members>BoniSlackEventsRest</members>
+        <members>BoniSlackEventsRestTest</members>
+        <members>BoniWrapupScheduler</members>
         <members>ChangePasswordController</members>
         <members>ChangePasswordControllerTest</members>
         <members>CommunitiesLandingController</members>
@@ -50,6 +73,10 @@
         <members>CommunitiesSelfRegConfirmControllerTest</members>
         <members>CommunitiesSelfRegController</members>
         <members>CommunitiesSelfRegControllerTest</members>
+        <members>ContractDocumentPdfController</members>
+        <members>ContractDocumentPdfControllerTest</members>
+        <members>ContractDocumentService</members>
+        <members>ContractDocumentServiceTest</members>
         <members>DartCollectionBatch</members>
         <members>DartCollectionBatchTest</members>
         <members>DartCollectionQueueable</members>
@@ -71,6 +98,8 @@
         <members>FinlightNewsScheduler</members>
         <members>FinlightNewsService</members>
         <members>FinlightNewsServiceTest</members>
+        <members>FollowupRecommendationPdfController</members>
+        <members>FollowupRecommendationPdfControllerTest</members>
         <members>ForgotPasswordController</members>
         <members>ForgotPasswordControllerTest</members>
         <members>HomeDashboardController</members>
@@ -81,31 +110,51 @@
         <members>LeadEventConvertHandlerTest</members>
         <members>LeadKpiController</members>
         <members>LeadKpiControllerTest</members>
+        <members>LeadLookupAction</members>
+        <members>LeadLookupActionTest</members>
         <members>LeadPriorityController</members>
         <members>LeadPriorityControllerTest</members>
         <members>LeadPriorityRationaleProvider</members>
         <members>LeadPriorityRationaleProviderTest</members>
+        <members>LeadProductRecommendationAction</members>
+        <members>LeadProductRecommendationActionTest</members>
+        <members>LeadProposalController</members>
+        <members>LeadProposalControllerTest</members>
+        <members>LeadProposalPdfController</members>
+        <members>LeadProposalPdfControllerTest</members>
         <members>LeadRationaleQueueable</members>
         <members>LeadRationaleQueueableTest</members>
         <members>LeadRationaleSchedulable</members>
         <members>LeadRationaleSchedulableTest</members>
+        <members>LeadRecommendationSaveAction</members>
+        <members>LeadRecommendationSaveActionTest</members>
+        <members>LeadRecommendationTestUtil</members>
         <members>MaskingService</members>
         <members>MaskingServiceTest</members>
         <members>MaturityAlertBatch</members>
         <members>MaturityAlertBatchTest</members>
         <members>MeetingDocRecapProvider</members>
         <members>MeetingDocRecapProviderTest</members>
+        <members>MeetingNoteAgentRecommender</members>
+        <members>MeetingNoteAgentRecommenderTest</members>
         <members>MeetingNoteConfirmAction</members>
         <members>MeetingNoteConfirmActionTest</members>
         <members>MeetingNoteSharingService</members>
         <members>MeetingNoteSharingServiceTest</members>
         <members>MeetingNoteTriggerHandler</members>
+        <members>MeetingPrepBriefingController</members>
+        <members>MeetingPrepBriefingControllerTest</members>
         <members>MeetingPrepBriefingProvider</members>
         <members>MeetingPrepBriefingProviderTest</members>
+        <members>MeetingPrepEmailComposerController</members>
+        <members>MeetingPrepEmailComposerControllerTest</members>
         <members>MeetingPrepEmailProvider</members>
         <members>MeetingPrepEmailProviderTest</members>
+        <members>MeetingSessionContextController</members>
         <members>MicrobatchSelfRegController</members>
         <members>MicrobatchSelfRegControllerTest</members>
+        <members>MyKpiController</members>
+        <members>MyKpiControllerTest</members>
         <members>MyProfilePageController</members>
         <members>MyProfilePageControllerTest</members>
         <members>NaverNewsBatch</members>
@@ -121,18 +170,32 @@
         <members>NewsDailySummarySchedulable</members>
         <members>NewsDailySummarySchedulableTest</members>
         <members>NewsSignalService</members>
+        <members>OpportunityFollowupContextAction</members>
+        <members>OpportunityFollowupContextActionTest</members>
         <members>OpportunityKpiController</members>
         <members>OpportunityKpiControllerTest</members>
         <members>OpportunityListAction</members>
         <members>OpportunityListActionTest</members>
         <members>OpportunityLookupAction</members>
         <members>OpportunityLookupActionTest</members>
+        <members>OpportunityRadarController</members>
+        <members>OpportunityRadarControllerTest</members>
+        <members>OpportunityReviewService</members>
+        <members>OpportunityReviewServiceTest</members>
         <members>PriorityScoreBatch</members>
         <members>PriorityScoreBatchTest</members>
         <members>ProductRecommendationAction</members>
         <members>ProductRecommendationActionTest</members>
         <members>RPProposalCatalogProvider</members>
         <members>RPProposalCatalogProviderTest</members>
+        <members>RadarException</members>
+        <members>RadarRecommendationService</members>
+        <members>RadarRecommendationServiceTest</members>
+        <members>RadarRefreshSchedulable</members>
+        <members>RadarScoreService</members>
+        <members>RadarSettings</members>
+        <members>RadarTestDataFactory</members>
+        <members>RecommendationOutcomeService</members>
         <members>SDO_Tool_TEGenController</members>
         <members>SignalRmAlertQueueable</members>
         <members>SignalRmAlertService</members>
@@ -143,6 +206,8 @@
         <members>SiteLoginControllerTest</members>
         <members>SiteRegisterController</members>
         <members>SiteRegisterControllerTest</members>
+        <members>SlackAlertService</members>
+        <members>SlackAlertServiceTest</members>
         <members>SlackChannelMessageService</members>
         <members>SlackChannelMessageServiceTest</members>
         <members>SlackCmdtDeployer</members>
@@ -152,6 +217,8 @@
         <members>SlackProposalShareService</members>
         <members>SlackProposalShareServiceTest</members>
         <members>TestDataFactory</members>
+        <members>WalletShareService</members>
+        <members>WalletShareServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -174,12 +241,15 @@
         <members>CommunitiesSelfReg</members>
         <members>CommunitiesSelfRegConfirm</members>
         <members>CommunitiesTemplate</members>
+        <members>ContractDocumentPdf</members>
         <members>Exception</members>
         <members>FileNotFound</members>
+        <members>FollowupRecommendationPdf</members>
         <members>ForgotPassword</members>
         <members>ForgotPasswordConfirm</members>
         <members>IdeasHome</members>
         <members>InMaintenance</members>
+        <members>LeadProposalPdf</members>
         <members>MicrobatchSelfReg</members>
         <members>MyProfilePage</members>
         <members>SDO_Tools_TEGen</members>
@@ -194,8 +264,12 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>BoniSlackEventTrigger</members>
+        <members>LeadConvertedTrigger</members>
         <members>LeadEventConvertTrigger</members>
+        <members>MeetingNoteRecommendTrigger</members>
         <members>MeetingNoteTrigger</members>
+        <members>OpportunityReviewTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -252,11 +326,14 @@
         <members>RM_Assistant.v2</members>
         <members>RM_Assistant.v3</members>
         <members>RM_Assistant.v5</members>
+        <members>RM_Assistant.v6</members>
+        <members>RM_Assistant.v7</members>
         <members>SearchAgent.v1</members>
         <name>BotVersion</name>
     </types>
     <types>
         <members>LEXTHEMINGBORNSecurities</members>
+        <members>LEXTHEMINGBornSecurities_Themes</members>
         <name>BrandingSet</name>
     </types>
     <types>
@@ -283,6 +360,7 @@
         <name>CampaignInfluenceModel</name>
     </types>
     <types>
+        <members>Agentforce_AgentApi_JWT</members>
         <members>SelfSignedCert_18Aug2026_081702</members>
         <name>Certificate</name>
     </types>
@@ -297,6 +375,7 @@
         <name>Community</name>
     </types>
     <types>
+        <members>Contact.Contact_Masked</members>
         <members>PersonAccount.EmployeePortalDefault</members>
         <name>CompactLayout</name>
     </types>
@@ -307,6 +386,7 @@
         <members>ChatGPT_Image_2026_8_18_02_19_32</members>
         <members>ChatGPT_Image_2026_8_18_02_19_321</members>
         <members>asset_2026_08_24_031139_png</members>
+        <members>execc52b5442d2d7465984ffa3049ab400c</members>
         <name>ContentAsset</name>
     </types>
     <types>
@@ -334,7 +414,6 @@
         <name>CspTrustedSite</name>
     </types>
     <types>
-        <members>BORN_Securities</members>
         <members>standard__AIWorkbench</members>
         <members>standard__AdvancedTherapyManagement</members>
         <members>standard__AdvertisingInventoryCalendar</members>
@@ -344,7 +423,6 @@
         <members>standard__Approvals</members>
         <members>standard__Audience360</members>
         <members>standard__B2bReferralConsole</members>
-        <members>standard__Chatter</members>
         <members>standard__CommerceStarter</members>
         <members>standard__CommunicationsSalesConsole</members>
         <members>standard__Community</members>
@@ -539,6 +617,21 @@
         <members>BenefitManagementRecertification__c.Language__c</members>
         <members>BenefitManagementRecertification__c.SubType__c</members>
         <members>BenefitManagementRecertification__c.Type__c</members>
+        <members>Boni_Secret__c.Signing_Secret__c</members>
+        <members>Boni_Secret__c.Verification_Token__c</members>
+        <members>Boni_Setting__mdt.Briefing_Hour__c</members>
+        <members>Boni_Setting__mdt.Maturity_Window_Days__c</members>
+        <members>Boni_Setting__mdt.Signal_Days__c</members>
+        <members>Boni_Setting__mdt.Stale_Days__c</members>
+        <members>Boni_Setting__mdt.Wrapup_Hour__c</members>
+        <members>Boni_Slack_Event__e.Event_Type__c</members>
+        <members>Boni_Slack_Event__e.Payload__c</members>
+        <members>Boni_Target__mdt.Data_User_Id__c</members>
+        <members>Boni_Target__mdt.Is_Active__c</members>
+        <members>Boni_Target__mdt.Role__c</members>
+        <members>Boni_Target__mdt.Slack_User_Id__c</members>
+        <members>CRM_Alert_Setting__mdt.Is_Active__c</members>
+        <members>CRM_Alert_Setting__mdt.Slack_Channel_Id__c</members>
         <members>Case.Decision_Reason__c</members>
         <members>Case.Decision__c</members>
         <members>Case.Opportunity__c</members>
@@ -635,7 +728,14 @@
         <members>Contact_Home__dll.cdp_sys_SourceVersion__c</members>
         <members>Contact_Home__dll.name_new_c__c</members>
         <members>Contract.Approved_Quote__c</members>
+        <members>Contract.Contract_Amount__c</members>
         <members>Contract.Contract_Category__c</members>
+        <members>Contract.Coupon_Rate__c</members>
+        <members>Contract.Fee_Rate__c</members>
+        <members>Contract.Issuer_Name__c</members>
+        <members>Contract.Maturity_Date__c</members>
+        <members>Contract.Product__c</members>
+        <members>Contract.RP_Yield__c</members>
         <members>CorpFinancialStmt_Home__dll.Account_c__c</members>
         <members>CorpFinancialStmt_Home__dll.Bonds_Payable_c__c</members>
         <members>CorpFinancialStmt_Home__dll.Cash_And_Equivalents_c__c</members>
@@ -701,12 +801,15 @@
         <members>CorporateFinancialStatement__c.Bonds_Payable__c</members>
         <members>CorporateFinancialStatement__c.Cash_And_Equivalents__c</members>
         <members>CorporateFinancialStatement__c.Cash_Asset_Ratio__c</members>
+        <members>CorporateFinancialStatement__c.Disclosure_Period_YM__c</members>
         <members>CorporateFinancialStatement__c.External_Key__c</members>
+        <members>CorporateFinancialStatement__c.Fiscal_Year_Text__c</members>
         <members>CorporateFinancialStatement__c.Fiscal_Year__c</members>
         <members>CorporateFinancialStatement__c.Lead__c</members>
         <members>CorporateFinancialStatement__c.Long_Term_Borrowings__c</members>
         <members>CorporateFinancialStatement__c.Operating_Income__c</members>
         <members>CorporateFinancialStatement__c.Period_Type__c</members>
+        <members>CorporateFinancialStatement__c.Report_Type_Label__c</members>
         <members>CorporateFinancialStatement__c.Revenue__c</members>
         <members>CorporateFinancialStatement__c.Short_Term_Borrowings__c</members>
         <members>CorporateFinancialStatement__c.Short_Term_Financial_Instruments__c</members>
@@ -907,17 +1010,43 @@
         <members>IndividualGDPRState__dlm.ShouldForgetRequestDate__c</members>
         <members>IndividualGDPRState__dlm.ShouldForget__c</members>
         <members>IndividualGDPRState__dlm.TenantId__c</members>
+        <members>KPI_Target__mdt.Period__c</members>
+        <members>KPI_Target__mdt.Target_Fee__c</members>
+        <members>KPI_Target__mdt.Target_New_Accounts__c</members>
         <members>Lead.Assigned_Company_Code__c</members>
         <members>Lead.Business_Registration_Number__c</members>
+        <members>Lead.Consultation_Date__c</members>
+        <members>Lead.Contact_Channel__c</members>
+        <members>Lead.Customer_Need__c</members>
+        <members>Lead.Department__c</members>
+        <members>Lead.Email_Masked__c</members>
+        <members>Lead.Expected_Deal_Size__c</members>
+        <members>Lead.First_Contact_DateTime__c</members>
+        <members>Lead.Interested_Product_Family__c</members>
+        <members>Lead.Meeting_Attendees__c</members>
+        <members>Lead.Meeting_Content__c</members>
+        <members>Lead.Meeting_Date__c</members>
+        <members>Lead.Meeting_Prep_Briefing_Updated_At__c</members>
+        <members>Lead.Meeting_Prep_Briefing__c</members>
+        <members>Lead.Phone_Masked__c</members>
         <members>Lead.Priority_Rationale_Detail__c</members>
         <members>Lead.Priority_Rationale_Summary__c</members>
         <members>Lead.Priority_Rationale_Updated_At__c</members>
         <members>Lead.Priority_Score__c</members>
+        <members>Lead.Qualification_Notes__c</members>
+        <members>Lead.Recommended_Fee_Rate__c</members>
+        <members>Lead.Recommended_Product_Family__c</members>
+        <members>Lead.Recommended_Product_Rationale__c</members>
+        <members>Lead.Recommended_Product__c</members>
+        <members>Lead.Recommended_Term_Days__c</members>
         <members>Lead.Slack_Channel_ID__c</members>
         <members>Lead.Slack_Channel_Link__c</members>
         <members>Lead.name_new__c</members>
+        <members>Meeting_Note__c.Attendees__c</members>
         <members>Meeting_Note__c.Masked_Count__c</members>
+        <members>Meeting_Note__c.Meeting_Date__c</members>
         <members>Meeting_Note__c.Opportunity__c</members>
+        <members>Meeting_Note__c.Product_Recommendation__c</members>
         <members>Meeting_Note__c.Raw_Content__c</members>
         <members>Meeting_Note__c.Sanitized_Content__c</members>
         <members>MessagingSession.SDO_MessagingSession_BotName__c</members>
@@ -933,6 +1062,7 @@
         <members>Opportunity.Is_Cross_Sell__c</members>
         <members>Opportunity.Issuer_Name__c</members>
         <members>Opportunity.Last_Meeting_Date__c</members>
+        <members>Opportunity.Last_Recommendation__c</members>
         <members>Opportunity.Loss_Detail__c</members>
         <members>Opportunity.Loss_Reason__c</members>
         <members>Opportunity.Meeting_Log__c</members>
@@ -999,6 +1129,25 @@
         <members>Quote.Issue_Amount__c</members>
         <members>Quote.Maturity_Date__c</members>
         <members>Quote.Term_Days__c</members>
+        <members>Radar_Setting__mdt.Description__c</members>
+        <members>Radar_Setting__mdt.Value__c</members>
+        <members>Recommendation__c.Account__c</members>
+        <members>Recommendation__c.Expected_Amount__c</members>
+        <members>Recommendation__c.Generated_At__c</members>
+        <members>Recommendation__c.Opportunity__c</members>
+        <members>Recommendation__c.Our_Balance__c</members>
+        <members>Recommendation__c.Product__c</members>
+        <members>Recommendation__c.Rank__c</members>
+        <members>Recommendation__c.Reason__c</members>
+        <members>Recommendation__c.Score_Detail__c</members>
+        <members>Recommendation__c.Score__c</members>
+        <members>Recommendation__c.Source__c</members>
+        <members>Recommendation__c.Status__c</members>
+        <members>Recommendation__c.Type__c</members>
+        <members>Recommendation__c.Wallet_Amount__c</members>
+        <members>Recommendation__c.Wallet_Basis__c</members>
+        <members>Recommendation__c.Wallet_Share__c</members>
+        <members>Recommendation__c.Whitespace_Amount__c</members>
         <members>Return_Order__c.Customer_Order__c</members>
         <members>Return_Order__c.Instructions__c</members>
         <members>Slack__mdt.Enterprise_ID__c</members>
@@ -1240,10 +1389,24 @@
         <name>CustomLabels</name>
     </types>
     <types>
+        <members>Boni_Setting.Default</members>
+        <members>Boni_Target.Demo_RM</members>
+        <members>CRM_Alert_Setting.Lead_Convert_Failure</members>
         <members>DART_Setting.Default</members>
         <members>Finlight_Setting.Default</members>
+        <members>KPI_Target.FY2026_Q3</members>
         <members>Naver_Setting.Default</members>
         <members>QLabs.Org_Identifier</members>
+        <members>Radar_Setting.Maturity_Window_Days</members>
+        <members>Radar_Setting.Recent_Outcome_Days</members>
+        <members>Radar_Setting.Segment_Growth_Assets</members>
+        <members>Radar_Setting.Segment_Large_Assets</members>
+        <members>Radar_Setting.Target_Share_Pct</members>
+        <members>Radar_Setting.Upsell_Threshold_Pct</members>
+        <members>Radar_Setting.Weight_Financial</members>
+        <members>Radar_Setting.Weight_Priority</members>
+        <members>Radar_Setting.Weight_Signal</members>
+        <members>Radar_Setting.Weight_SimilarWon</members>
         <members>Slack.Slack_Org</members>
         <members>xDO_Base_QBrix_Register.Brix_1_xDO_SlackDemoLink</members>
         <members>xDO_Base_QBrix_Register.QBrix_0_CDO_BaseSetup</members>
@@ -1265,6 +1428,7 @@
     </types>
     <types>
         <members>DART_Signal_RM_Alert</members>
+        <members>Review_Completed</members>
         <members>enablement_coaching_feedback_ready</members>
         <name>CustomNotificationType</name>
     </types>
@@ -1416,6 +1580,10 @@
         <members>BldgEnrgyIntensityVal</members>
         <members>BldgSizeCategory</members>
         <members>BoardCertification</members>
+        <members>Boni_Secret__c</members>
+        <members>Boni_Setting__mdt</members>
+        <members>Boni_Slack_Event__e</members>
+        <members>Boni_Target__mdt</members>
         <members>BroadcastTopic</members>
         <members>BroadcastTopicCollabRoom</members>
         <members>BroadcastTopicUserRole</members>
@@ -1435,6 +1603,7 @@
         <members>BuyerGroupMember</members>
         <members>BuyerGroupPricebook</members>
         <members>BuyerGroupRelatedObject</members>
+        <members>CRM_Alert_Setting__mdt</members>
         <members>CalcMatrixColumnRange</members>
         <members>CalcProcStepRelationship</members>
         <members>CalculatedInsightRangeBound</members>
@@ -1560,8 +1729,6 @@
         <members>CodeSet</members>
         <members>CodeSetBundle</members>
         <members>CodeSetRelationship</members>
-        <members>CollaborationGroup</members>
-        <members>CollaborationGroupMember</members>
         <members>CommSubscription</members>
         <members>CommSubscriptionChannelType</members>
         <members>CommSubscriptionConsent</members>
@@ -1621,6 +1788,8 @@
         <members>CoverageBenefit</members>
         <members>CoverageBenefitItem</members>
         <members>CoverageBenefitItemLimit</members>
+        <members>CoworkerConversation</members>
+        <members>CoworkerConversationEntry</members>
         <members>CrbnCreditAlloc</members>
         <members>CrbnCreditAllocItem</members>
         <members>CrbnCreditDistribution</members>
@@ -1709,6 +1878,7 @@
         <members>ElectronicMediaGroup</members>
         <members>ElectronicMediaUse</members>
         <members>EmailMessage</members>
+        <members>EmailMessageMigration</members>
         <members>EmissionsActivity</members>
         <members>EmissionsAllocation</members>
         <members>EmissionsForecastFact</members>
@@ -1899,6 +2069,7 @@
         <members>JobProfile</members>
         <members>JournalSubType</members>
         <members>JournalType</members>
+        <members>KPI_Target__mdt</members>
         <members>Knowledge__kav</members>
         <members>Lead</members>
         <members>LeadCleanInfo</members>
@@ -2001,6 +2172,7 @@
         <members>MfgProgramCpntFrcstFact</members>
         <members>MfgProgramForecastFact</members>
         <members>MfgProgramVariantFrcstFact</members>
+        <members>MigratedEmail</members>
         <members>MktCalculatedInsight</members>
         <members>MktDataTransform</members>
         <members>MktMLModel</members>
@@ -2249,9 +2421,11 @@
         <members>QuoteLineItemRelatedObject</members>
         <members>QuoteRecipientGroup</members>
         <members>QuoteRecipientGroupMember</members>
+        <members>Radar_Setting__mdt</members>
         <members>ReceivedDocument</members>
         <members>ReceivedDocumentType</members>
         <members>Recommendation</members>
+        <members>Recommendation__c</members>
         <members>RecordAction</members>
         <members>RecordActnSelItemExtrc</members>
         <members>RecordAlert</members>
@@ -2271,6 +2445,7 @@
         <members>RentalCarEnrgyUse</members>
         <members>ReportAnomalyEventStore</members>
         <members>ReportHierarchyObjectField</members>
+        <members>RequestsForAccessSIQ</members>
         <members>ResidentialLoanApplication</members>
         <members>ResourceAbsence</members>
         <members>ResourcePreference</members>
@@ -2369,6 +2544,9 @@
         <members>SrvcMgmntApprovalAssignment</members>
         <members>SrvcMgmntRecEvntAsgnt</members>
         <members>SrvcMgmntRuleAssignment</members>
+        <members>StagedEmail</members>
+        <members>StagedUnmtchdEmailAddr</members>
+        <members>StagedUnmtchdEmailAddrRela</members>
         <members>StandardCareFeeAgreement</members>
         <members>StandardShippingRate</members>
         <members>StnryAssetAnnualFact</members>
@@ -2478,8 +2656,6 @@
         <members>WebStoreSearchProdSettings</members>
         <members>Wishlist</members>
         <members>WishlistItem</members>
-        <members>WorkBadge</members>
-        <members>WorkBadgeDefinition</members>
         <members>WorkCapacityAvailability</members>
         <members>WorkCapacityLimit</members>
         <members>WorkCapacityUsage</members>
@@ -2491,7 +2667,6 @@
         <members>WorkPlanTemplateEntry</members>
         <members>WorkStep</members>
         <members>WorkStepTemplate</members>
-        <members>WorkThanks</members>
         <members>WorkType</members>
         <members>WorkTypeGroup</members>
         <members>WorkTypeGroupMember</members>
@@ -2508,6 +2683,11 @@
         <members>Account-en_US</members>
         <members>Asset-en_US</members>
         <members>BenefitManagementRecertification__c-en_US</members>
+        <members>Boni_Secret__c-en_US</members>
+        <members>Boni_Setting__mdt-en_US</members>
+        <members>Boni_Slack_Event__e-en_US</members>
+        <members>Boni_Target__mdt-en_US</members>
+        <members>CRM_Alert_Setting__mdt-en_US</members>
         <members>Case-en_US</members>
         <members>Contact-en_US</members>
         <members>Contract-en_US</members>
@@ -2520,7 +2700,9 @@
         <members>Finlight_Setting__mdt-en_US</members>
         <members>IB_Deal_Team_Member__c-en_US</members>
         <members>IB_Deal__c-en_US</members>
+        <members>KPI_Target__mdt-en_US</members>
         <members>Knowledge__kav-en_US</members>
+        <members>Lead-en_US</members>
         <members>Meeting_Note__c-en_US</members>
         <members>Naver_Setting__mdt-en_US</members>
         <members>Opportunity-en_US</members>
@@ -2533,6 +2715,8 @@
         <members>QLabs__mdt-en_US</members>
         <members>Quote-en_US</members>
         <members>QuoteLineItem-en_US</members>
+        <members>Radar_Setting__mdt-en_US</members>
+        <members>Recommendation__c-en_US</members>
         <members>Return_Order__c-en_US</members>
         <members>Slack__mdt-en_US</members>
         <members>Task-en_US</members>
@@ -2541,16 +2725,23 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
+        <members>Opportunity_Radar_View_All</members>
         <members>View_Unmasked_PII</members>
         <name>CustomPermission</name>
+    </types>
+    <types>
+        <members>boni</members>
+        <name>CustomSite</name>
     </types>
     <types>
         <members>CorporateFinancialStatement__c</members>
         <members>Deal_Progress_Summary__c</members>
         <members>ExternalSignal__c</members>
+        <members>Growth_Opportunity</members>
         <members>IB_Deal__c</members>
         <members>Knowledge__kav</members>
         <members>Meeting_Note__c</members>
+        <members>Opportunity_Radar</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -2858,11 +3049,13 @@
         <members>IndustriesSustainability_UtilityBar</members>
         <members>Integration_UtilityBar</members>
         <members>ItCompliance_UtilityBar</members>
+        <members>Lead_Record_Page</members>
         <members>LightningSalesConsole_UtilityBar</members>
         <members>LightningSales_UtilityBar</members>
         <members>LightningService_UtilityBar</members>
         <members>MediaAdSalesManagement_UtilityBar</members>
         <members>OperationsConsole_UtilityBar</members>
+        <members>Opportunity_Radar</members>
         <members>Payments_Home_Default</members>
         <members>Personalization_UtilityBar</members>
         <members>PriceManagement_UtilityBar</members>
@@ -2874,6 +3067,8 @@
         <members>RatingManagement_UtilityBar</members>
         <members>Record_Page</members>
         <members>Record_Page1</members>
+        <members>Record_Page2</members>
+        <members>Record_Page3</members>
         <members>ReferralConsole_UtilityBar</members>
         <members>RevenueCloudConsole_UtilityBar</members>
         <members>SalesCloudMobile_UtilityBar</members>
@@ -2886,20 +3081,25 @@
     <types>
         <members>Create_Customer_Return_Order</members>
         <members>Create_New_Case</members>
+        <members>D_Section_AI</members>
+        <members>D_Section_AI_Task</members>
         <members>Daily_Schedule_Notification</members>
         <members>GetSanitizedMeetingNote</members>
         <members>Get_Customer_Current_Order</members>
         <members>Get_Customer_Order</members>
         <members>Get_Verified_Customer_Information</members>
         <members>Inform_Merchant_of_Return</members>
+        <members>Lead_Convert_Create_Meeting_Note</members>
         <members>Lead_Create_Slack_Channel_And_Email</members>
         <members>Lead_Meeting_Prep_Briefing</members>
         <members>Lead_Meeting_Prep_Email_Draft</members>
         <members>Lead_Send_Proposal_And_Files</members>
+        <members>Lead_Sync_LastName</members>
         <members>Meeting_Confirm</members>
         <members>Meeting_Session</members>
         <members>Meeting_Summary_To_Slack</members>
         <members>NGA_Get_Case_by_Case_Number</members>
+        <members>Opportunity_Followup_Recommendation</members>
         <members>Opportunity_Meeting_Log_To_Slack</members>
         <members>Route_from_ASA</members>
         <members>Send_Verification_Code_to_Customer</members>
@@ -2916,20 +3116,25 @@
     <types>
         <members>Create_Customer_Return_Order</members>
         <members>Create_New_Case</members>
+        <members>D_Section_AI</members>
+        <members>D_Section_AI_Task</members>
         <members>Daily_Schedule_Notification</members>
         <members>GetSanitizedMeetingNote</members>
         <members>Get_Customer_Current_Order</members>
         <members>Get_Customer_Order</members>
         <members>Get_Verified_Customer_Information</members>
         <members>Inform_Merchant_of_Return</members>
+        <members>Lead_Convert_Create_Meeting_Note</members>
         <members>Lead_Create_Slack_Channel_And_Email</members>
         <members>Lead_Meeting_Prep_Briefing</members>
         <members>Lead_Meeting_Prep_Email_Draft</members>
         <members>Lead_Send_Proposal_And_Files</members>
+        <members>Lead_Sync_LastName</members>
         <members>Meeting_Confirm</members>
         <members>Meeting_Session</members>
         <members>Meeting_Summary_To_Slack</members>
         <members>NGA_Get_Case_by_Case_Number</members>
+        <members>Opportunity_Followup_Recommendation</members>
         <members>Opportunity_Meeting_Log_To_Slack</members>
         <members>Route_from_ASA</members>
         <members>Send_Verification_Code_to_Customer</members>
@@ -2985,6 +3190,8 @@
         <members>RM_Assistant_v2</members>
         <members>RM_Assistant_v3</members>
         <members>RM_Assistant_v5</members>
+        <members>RM_Assistant_v6</members>
+        <members>RM_Assistant_v7</members>
         <members>SearchAgent</members>
         <name>GenAiPlannerBundle</name>
     </types>
@@ -3020,6 +3227,7 @@
         <members>b2bma</members>
         <members>cdpactvstrgptnr</members>
         <members>qbranch</members>
+        <members>sf_com_apps</members>
         <members>slackplatform</members>
         <members>ssot</members>
         <members>vbtapp</members>
@@ -3103,6 +3311,8 @@
         <members>BldgEnrgyIntensity-Building Energy Intensity Layout</members>
         <members>BldgEnrgyIntensityVal-Building Energy Intensity Value Layout</members>
         <members>BoardCertification-Board Certification Layout</members>
+        <members>Boni_Setting__mdt-Boni Setting Layout</members>
+        <members>Boni_Target__mdt-Boni Target Layout</members>
         <members>BrokerOfRecord-Broker Of Record Layout</members>
         <members>BrowserPolicyViolation-Browser Policy Violation Layout</members>
         <members>Budget-Budget Layout</members>
@@ -3113,6 +3323,7 @@
         <members>BusinessMilestone-Business Milestone Layout</members>
         <members>BusinessProfile-Business Profile Layout</members>
         <members>BuyerAccount-Buyer Account Layout</members>
+        <members>CRM_Alert_Setting__mdt-CRM Alert Setting Layout</members>
         <members>CalcMatrixColumnRange-Decision Matrix Column Range Layout</members>
         <members>CalcProcStepRelationship-Expression Set Step Relationship Layout</members>
         <members>CalculationMatrix-Decision Matrix Layout</members>
@@ -3397,6 +3608,7 @@
         <members>Invoice-Invoice Layout</members>
         <members>InvoiceLine-Invoice Line Layout</members>
         <members>JobProfile-Job Profile Layout</members>
+        <members>KPI_Target__mdt-KPI 목표 Layout</members>
         <members>Knowledge__kav-Knowledge Layout</members>
         <members>Lead-Lead Layout</members>
         <members>LegalEntity-Legal Entity Layout</members>
@@ -3562,8 +3774,10 @@
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>QuoteLineItemRelatedObject-%5F%5FMISSING LABEL%5F%5F PropertyFile - val QuoteLineItemRelatedObject not found in section StandardLayouts</members>
+        <members>Radar_Setting__mdt-레이더 설정 Layout</members>
         <members>ReceivedDocument-Received Document Layout</members>
         <members>ReceivedDocumentType-Received Document Type Layout</members>
+        <members>Recommendation__c-추천 이력 Layout</members>
         <members>RecordsetFilterCriteria-Recordset Filter Criteria Layout</members>
         <members>RecordsetFilterCriteriaRule-Recordset Filter Criteria Rule Layout</members>
         <members>RecurrenceSchedule-Recurrence Schedule Layout</members>
@@ -3690,9 +3904,6 @@
         <members>WebStore-Store Layout</members>
         <members>WebStoreConfig-Web Store Configuration Layout</members>
         <members>WebStorePricebook-Store Price Book Layout</members>
-        <members>WorkAccess-Access Layout</members>
-        <members>WorkBadge-Badge Received Layout</members>
-        <members>WorkBadgeDefinition-Badge Layout</members>
         <members>WorkCapacityAvailability-Work Capacity Availability Layout</members>
         <members>WorkCapacityLimit-Work Capacity Limit Layout</members>
         <members>WorkCapacityUsage-Work Capacity Usage Layout</members>
@@ -3704,7 +3915,6 @@
         <members>WorkPlanTemplateEntry-Work Plan Template Entry Layout</members>
         <members>WorkStep-Work Step Layout</members>
         <members>WorkStepTemplate-Work Step Template Layout</members>
-        <members>WorkThanks-Thanks Layout</members>
         <members>WorkType-Work Type Layout</members>
         <members>WorkTypeGroup-Work Type Group Layout</members>
         <members>WorkTypeGroupMember-Work Type Group Member Layout</members>
@@ -3720,17 +3930,25 @@
     </types>
     <types>
         <members>accountPriorityList</members>
+        <members>bornGrowthOpportunity</members>
         <members>homeScheduleNews</members>
         <members>leadKpiCard</members>
+        <members>leadMeetingPrepBriefing</members>
         <members>leadPriorityList</members>
+        <members>leadProposalGenerator</members>
         <members>meetingNotePad</members>
+        <members>meetingPrepEmailComposer</members>
+        <members>meetingSessionLauncher</members>
+        <members>myKpiCard</members>
         <members>opportunityKpiCard</members>
         <members>priorityList</members>
         <members>slackEmailRichTextInput</members>
+        <members>walletOpportunityRadar</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
         <members>BORNSecurities</members>
+        <members>BornSecurities_Themes</members>
         <name>LightningExperienceTheme</name>
     </types>
     <types>
@@ -4009,7 +4227,6 @@
         <members>CodeSetBundle.All_CodeSetBundles</members>
         <members>CodeSetRelationship.All_CodeSetRelationships</members>
         <members>CodeSetRelationship.My_CodeSetRelationships</members>
-        <members>CollaborationGroup.All_ChatterGroups</members>
         <members>CollectionPlan.All_CollectionPlans</members>
         <members>CollectionPlanItem.All_CollectionPlanItems</members>
         <members>CollectionPlanReason.All_CollectionPlanReasons</members>
@@ -4069,6 +4286,7 @@
         <members>ContractLineOutcome.All_ContractLineOutcomes</members>
         <members>ContractLineOutcome.My_ContractLineOutcomes</members>
         <members>ContractPaymentAgreement.All_ContractPaymentAgreements</members>
+        <members>CorporateFinancialStatement__c.All_view</members>
         <members>CostBook.All_CostBooks</members>
         <members>CostBookEntry.All_CostBookEntries</members>
         <members>CostCenter.All_CostCenters</members>
@@ -4407,6 +4625,7 @@
         <members>MedicationTherapyReview.TargetedMedicationReview</members>
         <members>MedicationTherapyStmtReview.All_MedicationTherapyStmtReviews</members>
         <members>MedicinalIngredient.All_MedicinalIngredients</members>
+        <members>Meeting_Note__c.All_Meeting_Notes</members>
         <members>MemberBenefit.All_MemberBenefits</members>
         <members>MemberPlan.All_MemberPlans</members>
         <members>MemberPlanCarePlan.All_MemberPlanCarePlans</members>
@@ -4950,9 +5169,12 @@
         <members>CDO_Base_Permission</members>
         <members>DART_OpenAPI_Access</members>
         <members>MFA_Required</members>
+        <members>Meeting_Notes_Access</members>
         <members>NGA_Pronto_Agent</members>
         <members>Naver_OpenAPI_Access</members>
         <members>NextGen_1bYaj000000KCBVEA4_Permissions</members>
+        <members>Opportunity_Radar</members>
+        <members>Opportunity_Radar_Manager</members>
         <members>PDW_Permission_set</members>
         <members>Priority_Dashboard_Access</members>
         <members>RM_Assistant_Access</members>
@@ -4965,6 +5187,7 @@
         <members>SlackMetadata</members>
         <members>Slack_Access</members>
         <members>Slack_Lead_Channel</members>
+        <members>View_Unmasked_PII_Access</members>
         <members>sfdcInternalInt__sfdc_a360</members>
         <members>sfdcInternalInt__sfdc_a360_sfcrm_data_extract</members>
         <members>sfdcInternalInt__sfdc_accelerate_dms</members>
@@ -5140,6 +5363,7 @@
         <members>StandardAul</members>
         <members>StandardAul1</members>
         <members>Unified Employee</members>
+        <members>boni Profile</members>
         <members>상품</members>
         <members>심사</members>
         <members>영업 본부장</members>
@@ -5163,16 +5387,23 @@
         <name>QueueRoutingConfig</name>
     </types>
     <types>
+        <members>Account.D_Section_AI</members>
+        <members>Account.Meeting_Session</members>
         <members>Case.CloseCaseLightning</members>
         <members>Case.LogACall</members>
         <members>Case.NewChildCase</members>
         <members>CollaborationGroup.NewGroupMember</members>
         <members>CollaborationGroup.NewGroupRecord</members>
+        <members>Contact.Meeting_Session</members>
+        <members>Event.Meeting_Session</members>
         <members>FeedItem.NewTaskFromFeedItem</members>
         <members>Lead.Create_Slack_Channel</members>
+        <members>Lead.Lead_Proposal_Pdf</members>
         <members>Lead.Meeting_Confirm</members>
         <members>Lead.Meeting_Prep_Briefing</members>
+        <members>Lead.Meeting_Prep_Email_Auto</members>
         <members>Lead.Meeting_Prep_Email_Draft</members>
+        <members>Lead.Meeting_Session</members>
         <members>Lead.Send_Proposal_And_Files</members>
         <members>LogACall</members>
         <members>NewAccount</members>
@@ -5184,10 +5415,13 @@
         <members>NewNote</members>
         <members>NewOpportunity</members>
         <members>NewTask</members>
+        <members>Opportunity.Followup_Recommendation</members>
+        <members>Opportunity.Meeting_Session</members>
         <members>Opportunity.Meeting_Session_Action</members>
         <members>Quote.SendEmail</members>
         <members>SendEmail</members>
         <members>ServiceAppointment.SendEmail</members>
+        <members>Task.D_Section_AI_Task</members>
         <members>Task.Defer</members>
         <members>Task.EditDescription</members>
         <members>Task.UpdatePriority</members>
@@ -5986,6 +6220,7 @@
         <members>CouponCodeRedemption</members>
         <members>CoverageBenefit</members>
         <members>CoverageBenefitItem</members>
+        <members>CoworkerConversation</members>
         <members>CrbnCreditAlloc</members>
         <members>CrbnCreditDistribution</members>
         <members>CrbnCreditProject</members>
@@ -6310,6 +6545,7 @@
         <members>QuickTextUsage</members>
         <members>QuoteRecipientGroupMember</members>
         <members>ReceivedDocument</members>
+        <members>Recommendation__c</members>
         <members>RecordActnSelItemExtrc</members>
         <members>RecordAlert</members>
         <members>RecordMergeHistory</members>
@@ -6322,6 +6558,7 @@
         <members>RentalCarEmssnFctr</members>
         <members>RentalCarEnrgyUse</members>
         <members>ReportResultBlob</members>
+        <members>RequestsForAccessSIQ</members>
         <members>ResidentialLoanApplication</members>
         <members>RetailLocationGroup</members>
         <members>RetentionStoreUsage</members>
@@ -6436,8 +6673,6 @@
         <members>WebCart</members>
         <members>WebStore</members>
         <members>Wishlist</members>
-        <members>WorkAccess</members>
-        <members>WorkBadgeDefinition</members>
         <members>WorkCapacityAvailability</members>
         <members>WorkCapacityLimit</members>
         <members>WorkCapacityUsage</members>
@@ -6446,7 +6681,6 @@
         <members>WorkPlanSelectionRule</members>
         <members>WorkPlanTemplate</members>
         <members>WorkStepTemplate</members>
-        <members>WorkThanks</members>
         <members>WorkType</members>
         <members>WorkTypeGroup</members>
         <members>WorkerCompCoverageClass</members>
@@ -6580,6 +6814,7 @@
         <name>StandardValueSet</name>
     </types>
     <types>
+        <members>BornLogoHorizontal</members>
         <members>SiteSamples</members>
         <name>StaticResource</name>
     </types>
@@ -6710,6 +6945,7 @@
         <members>ProductServiceCampaignItem</members>
         <members>ProductTransfer</members>
         <members>PtyCrPrflFinclAcctActvty</members>
+        <members>Recommendation__c</members>
         <members>Referral</members>
         <members>ResourceAbsence</members>
         <members>ResourcePreference</members>
@@ -6760,13 +6996,23 @@
         <name>TransactionSecurityPolicy</name>
     </types>
     <types>
+        <members>ko</members>
+        <name>Translations</name>
+    </types>
+    <types>
+        <members>Lead_Record_Page</members>
+        <members>Opportunity_Radar</members>
         <members>Record_Page</members>
         <members>Record_Page1</members>
+        <members>Record_Page2</members>
+        <members>Record_Page3</members>
         <name>UiViewDefinition</name>
     </types>
     <types>
+        <members>Contact.Email_Required</members>
         <members>Contact.Required_dpt</members>
         <members>Deal_Progress_Summary__c.RM_Required</members>
+        <members>Lead.Email_Required</members>
         <name>ValidationRule</name>
     </types>
     <types>
@@ -6804,20 +7050,25 @@
     <types>
         <members>Create_Customer_Return_Order</members>
         <members>Create_New_Case</members>
+        <members>D_Section_AI</members>
+        <members>D_Section_AI_Task</members>
         <members>Daily_Schedule_Notification</members>
         <members>GetSanitizedMeetingNote</members>
         <members>Get_Customer_Current_Order</members>
         <members>Get_Customer_Order</members>
         <members>Get_Verified_Customer_Information</members>
         <members>Inform_Merchant_of_Return</members>
+        <members>Lead_Convert_Create_Meeting_Note</members>
         <members>Lead_Create_Slack_Channel_And_Email</members>
         <members>Lead_Meeting_Prep_Briefing</members>
         <members>Lead_Meeting_Prep_Email_Draft</members>
         <members>Lead_Send_Proposal_And_Files</members>
+        <members>Lead_Sync_LastName</members>
         <members>Meeting_Confirm</members>
         <members>Meeting_Session</members>
         <members>Meeting_Summary_To_Slack</members>
         <members>NGA_Get_Case_by_Case_Number</members>
+        <members>Opportunity_Followup_Recommendation</members>
         <members>Opportunity_Meeting_Log_To_Slack</members>
         <members>Route_from_ASA</members>
         <members>Send_Verification_Code_to_Customer</members>

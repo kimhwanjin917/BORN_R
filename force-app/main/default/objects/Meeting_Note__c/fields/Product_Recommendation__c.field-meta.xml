@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Recommendation__c</fullName>
+    <description>미팅 중 추천(docs/51, ADR-0002): 이 메모 저장 시 RM_Assistant 에이전트가 Agent API로 돌려준 상품 추천 답변 원문. 정제본만 에이전트에 전달됨.</description>
+    <label>에이전트 상품 추천</label>
+    <length>32768</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>8</visibleLines>
+</CustomField>

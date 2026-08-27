@@ -1,3 +1,24 @@
+/* 타이포·색 기준: 아래 뉴스 요약(.news*) 카드 */
+:host {
+    --dash-font-title: 1.125rem;
+    --dash-font-body-em: 0.9375rem;
+    --dash-font-body: 0.8125rem;
+    --dash-font-label: 0.75rem;
+    --dash-font-badge: 0.6875rem;
+
+    --dash-weight-heavy: 800;
+    --dash-weight-bold: 700;
+    --dash-weight-medium: 600;
+
+    --dash-color-title: #111524;
+    --dash-color-item: #141a2b;
+    --dash-color-muted: #6b7183;
+    --dash-color-label: #8a90a2;
+    --dash-color-caption: #9299ab;
+    --dash-color-border: #eef0f5;
+    --dash-surface-chip: #f1f3f8;
+}
+
 .dashboard {
     display: flex;
     flex-direction: column;
@@ -17,8 +38,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.875rem 1rem;
-    border-bottom: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--dash-color-border);
 }
 
 .card-head_button {
@@ -28,31 +50,44 @@
 .card-head__title {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9375rem;
-    font-weight: 700;
-    color: var(--slds-g-color-neutral-base-10, #181818);
+    gap: 0.75rem;
+    font-size: var(--dash-font-title);
+    font-weight: var(--dash-weight-heavy);
+    letter-spacing: -0.01em;
+    color: var(--dash-color-title);
+}
+
+.card-head__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, #3b6cf6, #2948d6);
+    box-shadow: 0 4px 10px rgba(41, 72, 214, 0.28);
 }
 
 .card-head__count {
     min-width: 1.5rem;
-    padding: 0.0625rem 0.5rem;
+    padding: 0.1875rem 0.5rem;
     border-radius: 999px;
-    background: var(--slds-g-color-neutral-base-95, #f3f3f3);
-    color: var(--slds-g-color-neutral-base-30, #444);
-    font-size: 0.75rem;
-    font-weight: 700;
+    background: var(--dash-surface-chip);
+    color: var(--dash-color-muted);
+    font-size: var(--dash-font-badge);
+    font-weight: var(--dash-weight-bold);
     text-align: center;
 }
 
 .badge {
     min-width: 1.5rem;
-    padding: 0.0625rem 0.5rem;
+    padding: 0.1875rem 0.5rem;
     border-radius: 999px;
     background: var(--slds-g-color-palette-red-50, #ea001e);
     color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: var(--dash-font-badge);
+    font-weight: var(--dash-weight-heavy);
     text-align: center;
 }
 
@@ -65,8 +100,8 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.625rem 1rem;
-    border-bottom: 1px solid var(--slds-g-color-border-base-1, #f0f0f0);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--dash-color-border);
 }
 
 .row:last-child {
@@ -86,17 +121,19 @@
 }
 
 .row__name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--slds-g-color-neutral-base-10, #181818);
+    font-size: var(--dash-font-body-em);
+    font-weight: var(--dash-weight-bold);
+    line-height: 1.35;
+    color: var(--dash-color-item);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .row__reason {
-    font-size: 0.75rem;
-    color: var(--slds-g-color-neutral-base-50, #706e6b);
+    font-size: var(--dash-font-body);
+    line-height: 1.4;
+    color: var(--dash-color-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -106,8 +143,9 @@
 
 .row__time {
     flex: 0 0 auto;
-    font-size: 0.8125rem;
-    color: var(--slds-g-color-neutral-base-30, #514f4d);
+    font-size: var(--dash-font-body);
+    font-weight: var(--dash-weight-medium);
+    color: var(--dash-color-label);
 }
 
 .row__meta {
@@ -115,8 +153,8 @@
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.25rem;
-    font-size: 0.6875rem;
-    color: var(--slds-g-color-neutral-base-50, #706e6b);
+    font-size: var(--dash-font-badge);
+    color: var(--dash-color-label);
 }
 
 .tag {
@@ -124,7 +162,7 @@
     border-radius: 0.25rem;
     background: var(--slds-g-color-palette-blue-95, #eef4ff);
     color: var(--slds-g-color-palette-blue-30, #05298a);
-    font-weight: 600;
+    font-weight: var(--dash-weight-medium);
 }
 
 .news-link {
@@ -134,27 +172,27 @@
 }
 
 .summary {
-    padding: 0.875rem 1rem;
-    font-size: 0.8125rem;
+    padding: 0.875rem 1.25rem;
+    font-size: var(--dash-font-body);
     line-height: 1.5;
-    color: var(--slds-g-color-neutral-base-20, #2e2e2e);
+    color: var(--dash-color-item);
     white-space: pre-wrap;
-    border-bottom: 1px solid var(--slds-g-color-border-base-1, #f0f0f0);
-    background: var(--slds-g-color-neutral-base-95, #fafaf9);
+    border-bottom: 1px solid var(--dash-color-border);
+    background: #fbfcfe;
 }
 
 .state {
-    padding: 1.25rem 1rem;
-    font-size: 0.8125rem;
+    padding: 1.25rem;
+    font-size: var(--dash-font-body);
     text-align: center;
 }
 
 .state_empty {
-    color: var(--slds-g-color-neutral-base-50, #706e6b);
+    color: var(--dash-color-caption);
 }
 
 .state_error {
-    color: var(--slds-g-color-error, #ba0517);
+    color: #ba0517;
 }
 
 /* ─── 뉴스 요약 (카드 뉴스) ────────────────────────────────────── */
@@ -510,4 +548,31 @@
     .news-grid {
         grid-template-columns: 1fr;
     }
+}
+/* 2026-08-27 (docs/55 §12): 만기 알림 행 — 클릭 가능함을 드러내는 스타일 (row_link에만 적용) */
+.row_link {
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.row_link:hover,
+.row_link:focus-visible {
+    background: #eaf2ff;
+    box-shadow: inset 3px 0 0 #2d6dcc;
+    outline: none;
+}
+.row_link .row__name {
+    color: #173b72;
+}
+.row_link:hover .row__name {
+    color: #2d6dcc;
+    text-decoration: underline;
+}
+.row__chevron {
+    flex: 0 0 auto;
+    opacity: 0.45;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.row_link:hover .row__chevron {
+    opacity: 1;
+    transform: translateX(2px);
 }

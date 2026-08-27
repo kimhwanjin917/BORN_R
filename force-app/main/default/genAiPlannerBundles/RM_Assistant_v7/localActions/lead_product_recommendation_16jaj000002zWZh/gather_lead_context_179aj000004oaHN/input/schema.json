@@ -1,0 +1,14 @@
+{
+  "required" : [ "leadId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "leadId" : {
+      "title" : "Lead Id",
+      "description" : "Lead 검색 결과의 leadId (Salesforce 레코드 Id)",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

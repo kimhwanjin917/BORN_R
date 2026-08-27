@@ -1,0 +1,179 @@
+/* 타이포·색 기준: homeScheduleNews 뉴스 요약 카드 */
+:host {
+    --dash-font-title: 1.125rem;
+    --dash-font-section: 1.0625rem;
+    --dash-font-metric: 1.5rem;
+    --dash-font-body-em: 0.9375rem;
+    --dash-font-body: 0.8125rem;
+    --dash-font-label: 0.75rem;
+    --dash-font-badge: 0.6875rem;
+
+    --dash-weight-heavy: 800;
+    --dash-weight-bold: 700;
+    --dash-weight-medium: 600;
+
+    --dash-color-title: #111524;
+    --dash-color-body: #1b2233;
+    --dash-color-muted: #6b7183;
+    --dash-color-label: #8a90a2;
+    --dash-color-caption: #9299ab;
+    --dash-color-brand: #2948d6;
+    --dash-color-brand-light: #3b6cf6;
+    --dash-color-border: #eef0f5;
+    --dash-surface-subtle: #fbfcfe;
+    --dash-surface-tint: #f2f5ff;
+}
+
+.kpi-card {
+    display: block;
+    background: var(--slds-g-color-surface-1, #fff);
+    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--dash-color-border);
+}
+
+.card-head__title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--dash-font-title);
+    font-weight: var(--dash-weight-heavy);
+    letter-spacing: -0.01em;
+    color: var(--dash-color-title);
+}
+
+.card-head__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, #3b6cf6, #2948d6);
+    box-shadow: 0 4px 10px rgba(41, 72, 214, 0.28);
+}
+
+.card-head__period {
+    flex: 0 0 auto;
+    padding: 0.1875rem 0.5rem;
+    border-radius: 999px;
+    background: #e8eefe;
+    color: var(--dash-color-brand);
+    font-size: var(--dash-font-badge);
+    font-weight: var(--dash-weight-bold);
+    white-space: nowrap;
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.75rem;
+    padding: 1.125rem 1.25rem 1.25rem;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--dash-color-border);
+    border-radius: 0.75rem;
+    background: var(--dash-surface-subtle);
+}
+
+.tile_clickable {
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tile_clickable:hover {
+    background: var(--dash-surface-tint);
+    border-color: #dbe1f0;
+}
+
+.tile_clickable:focus-visible {
+    outline: 2px solid var(--dash-color-brand-light);
+    outline-offset: 2px;
+}
+
+.tile__label {
+    font-size: var(--dash-font-label);
+    font-weight: var(--dash-weight-medium);
+    color: var(--dash-color-label);
+}
+
+.tile__value {
+    font-size: var(--dash-font-metric);
+    font-weight: var(--dash-weight-heavy);
+    line-height: 1.1;
+    color: var(--dash-color-title);
+}
+
+.tile__value_muted {
+    color: var(--dash-color-caption);
+}
+
+.tile__track {
+    height: 0.375rem;
+    margin-top: 0.375rem;
+    border-radius: 999px;
+    background: var(--dash-color-border);
+    overflow: hidden;
+}
+
+.tile__fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.tile__fill_fee {
+    background: linear-gradient(135deg, #4b7bf5, #2f57e0);
+}
+
+.tile__fill_new {
+    background: linear-gradient(135deg, #34c77b, #159f5c);
+}
+
+.tile__sub {
+    font-size: var(--dash-font-label);
+    color: var(--dash-color-caption);
+}
+
+.tile__delta {
+    font-size: var(--dash-font-label);
+    font-weight: var(--dash-weight-bold);
+}
+
+.tile__delta_up {
+    color: #12864f;
+}
+
+.tile__delta_down {
+    color: #ba0517;
+}
+
+.state {
+    padding: 1.25rem;
+    font-size: var(--dash-font-body);
+    text-align: center;
+}
+
+.state_empty {
+    color: var(--dash-color-caption);
+}
+
+.state_error {
+    color: #ba0517;
+}

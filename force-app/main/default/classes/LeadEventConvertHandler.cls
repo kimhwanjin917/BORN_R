@@ -109,6 +109,7 @@ public with sharing class LeadEventConvertHandler {
 
             // 성공 건은 원본 Event를 새 Opportunity에 연결(WhoId는 전환이 Contact로 자동 이전)
             List<Event> eventsToRelink = new List<Event>();
+            List<SlackAlertService.LeadConvertFailure> failures = new List<SlackAlertService.LeadConvertFailure>();
             for (Integer i = 0; i < responses.size(); i++) {
                 LeadConvertService.Response res = responses[i];
                 if (res.isSuccess == true && res.opportunityId != null) {
@@ -117,6 +118,8 @@ public with sharing class LeadEventConvertHandler {
                         WhatId = res.opportunityId
                     ));
                 } else if (res.isSuccess != true) {
+                    failures.add(new SlackAlertService.LeadConvertFailure(
+                        submitted[i].leadId, submitted[i].sourceEventId, res.errorType, res.errorMessage));
                     System.debug(LoggingLevel.WARN, 'Lead 자동 전환 실패 Lead=' + submitted[i].leadId
                         + ' type=' + res.errorType + ' msg=' + res.errorMessage);
                 }
@@ -124,6 +127,11 @@ public with sharing class LeadEventConvertHandler {
             if (!eventsToRelink.isEmpty()) {
                 // 연결 실패가 전환 자체를 되돌릴 이유는 아니므로 개별 실패 허용
                 Database.update(eventsToRelink, false, AccessLevel.USER_MODE);
+            }
+            // 실패 건은 담당자가 보는 Slack 채널(#crm-처리요청)로 알린다.
+            // SlackAlertService 는 내부에서 모든 예외를 삼키므로 전환 결과에 영향을 주지 않는다.
+            if (!failures.isEmpty()) {
+                SlackAlertService.notifyLeadConvertFailures(failures);
             }
         }
     }

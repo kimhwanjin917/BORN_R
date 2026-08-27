@@ -267,7 +267,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_Output_Success</targetReference>
+                <targetReference>Mark_Family_RP</targetReference>
             </connector>
             <label>성공</label>
         </rules>
@@ -316,6 +316,33 @@
         <object>Lead</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Mark_Family_RP</name>
+        <label>Lead 추천 상품군 = RP 기록</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Output_Success</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Output_Success</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Recommended_Product_Family__c</field>
+            <value>
+                <stringValue>RP</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
     <screens>
         <name>Error_Screen</name>
         <label>오류</label>

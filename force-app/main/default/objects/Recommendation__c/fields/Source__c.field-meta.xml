@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source__c</fullName>
+    <label>생성 출처</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>레이더</fullName>
+                <default>true</default>
+                <label>레이더</label>
+            </value>
+            <value>
+                <fullName>에이전트</fullName>
+                <default>false</default>
+                <label>에이전트</label>
+            </value>
+            <value>
+                <fullName>미팅요약</fullName>
+                <default>false</default>
+                <label>미팅요약</label>
+            </value>
+            <value>
+                <fullName>시드</fullName>
+                <default>false</default>
+                <label>시드</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

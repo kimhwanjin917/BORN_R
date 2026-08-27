@@ -1,0 +1,28 @@
+{
+  "required" : [ "leadId", "productFamily" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "leadId" : {
+      "title" : "Lead Id",
+      "description" : "확정된 Lead 의 leadId",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "productFamily" : {
+      "title" : "추천 상품군",
+      "description" : "정확히 \"RP\" 또는 \"회사채\" 중 하나",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "rationale" : {
+      "title" : "추천 근거",
+      "description" : "상품군을 고른 이유를 액션 결과 수치를 인용해 2~4문장으로 요약 (2000자 이내)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

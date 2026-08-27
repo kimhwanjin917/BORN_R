@@ -1,0 +1,186 @@
+<template>
+    <lightning-card title="고객 성장 기회 분석" icon-name="standard:opportunity">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+            <!-- Account selector -->
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end slds-m-bottom_small">
+                <div class="slds-size_1-of-2">
+                    <lightning-combobox
+                        name="account"
+                        label="Account 선택"
+                        placeholder="고객사를 선택하세요"
+                        options={accountOptions}
+                        value={selectedAccountId}
+                        onchange={handleAccountChange}>
+                    </lightning-combobox>
+                </div>
+                <template if:true={loading}>
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </template>
+            </div>
+
+            <template if:true={errorMsg}>
+                <div class="slds-text-color_error slds-m-vertical_small">{errorMsg}</div>
+            </template>
+
+            <template if:true={hasData}>
+                <!-- Profile row -->
+                <div class="slds-box slds-box_x-small slds-m-bottom_small slds-theme_shade">
+                    <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_1-of-4">
+                            <p class="slds-text-title">법인명</p>
+                            <p class="slds-text-heading_small">{data.accountName}</p>
+                        </div>
+                        <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_1-of-4">
+                            <p class="slds-text-title">산업</p>
+                            <p class="slds-text-body_regular">{data.industry}</p>
+                        </div>
+                        <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_1-of-4">
+                            <p class="slds-text-title">연매출</p>
+                            <p class="slds-text-body_regular">{profileRevenue}</p>
+                        </div>
+                        <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_1-of-4">
+                            <p class="slds-text-title">직원수</p>
+                            <p class="slds-text-body_regular">{profileEmployees}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                    <!-- LEFT: Whitespace / estimated wallet -->
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <article class="slds-card slds-card_boundary slds-p-around_small">
+                            <h2 class="slds-text-heading_small slds-m-bottom_x-small">
+                                Whitespace / 추정 Wallet
+                                <span class="slds-badge slds-m-left_x-small">추정치</span>
+                            </h2>
+                            <template if:true={data.hasFinancials}>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    최신 분기: {data.latestPeriodLabel}
+                                </p>
+                                <dl class="slds-dl_horizontal slds-m-top_x-small">
+                                    <dt class="slds-dl_horizontal__label">현금성자산</dt>
+                                    <dd class="slds-dl_horizontal__detail">{cashDisplay}</dd>
+                                    <dt class="slds-dl_horizontal__label">단기금융상품</dt>
+                                    <dd class="slds-dl_horizontal__detail">{shortTermDisplay}</dd>
+                                    <dt class="slds-dl_horizontal__label">추정 운용가능 자금</dt>
+                                    <dd class="slds-dl_horizontal__detail slds-text-heading_small">{estFundsDisplay}</dd>
+                                    <dt class="slds-dl_horizontal__label">당사 거래금액(Won)</dt>
+                                    <dd class="slds-dl_horizontal__detail">{closedWonDisplay}</dd>
+                                    <dt class="slds-dl_horizontal__label">Whitespace Proxy</dt>
+                                    <dd class="slds-dl_horizontal__detail">
+                                        <template if:true={data.hasProxy}>{proxyDisplay}</template>
+                                        <template if:false={data.hasProxy}>
+                                            <span class="slds-text-color_weak">해석 불가(음수) — 미표시</span>
+                                        </template>
+                                    </dd>
+                                </dl>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                                    ※ 추정 운용가능 자금 = 현금성자산 + 단기금융상품. Proxy = 추정자금 − 당사거래금액.
+                                    실제 지갑점유율(%)이 아니며 추정 Proxy입니다.
+                                </p>
+                            </template>
+                            <template if:false={data.hasFinancials}>
+                                <p class="slds-text-color_weak">이 고객사의 재무데이터가 없습니다.</p>
+                            </template>
+                        </article>
+                    </div>
+
+                    <!-- RIGHT: Upsell/Cross-sell + products -->
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <article class="slds-card slds-card_boundary slds-p-around_small">
+                            <h2 class="slds-text-heading_small slds-m-bottom_x-small">Upsell / Cross-sell 후속영업 검토</h2>
+                            <div class="slds-m-bottom_small">
+                                <template if:true={data.hasUpsell}>
+                                    <span class="slds-badge slds-theme_success slds-m-right_x-small">Upsell 검토</span>
+                                </template>
+                                <template if:true={data.hasCrossSell}>
+                                    <span class="slds-badge slds-theme_warning">Cross-sell 검토</span>
+                                </template>
+                                <template if:true={noRecommendation}>
+                                    <span class="slds-text-color_weak">등록된 Recommendation 없음</span>
+                                </template>
+                            </div>
+
+                            <h3 class="slds-text-title_caps slds-m-top_small">현재 거래상품 (Closed Won)</h3>
+                            <template if:true={hasOwned}>
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-top_x-small">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th>상품</th><th>상품군</th><th>금액</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={ownedRows} for:item="row">
+                                            <tr key={row.key}>
+                                                <td>{row.name}</td>
+                                                <td>{row.family}</td>
+                                                <td>{row.amount}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+                            <template if:false={hasOwned}>
+                                <p class="slds-text-color_weak slds-m-top_x-small">Closed Won 거래상품 없음</p>
+                            </template>
+
+                            <h3 class="slds-text-title_caps slds-m-top_small">미거래상품 (Whitespace 후보)</h3>
+                            <template if:true={hasWhitespace}>
+                                <ul class="slds-list_horizontal slds-wrap slds-m-top_x-small">
+                                    <template for:each={whitespaceRows} for:item="w">
+                                        <li key={w.key} class="slds-m-right_x-small slds-m-bottom_x-small">
+                                            <span class="slds-badge slds-badge_lightest">{w.name}</span>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template if:false={hasWhitespace}>
+                                <p class="slds-text-color_weak slds-m-top_x-small">미거래상품 없음(전 상품 보유)</p>
+                            </template>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Financial trend -->
+                <article class="slds-card slds-card_boundary slds-p-around_small slds-m-top_small">
+                    <h2 class="slds-text-heading_small slds-m-bottom_x-small">분기별 재무 추세</h2>
+                    <template if:true={hasTrend}>
+                        <div class="slds-m-bottom_x-small">
+                            <span class="chart-legend chart-cash">■</span> 현금성자산
+                            <span class="chart-legend chart-st slds-m-left_small">■</span> 단기금융상품
+                        </div>
+                        <div class="chart-wrap">
+                            <svg width="100%" viewBox={chartViewBox} preserveAspectRatio="xMidYMid meet"
+                                 class="trend-svg" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="30" y1={chart.baselineY} x2={chart.width} y2={chart.baselineY}
+                                      stroke="#c9c9c9" stroke-width="1"></line>
+                                <polyline points={chart.stLine} fill="none" stroke="#f59e0b" stroke-width="2"></polyline>
+                                <polyline points={chart.cashLine} fill="none" stroke="#2563eb" stroke-width="2"></polyline>
+                                <template for:each={chart.cashDots} for:item="d">
+                                    <circle key={d.key} cx={d.cx} cy={d.cy} r="3" fill="#2563eb"></circle>
+                                </template>
+                                <template for:each={chart.labels} for:item="lb">
+                                    <text key={lb.key} x={lb.x} y={lb.y} font-size="10"
+                                          text-anchor="middle" fill="#555">{lb.text}</text>
+                                </template>
+                            </svg>
+                        </div>
+                        <p class="slds-text-body_small slds-text-color_weak">단위: 원. 값이 없는 분기는 0으로 표시됩니다.</p>
+                    </template>
+                    <template if:false={hasTrend}>
+                        <p class="slds-text-color_weak">재무 시계열 데이터가 없습니다.</p>
+                    </template>
+                </article>
+            </template>
+
+            <template if:false={hasData}>
+                <template if:false={loading}>
+                    <div class="slds-illustration slds-illustration_small slds-p-around_medium">
+                        <p class="slds-text-color_weak">상단에서 Account를 선택하면 분석이 표시됩니다.</p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

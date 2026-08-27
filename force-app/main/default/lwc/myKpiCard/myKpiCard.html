@@ -1,0 +1,61 @@
+<template>
+    <article class="kpi-card">
+        <header class="card-head">
+            <div class="card-head__title">
+                <span class="card-head__icon">
+                    <lightning-icon
+                        icon-name="utility:metrics"
+                        size="small"
+                        variant="inverse"
+                        alternative-text="KPI"
+                    ></lightning-icon>
+                </span>
+                <span>내 KPI 달성률</span>
+            </div>
+            <template lwc:if={periodLabel}>
+                <span class="card-head__period">{periodLabel}</span>
+            </template>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <div class="tiles">
+                <div
+                    class="tile tile_clickable"
+                    role="button"
+                    tabindex="0"
+                    data-object="Opportunity"
+                    onclick={handleTileClick}
+                    onkeydown={handleTileKeydown}
+                >
+                    <span class="tile__label">{feeLabel}</span>
+                    <span class="tile__value">{feePercentDisplay}</span>
+                    <div class="tile__track">
+                        <div class="tile__fill tile__fill_fee" style={feeBarStyle}></div>
+                    </div>
+                    <span class="tile__sub">{feeAmountDisplay}</span>
+                </div>
+
+                <div
+                    class="tile tile_clickable"
+                    role="button"
+                    tabindex="0"
+                    data-object="Account"
+                    onclick={handleTileClick}
+                    onkeydown={handleTileKeydown}
+                >
+                    <span class="tile__label">신규 발굴</span>
+                    <span class="tile__value">{newAccountsDisplay}</span>
+                    <div class="tile__track">
+                        <div class="tile__fill tile__fill_new" style={newBarStyle}></div>
+                    </div>
+                    <span class="tile__sub">신규 고객사</span>
+                </div>
+
+            </div>
+        </template>
+    </article>
+</template>

@@ -398,7 +398,6 @@
                 <legendPosition>Bottom</legendPosition>
                 <report>ItsmReports/My_AvgTime_to_Resolve_by_Priority</report>
                 <showPercentage>false</showPercentage>
-                <showPicturesOnCharts>false</showPicturesOnCharts>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <sortLegendValues>false</sortLegendValues>

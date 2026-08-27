@@ -1,0 +1,204 @@
+<template>
+    <article class="radar-card" aria-labelledby="radar-title">
+        <header class="component-header">
+            <div>
+                <p class="eyebrow">OPPORTUNITY RADAR</p>
+                <h1 id="radar-title" class="title">고객 성장 기회 레이더</h1>
+                <p class="subtitle">화이트스페이스와 성공 가능성을 함께 보고 다음 영업 행동을 결정합니다.</p>
+            </div>
+            <div class="header-meta"><span class="live-dot" aria-hidden="true"></span><span>{generatedLabel}</span></div>
+        </header>
+
+        <div class="toolbar">
+            <template lwc:if={canViewAll}>
+                <lightning-radio-group name="scope" label="범위" variant="label-hidden" type="button" options={scopeOptions} value={scope} onchange={handleScope} class="scope"></lightning-radio-group>
+            </template>
+            <template lwc:if={isAppMode}>
+                <lightning-combobox name="segment" label="산업군" variant="label-hidden" value={segment}
+                    options={segmentOptions} onchange={handleSegment} class="segment"></lightning-combobox>
+                <lightning-input type="search" label="기업 검색" variant="label-hidden" placeholder="기업명 검색"
+                    value={searchTerm} onchange={handleSearch} class="search"></lightning-input>
+            </template>
+            <lightning-button label="새로고침" icon-name="utility:refresh" onclick={handleRefresh} disabled={isLoading}></lightning-button>
+        </div>
+
+        <template lwc:if={isLoading}>
+            <div class="loading"><lightning-spinner alternative-text="불러오는 중" size="medium"></lightning-spinner></div>
+        </template>
+        <template lwc:elseif={error}>
+            <div class="slds-notify slds-notify_alert slds-alert_error slds-m-around_medium" role="alert">{error}</div>
+        </template>
+        <template lwc:else>
+            <section class="kpi-strip" aria-label="핵심 지표">
+                <template for:each={kpis} for:item="k">
+                    <div key={k.label} class="kpi">
+                        <span class="kpi-label">{k.label}</span>
+                        <span class="kpi-value">{k.value}</span>
+                        <span class="kpi-note">{k.note}</span>
+                    </div>
+                </template>
+            </section>
+
+            <div class="main-grid">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div><h2>기회 우선순위 레이더</h2><p>오른쪽 위에 있을수록 공백이 크고 성공 가능성이 높습니다.</p></div>
+                        <span class="chart-count">{scopeLabel} · {chartCount}</span>
+                    </div>
+                    <div class="chart-shell">
+                        <svg class="radar-chart" viewBox={viewBox} role="img" aria-label="기업별 화이트스페이스와 성공 가능성">
+                            <rect class="chart-background" x="0" y="0" width={chartWidth} height={chartHeight} rx="12"></rect>
+                            <rect class="priority-zone" x={zoneRect.x} y={zoneRect.y} width={zoneRect.w} height={zoneRect.h} rx="8"></rect>
+                            <template for:each={yTicks} for:item="t">
+                                <line key={t.y} class="grid-line" x1={chartLeft} y1={t.y} x2={chartRight} y2={t.y}></line>
+                            </template>
+                            <template for:each={xTicks} for:item="t">
+                                <line key={t.x} class="grid-line" x1={t.x} y1={chartTop} x2={t.x} y2={chartBottom}></line>
+                            </template>
+                            <line class="quadrant-line" x1={quadrantX} y1={chartTop} x2={quadrantX} y2={chartBottom}></line>
+                            <line class="quadrant-line" x1={chartLeft} y1={quadrantY} x2={chartRight} y2={quadrantY}></line>
+                            <line class="axis-line" x1={chartLeft} y1={chartBottom} x2={chartRight} y2={chartBottom}></line>
+                            <line class="axis-line" x1={chartLeft} y1={chartTop} x2={chartLeft} y2={chartBottom}></line>
+                            <template for:each={xTicks} for:item="t">
+                                <text key={t.x} class="axis-tick" x={t.x} y="552" text-anchor="middle">{t.label}</text>
+                            </template>
+                            <template for:each={yTicks} for:item="t">
+                                <text key={t.y} class="axis-tick" x="66" y={t.y} text-anchor="end" dominant-baseline="middle">{t.label}점</text>
+                            </template>
+                            <text class="axis-title" x={xTitleX} y={xTitleY} text-anchor="middle">화이트스페이스 = 고객 지갑 − 우리 잔액 (억, 제곱근 스케일)</text>
+                            <text class="axis-title" x="22" y={yTitleY} text-anchor="middle" transform={yTitleTransform}>성공 가능성 (점)</text>
+                            <text class="zone-label zone-label_high" x={zoneLabelX} y={zoneLabelY} text-anchor="start">우선 공략 · 공백 크고 가능성 {priorityScore}점 이상</text>
+                            <text class="zone-label zone-label_nurture" x={nurtureLabelX} y={nurtureLabelY} text-anchor="start">육성 · 관찰</text>
+                            <template for:each={chartPoints} for:item="p">
+                                <g key={p.id}>
+                                    <circle class={p.cls} cx={p.cx} cy={p.cy} r={p.r} data-id={p.id} tabindex="0" role="button"
+                                        aria-label={p.title} onclick={handleSelect} onkeydown={handleSelectKey}>
+                                        <title>{p.title}</title>
+                                    </circle>
+                                    <text class={p.labelCls} x={p.lx} y={p.ly} text-anchor={p.anchor}>{p.name}</text>
+                                </g>
+                            </template>
+                        </svg>
+                        <div class="chart-legend">
+                            <span><i class="legend-dot upsell"></i>업셀 (거래 중, 점유율 확대)</span>
+                            <span><i class="legend-dot crosssell"></i>크로스셀 (신규 상품)</span>
+                            <span><i class="legend-dot rollover"></i>만기차환 (만기 도래)</span>
+                            <span><i class="legend-bubble"></i>버블 크기 = 예상 지갑</span>
+                            <span><i class="legend-dot selected"></i>선택됨</span>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="panel detail-panel" aria-live="polite">
+                    <template lwc:if={detail}>
+                        <div class="detail-heading">
+                            <div><p class="eyebrow">SELECTED ACCOUNT</p><h3>{detail.name}</h3><p class="subtitle">{detail.industry} · {detail.statementLabel}</p><p class={detail.lastContactClass}>{detail.lastContactLabel}</p></div>
+                            <template lwc:if={detail.isPriority}><span class="priority-badge">우선 공략</span></template>
+                        </div>
+                        <div class="detail-metrics">
+                            <div><span>지갑 점유율</span><strong>{detail.shareLabel}</strong></div>
+                            <div><span>예상 지갑</span><strong>{detail.walletLabel}</strong></div>
+                            <div><span>화이트스페이스</span><strong class="accent">{detail.whitespaceLabel}</strong></div>
+                            <div><span>성공 가능성</span><strong>{detail.propensityLabel}</strong></div>
+                        </div>
+                        <template lwc:if={detail.families.length}>
+                            <ul class="family-list">
+                                <template for:each={detail.families} for:item="f">
+                                    <li key={f.family}><span class="family-name">{f.family}</span><span>{f.ourLabel} / {f.walletLabel}</span><b>{f.shareLabel}</b><small>{f.basis}</small></li>
+                                </template>
+                            </ul>
+                        </template>
+                        <div class="recommendation-heading"><h4>추천 액션</h4><span>공백 × 성공 가능성 순</span></div>
+                        <template for:each={detail.recs} for:item="r">
+                            <div key={r.id} class={r.cardClass}>
+                                <div class="recommendation-topline">
+                                    <span class="recommendation-rank">{r.rank}</span>
+                                    <strong>{r.productName}</strong>
+                                    <template lwc:if={r.isInProgress}><span class="pill pill-progress">진행 중</span></template>
+                                    <span class={r.pillClass}>{r.type}</span>
+                                </div>
+                                <div class="recommendation-meta"><span>예상 금액 <b>{r.expectedLabel}</b></span><span>성공 가능성 <b>{r.scoreLabel}</b> {r.statusLabel}</span></div>
+                                <ul class="breakdown" aria-label="점수 구성">
+                                    <template for:each={r.breakdown} for:item="b">
+                                        <li key={b.key} title={b.title}><span class="breakdown-label">{b.label}</span><span class="breakdown-track"><span class="breakdown-fill" style={b.style}></span></span><span class="breakdown-value">{b.value}</span></li>
+                                    </template>
+                                </ul>
+                                <p>{r.reason}</p>
+                                <template lwc:if={r.isProposed}>
+                                    <button class="recommendation-action" data-rec-id={r.id} onclick={handleCreateOpportunity} disabled={isCreating}>이 추천으로 기회 생성</button>
+                                </template>
+                                <template lwc:elseif={r.hasOpp}>
+                                    <button class="recommendation-action" data-opp-id={r.opportunityId} onclick={handleOpenOpportunity}>영업기회 열기</button>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:if={detail.skipped.length}>
+                            <div class="recommendation-heading skip-heading"><h4>제안 없음</h4><span>판단 근거</span></div>
+                            <ul class="skips">
+                                <template for:each={detail.skipped} for:item="s">
+                                    <li key={s.family} class="skip"><span class="skip-family">{s.family}</span><span class="skip-reason">{s.reason}</span></li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template lwc:if={detail.outcomes.length}>
+                            <div class="recommendation-heading outcome-heading"><h4>최근 결과</h4><span>{recentOutcomeLabel}</span></div>
+                            <ul class="outcomes">
+                                <template for:each={detail.outcomes} for:item="o">
+                                    <li key={o.id} class={o.rowClass}>
+                                        <span class="outcome-icon" aria-hidden="true">{o.icon}</span>
+                                        <span class="outcome-status">{o.status}</span>
+                                        <span class="outcome-name">{o.productName}</span>
+                                        <span class="outcome-meta">{o.expectedLabel} · {o.closedLabel}</span>
+                                        <template lwc:if={o.hasOpp}><button class="outcome-link" data-opp-id={o.opportunityId} onclick={handleOpenOpportunity}>열기</button></template>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template lwc:if={isAppMode}>
+                            <button class="account-action" onclick={handleOpenAccount}>고객사 레코드 열기</button>
+                        </template>
+                    </template>
+                    <template lwc:else><h3>검색 결과가 없습니다.</h3></template>
+                </aside>
+            </div>
+
+            <template lwc:if={isAppMode}>
+                <section class="account-list">
+                    <div class="panel-heading"><div><h2>기업별 기회 큐</h2><p>버블 또는 기업명을 클릭하면 추천 근거가 갱신됩니다.</p></div><span class="chart-count">정렬 기준: 공백 × 성공 가능성</span></div>
+                    <div class="table-wrap">
+                        <table class="queue">
+                            <thead><tr><th scope="col">순위</th><th scope="col">기업</th><th scope="col">산업군</th><th scope="col">지갑 점유율</th><th scope="col">예상 지갑</th><th scope="col">화이트스페이스</th><th scope="col">성공 가능성</th><th scope="col">추천</th><th scope="col">담당</th></tr></thead>
+                            <tbody>
+                                <template for:each={tableRows} for:item="a">
+                                    <tr key={a.accountId} class={a.rowClass}>
+                                        <td>{a.rank}</td>
+                                        <th scope="row"><button class="row-button account-name" data-id={a.accountId} onclick={handleSelect}>{a.name}</button></th>
+                                        <td>{a.industry}</td>
+                                        <td><div class="share-cell"><span>{a.shareLabel}</span><span class="share-track"><span class="share-fill" style={a.shareStyle}></span></span></div></td>
+                                        <td>{a.walletLabel}</td>
+                                        <td class="whitespace">{a.whitespaceLabel}</td>
+                                        <td class="score">{a.propensityLabel}</td>
+                                        <td><span class={a.topPillClass}>{a.topType}</span> {a.topLabel}</td>
+                                        <td>{a.ownerName}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <template lwc:if={hasPager}>
+                        <div class="pager">
+                            <button class="pager-btn" onclick={handlePrevPage} disabled={isFirstPage} aria-label="이전 페이지">‹</button>
+                            <span class="pager-label">{pageLabel}</span>
+                            <button class="pager-btn" onclick={handleNextPage} disabled={isLastPage} aria-label="다음 페이지">›</button>
+                        </div>
+                    </template>
+                </section>
+            </template>
+        </template>
+
+        <footer class="component-footer">
+            <span><i class="legend-dot upsell"></i>업셀</span><span><i class="legend-dot crosssell"></i>크로스셀</span><span><i class="legend-dot rollover"></i>만기차환</span>
+            <span class="footer-note">지갑 = 최신 재무제표(DART) · 점수 = 유사 Won·접점·신호·관계 가중합</span>
+        </footer>
+    </article>
+</template>

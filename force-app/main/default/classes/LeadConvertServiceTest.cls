@@ -10,7 +10,6 @@ private class LeadConvertServiceTest {
     private static final Decimal LEAD_PRIORITY = 42;
     private static final String LEAD_BRN = '1234567890';
     private static final String LEAD_COMPANY_CODE = 'CODE-001';
-    private static final String LEAD_DEPARTMENT = '재경팀';
     private static final String TEST_USER_NAME = 'lcs.tester@leadconvert.test.example.com';
 
     @TestSetup
@@ -29,7 +28,7 @@ private class LeadConvertServiceTest {
                 LastName = 'Kim',
                 FirstName = 'Test',
                 Company = 'Acme Corp',
-                Status = '신규',
+                Status = 'Open - Not Contacted',
                 // Industry/Email are carried by the standard conversion mapping to
                 // Account.Industry / Contact.Email, satisfying the org's active
                 // Required_PL (Account) and Required (Contact) validation rules.
@@ -40,13 +39,18 @@ private class LeadConvertServiceTest {
                 name_new__c = '김담당',
                 Priority_Score__c = LEAD_PRIORITY,
                 Business_Registration_Number__c = LEAD_BRN,
-                Assigned_Company_Code__c = LEAD_COMPANY_CODE,
-                Department__c = LEAD_DEPARTMENT
+                Assigned_Company_Code__c = LEAD_COMPANY_CODE
             );
             insert lead;
 
             insert new CorporateFinancialStatement__c(Lead__c = lead.Id);
             insert new ExternalSignal__c(Lead__c = lead.Id);
+
+            // 기준 상품 후보 (docs/51): 상품군별 활성 상품
+            insert new List<Product2>{
+                new Product2(Name = 'RP (환매조건부채권)', Family = 'RP', IsActive = true),
+                new Product2(Name = '회사채', Family = '채권', IsActive = true)
+            };
         }
     }
 
@@ -95,9 +99,8 @@ private class LeadConvertServiceTest {
             newFieldPerm(ps.Id, 'Lead', 'Lead.Priority_Score__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Business_Registration_Number__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Assigned_Company_Code__c', false),
-            newFieldPerm(ps.Id, 'Lead', 'Lead.Department__c', false),
-            // Contact.Department is written when transferring the Lead's department.
-            newFieldPerm(ps.Id, 'Contact', 'Contact.Department', true),
+            newFieldPerm(ps.Id, 'Lead', 'Lead.Recommended_Product_Family__c', false),
+            newFieldPerm(ps.Id, 'Opportunity', 'Opportunity.Primary_Product__c', true),
             // Account fields are read and written. Business_Registration_Number__c
             // is a required (non-nillable) field, so its FLS is implicit and
             // cannot be granted via FieldPermissions — it is omitted here.
@@ -167,6 +170,112 @@ private class LeadConvertServiceTest {
 
         Opportunity opp = [SELECT Id, AccountId FROM Opportunity WHERE Id = :res.opportunityId];
         Assert.isNotNull(opp.AccountId, 'Opportunity should be linked to the new Account');
+    }
+
+    // ─── ADR-0001: Opportunity RecordType from 추천 상품군 ─────────────────
+
+    private static String convertAndGetOppRecordType(String family) {
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            lead.Recommended_Product_Family__c = family;
+            update lead;
+        }
+        LeadConvertService.Request req = new LeadConvertService.Request();
+        req.leadId = lead.Id;
+        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 10, 0, 0);
+
+        List<LeadConvertService.Response> responses;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
+        }
+        Test.stopTest();
+        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
+        Opportunity created = [
+            SELECT Name, RecordType.DeveloperName, Primary_Product__c,
+                   Primary_Product__r.Name, Primary_Product__r.Family
+            FROM Opportunity WHERE Id = :responses[0].opportunityId
+        ];
+        lastPrimaryProductFamily = created.Primary_Product__c == null
+            ? null
+            : created.Primary_Product__r.Family;
+        lastPrimaryProductName = created.Primary_Product__c == null
+            ? null
+            : created.Primary_Product__r.Name;
+        lastOpportunityName = created.Name;
+        return created.RecordType.DeveloperName;
+    }
+    private static String lastPrimaryProductFamily;
+    private static String lastPrimaryProductName;
+    private static String lastOpportunityName;
+
+    @isTest
+    static void shouldCreateRpDealOpportunity_WhenFamilyIsRP() {
+        Assert.areEqual('RP_Deal', convertAndGetOppRecordType('RP'));
+        Assert.areEqual('RP', lastPrimaryProductFamily, '기준 상품 = RP 상품군');
+    }
+
+    @isTest
+    static void shouldCreateBondDealOpportunity_WhenFamilyIsBond() {
+        Assert.areEqual('Deal', convertAndGetOppRecordType('회사채'));
+        Assert.areEqual('채권', lastPrimaryProductFamily, '기준 상품 = 채권 상품군');
+    }
+
+    // ─── Opportunity Name: "{회사명} - {상품군}" ────────────────────────────
+
+    @isTest
+    static void shouldNameOpportunityWithAccountAndFamily_WhenFamilyIsRP() {
+        convertAndGetOppRecordType('RP');
+        Assert.areEqual('Acme Corp - RP', lastOpportunityName,
+            '전환된 기회 이름은 회사명 + 상품군');
+    }
+
+    @isTest
+    static void shouldNameOpportunityWithAccountAndFamily_WhenFamilyIsBond() {
+        convertAndGetOppRecordType('회사채');
+        Assert.areEqual('Acme Corp - 회사채', lastOpportunityName,
+            '전환된 기회 이름은 회사명 + 상품군');
+    }
+
+    @isTest
+    static void shouldStillNameOpportunity_WhenNoProductMatches() {
+        // 이름은 상품군만으로 만들어지므로 활성 상품이 하나도 없어도 붙는다.
+        // 기준 상품만 비어 있게 된다.
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            delete [SELECT Id FROM Product2];
+        }
+        convertAndGetOppRecordType('RP');
+        Assert.areEqual('Acme Corp - RP', lastOpportunityName,
+            '상품이 없어도 이름은 상품군으로 붙어야 함');
+        Assert.isNull(lastPrimaryProductFamily, '기준 상품은 비어 있어야 함');
+    }
+
+    @isTest
+    static void shouldTruncateName_WhenLongerThanFieldLimit() {
+        String longAccount = 'A'.repeat(200);
+        String assembled = LeadConvertService.buildOpportunityName(longAccount, '회사채');
+        Assert.areEqual(120, assembled.length(), 'Opportunity.Name 120자 제한으로 잘려야 함');
+        Assert.areEqual('A'.repeat(120), assembled, '앞에서부터 120자');
+    }
+
+    // ─── 기준 상품 = 상품군의 대표 상품 (이름순 우연에 맡기지 않는다) ───────
+
+    @isTest
+    static void shouldPickRepresentativeProduct_NotFirstByName() {
+        // 한글이 라틴 문자보다 먼저 정렬되므로 이름순 첫 번째는 '외화 RP (USD) 30일물'.
+        // 대표 상품인 'RP (환매조건부채권)' 이 잡혀야 한다.
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            insert new Product2(Name = '외화 RP (USD) 30일물', Family = 'RP', IsActive = true);
+        }
+        convertAndGetOppRecordType('RP');
+        Assert.areEqual('RP (환매조건부채권)', lastPrimaryProductName,
+            '이름순 첫 번째가 아니라 대표 상품이 기준 상품이어야 함');
+    }
+
+    @isTest
+    static void shouldDefaultToRpDeal_WhenFamilyBlank() {
+        Assert.areEqual(LeadConvertService.DEFAULT_OPP_RECORD_TYPE, convertAndGetOppRecordType(null));
+        Assert.areEqual('RP', lastPrimaryProductFamily, '빈값이면 기준 상품도 RP');
     }
 
     @isTest
@@ -265,29 +374,6 @@ private class LeadConvertServiceTest {
             'Business registration number should transfer when Account value is blank');
         Assert.areEqual(LEAD_COMPANY_CODE, acc.Assigned_Company_Code__c,
             'Assigned company code should transfer when Account value is blank');
-    }
-
-    @isTest
-    static void shouldTransferDepartmentToContact_WhenConverted() {
-        // Given
-        Lead lead = [SELECT Id FROM Lead LIMIT 1];
-        LeadConvertService.Request req = new LeadConvertService.Request();
-        req.leadId = lead.Id;
-        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 13, 0, 0);
-
-        // When
-        List<LeadConvertService.Response> responses;
-        Test.startTest();
-        System.runAs(getTestUser()) {
-            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
-        }
-        Test.stopTest();
-
-        // Then
-        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
-        Contact contact = [SELECT Department FROM Contact LIMIT 1];
-        Assert.areEqual(LEAD_DEPARTMENT, contact.Department,
-            'Lead Department__c should transfer to the standard Contact.Department field');
     }
 
     // ─── Negative Tests ───────────────────────────────────────────────────
