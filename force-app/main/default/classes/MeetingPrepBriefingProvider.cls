@@ -82,7 +82,9 @@ public with sharing class MeetingPrepBriefingProvider {
     /** CRM(Lead) 프로필. 회사·업종·직함·담당 RM 등. Data Cloud 통합의 CRM 축. */
     private static String buildCrmBlock(Id leadId) {
         List<Lead> leads = [
-            SELECT Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name
+            SELECT Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name,
+                   Priority_Score__c, Priority_Rationale_Summary__c, Priority_Rationale_Detail__c,
+                   Recommended_Product_Family__c, Recommended_Product_Rationale__c
             FROM Lead
             WHERE Id = :leadId
             WITH USER_MODE
@@ -100,6 +102,14 @@ public with sharing class MeetingPrepBriefingProvider {
         lines.add('- 리드 상태: ' + textOrUnknown(lead.Status));
         lines.add('- DART 기업 코드: ' + textOrUnknown(lead.Assigned_Company_Code__c));
         lines.add('- 담당 RM: ' + (lead.Owner == null ? '정보 없음' : textOrUnknown(lead.Owner.Name)));
+        lines.add('- 우선순위 점수: '
+            + (lead.Priority_Score__c == null ? '정보 없음' : String.valueOf(lead.Priority_Score__c)));
+        lines.add('- 우선순위 사유 요약(있으면 이 값을 그대로 반영): '
+            + textOrUnknown(lead.Priority_Rationale_Summary__c));
+        lines.add('- 우선순위 사유 상세: ' + textOrUnknown(lead.Priority_Rationale_Detail__c));
+        lines.add('- 추천 상품군(확정 값, 있으면 이 값을 따를 것): '
+            + (String.isBlank(lead.Recommended_Product_Family__c) ? '미정' : lead.Recommended_Product_Family__c));
+        lines.add('- 추천 상품군 근거: ' + textOrUnknown(lead.Recommended_Product_Rationale__c));
         return String.join(lines, '\n');
     }
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Lead</entityName>
+    <fieldName>Status</fieldName>
+    <masterLabel>리드 영업 경로</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Company</fieldNames>
+        <fieldNames>Business_Registration_Number__c</fieldNames>
+        <fieldNames>Priority_Score__c</fieldNames>
+        <fieldNames>Priority_Rationale_Summary__c</fieldNames>
+        <fieldNames>LeadSource</fieldNames>
+        <info>&lt;p&gt;진입 기준: 상담신청 데이터가 Lead로 유입된 상태입니다. 수행 가이드: AI 우선순위 사유를 확인하고, &quot;미팅 준비 브리핑&quot;으로 재무·시그널 맥락을 파악한 뒤 &quot;첫 접촉 메일 초안&quot;을 발송해 연결을 시도합니다.&lt;/p&gt;</info>
+        <picklistValueName>신규</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>First_Contact_DateTime__c</fieldNames>
+        <fieldNames>Contact_Channel__c</fieldNames>
+        <fieldNames>Phone</fieldNames>
+        <fieldNames>Email</fieldNames>
+        <fieldNames>Slack_Channel_Link__c</fieldNames>
+        <info>&lt;p&gt;진입 기준: 고객과 실제 통화가 연결된 상태입니다. 수행 가이드: &quot;Log a Call&quot;로 통화 결과를 기록하고 최초 접촉 일시·채널을 남깁니다. &quot;Slack 채널 생성&quot;으로 고객 전용 채널을 열고 상담 일정을 잡습니다.&lt;/p&gt;</info>
+        <picklistValueName>연결</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Customer_Need__c</fieldNames>
+        <fieldNames>Interested_Product_Family__c</fieldNames>
+        <fieldNames>Consultation_Date__c</fieldNames>
+        <fieldNames>Description</fieldNames>
+        <info>&lt;p&gt;진입 기준: 고객의 니즈와 금융상품을 상담하는 단계입니다. 수행 가이드: 상담을 진행하고 관련 재무제표·외부 시그널을 검토한 뒤 고객 니즈와 관심 상품군을 구조화해 기록합니다.&lt;/p&gt;</info>
+        <picklistValueName>상담</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Recommended_Product_Family__c</fieldNames>
+        <fieldNames>Recommended_Product_Rationale__c</fieldNames>
+        <fieldNames>Expected_Deal_Size__c</fieldNames>
+        <fieldNames>Qualification_Notes__c</fieldNames>
+        <info>&lt;p&gt;진입 기준: 상담 결과 실제 영업으로 진행할 수 있다고 판단한 상태입니다. 수행 가이드: 추천 상품군과 근거를 확정하고 예상 규모를 추정합니다. &quot;자료·RP 제안 발송&quot;으로 Slack에 제안을 공유한 뒤 &quot;미팅 확정&quot;으로 전환을 준비합니다.&lt;/p&gt;</info>
+        <picklistValueName>영업 가능</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Company</fieldNames>
+        <fieldNames>Recommended_Product_Family__c</fieldNames>
+        <fieldNames>OwnerId</fieldNames>
+        <info>&lt;p&gt;진입 기준: Lead를 Opportunity로 전환한 상태입니다. 수행 가이드: &quot;미팅 확정&quot;으로 전환이 완료되면 Account·Contact·Opportunity가 생성되고 재무제표·외부 시그널은 신규 Account로 자동 이관됩니다. 이후는 Opportunity의 회사채/RP Deal Path로 이어집니다.&lt;/p&gt;</info>
+        <picklistValueName>전환</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Master</recordTypeName>
+</PathAssistant>

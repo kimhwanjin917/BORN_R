@@ -137,12 +137,16 @@ public with sharing class LeadConvertService {
 
     /**
      * Resolves a converted Lead status, preferring the default converted status.
-     * @return MasterLabel of a converted LeadStatus
+     * Database.convertLead validates convertedStatus against the LeadStatus value
+     * (ApiName), not its label. When the status label is localized (e.g. "전환")
+     * the ApiName can still be "Converted", so returning MasterLabel would fail
+     * with "invalid convertedStatus".
+     * @return ApiName of a converted LeadStatus
      * @throws LeadConvertServiceException when no converted status is configured
      */
     private static String getConvertedStatus() {
         List<LeadStatus> statuses = [
-            SELECT MasterLabel
+            SELECT ApiName
             FROM LeadStatus
             WHERE IsConverted = true
             WITH USER_MODE
@@ -152,7 +156,7 @@ public with sharing class LeadConvertService {
         if (statuses.isEmpty()) {
             throw new LeadConvertServiceException('No converted LeadStatus is configured in this org.');
         }
-        return statuses[0].MasterLabel;
+        return statuses[0].ApiName;
     }
 
     /**

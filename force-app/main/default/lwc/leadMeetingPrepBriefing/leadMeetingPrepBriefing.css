@@ -1,0 +1,213 @@
+.briefing-wrap {
+    padding-top: 0.25rem;
+}
+
+.brief-section + .brief-section {
+    margin-top: 1.5rem;
+}
+
+/* "핵심 요약" 섹션 소제목 - 양옆 라인 */
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0.25rem 0 0.875rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #706e6b;
+}
+.section-heading::before,
+.section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e5e5e5;
+}
+
+/* 반응형 카드 그리드 - auto-fit + 1fr 로 남은 카드가 폭을 꽉 채움(빈 공간 없음).
+   카드 6개가 메인 컬럼 한 줄에 들어가도록 최소폭을 낮춘다. */
+.mp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.75rem;
+}
+
+/* 항목 카드 */
+.mp-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 1rem;
+    padding: 0.875rem 1rem 1rem;
+    box-shadow: 0 2px 10px rgba(16, 24, 40, 0.06);
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.mp-card:hover {
+    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.12);
+    transform: translateY(-2px);
+}
+/* 상단 은은한 테마색 그라데이션 - 헤더 한 줄만 덮도록 축소 */
+.mp-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: linear-gradient(180deg, var(--accent-soft), transparent);
+    pointer-events: none;
+}
+
+/* 헤더 한 줄: 번호 뱃지 + 제목 (+ 우선순위 점수) */
+.mp-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.625rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-line);
+}
+
+/* 번호 뱃지 (01, 02 …) */
+.mp-num {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.625rem;
+    height: 1.625rem;
+    padding: 0 0.4rem;
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(16, 24, 40, 0.2);
+}
+
+/* 컬러 제목 - 숫자 옆 한 줄 */
+.mp-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    word-break: keep-all;
+}
+
+.mp-body {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: #3e3e3c;
+    /* 한글이 단어 중간에서 깨지지 않게 - 공백 단위로만 줄바꿈 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+.mp-body p {
+    margin: 0;
+}
+
+/* 우선순위 점수 - 헤더 우측 인라인 강조 */
+.mp-score {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: baseline;
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+}
+.mp-score small {
+    margin-left: 0.1rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+}
+
+/* 컬러 점 불릿 리스트 */
+.mp-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.mp-list li {
+    position: relative;
+    padding-left: 0.95rem;
+    margin: 0.4rem 0;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+.mp-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+/* 재무 지표 증감 태그 (감소=빨강 / 증가=파랑) */
+.delta {
+    display: inline-block;
+    margin-left: 0.3rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 0.375rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    white-space: nowrap;
+    vertical-align: baseline;
+}
+.delta::before {
+    margin-right: 0.15rem;
+    font-size: 0.5625rem;
+}
+.delta-down {
+    color: #ba0517;
+    background: #fdecec;
+}
+.delta-down::before {
+    content: '▼';
+}
+.delta-up {
+    color: #0b5cab;
+    background: #eaf2fb;
+}
+.delta-up::before {
+    content: '▲';
+}
+
+/* 재무 카드 하단 - 전년 대비 기준 배지 */
+.mp-note {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 0.5rem;
+    background: var(--accent-soft);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--accent);
+    word-break: keep-all;
+    --slds-c-icon-color-foreground: var(--accent);
+    --slds-c-icon-color-foreground-default: var(--accent);
+    --sds-c-icon-color-foreground-default: var(--accent);
+}
+
+/* 파싱 실패 시 원문 폴백 */
+.briefing-body {
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+    font-size: 0.8125rem;
+}

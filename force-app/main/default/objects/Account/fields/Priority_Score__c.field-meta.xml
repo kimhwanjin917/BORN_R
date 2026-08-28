@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Priority_Score__c</fullName>
-    <description>계정 우선순위 산정 점수. 03단계 Flow가 값을 기록하고 02단계 홈 LWC 정렬 키로 사용된다.</description>
+    <description>계정 우선순위 산정 점수. PriorityScoreBatch가 항목별 연속 채점으로 기록하고 02단계 홈 LWC 정렬 키로 사용된다.</description>
     <externalId>false</externalId>
-    <inlineHelpText>0~999 범위의 정수로 계정 우선순위를 나타냅니다. 값이 클수록 우선순위가 높습니다.</inlineHelpText>
+    <inlineHelpText>0~100 범위(소수 1자리)로 계정 우선순위를 나타냅니다. 값이 클수록 우선순위가 높습니다.</inlineHelpText>
     <label>우선순위 점수</label>
-    <precision>3</precision>
+    <precision>4</precision>
     <required>false</required>
-    <scale>0</scale>
+    <scale>1</scale>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <type>Number</type>
