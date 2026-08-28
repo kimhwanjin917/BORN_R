@@ -1,0 +1,17 @@
+.kpi-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.kpi-row__cell {
+    min-width: 0;
+}
+
+/* 좁은 화면에서는 세로로 쌓기 */
+@media (max-width: 768px) {
+    .kpi-row {
+        grid-template-columns: 1fr;
+    }
+}
