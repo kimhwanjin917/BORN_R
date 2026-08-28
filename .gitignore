@@ -126,3 +126,6 @@ force-app/main/default/flowDefinitions/
 force-app/main/default/reports/
 force-app/main/default/reportTypes/
 force-app/main/default/callCenters/
+
+# Claude Code 개인 설정 (커밋 금지)
+.claude/settings.local.json

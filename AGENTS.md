@@ -60,8 +60,11 @@
 
 ### 4단계. 승인 → 배포 → 결과 보고
 
-- 3단계 보고 후 사용자가 **"배포 승인"이라고 명시적으로 말하기 전에는 `sf project deploy start`를 실행하지 않는다.** ("좋아 보인다" 같은 애매한 답이면 다시 묻는다.)
-- 배포는 선언된 목록만: `sf project deploy start --metadata ApexClass:X --metadata ApexClass:XTest -o <org별칭>`
+- 3단계 보고 후 사용자가 **"배포 승인"이라고 명시적으로 말하기 전에는 배포를 실행하지 않는다.** ("좋아 보인다" 같은 애매한 답이면 다시 묻는다.)
+- **배포는 반드시 `scripts/safe-deploy.ps1`을 통해서만 한다. raw `sf project deploy start` 직접 실행 금지.**
+  - `pwsh scripts/safe-deploy.ps1 -Metadata ApexClass:X,ApexClass:XTest`
+  - 이 래퍼가 배포 직전 org 현재본을 다시 조회해 3단계(org-우선 3-way 충돌 검증)를 **기계적으로** 재수행하고, retrieve 이후 org에서 제3자가 바꾼 컴포넌트가 있으면 배포를 자동 중단한다(exit 2). 충돌이 없을 때만 실제 `sf project deploy start`가 실행된다.
+  - 충돌로 중단되면 org 변경을 retrieve·병합한 뒤 다시 시도한다. 강행(`-AcknowledgeOrgChanges`)은 사용자에게 diff를 보이고 명시 승인을 받은 경우에만 전달한다.
 - 배포 성공 후 관련 테스트 실행: `sf apex run test --tests <테스트클래스명> --result-format human --synchronous -o <org별칭>` → 결과 원문 보고. 실패 시 원인 분석과 수정 계획을 보고하고 다시 3단계부터 반복한다.
 
 ## 행동 원칙

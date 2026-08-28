@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(sf project deploy*)",
+      "PowerShell(sf project deploy*)",
+      "Bash(sfdx force:source:deploy*)",
+      "PowerShell(sfdx force:source:deploy*)",
+      "Bash(sfdx force:source:push*)",
+      "PowerShell(sfdx force:source:push*)",
+      "Bash(sfdx force:mdapi:deploy*)",
+      "PowerShell(sfdx force:mdapi:deploy*)",
+      "mcp__salesforce-dx__deploy_metadata"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|mcp__salesforce-dx__deploy_metadata",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/deploy-guard.py",
+            "statusMessage": "배포 명령 검사 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
