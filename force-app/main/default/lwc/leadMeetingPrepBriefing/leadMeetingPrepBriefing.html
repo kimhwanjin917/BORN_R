@@ -37,13 +37,18 @@
                                         <div class="mp-head">
                                             <span class="mp-num">{item.number}</span>
                                             <h3 class="mp-title">{item.label}</h3>
-                                            <template lwc:if={item.score}>
-                                                <span class="mp-score"
-                                                    >{item.score}<small>점</small></span
-                                                >
-                                            </template>
                                         </div>
                                         <div class="mp-body">
+                                            <template lwc:if={item.score}>
+                                                <p class="mp-score-line">
+                                                    우선순위 점수
+                                                    <span class="mp-score-val"
+                                                        >{item.score}<small
+                                                            >점</small
+                                                        ></span
+                                                    >
+                                                </p>
+                                            </template>
                                             <template lwc:if={item.asList}>
                                                 <ul class="mp-list">
                                                     <template

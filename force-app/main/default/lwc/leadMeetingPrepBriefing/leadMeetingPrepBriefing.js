@@ -1,6 +1,8 @@
 import { LightningElement, api, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import PRIORITY_SCORE_FIELD from '@salesforce/schema/Lead.Priority_Score__c';
 import getBriefing from '@salesforce/apex/MeetingPrepBriefingController.getBriefing';
 import generateBriefing from '@salesforce/apex/MeetingPrepBriefingController.generateBriefing';
 
@@ -26,6 +28,8 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
     briefing;
     updatedAt;
     isGenerating = false;
+    // 우선순위 점수는 AI 줄글이 아니라 Lead 필드에서 직접 읽어 항상 표시한다.
+    priorityScore;
 
     _wired;
 
@@ -35,6 +39,13 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
         if (result.data) {
             this.briefing = result.data.briefing;
             this.updatedAt = result.data.updatedAt;
+        }
+    }
+
+    @wire(getRecord, { recordId: '$recordId', fields: [PRIORITY_SCORE_FIELD] })
+    wiredLead({ data }) {
+        if (data) {
+            this.priorityScore = getFieldValue(data, PRIORITY_SCORE_FIELD);
         }
     }
 
@@ -84,22 +95,51 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
                     return;
                 }
 
-                const bullets = body
-                    .split('\n')
-                    .map((l) => l.replace(/^[-•·]\s*/, '').trim())
-                    .filter((l) => l);
-
                 const meta = this.metaFor(label);
                 const colorize = /재무/.test(label);
                 counter += 1;
 
-                // 우선순위 사유: 본문의 "NN점"을 뽑아 헤더 우측 점수로 표시
+                // 우선순위 사유: 점수는 Lead의 Priority_Score__c 값을 헤더 우측 배지로 쓴다
+                // (AI가 줄글에 점수를 안 써도 항상 표시). 본문에선 점수·라벨 문구를 제거해 사유만 남긴다.
                 let score = '';
                 if (/우선순위/.test(label)) {
-                    const sm = body.match(/([0-9]+(?:\.[0-9]+)?)\s*점/);
-                    if (sm) {
-                        score = sm[1];
+                    if (
+                        this.priorityScore !== null &&
+                        this.priorityScore !== undefined
+                    ) {
+                        score = String(this.priorityScore);
+                    } else {
+                        const sm =
+                            body.match(
+                                /우선순위\s*점수\s*[:：]\s*([0-9]+(?:\.[0-9]+)?)/
+                            ) || body.match(/([0-9]+(?:\.[0-9]+)?)\s*점/);
+                        if (sm) {
+                            score = sm[1];
+                        }
                     }
+                    body = body
+                        .replace(
+                            /우선순위\s*점수\s*[:：]\s*[0-9]+(?:\.[0-9]+)?\s*점?\.?/g,
+                            ''
+                        )
+                        .replace(/우선순위\s*사유\s*요약\s*[:：]/g, '')
+                        .trim();
+                }
+
+                // 템플릿이 준 줄단위 불릿. 줄글 한 덩어리(4·5·6번)면 문장 단위로 쪼개
+                // 1·2·3번과 같은 개조식 불릿 리스트로 만든다.
+                let bullets = body
+                    .split('\n')
+                    .map((l) => l.replace(/^[-•·]\s*/, '').trim())
+                    .filter((l) => l);
+                if (bullets.length <= 1) {
+                    bullets = this.splitSentences(
+                        bullets.length ? bullets[0] : body
+                    );
+                }
+                // 재무 카드는 증감 태그 추출을 건드리지 않도록 개조식 변환에서 제외
+                if (!colorize) {
+                    bullets = bullets.map((l) => this.toNounStyle(l));
                 }
 
                 cards.push({
@@ -111,7 +151,7 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
                     // 재무 지표는 연간(4분기 누적) 기준이라 카드 하단에 기준 배지 표시
                     note: colorize ? '전년 대비 기준 · 전년도 4분기 누적' : '',
                     themeStyle: `--accent:${meta.accent};--accent-soft:${meta.accent}14;--accent-line:${meta.accent}40;`,
-                    asList: bullets.length > 1 || colorize,
+                    asList: bullets.length > 0,
                     text: bullets.length ? bullets[0] : body,
                     bullets: bullets.map((line, k) =>
                         this.buildBullet(line, colorize, `${bi}-${ii}-${k}`)
@@ -120,6 +160,53 @@ export default class LeadMeetingPrepBriefing extends LightningElement {
             });
         });
         return cards;
+    }
+
+    /**
+     * 줄글 본문을 문장 단위로 쪼갠다. 문장부호 뒤 공백에서만 끊으므로
+     * 소수점 점수(예: 74.2)는 뒤에 공백이 없어 분리되지 않는다.
+     */
+    splitSentences(text) {
+        if (!text) {
+            return [];
+        }
+        return text
+            .split(/(?<=[.!?。])\s+/)
+            .map((s) => s.trim())
+            .filter((s) => s);
+    }
+
+    /** 문장 끝 서술형 어미를 1·2·3번 카드처럼 개조식(명사형)으로 바꾼다. */
+    toNounStyle(line) {
+        if (!line) {
+            return line;
+        }
+        let s = line.trim();
+        const endings = [
+            [/있습니다\.?$/, '있음'],
+            [/없습니다\.?$/, '없음'],
+            [/입니다\.?$/, '임'],
+            [/됩니다\.?$/, '됨'],
+            [/립니다\.?$/, '림'],
+            [/합니다\.?$/, '함'],
+            [/습니다\.?$/, '음'],
+            [/있다\.?$/, '있음'],
+            [/없다\.?$/, '없음'],
+            [/이다\.?$/, '임'],
+            [/된다\.?$/, '됨'],
+            [/한다\.?$/, '함'],
+            [/부족하다\.?$/, '부족'],
+            [/필요하다\.?$/, '필요'],
+            [/가능하다\.?$/, '가능'],
+            [/하다\.?$/, '함']
+        ];
+        for (let i = 0; i < endings.length; i += 1) {
+            if (endings[i][0].test(s)) {
+                s = s.replace(endings[i][0], endings[i][1]);
+                break;
+            }
+        }
+        return s;
     }
 
     /** 불릿 한 줄 → { text, 증감 태그 }. 재무 항목만 끝의 증가/감소를 태그로 분리. */

@@ -114,20 +114,22 @@
     margin: 0;
 }
 
-/* 우선순위 점수 - 헤더 우측 인라인 강조 */
-.mp-score {
-    flex: 0 0 auto;
-    margin-left: auto;
-    display: inline-flex;
-    align-items: baseline;
-    font-size: 1.125rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--accent);
-    letter-spacing: -0.02em;
+/* 우선순위 점수 - 본문 상단 한 줄, 살짝만 강조 */
+.mp-score-line {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #706e6b;
 }
-.mp-score small {
-    margin-left: 0.1rem;
+.mp-score-val {
+    margin-left: 0.15rem;
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+}
+.mp-score-val small {
+    margin-left: 0.05rem;
     font-size: 0.625rem;
     font-weight: 700;
 }

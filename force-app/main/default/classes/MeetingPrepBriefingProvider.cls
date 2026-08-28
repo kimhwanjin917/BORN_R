@@ -57,7 +57,15 @@ public with sharing class MeetingPrepBriefingProvider {
             if (crmBlock != null) {
                 blocks.add(crmBlock);
             }
+            // 우선순위 점수를 "적합도/니즈/공시" 항목별로 분해한 근거(배치와 동일 규칙, PriorityScoreExplainer).
+            // 있으면 CRM 블록 바로 뒤에 붙여 "왜 이 점수인지"를 LLM 이 수치로 설명하게 한다.
+            String priorityScoreBlock = PriorityScoreExplainer.buildGroundingText(relatedLead.Id);
+            if (priorityScoreBlock != null) {
+                blocks.add(priorityScoreBlock);
+            }
             String financialBlock = buildFinancialTrendBlock(relatedLead.Id);
+            String latestQuarterBlock = buildLatestQuarterBlock(relatedLead.Id);
+            String wonBlock = buildSimilarWonBlock(relatedLead.Id);
             String signalBlock = buildSignalBlock(relatedLead.Id);
             if (financialBlock == null && signalBlock == null) {
                 // CRM 프로필만으로는 브리핑 근거가 부족하다고 명시한다.
@@ -70,8 +78,14 @@ public with sharing class MeetingPrepBriefingProvider {
             if (financialBlock != null) {
                 blocks.add(financialBlock);
             }
+            if (latestQuarterBlock != null) {
+                blocks.add(latestQuarterBlock);
+            }
             if (signalBlock != null) {
                 blocks.add(signalBlock);
+            }
+            if (wonBlock != null) {
+                blocks.add(wonBlock);
             }
             return String.join(blocks, '\n\n');
         } catch (QueryException e) {
@@ -82,9 +96,11 @@ public with sharing class MeetingPrepBriefingProvider {
     /** CRM(Lead) 프로필. 회사·업종·직함·담당 RM 등. Data Cloud 통합의 CRM 축. */
     private static String buildCrmBlock(Id leadId) {
         List<Lead> leads = [
-            SELECT Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name,
+            SELECT Name, Company, Industry, Title, Status, Assigned_Company_Code__c, Owner.Name,
                    Priority_Score__c, Priority_Rationale_Summary__c, Priority_Rationale_Detail__c,
-                   Recommended_Product_Family__c, Recommended_Product_Rationale__c
+                   Recommended_Product_Family__c, Recommended_Product_Rationale__c,
+                   Recommended_Product__c, Recommended_Product__r.Name,
+                   Recommended_Term_Days__c, Recommended_Fee_Rate__c
             FROM Lead
             WHERE Id = :leadId
             WITH USER_MODE
@@ -97,6 +113,7 @@ public with sharing class MeetingPrepBriefingProvider {
         List<String> lines = new List<String>();
         lines.add('[CRM 프로필]');
         lines.add('- 회사명: ' + textOrUnknown(lead.Company));
+        lines.add('- 담당자: ' + textOrUnknown(lead.Name));
         lines.add('- 업종: ' + textOrUnknown(lead.Industry));
         lines.add('- 담당자 직함: ' + textOrUnknown(lead.Title));
         lines.add('- 리드 상태: ' + textOrUnknown(lead.Status));
@@ -109,7 +126,91 @@ public with sharing class MeetingPrepBriefingProvider {
         lines.add('- 우선순위 사유 상세: ' + textOrUnknown(lead.Priority_Rationale_Detail__c));
         lines.add('- 추천 상품군(확정 값, 있으면 이 값을 따를 것): '
             + (String.isBlank(lead.Recommended_Product_Family__c) ? '미정' : lead.Recommended_Product_Family__c));
-        lines.add('- 추천 상품군 근거: ' + textOrUnknown(lead.Recommended_Product_Rationale__c));
+        // 종목·기간·요율은 상품 제안서 PDF 가 읽는 값과 같은 값이다. 브리핑이 이것과 다른 종목을 말하면
+        // 고객에게 나가는 제안서와 어긋나므로, 값이 있으면 반드시 이대로 말하게 한다.
+        lines.add('- 추천 종목(확정 값, 있으면 이 종목을 그대로 말할 것. 다른 종목을 제시하지 말 것): '
+            + (lead.Recommended_Product__r == null ? '미정' : lead.Recommended_Product__r.Name));
+        lines.add('- 추천 운용기간(일): '
+            + (lead.Recommended_Term_Days__c == null ? '미정' : String.valueOf(lead.Recommended_Term_Days__c.setScale(0))));
+        lines.add('- 추천 수수료율(%): '
+            + (lead.Recommended_Fee_Rate__c == null ? '미정' : String.valueOf(lead.Recommended_Fee_Rate__c)));
+        lines.add('- 추천 근거: ' + textOrUnknown(lead.Recommended_Product_Rationale__c));
+        return String.join(lines, '\n');
+    }
+
+    /**
+     * 같은 산업군(있으면 추천 상품군까지)의 종결 기회 Won 비율. 숫자는 SimilarWonAnalysisAction 이
+     * Aggregate SOQL 로 실계산한다 — 여기서 다시 세지 않는다.
+     *
+     * 이 블록이 없으면 LLM 이 근거 없이 확률을 지어낸다(실제로 "추정 40~60%" 가 나온 적이 있다).
+     * 모수가 0이면 수치 대신 "추정하지 말 것" 지시를 넘긴다.
+     */
+    private static String buildSimilarWonBlock(Id leadId) {
+        List<Lead> leads = [
+            SELECT Industry, Recommended_Product_Family__c
+            FROM Lead WHERE Id = :leadId WITH USER_MODE LIMIT 1
+        ];
+        if (leads.isEmpty() || String.isBlank(leads[0].Industry)) {
+            return null;
+        }
+        SimilarWonAnalysisAction.Request req = new SimilarWonAnalysisAction.Request();
+        req.industry = leads[0].Industry;
+        // 상품군이 정해져 있으면 그 상품군의 종결 기회로 모수를 좁힌다. Lead 는 '회사채', Product2 는 '채권'.
+        String family = leads[0].Recommended_Product_Family__c;
+        if (String.isNotBlank(family)) {
+            req.productType = family == '회사채' ? '채권' : family;
+        }
+        List<SimilarWonAnalysisAction.Result> results;
+        try {
+            results = SimilarWonAnalysisAction.analyze(new List<SimilarWonAnalysisAction.Request>{ req });
+        } catch (Exception e) {
+            return null;
+        }
+        if (results == null || results.isEmpty()) {
+            return null;
+        }
+        SimilarWonAnalysisAction.Result r = results[0];
+        List<String> lines = new List<String>();
+        lines.add('[유사 Won 집계 - Apex 가 실제 종결 기회를 센 값이다. 확률은 이 수치만 인용하고 절대 추정하지 말 것]');
+        lines.add('- 기준 산업군: ' + textOrUnknown(leads[0].Industry)
+            + (String.isBlank(req.productType) ? ' (상품군 미지정, 전체 상품 기준)' : ' · 상품군: ' + req.productType));
+        if (r.insufficientData == true || r.totalCount == null || r.totalCount == 0) {
+            lines.add('- 조건에 맞는 종결 기회가 없다. 확률을 말하지 말고 "유사 사례가 부족하다"고만 쓸 것.');
+        } else {
+            lines.add('- 종결 ' + r.totalCount + '건 중 Won ' + r.wonCount + '건 · Won 비율 ' + r.wonRate + '%');
+        }
+        return String.join(lines, '\n');
+    }
+
+    /**
+     * 가장 최근 분기 재무 1건. 연간(사업보고서)은 12월 결산이라 반년 넘게 묵은 숫자가 되는데,
+     * 자금운용 제안은 "지금 굴릴 수 있는 돈"이 핵심이라 최신 잔고를 따로 보여준다.
+     * 추세는 위의 연간 블록으로, 잔고는 이 블록으로 판단하게 한다.
+     */
+    private static String buildLatestQuarterBlock(Id leadId) {
+        List<CorporateFinancialStatement__c> rows = [
+            SELECT Fiscal_Year__c, Period_Type__c, Disclosure_Period_YM__c,
+                   Cash_And_Equivalents__c, Short_Term_Financial_Instruments__c,
+                   Short_Term_Borrowings__c, Bonds_Payable__c, Revenue__c
+            FROM CorporateFinancialStatement__c
+            WHERE Lead__c = :leadId AND Period_Type__c != :ANNUAL_PERIOD
+            WITH USER_MODE
+            ORDER BY Fiscal_Year__c DESC NULLS LAST, Disclosure_Period_YM__c DESC NULLS LAST
+            LIMIT 1
+        ];
+        if (rows.isEmpty()) {
+            return null;
+        }
+        CorporateFinancialStatement__c cfs = rows[0];
+        List<String> lines = new List<String>();
+        lines.add('[최신 분기 재무 - 위 연간 추이보다 최신이다. 현재 운용 가능한 자금 규모는 이 값을 기준으로 말할 것]');
+        lines.add('- 공시기준 ' + textOrUnknown(cfs.Disclosure_Period_YM__c)
+            + ' (' + textOrUnknown(cfs.Period_Type__c) + ')'
+            + ': 현금및현금성자산 ' + formatWon(cfs.Cash_And_Equivalents__c)
+            + ', 단기금융상품 ' + formatWon(cfs.Short_Term_Financial_Instruments__c)
+            + ', 단기차입금 ' + formatWon(cfs.Short_Term_Borrowings__c)
+            + ', 사채 ' + formatWon(cfs.Bonds_Payable__c)
+            + ', 매출 ' + formatWon(cfs.Revenue__c));
         return String.join(lines, '\n');
     }
 

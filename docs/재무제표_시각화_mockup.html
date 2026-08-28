@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>디지털대성 | 재무제표 분석</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --sf-blue: #0176d3;
+    --sf-blue-dark: #014486;
+    --sf-link: #0b5cab;
+    --bg: #f3f3f3;
+    --card: #ffffff;
+    --border: #e5e5e5;
+    --border-strong: #c9c9c9;
+    --text: #181818;
+    --text-2: #444444;
+    --text-3: #747474;
+    --pos: #2e844a;
+    --neg: #ba0517;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Salesforce Sans", -apple-system, "Malgun Gothic", "맑은 고딕", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  /* ===================== Global header (SLDS: 50px) ===================== */
+  .g-header {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff; border-bottom: 1px solid #dddbda;
+    padding: 0 16px; height: 50px;
+  }
+  .g-logo { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+  .g-logo .mark {
+    width: 34px; height: 34px; border-radius: 7px;
+    background: #12508f;
+    color: #fff; font-weight: 800; font-size: 19px; font-style: italic;
+    display: grid; place-items: center;
+  }
+  .g-logo .wm { line-height: 1.05; }
+  .g-logo .wm b { font-size: 18px; color: #16325c; letter-spacing: -.3px; }
+  .g-logo .wm span { display: block; font-size: 6.5px; color: #8a97a3; letter-spacing: 2.5px; margin-top: 2px; }
+  .g-search { flex: 1; max-width: 460px; margin: 0 auto; position: relative; }
+  .g-search svg { position: absolute; left: 13px; top: 9px; }
+  .g-search input {
+    width: 100%; height: 32px; border-radius: 16px; border: 1px solid #c9c9c9;
+    background: #fff; padding: 0 13px 0 34px; font-size: 13px; color: var(--text); outline: none;
+  }
+  .g-search input:focus { border-color: var(--sf-blue); box-shadow: 0 0 3px #0176d366; }
+  .g-ask {
+    display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 14px;
+    border: 1px solid #c9c9c9; border-radius: 15px; font-size: 13px; color: var(--text);
+    background: #fff; cursor: default; flex-shrink: 0;
+  }
+  .g-icons { display: flex; align-items: center; gap: 15px; flex-shrink: 0; color: #706e6b; }
+  .g-icons svg { display: block; cursor: default; }
+  .g-icons .star-grp { display: inline-flex; align-items: center; gap: 1px; }
+  .g-icons .ava {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, #6ba7d6, #2f5f8c);
+  }
+
+  /* ===================== Nav bar (SLDS: 40px) ===================== */
+  .nav {
+    display: flex; align-items: center; gap: 0;
+    background: #fff; border-bottom: 1px solid #dddbda;
+    padding: 0 16px; height: 40px; white-space: nowrap;
+    box-shadow: 0 2px 3px rgba(0,0,0,.05);
+  }
+  .nav .apps { color: #706e6b; margin-right: 14px; flex-shrink: 0; display: flex; }
+  .nav .app { font-weight: 700; font-size: 15px; color: #080707; margin-right: 22px; flex-shrink: 0; }
+  .nav .tabs { display: flex; align-items: center; flex: 1; min-width: 0; overflow: hidden; }
+  .nav .tab {
+    display: inline-flex; align-items: center; gap: 5px; height: 40px; padding: 0 13px;
+    font-size: 13px; color: #080707; border-bottom: 3px solid transparent; cursor: default; flex-shrink: 0;
+  }
+  .nav .tab .c { font-size: 8px; color: #706e6b; }
+  .nav .tab.active { color: var(--sf-link); font-weight: 700; border-bottom-color: var(--sf-blue); }
+  .nav .tab:hover:not(.active) { background: #f3f2f2; }
+  .nav .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: 10px; color: #706e6b; }
+  .nav .nav-right .ovf { display: flex; flex-direction: column; line-height: .5; }
+
+  /* ===================== Record page ===================== */
+  .page { padding: 8px 12px 16px; max-width: none; margin: 0; }
+
+  .breadcrumb { font-size: 12px; color: var(--text-3); margin: 2px 4px 8px; }
+  .breadcrumb a { color: var(--sf-link); text-decoration: none; }
+
+  .rec-header {
+    background: #fff; border: 1px solid var(--border); border-radius: 4px;
+    padding: 12px 18px; margin-bottom: 10px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+  }
+  .rec-top { display: flex; align-items: center; gap: 14px; }
+  .rec-icon {
+    width: 40px; height: 40px; border-radius: 6px; background: #66491a;
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .rec-titles { flex: 1; min-width: 0; }
+  .rec-eyebrow { font-size: 12px; color: var(--text-3); }
+  .rec-title { font-size: 20px; font-weight: 700; color: #080707; letter-spacing: -.4px; line-height: 1.15; }
+  .rec-actions { flex-shrink: 0; }
+  .actions {
+    display: inline-flex; align-items: stretch; height: 30px;
+    border: 1px solid #c9c9c9; border-radius: 15px; overflow: hidden; background: #fff;
+  }
+  .actions .a {
+    display: inline-flex; align-items: center; padding: 0 15px;
+    font-size: 13px; color: var(--sf-link); border-left: 1px solid #dddbda; cursor: default;
+  }
+  .actions .a:first-child { border-left: none; }
+  .actions .a:hover { background: #f4f6f9; }
+  .actions .caret { padding: 0 10px; }
+  .actions .caret svg { display: block; }
+
+  /* Highlights panel */
+  .highlights {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border); margin-top: 12px; padding-top: 12px;
+  }
+  .hi { padding: 0 18px; border-left: 1px solid var(--border); }
+  .hi:first-child { border-left: none; padding-left: 4px; }
+  .hi .k { font-size: 11.5px; color: var(--text-3); margin-bottom: 4px; }
+  .hi .v { font-size: 21px; font-weight: 700; color: #080707; letter-spacing: -.5px; }
+  .hi .v small { font-size: 12px; font-weight: 600; color: var(--text-3); margin-left: 2px; }
+  .hi .d { font-size: 12px; margin-top: 3px; font-weight: 600; }
+  .hi .up { color: var(--pos); }
+  .hi .down { color: var(--neg); }
+  .hi .flat { color: var(--text-3); }
+
+  /* Sub tabs */
+  .subtabs {
+    display: flex; gap: 0; background: #fff;
+    border: 1px solid var(--border); border-bottom: none;
+    border-radius: 4px 4px 0 0; padding: 0 6px;
+  }
+  .subtab {
+    padding: 11px 16px; font-size: 13px; color: var(--text-2); font-weight: 600;
+    border-bottom: 3px solid transparent; cursor: default;
+  }
+  .subtab.active { color: var(--sf-link); border-bottom-color: var(--sf-blue); }
+
+  .canvas-region {
+    background: transparent; border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 4px 4px; padding: 12px;
+  }
+
+  /* Cards */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04); overflow: hidden;
+  }
+  .card.full { grid-column: 1 / -1; }
+  .card-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--border);
+  }
+  .card-head h2 { margin: 0; font-size: 13.5px; font-weight: 700; color: #080707; }
+  .card-head .meta { font-size: 11.5px; color: var(--text-3); font-weight: 400; }
+  .card-head .wmenu {
+    margin-left: auto; width: 24px; height: 24px; border-radius: 4px; color: #706e6b;
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .card-head .wmenu:hover { background: #f3f2f2; }
+  .card-body { padding: 14px 16px 16px; }
+  .chart-box { position: relative; height: 300px; }
+  .chart-box.tall { height: 330px; }
+
+  .foot { text-align: center; color: var(--text-3); font-size: 11px; margin: 14px 0 6px; }
+  @media (max-width: 900px) {
+    .highlights { grid-template-columns: repeat(2, 1fr); gap: 12px 0; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== Global header ===================== -->
+<div class="g-header">
+  <div class="g-logo">
+    <div class="mark">B</div>
+    <div class="wm"><b>근본증권</b><span>BORN SECURITIES</span></div>
+  </div>
+  <div class="g-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#969492" stroke-width="2.4"><circle cx="10.5" cy="10.5" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
+    <input type="text" placeholder="Search..." />
+  </div>
+  <div class="g-ask">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="#0176d3"><path d="M12 2l1.9 5.6L20 9l-4.6 3.4L17 18l-5-3-5 3 1.6-5.6L4 9l6.1-1.4z"/></svg>
+    Ask
+  </div>
+  <div class="g-icons">
+    <!-- Agentforce -->
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.3" fill="currentColor" stroke="none"/><path d="M12 4v3M8 19v2M16 19v2"/></svg>
+    <!-- Favorites star + caret -->
+    <span class="star-grp">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.5 5.5 6 .5-4.5 4 1.4 5.9L12 15.8 6.6 19l1.4-5.9-4.5-4 6-.5z"/></svg>
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+    <!-- Global actions + -->
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <!-- Cloud -->
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A3.5 3.5 0 0 1 18 18z"/></svg>
+    <!-- Help -->
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7"/><circle cx="12" cy="16.5" r="1" fill="currentColor" stroke="none"/></svg>
+    <!-- Setup gear -->
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+    <!-- Bell -->
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.5 21a1.5 1.5 0 0 0 3 0"/></svg>
+    <div class="ava"></div>
+  </div>
+</div>
+
+<!-- ===================== Nav bar ===================== -->
+<div class="nav">
+  <span class="apps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
+  <span class="app">BORN Securities</span>
+  <div class="tabs">
+    <span class="tab">Home</span>
+    <span class="tab">법인 고객 <span class="c">▼</span></span>
+    <span class="tab">고객사 담당자 <span class="c">▼</span></span>
+    <span class="tab">리드 <span class="c">▼</span></span>
+    <span class="tab">영업기회 <span class="c">▼</span></span>
+    <span class="tab">Meeting Notes <span class="c">▼</span></span>
+    <span class="tab">할 일 <span class="c">▼</span></span>
+    <span class="tab">견적 <span class="c">▼</span></span>
+    <span class="tab">심사·고객문의 <span class="c">▼</span></span>
+    <span class="tab">계약 <span class="c">▼</span></span>
+    <span class="tab active">재무제표 <span class="c">▼</span></span>
+    <span class="tab">Calendar <span class="c">▼</span></span>
+    <span class="tab">상품 <span class="c">▼</span></span>
+    <span class="tab">기회 레이더</span>
+  </div>
+  <div class="nav-right">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 4l5 5L9 20H4v-5z"/><path d="M13 6l5 5"/></svg>
+    <span class="ovf">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="6 15 12 9 18 15"/></svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+  </div>
+</div>
+
+<!-- ===================== Record page ===================== -->
+<div class="page">
+  <div class="breadcrumb"><a href="#">재무제표</a> &nbsp;›&nbsp; <a href="#">리드 · 임서우</a> &nbsp;›&nbsp; 디지털대성</div>
+
+  <!-- Record header + highlights -->
+  <div class="rec-header">
+    <div class="rec-top">
+      <div class="rec-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1.5"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+      </div>
+      <div class="rec-titles">
+        <div class="rec-eyebrow">재무제표 분석</div>
+        <div class="rec-title">디지털대성</div>
+      </div>
+      <div class="rec-actions">
+        <div class="actions">
+          <span class="a">New 고객사 담당자</span>
+          <span class="a">Edit</span>
+          <span class="a">New 심사·고객문의</span>
+          <span class="a caret"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0b5cab" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlights" id="highlights"></div>
+  </div>
+
+  <!-- Sub tabs -->
+  <div class="subtabs">
+    <div class="subtab">세부 정보</div>
+    <div class="subtab active">재무 분석</div>
+    <div class="subtab">관련</div>
+  </div>
+
+  <div class="canvas-region">
+    <div class="grid">
+      <div class="card full">
+        <div class="card-head">
+          <h2>매출액 추이</h2>
+          <span class="meta">· 단위: 억 원</span>
+          <span class="wmenu"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+        </div>
+        <div class="card-body"><div class="chart-box tall"><canvas id="revChart"></canvas></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>영업이익 & 영업이익률</h2>
+          <span class="wmenu"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+        </div>
+        <div class="card-body"><div class="chart-box"><canvas id="opChart"></canvas></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>현금및현금성자산</h2>
+          <span class="wmenu"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+        </div>
+        <div class="card-body"><div class="chart-box"><canvas id="cashChart"></canvas></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 원본 데이터 (14개 재무제표 레코드) =====
+const raw = [
+  { fy: 2023, q: 1, rev: 49375056013,  op: 2127621990,  cash: 39222166527 },
+  { fy: 2023, q: 2, rev: 49272472596,  op: 7985540605,  cash: 13079949011 },
+  { fy: 2023, q: 3, rev: 63555683057,  op: 17924715795, cash: 21825716061 },
+  { fy: 2023, q: 4, rev: 49345591336,  op: 25023413731, cash: 35153056935 },
+  { fy: 2024, q: 1, rev: 47177819703,  op: 1223812184,  cash: 31405842212 },
+  { fy: 2024, q: 2, rev: 47702241241,  op: 7529355607,  cash: 25090590947 },
+  { fy: 2024, q: 3, rev: 69276371781,  op: 18429705670, cash: 12929684252 },
+  { fy: 2024, q: 4, rev: 53565832078,  op: 23703477394, cash: 17640008700 },
+  { fy: 2025, q: 1, rev: 60390724019,  op: 5185664788,  cash: 28535292861 },
+  { fy: 2025, q: 2, rev: 59311761045,  op: 10078294429, cash: 15796657543 },
+  { fy: 2025, q: 3, rev: 80217617016,  op: 21218573673, cash: 20260034461 },
+  { fy: 2025, q: 4, rev: 53901796900,  op: 31559402258, cash: 25210949072 },
+  { fy: 2026, q: 1, rev: 69787463914,  op: 10159475475, cash: 42636650961 },
+  { fy: 2026, q: 2, rev: 69024696296,  op: 15111354868, cash: 46475624082 },
+];
+
+const EOK = 1e8;
+const toEok = v => v / EOK;
+const fmtEok = v => (v / EOK).toLocaleString('ko-KR', { maximumFractionDigits: 0 });
+const labels = raw.map(d => `${String(d.fy).slice(2)} ${d.q}Q`);
+
+const C = {
+  blue: '#0176d3', blueSoft: 'rgba(1,118,211,.16)',
+  green: '#2e844a', amber: '#e0994d', amberSoft: 'rgba(224,153,77,.20)',
+  teal: '#06a59a', grid: '#ececec', muted: '#747474'
+};
+
+// ===== Highlights (2026 2Q vs 2025 2Q) =====
+const cur = raw[raw.length - 1];
+const prevY = raw.find(d => d.fy === cur.fy - 1 && d.q === cur.q);
+const margin = v => (v.op / v.rev) * 100;
+function delta(now, base) {
+  const pct = ((now - base) / base) * 100;
+  const cls = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat';
+  const arrow = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '–';
+  return `<div class="d ${cls}">${arrow} 전년比 ${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%</div>`;
+}
+const hi = [
+  { k: '매출액 (26년 2Q)', v: fmtEok(cur.rev), u: '억', d: delta(cur.rev, prevY.rev) },
+  { k: '영업이익 (26년 2Q)', v: fmtEok(cur.op), u: '억', d: delta(cur.op, prevY.op) },
+  { k: '영업이익률', v: margin(cur).toFixed(1), u: '%',
+    d: `<div class="d ${margin(cur) >= margin(prevY) ? 'up' : 'down'}">${margin(cur) >= margin(prevY) ? '▲' : '▼'} 전년 ${margin(prevY).toFixed(1)}%p</div>` },
+  { k: '현금성자산', v: fmtEok(cur.cash), u: '억', d: delta(cur.cash, prevY.cash) },
+];
+document.getElementById('highlights').innerHTML = hi.map(x => `
+  <div class="hi"><div class="k">${x.k}</div><div class="v">${x.v}<small>${x.u}</small></div>${x.d}</div>`).join('');
+
+// ===== Chart defaults =====
+Chart.defaults.font.family = '"Salesforce Sans","Malgun Gothic",Arial,sans-serif';
+Chart.defaults.font.size = 11;
+Chart.defaults.color = C.muted;
+const eokTick = { callback: v => v.toLocaleString('ko-KR') };
+
+// 매출 추이
+new Chart(document.getElementById('revChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{
+    label: '매출액(억)', data: raw.map(d => toEok(d.rev)),
+    backgroundColor: raw.map(d => d.fy === 2026 ? C.blue : C.blueSoft),
+    borderColor: C.blue, borderWidth: raw.map(d => d.fy === 2026 ? 0 : 1),
+    borderRadius: 3, maxBarThickness: 44
+  }]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` 매출 ${c.raw.toLocaleString('ko-KR',{maximumFractionDigits:0})}억` } } },
+    scales: { y: { beginAtZero: true, grid: { color: C.grid }, ticks: eokTick }, x: { grid: { display: false } } } }
+});
+
+// 영업이익 + 이익률
+new Chart(document.getElementById('opChart'), {
+  data: { labels, datasets: [
+    { type: 'bar', label: '영업이익(억)', data: raw.map(d => toEok(d.op)),
+      backgroundColor: C.amberSoft, borderColor: C.amber, borderWidth: 1, borderRadius: 3, order: 2, yAxisID: 'y' },
+    { type: 'line', label: '영업이익률(%)', data: raw.map(margin),
+      borderColor: C.green, backgroundColor: C.green, tension: .35, borderWidth: 2.2,
+      pointRadius: 2.5, pointBackgroundColor: '#fff', pointBorderColor: C.green, pointBorderWidth: 1.8, order: 1, yAxisID: 'y1' }
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 11, font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => c.dataset.yAxisID === 'y1' ? ` 이익률 ${c.raw.toFixed(1)}%` : ` 영업이익 ${c.raw.toLocaleString('ko-KR',{maximumFractionDigits:0})}억` } } },
+    scales: {
+      y: { beginAtZero: true, position: 'left', grid: { color: C.grid }, ticks: eokTick },
+      y1: { beginAtZero: true, position: 'right', grid: { display: false }, ticks: { callback: v => v + '%' } },
+      x: { grid: { display: false } } } }
+});
+
+// 현금성자산
+new Chart(document.getElementById('cashChart'), {
+  type: 'line',
+  data: { labels, datasets: [{
+    label: '현금성자산(억)', data: raw.map(d => toEok(d.cash)),
+    borderColor: C.teal, backgroundColor: 'rgba(6,165,154,.12)', fill: true,
+    tension: .35, borderWidth: 2.2, pointRadius: 2.5, pointBackgroundColor: '#fff', pointBorderColor: C.teal, pointBorderWidth: 1.8
+  }]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` 현금 ${c.raw.toLocaleString('ko-KR',{maximumFractionDigits:0})}억` } } },
+    scales: { y: { beginAtZero: true, grid: { color: C.grid }, ticks: eokTick }, x: { grid: { display: false } } } }
+});
+</script>
+</body>
+</html>
