@@ -18,7 +18,9 @@
  *
  * 제외(점수 null 로 저장 → 목록에서 빠짐):
  *   - 자본잠식(Total_Equity__c <= 0)
- *   - 이미 영업 진행 중(Lead: Status != 'New' 는 애초 대상에서 빠짐 / Account: 열린 Opportunity 보유)
+ *   - 비율 산정 불가(Total_Assets__c <= 0)
+ * 이미 영업 진행 중(Lead 비신규 상태·Account 열린 Opportunity)이어도 제외하지 않는다.
+ * 기존 거래처도 다른 상품을 추가로 판매할 여지가 있어 우선순위 목록에 남긴다.
  * 적합도가 낮은 기업은 제외가 아니라 낮은 점수로 남겨 최하위로 깔린다.
  *
  * 결정성: 최신은 연간·반기·분기 전체에서 (Fiscal_Year__c, 보고서 서수)가 가장 최근인 공시를 고르고,
@@ -97,7 +99,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
     /**
      * 점수 산정 후보 레코드를 조회한다.
-     * Lead 는 발굴 단계(Status='신규')만, Account 는 전체를 조회하고 execute 에서 제외 판정을 적용한다.
+     * Lead 는 미전환 전체, Account 는 전체를 조회한다(영업 진행 여부로 제외하지 않는다).
      * @param context 배치 컨텍스트
      * @return 대상 레코드 QueryLocator
      */
@@ -106,7 +108,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
             return Database.getQueryLocator([
                 SELECT Id, Priority_Score__c
                 FROM Lead
-                WHERE IsConverted = false AND Status = '신규'
+                WHERE IsConverted = false
             ]);
         }
         return Database.getQueryLocator([
@@ -128,9 +130,6 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
         Map<Id, CorporateFinancialStatement__c> priorByTarget = new Map<Id, CorporateFinancialStatement__c>();
         loadRecentStatements(targetIds, latestByTarget, priorByTarget);
 
-        Set<Id> excludedByOpenDeal = targetKind == Target.ACCOUNT
-            ? loadAccountsWithOpenOpportunity(targetIds)
-            : new Set<Id>();
         Map<Id, Integer> latestDisclosureYearByTarget = loadLatestDisclosureYears(targetIds);
 
         List<SObject> recordsToUpdate = new List<SObject>();
@@ -140,8 +139,7 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
             Decimal newScore = computeScore(
                 latest,
                 priorByTarget.get(targetId),
-                latestDisclosureYearByTarget.get(targetId),
-                excludedByOpenDeal.contains(targetId)
+                latestDisclosureYearByTarget.get(targetId)
             );
             Object currentRaw = record.get('Priority_Score__c');
             Decimal current = currentRaw == null
@@ -170,20 +168,18 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
     /**
      * 최신/직전 연간 재무제표와 공시 상태로 총점(0~100)을 계산한다.
-     * 제외 대상(자본잠식·영업중)이거나 최신 재무가 없으면 null 을 반환한다.
+     * 제외 대상(자본잠식·비율 산정 불가)이거나 최신 재무가 없으면 null 을 반환한다.
      * @param latest 최신 연간 재무제표(없으면 null)
      * @param prior 직전 연간 재무제표(없으면 null)
      * @param latestDisclosureYear 최신 공시 시그널의 연도(없으면 null)
-     * @param excludedByOpenDeal 열린 Opportunity 로 영업 진행 중이면 true
      * @return 0~100(소수 1자리) 점수 또는 null(제외/데이터 없음)
      */
     private Decimal computeScore(
         CorporateFinancialStatement__c latest,
         CorporateFinancialStatement__c prior,
-        Integer latestDisclosureYear,
-        Boolean excludedByOpenDeal
+        Integer latestDisclosureYear
     ) {
-        if (excludedByOpenDeal || latest == null) {
+        if (latest == null) {
             return null;
         }
         if (latest.Total_Equity__c == null || latest.Total_Equity__c <= 0) {
@@ -472,26 +468,6 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
             }
         }
         return yearByTarget;
-    }
-
-    /**
-     * 열린 Opportunity(IsClosed=false)를 가진 Account Id 집합을 반환한다(영업 진행 중 제외용).
-     * @param accountIds Account Id 집합
-     * @return 열린 딜을 보유한 Account Id 집합
-     */
-    private Set<Id> loadAccountsWithOpenOpportunity(Set<Id> accountIds) {
-        Set<Id> withOpenDeal = new Set<Id>();
-        if (accountIds.isEmpty()) {
-            return withOpenDeal;
-        }
-        for (Opportunity opp : [
-            SELECT AccountId
-            FROM Opportunity
-            WHERE AccountId IN :accountIds AND IsClosed = false
-        ]) {
-            withOpenDeal.add(opp.AccountId);
-        }
-        return withOpenDeal;
     }
 
     private String relationshipField() {

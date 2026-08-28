@@ -116,6 +116,11 @@ New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
 try {
     Copy-Item (Join-Path $RepoRoot 'sfdx-project.json') (Join-Path $TempRoot 'sfdx-project.json')
 
+    # sfdx-project.json 의 packageDirectories 를 임시 프로젝트에도 생성한다.
+    # (sf CLI 는 retrieve 전에 이 경로 존재를 검사하므로, 없으면 MissingPackageDirectoryError 로 검증이 실패한다.)
+    $pkgDirs = (Get-Content -Raw (Join-Path $RepoRoot 'sfdx-project.json') | ConvertFrom-Json).packageDirectories
+    foreach ($pd in $pkgDirs) { New-Item -ItemType Directory -Path (Join-Path $TempRoot $pd.path) -Force | Out-Null }
+
     $mdArgs = @()
     foreach ($m in $Metadata) { $mdArgs += @('--metadata', $m) }
 

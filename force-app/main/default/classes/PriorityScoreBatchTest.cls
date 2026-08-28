@@ -176,8 +176,9 @@ private class PriorityScoreBatchTest {
     }
 
     @isTest
-    static void shouldExcludeAccount_WhenOpenOpportunityExists() {
-        // Given: 재무는 만점급이지만 열린 Opportunity 보유 → 영업 진행 중 제외 → null
+    static void shouldScoreAccount_WhenOpenOpportunityExists() {
+        // Given: 열린 Opportunity(영업 진행 중)가 있어도 제외하지 않는다 — 추가 상품 판매 여지가 있어 우선순위에 남긴다.
+        //        열린 딜 없는 동일 재무 케이스(shouldScoreAccount_WhenNoOpenOpportunity)와 같은 69.9 가 나와야 한다.
         Account account = TestDataFactory.createAccount('90000001', true);
         insertStatement(null, account.Id, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
         insert new Opportunity(
@@ -192,7 +193,7 @@ private class PriorityScoreBatchTest {
         Test.stopTest();
 
         Account result = [SELECT Priority_Score__c FROM Account WHERE Id = :account.Id];
-        Assert.areEqual(null, result.Priority_Score__c, '열린 Opportunity 가 있으면 영업 진행 중으로 제외되어 null');
+        Assert.areEqual(69.9, result.Priority_Score__c, '열린 Opportunity 가 있어도 제외하지 않고 정상 채점(69.9)되어야 한다');
     }
 
     @isTest
@@ -232,6 +233,38 @@ private class PriorityScoreBatchTest {
 
         Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
         Assert.areEqual(69.9, result.Priority_Score__c, '스케줄러가 배치를 기동해 Lead 점수를 산정해야 한다');
+    }
+
+    @isTest
+    static void shouldScoreLead_WhenStatusNotNew() {
+        // 비신규 상태(영업 진행 중) 리드도 제외하지 않고 채점한다 — 신규 케이스와 동일한 69.9.
+        List<LeadStatus> working = [
+            SELECT MasterLabel
+            FROM LeadStatus
+            WHERE IsConverted = false AND MasterLabel != '신규'
+            ORDER BY SortOrder ASC NULLS LAST
+            LIMIT 1
+        ];
+        if (working.isEmpty()) {
+            return; // org 에 비신규·미전환 상태가 없으면 검증 불가 → 건너뜀
+        }
+        Lead lead = new Lead(
+            LastName = 'Tester',
+            Company = 'Working Lead',
+            Status = working[0].MasterLabel,
+            IsConverted = false,
+            name_new__c = 'Tester',
+            Email = 'working@example.com'
+        );
+        insert lead;
+        insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
+
+        Test.startTest();
+        Database.executeBatch(new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD), 200);
+        Test.stopTest();
+
+        Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
+        Assert.areEqual(69.9, result.Priority_Score__c, '비신규 상태 리드도 제외하지 않고 정상 채점(69.9)되어야 한다');
     }
 
     // ─── 테스트 데이터 헬퍼 (TestDataFactory 동결로 이 클래스에 둔다) ──────────
