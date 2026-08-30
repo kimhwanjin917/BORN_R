@@ -8,14 +8,14 @@
  * - with sharing: 실행 사용자가 볼 수 있는 Opportunity만 집계된다.
  * - 레코드 목록은 반환하지 않고 집계 수치만 반환한다.
  * - 모수가 0이면 insufficientData = true, wonRate = 0 (0으로 나누지 않음, 수치를 만들어내지 않음).
- * - productType 매칭 기준: 이 org는 상품 유형을 Opportunity.Primary_Product__c(→Product2)로 표현하므로
- *   Primary_Product__r.Family 또는 Primary_Product__r.Name 이 입력값과 같은 건만 센다.
+ * - productType 매칭 기준: Opportunity.Product_Family__c 또는 기준 상품(Product2) 이름과 일치한다.
  */
 public with sharing class SimilarWonAnalysisAction {
 
     private static final String MSG_NO_INDUSTRY = '산업군(industry)이 비어 있어 유사 기회를 찾을 수 없습니다.';
     private static final String MSG_INSUFFICIENT = '조건에 맞는 종결된 유사 기회가 없어 데이터가 부족합니다. 확률을 추정하지 마세요.';
 
+    /** Input criteria for one similar-opportunity aggregation request. */
     public class Request {
         @InvocableVariable(
             label='산업군 (Account.Industry)'
@@ -25,10 +25,11 @@ public with sharing class SimilarWonAnalysisAction {
 
         @InvocableVariable(
             label='상품 유형 (선택)'
-            description='선택. 상품군(Product2.Family, 예: RP, 채권) 또는 상품명(예: RP (환매조건부채권)). 지정하면 해당 상품이 주력 상품인 기회만 집계합니다.')
+            description='선택. Opportunity.Product_Family__c 상품군 또는 기준 상품명(예: RP, 회사채)을 지정하면 해당 상품이 주력 상품인 기회만 집계합니다.')
         public String productType;
     }
 
+    /** Aggregated result returned to Agentforce or Flow. */
     public class Result {
         @InvocableVariable(label='전체 종결 건수' description='조건에 맞는 종결(Closed Won + Closed Lost) Opportunity 수')
         public Integer totalCount;
@@ -52,6 +53,11 @@ public with sharing class SimilarWonAnalysisAction {
         public String message;
     }
 
+    /**
+     * Aggregates closed opportunities by industry and optional product criteria.
+     * @param requests Requests to process.
+     * @return One result per request, in input order.
+     */
     @InvocableMethod(
         label='유사 기회 Won 비율 집계'
         description='같은 산업군(선택: 같은 상품 유형)의 종결된 Opportunity를 집계해 전체 종결 건수, Won 건수, Won 비율(%)을 실계산으로 반환합니다. 모수가 0이면 insufficientData=true. 레코드가 아닌 집계 수치만 반환합니다.'
@@ -84,7 +90,6 @@ public with sharing class SimilarWonAnalysisAction {
             return res;
         }
 
-        // Aggregate SOQL — 레코드가 아닌 집계 수치만 조회. with sharing이라 실행 사용자가 볼 수 있는 건만 포함된다.
         List<AggregateResult> rows;
         if (productType == null) {
             rows = [
@@ -92,6 +97,7 @@ public with sharing class SimilarWonAnalysisAction {
                 FROM Opportunity
                 WHERE IsClosed = true
                   AND Account.Industry = :industry
+                WITH USER_MODE
                 GROUP BY IsWon
             ];
         } else {
@@ -100,7 +106,8 @@ public with sharing class SimilarWonAnalysisAction {
                 FROM Opportunity
                 WHERE IsClosed = true
                   AND Account.Industry = :industry
-                  AND (Primary_Product__r.Family = :productType OR Primary_Product__r.Name = :productType)
+                  AND (Product_Family__c = :productType OR Primary_Product__r.Name = :productType)
+                WITH USER_MODE
                 GROUP BY IsWon
             ];
         }
@@ -119,7 +126,6 @@ public with sharing class SimilarWonAnalysisAction {
         res.wonCount = won;
 
         if (total == 0) {
-            // 0으로 나누지 않는다. 수치를 지어내지 않는다.
             res.wonRate = 0;
             res.insufficientData = true;
             res.message = MSG_INSUFFICIENT;

@@ -253,8 +253,10 @@ export default class HomeScheduleNews extends NavigationMixin(LightningElement) 
             return;
         }
 
+        // Flow 종료(완료 팝업 [확인]) 후 해당 영업기회로 돌아간다
+        const retUrl = `/lightning/r/${opportunityId}/view`;
         const flowUrl =
-            `/flow/${this.flowApiName}?recordId=${encodeURIComponent(opportunityId)}&retURL=/lightning/page/home`;
+            `/flow/${this.flowApiName}?recordId=${encodeURIComponent(opportunityId)}&retURL=${encodeURIComponent(retUrl)}`;
 
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',

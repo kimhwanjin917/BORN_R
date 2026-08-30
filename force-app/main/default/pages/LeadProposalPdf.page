@@ -4,8 +4,7 @@
 <html>
 <head>
 <style type="text/css">
-    @page { size: A4; margin: 16mm 15mm 18mm 15mm;
-        @bottom-center { content: "근본증권 주식회사 · 법인영업본부 · " counter(page) " / " counter(pages); font-family: 'Arial Unicode MS'; font-size: 8.5pt; color: #8A93A6; } }
+    @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
     body { font-family: 'Arial Unicode MS'; font-size: 10.5pt; color: #0A1B3D; line-height: 1.5; }
 
     table.hd { width: 100%; border-collapse: collapse; margin-bottom: 6pt; }

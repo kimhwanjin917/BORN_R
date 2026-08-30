@@ -100,7 +100,7 @@
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <subflows>
         <description>요약 생성 + Slack 전송 (채널 기본값 #상품팀-검토)</description>
         <name>Send_Summary</name>

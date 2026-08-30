@@ -32,20 +32,21 @@ private class MyKpiControllerTest {
 
         Id topId = users[0].Id;
         Id lowId = users[1].Id;
-        Date thisQuarter = quarterStart(Date.today());
-        Date lastQuarter = quarterStart(thisQuarter.addMonths(-1));
+        Integer half = Date.today().month() <= 6 ? 1 : 2;
+        Date thisHalfStart = Date.newInstance(Date.today().year(), half == 1 ? 1 : 7, 1);
+        Date previousHalfEnd = thisHalfStart.addDays(-1);
 
         insert new List<Opportunity>{
-            // This quarter: the small high-margin deal out-earns the large low-margin one.
-            wonDeal('Top current', topId, products[0].Id, 300000000, thisQuarter.addDays(5)),
-            wonDeal('Low current', lowId, products[1].Id, 1000000000, thisQuarter.addDays(5)),
-            // A won deal in the previous quarter — this quarter's figure must not include it.
-            wonDeal('Low previous', lowId, products[0].Id, 500000000, lastQuarter.addDays(5)),
+            // This half-year: the small high-margin deal out-earns the large low-margin one.
+            wonDeal('Top current', topId, products[0].Id, 300000000, thisHalfStart.addDays(5)),
+            wonDeal('Low current', lowId, products[1].Id, 1000000000, thisHalfStart.addDays(5)),
+            // A won deal in the previous half-year — this half-year's figure must not include it.
+            wonDeal('Low previous', lowId, products[0].Id, 500000000, previousHalfEnd.addDays(-5)),
             // Open deals never count towards fee revenue.
             new Opportunity(
                 Name = 'Top open',
                 StageName = 'Prospecting',
-                CloseDate = thisQuarter.addDays(10),
+                CloseDate = thisHalfStart.addDays(10),
                 Amount = 900000000,
                 OwnerId = topId,
                 Primary_Product__c = products[0].Id
@@ -77,18 +78,18 @@ private class MyKpiControllerTest {
     }
 
     @isTest
-    static void previousQuarterDealsAreExcluded() {
+    static void previousHalfYearDealsAreExcluded() {
         Test.startTest();
         MyKpiController.MyKpi low = runAsUser(LOW_RM);
         Test.stopTest();
 
         // Low RM also has a 500,000,000 high-margin deal — 5,000,000 in fees —
-        // closed last quarter. Only this quarter's 1,500,000 may count.
-        System.assertEquals(1500000, low.feeRevenue, '지난 분기에 성사된 딜은 이번 분기 수수료에 들어가지 않는다');
+        // closed in the previous half-year. Only this half-year's 1,500,000 may count.
+        System.assertEquals(1500000, low.feeRevenue, '이전 반기에 성사된 딜은 현재 반기 수수료에 들어가지 않는다');
     }
 
     @isTest
-    static void newAccountsCountOwnedAccountsCreatedThisQuarter() {
+    static void newAccountsCountOwnedAccountsCreatedThisHalfYear() {
         Id topId = [SELECT Id FROM User WHERE Username = :TOP_RM LIMIT 1].Id;
         insert new List<Account>{
             new Account(Name = 'Fresh One', OwnerId = topId, Business_Registration_Number__c = '0000000001'),
@@ -99,7 +100,7 @@ private class MyKpiControllerTest {
         MyKpiController.MyKpi kpi = runAsUser(TOP_RM);
         Test.stopTest();
 
-        System.assertEquals(2, kpi.newAccounts, '이번 분기에 본인이 만든 고객사만');
+        System.assertEquals(2, kpi.newAccounts, '현재 반기에 본인이 만든 고객사만');
     }
 
     @isTest
@@ -109,21 +110,18 @@ private class MyKpiControllerTest {
         Test.stopTest();
 
         System.assertEquals(0, kpi.feeRevenue, '성사된 딜이 없으면 0');
-        System.assertEquals(0, kpi.newAccounts, '이번 분기에 만든 고객사가 없으면 0');
+        System.assertEquals(0, kpi.newAccounts, '현재 반기에 만든 고객사가 없으면 0');
     }
 
     @isTest
-    static void periodLabelNamesTheCurrentQuarter() {
+    static void periodLabelNamesTheCurrentHalfYear() {
         Test.startTest();
         MyKpiController.MyKpi kpi = runAsUser(TOP_RM);
         Test.stopTest();
 
-        Integer expected = (Date.today().month() - 1) / 3 + 1;
-        System.assertEquals(
-            Date.today().year() + ' ' + expected + 'Q',
-            kpi.periodLabel,
-            '오늘 날짜가 속한 분기를 표시'
-        );
+        Integer half = Date.today().month() <= 6 ? 1 : 2;
+        String expected = String.valueOf(Date.today().year()) + (half == 1 ? ' 상반기' : ' 하반기');
+        System.assertEquals(expected, kpi.periodLabel, '오늘 날짜가 속한 반기를 표시');
     }
 
     @isTest
@@ -172,7 +170,4 @@ private class MyKpiControllerTest {
         );
     }
 
-    private static Date quarterStart(Date d) {
-        return Date.newInstance(d.year(), ((d.month() - 1) / 3) * 3 + 1, 1);
-    }
 }

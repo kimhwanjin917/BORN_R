@@ -1,5 +1,5 @@
 /**
- * Slack → 본이 inbound. 공개 Site 게스트가 실행. 검증 후 플랫폼 이벤트만 발행하고 즉시 200.
+ * Slack → 보니 inbound. 공개 Site 게스트가 실행. 검증 후 플랫폼 이벤트만 발행하고 즉시 200.
  * 게스트는 CRM 데이터를 못 읽으므로 처리 자체는 BoniSlackEventTrigger(시스템 컨텍스트)에서 한다.
  *
  * 검증 방식 2가지:
@@ -62,7 +62,7 @@ global with sharing class BoniSlackEventsRest {
         return Math.abs(now - Long.valueOf(timestamp)) <= MAX_SKEW_SECONDS;
     }
 
-    /** payload.token == Verification Token 이고 api_app_id 가 본이 앱이면 true */
+    /** payload.token == Verification Token 이고 api_app_id 가 보니 앱이면 true */
     public static Boolean isValidToken(String expectedToken, String payloadJson) {
         if (String.isBlank(expectedToken) || String.isBlank(payloadJson)) return false;
         try {

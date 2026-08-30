@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getEmailContext from '@salesforce/apex/MeetingPrepEmailComposerController.getEmailContext';
 import getEmailDraft from '@salesforce/apex/MeetingPrepEmailComposerController.getEmailDraft';
 import getRecordName from '@salesforce/apex/MeetingPrepEmailComposerController.getRecordName';
+import sendEmail from '@salesforce/apex/MeetingPrepEmailComposerController.sendEmail';
 
 export default class MeetingPrepEmailComposer extends LightningElement {
     _recordId;
@@ -19,6 +20,7 @@ export default class MeetingPrepEmailComposer extends LightningElement {
     @track relatedToId;
     hasDraft = false;
     bodyLoading = false;
+    sending = false;
 
     @api
     get recordId() {
@@ -127,15 +129,73 @@ export default class MeetingPrepEmailComposer extends LightningElement {
         this.relatedToId = event.detail.recordId;
     }
 
-    handleSend() {
-        // 실제 발송은 다음 단계에서 연결 (현재는 초안 검토까지)
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: '검토 완료',
-                message: '발송 기능은 다음 단계에서 연결됩니다. (현재는 초안 검토까지)',
-                variant: 'info'
-            })
-        );
+    get isBodyEmpty() {
+        return !this.htmlBody || this.htmlBody.replace(/<[^>]*>/g, '').trim() === '';
+    }
+
+    get sendDisabled() {
+        return this.sending;
+    }
+
+    async handleSend() {
+        if (!this.hasRecipients) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: '받는 사람 필요',
+                    message: '받는 사람을 최소 1명 이상 지정해 주세요.',
+                    variant: 'error'
+                })
+            );
+            return;
+        }
+        if (!this.subject || !this.subject.trim() || this.isBodyEmpty) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: '내용 필요',
+                    message: '제목과 본문을 입력해 주세요.',
+                    variant: 'error'
+                })
+            );
+            return;
+        }
+        if (!this.relatedToId) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Related To 필요',
+                    message: 'Related To(Lead)를 지정해 주세요.',
+                    variant: 'error'
+                })
+            );
+            return;
+        }
+
+        this.sending = true;
+        try {
+            await sendEmail({
+                subject: this.subject,
+                htmlBody: this.htmlBody,
+                relatedToId: this.relatedToId,
+                recipientIds: this.recipients.map((r) => r.id)
+            });
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: '발송 완료',
+                    message: '메일이 발송되었습니다.',
+                    variant: 'success'
+                })
+            );
+            this.handleClose();
+        } catch (error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: '발송 실패',
+                    message: error?.body?.message || error?.message || '메일 발송 중 오류가 발생했습니다.',
+                    variant: 'error'
+                })
+            );
+        } finally {
+            this.sending = false;
+        }
     }
 
     handleClose() {

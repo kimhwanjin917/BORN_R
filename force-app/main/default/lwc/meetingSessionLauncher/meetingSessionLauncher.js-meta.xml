@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Meeting Session Launcher</masterLabel>
-    <description>현재 레코드에서 전용 Meeting Session Flow 페이지로 이동합니다.</description>
+    <masterLabel>미팅 시작</masterLabel>
+    <description>현재 레코드 Id로 Meeting Session Flow를 전체 페이지로 엽니다(모달 없음).</description>
     <targets>
         <target>lightning__RecordAction</target>
     </targets>

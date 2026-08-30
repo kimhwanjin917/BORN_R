@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>MeetingNoteContextService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>MeetingSessionContextController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Meeting Note 오브젝트, 탭, 필드에 대한 접근 권한</description>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Meeting_Note__c.Account__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Meeting_Note__c.Contact__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Meeting_Note__c.Event_Id__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Meeting_Note__c.Masked_Count__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Meeting_Note__c.Meeting_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -21,6 +49,10 @@
         <field>Meeting_Note__c.Sanitized_Content__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Meeting_Session</flow>
+    </flowAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Meeting Notes Access</label>
     <objectPermissions>
@@ -37,4 +69,8 @@
         <tab>Meeting_Note__c</tab>
         <visibility>Available</visibility>
     </tabSettings>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>RunFlow</name>
+    </userPermissions>
 </PermissionSet>

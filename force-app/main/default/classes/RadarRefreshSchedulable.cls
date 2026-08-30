@@ -21,5 +21,7 @@ public with sharing class RadarRefreshSchedulable implements Schedulable {
         }
         RecommendationOutcomeService.syncOutcomes(accountIds);
         RadarRecommendationService.regenerate(accountIds);
+        // Create 만기 알림 follow-up Tasks for assets maturing within 30 days (home dashboard card).
+        MaturityAlertService.generateAlerts();
     }
 }

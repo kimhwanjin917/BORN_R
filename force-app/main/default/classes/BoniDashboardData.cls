@@ -1,4 +1,4 @@
-/** 본이 대시보드 렌더링 입력. SOQL·콜아웃 없음. */
+/** 보니 대시보드 렌더링 입력. SOQL·콜아웃 없음. */
 public with sharing class BoniDashboardData {
     public Id dataUserId;
     public String dataUserName;

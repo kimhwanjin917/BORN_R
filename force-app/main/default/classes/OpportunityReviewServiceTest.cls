@@ -15,14 +15,35 @@ private class OpportunityReviewServiceTest {
         );
     }
 
+    /** docs/58 (ADR-0004): 트리거는 더 이상 자동 심사를 하지 않는다 — 딜 Slack 채널만 만든다. Slack 은 mock. */
+    private class SlackOkMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+            HttpResponse r = new HttpResponse();
+            r.setStatusCode(200);
+            String ep = req.getEndpoint();
+            r.setBody(ep.contains('conversations.create') ? '{"ok":true,"channel":{"id":"C0T","name":"t"}}'
+                : ep.contains('lookupByEmail') ? '{"ok":true,"user":{"id":"U0T"}}' : '{"ok":true,"ts":"1.1"}');
+            return r;
+        }
+    }
+
     @IsTest
-    static void shouldApproveCreateContractNotifyAndAdvanceStage_OnMeetingLogChange() {
+    static void meetingLogChange_doesNothing_ButCompleteReviewStillWorks() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Test.setMock(HttpCalloutMock.class, new SlackOkMock());
 
         Test.startTest();
         opp.Meeting_Log__c = '2026-08-26 미팅: RP 1억 6개월 조건 합의';
-        update opp; // OpportunityReviewTrigger → Queueable
+        update opp; // OpportunityReviewTrigger 비활성 — 아무 일도 일어나지 않는다
         Test.stopTest();
+
+        opp = [SELECT Approval_Status__c, StageName, Slack_Channel_ID__c FROM Opportunity WHERE Id = :opp.Id];
+        Assert.areNotEqual(OpportunityReviewService.APPROVED, opp.Approval_Status__c, '미팅 로그 저장만으로 승인되지 않는다');
+        Assert.areEqual(0, [SELECT COUNT() FROM Contract WHERE SourceOpportunityId = :opp.Id], '계약서는 버튼 전까지 안 만든다');
+        Assert.isNull(opp.Slack_Channel_ID__c, '트리거 비활성 — 딜 채널도 자동 생성되지 않는다([상품팀 전달] 버튼이 만든다)');
+
+        // RM [계약서 생성] 버튼이 부르는 경로
+        OpportunityReviewService.completeReview(new List<Id>{ opp.Id });
 
         opp = [SELECT Approval_Status__c, StageName FROM Opportunity WHERE Id = :opp.Id];
         Assert.areEqual(OpportunityReviewService.APPROVED, opp.Approval_Status__c);
@@ -47,6 +68,7 @@ private class OpportunityReviewServiceTest {
     @IsTest
     static void shouldRunOnlyOnce_WhenAlreadyApproved() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Test.setMock(HttpCalloutMock.class, new SlackOkMock());
         opp.Approval_Status__c = OpportunityReviewService.APPROVED;
         opp.Meeting_Log__c = '첫 로그';
         update opp;

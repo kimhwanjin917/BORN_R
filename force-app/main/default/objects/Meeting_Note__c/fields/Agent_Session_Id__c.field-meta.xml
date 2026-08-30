@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agent_Session_Id__c</fullName>
+    <description>docs/60 — 메모 등록 시 RM_Assistant 에이전트가 만든 대화 세션 Id. 추가 질문 시 같은 세션을 이어가는 데 사용.</description>
+    <externalId>false</externalId>
+    <label>에이전트 세션 Id</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -113,7 +113,7 @@
         <name>OpportunityRevenue</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -121,15 +121,15 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -173,7 +173,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -189,7 +189,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -197,11 +197,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -213,7 +213,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -253,7 +253,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -268,6 +268,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -276,12 +292,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -294,6 +326,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -312,6 +360,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -328,8 +380,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -341,7 +405,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -357,7 +421,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -405,22 +469,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -456,7 +536,7 @@
         <name>OpportunityQuantity</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -468,11 +548,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -516,11 +596,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -536,7 +616,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -544,11 +624,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -556,7 +636,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -596,7 +676,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -611,6 +691,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -619,12 +715,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -637,6 +749,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -655,6 +783,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -671,8 +803,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -684,7 +828,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -700,7 +844,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -748,22 +892,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -799,7 +959,7 @@
         <name>OpportunityLineItemRevenue</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -811,11 +971,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -859,11 +1019,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -879,7 +1039,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -887,11 +1047,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -903,7 +1063,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -943,7 +1103,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -958,6 +1118,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -966,12 +1142,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -984,6 +1176,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -1002,6 +1210,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -1018,8 +1230,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -1031,7 +1255,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -1047,7 +1271,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -1096,22 +1320,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -1147,7 +1387,7 @@
         <name>OpportunityLineItemQuantity</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -1159,11 +1399,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -1207,11 +1447,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -1227,7 +1467,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -1235,11 +1475,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -1247,7 +1487,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -1287,7 +1527,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -1302,6 +1542,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -1310,12 +1566,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -1328,6 +1600,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -1346,6 +1634,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -1362,8 +1654,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -1375,7 +1679,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -1391,7 +1695,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -1439,22 +1743,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -1490,7 +1810,7 @@
         <name>OpportunityRevenueProductDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -1502,11 +1822,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -1550,11 +1870,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -1570,7 +1890,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -1578,11 +1898,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -1594,7 +1914,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -1634,7 +1954,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -1649,6 +1969,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -1657,12 +1993,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -1675,6 +2027,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -1693,6 +2061,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -1709,8 +2081,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -1722,7 +2106,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -1738,7 +2122,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -1787,22 +2171,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -1838,7 +2238,7 @@
         <name>OpportunityQuantityProductDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -1850,11 +2250,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -1898,11 +2298,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -1918,7 +2318,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -1926,11 +2326,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -1938,7 +2338,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -1978,7 +2378,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -1993,6 +2393,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -2001,12 +2417,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2019,6 +2451,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2037,6 +2485,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -2053,8 +2505,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -2066,7 +2530,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -2082,7 +2546,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -2130,22 +2594,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -2181,7 +2661,7 @@
         <name>LineItemRevenueProductDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -2193,11 +2673,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -2241,11 +2721,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -2261,7 +2741,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -2269,11 +2749,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -2285,7 +2765,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -2325,7 +2805,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -2340,6 +2820,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -2348,12 +2844,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2366,6 +2878,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2384,6 +2912,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -2400,8 +2932,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -2413,7 +2957,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -2429,7 +2973,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -2478,22 +3022,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -2529,7 +3089,7 @@
         <name>LineItemQuantityProductDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -2541,11 +3101,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -2589,11 +3149,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -2609,7 +3169,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -2617,11 +3177,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -2629,7 +3189,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -2669,7 +3229,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -2684,6 +3244,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -2692,12 +3268,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2710,6 +3302,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2728,6 +3336,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -2744,8 +3356,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -2757,7 +3381,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -2773,7 +3397,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -2821,22 +3445,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -2872,7 +3512,7 @@
         <name>OpportunityRevenueScheduleDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -2884,11 +3524,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -2932,11 +3572,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -2952,7 +3592,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -2960,11 +3600,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -2976,7 +3616,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -3016,7 +3656,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -3031,6 +3671,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -3039,12 +3695,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -3057,6 +3729,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -3075,6 +3763,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -3091,8 +3783,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -3104,7 +3808,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -3120,7 +3824,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -3169,22 +3873,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -3220,7 +3940,7 @@
         <name>OpportunityQuantityScheduleDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -3232,11 +3952,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -3280,11 +4000,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -3300,7 +4020,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -3308,11 +4028,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -3320,7 +4040,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -3360,7 +4080,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -3375,6 +4095,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -3383,12 +4119,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -3401,6 +4153,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -3419,6 +4187,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -3435,8 +4207,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -3448,7 +4232,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -3464,7 +4248,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -3512,22 +4296,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -3563,7 +4363,7 @@
         <name>LineItemRevenueScheduleDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -3575,11 +4375,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -3623,11 +4423,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -3643,7 +4443,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -3651,11 +4451,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -3667,7 +4467,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -3707,7 +4507,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -3722,6 +4522,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -3730,12 +4546,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -3748,6 +4580,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -3766,6 +4614,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -3782,8 +4634,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -3795,7 +4659,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -3811,7 +4675,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -3860,22 +4724,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
@@ -3911,7 +4791,7 @@
         <name>LineItemQuantityScheduleDate</name>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NAME</field>
-            <label>Opportunity Name</label>
+            <label>영업기회 명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
@@ -3923,11 +4803,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CLOSE_DATE</field>
-            <label>Close Date</label>
+            <label>예상 계약 완료일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.STAGE_NAME</field>
-            <label>Stage</label>
+            <label>영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PROBABILITY</field>
@@ -3971,11 +4851,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.CURRENCY_ISO_CODE</field>
-            <label>Opportunity Currency</label>
+            <label>통화</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
-            <label>Amount</label>
+            <label>계약금액</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>CORE.USERS.ALIAS</field>
@@ -3991,7 +4871,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>DESCRIPTION</field>
-            <label>Description</label>
+            <label>상세설명</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.EXP_AMOUNT</field>
@@ -3999,11 +4879,11 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LEAD_SOURCE</field>
-            <label>Lead Source</label>
+            <label>유입 경로</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.NEXT_STEP</field>
-            <label>Next Step</label>
+            <label>다음 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PRIVATE</field>
@@ -4011,7 +4891,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.TYPE</field>
-            <label>Type</label>
+            <label>영업 유형</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>UPDATEDBY_USER.ALIAS</field>
@@ -4051,7 +4931,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
-            <label>Opportunity Record Type</label>
+            <label>영업기회 구분</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
@@ -4066,6 +4946,22 @@
             <label>Last Modified Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1W</field>
+            <label>Meeting Prep Briefing</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005Tfl1V</field>
+            <label>Meeting Prep Briefing Updated At</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecf</field>
+            <label>Meeting Prep Briefing Updated At V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V6ecg</field>
+            <label>Meeting Prep Briefing V2</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDWID</field>
             <label>RP만기일</label>
         </opportunityListFieldsLabelMappings>
@@ -4074,12 +4970,28 @@
             <label>RP약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoF</field>
+            <label>Slack Channel ID</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoG</field>
+            <label>Slack 채널 링크</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8GpZ</field>
+            <label>계약 시작일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF0</field>
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VGrDd</field>
+            <label>단계 진입일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -4092,6 +5004,22 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsFG</field>
             <label>상품군</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoD</field>
+            <label>상품팀 회신 시각</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoE</field>
+            <label>상품팀 회신자</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpa</field>
+            <label>수수료</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005V8Gpb</field>
+            <label>수익률 구조</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -4110,6 +5038,10 @@
             <label>실패 상세</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005UTA8D</field>
+            <label>우선순위 점수</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF3</field>
             <label>원천 영업기회</label>
         </opportunityListFieldsLabelMappings>
@@ -4126,8 +5058,20 @@
             <label>최근 미팅일</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005OHsbW</field>
+            <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
             <label>표면금리</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoC</field>
+            <label>확정 수수료율</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005TGZoH</field>
+            <label>회신 메시지 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>PARTNER.NAME</field>
@@ -4139,7 +5083,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>
-            <label>Days In Stage</label>
+            <label>Days In 영업 단계</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_ACTIVITY_DAYS</field>
@@ -4155,7 +5099,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.LAST_STAGE_CHANGE</field>
-            <label>Last Stage Change Date</label>
+            <label>Last 영업 단계 Change Date</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.PUSH_COUNT</field>
@@ -4203,22 +5147,38 @@
             <field>OPPORTUNITY.LAST_ACTIVITY</field>
             <field>OPPORTUNITY.CREATED_DATE</field>
             <field>OPPORTUNITY.LAST_UPDATE</field>
+            <field>00Naj00005Tfl1W</field>
+            <field>00Naj00005Tfl1V</field>
+            <field>00Naj00005V6ecf</field>
+            <field>00Naj00005V6ecg</field>
             <field>00Naj00005FDWID</field>
             <field>00Naj00005FDJdd</field>
+            <field>00Naj00005TGZoF</field>
+            <field>00Naj00005TGZoG</field>
+            <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
             <field>00Naj00005EmsF1</field>
+            <field>00Naj00005VGrDd</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
+            <field>00Naj00005TGZoD</field>
+            <field>00Naj00005TGZoE</field>
+            <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005V8Gpb</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
             <field>00Naj00005GUikb</field>
+            <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
+            <field>00Naj00005OHsbW</field>
             <field>00Naj00005FDxWv</field>
+            <field>00Naj00005TGZoC</field>
+            <field>00Naj00005TGZoH</field>
             <field>PARTNER.NAME</field>
             <field>OPPORTUNITY.ISPRIORITYRECORD</field>
             <field>OPPORTUNITY.LAST_STG_CHG_DAYS</field>

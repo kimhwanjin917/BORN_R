@@ -46,6 +46,41 @@ private class MeetingPrepBriefingProviderTest {
     }
 
     @isTest
+    static void shouldKeepSignalBlock_WhenFinancialAbsentButSignalExists() {
+        // 재무제표는 없고 외부 시그널만 있는 리드. 블록 격리 덕분에 시그널 블록은 살아남아야 한다.
+        // (예전 단일 try/catch 구조에서도 이 케이스는 통과했지만, 블록 분리 후에도 회귀하지 않음을 못박는다.)
+        Lead lead = createLead('Signal Only Lead');
+        insertDisclosureSignal(lead.Id, Date.newInstance(2026, 5, 20), '수주 공시', '대형 공급계약 체결');
+
+        Lead grounded = [SELECT Id FROM Lead WHERE Id = :lead.Id];
+        String text = MeetingPrepBriefingProvider.buildContextText(grounded);
+
+        Assert.isTrue(text.contains('CRM 프로필'), 'CRM 블록은 항상 있어야 한다');
+        Assert.isTrue(text.contains('최근 외부 시그널'), '재무가 없어도 시그널 블록은 남아야 한다');
+        Assert.isTrue(text.contains('수주 공시'), '시그널 제목이 인용돼야 한다');
+        Assert.isFalse(
+            text.contains(MeetingPrepBriefingProvider.NO_DATA_MESSAGE),
+            '시그널이라도 있으면 데이터 없음 문구는 붙지 않아야 한다'
+        );
+    }
+
+    @isTest
+    static void shouldKeepFinancialBlock_WhenSignalAbsentButFinancialExists() {
+        // 시그널은 없고 연간 재무만 있는 리드. 재무 블록은 남고 데이터 없음 문구는 붙지 않아야 한다.
+        Lead lead = createLead('Financial Only Lead');
+        insertStatement(lead.Id, 2025, ASSETS, ASSETS, 30000000000L);
+
+        Lead grounded = [SELECT Id FROM Lead WHERE Id = :lead.Id];
+        String text = MeetingPrepBriefingProvider.buildContextText(grounded);
+
+        Assert.isTrue(text.contains('재무제표 추이'), '시그널이 없어도 재무 블록은 남아야 한다');
+        Assert.isFalse(
+            text.contains(MeetingPrepBriefingProvider.NO_DATA_MESSAGE),
+            '재무라도 있으면 데이터 없음 문구는 붙지 않아야 한다'
+        );
+    }
+
+    @isTest
     static void shouldReturnNoLeadMessage_WhenLeadNull() {
         String text = MeetingPrepBriefingProvider.buildContextText(null);
         Assert.areEqual(

@@ -9,6 +9,7 @@
         <targetConfig targets="lightning__RecordPage">
             <objects>
                 <object>Lead</object>
+                <object>Opportunity</object>
             </objects>
         </targetConfig>
     </targetConfigs>

@@ -154,13 +154,13 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Meeting Note</label>
+    <label>미팅노트</label>
     <nameField>
         <displayFormat>MN-{0000}</displayFormat>
         <label>Meeting Note Number</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Meeting Notes</pluralLabel>
+    <pluralLabel>미팅노트</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>Private</sharingModel>
     <visibility>Public</visibility>

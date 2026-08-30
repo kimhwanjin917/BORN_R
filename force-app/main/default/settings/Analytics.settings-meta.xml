@@ -19,7 +19,6 @@
     <enableCrmaSubsForExpCloud>false</enableCrmaSubsForExpCloud>
     <enableCrtSetupLightningUiPref>true</enableCrtSetupLightningUiPref>
     <enableCurrencySupportInDCRPref>false</enableCurrencySupportInDCRPref>
-    <enableDashboardComponentSnapshot>false</enableDashboardComponentSnapshot>
     <enableDashboardFlexiTable>true</enableDashboardFlexiTable>
     <enableDashboardSubOrgEmailPref>false</enableDashboardSubOrgEmailPref>
     <enableDashboardToPDFEnable>false</enableDashboardToPDFEnable>

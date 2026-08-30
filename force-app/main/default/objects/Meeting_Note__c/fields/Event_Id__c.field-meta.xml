@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Event_Id__c</fullName>
+    <description>이 미팅 기록의 출처 일정(Event)의 18자리 Id. Salesforce는 Event를 커스텀 Lookup 대상으로 허용하지 않으므로(&quot;referenceTo value of &apos;Event&apos; does not resolve to a valid sObject type&quot;) Lookup 대신 External Id 텍스트로 보관한다. Event에서 미팅 세션을 시작한 경우에만 채워진다.</description>
+    <externalId>true</externalId>
+    <label>일정 Id</label>
+    <length>18</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

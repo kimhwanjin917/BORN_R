@@ -42,6 +42,45 @@ private class AccountPriorityControllerTest {
     }
 
     @isTest
+    static void excludesAccountsOwnedByOtherUsers() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+        User otherUser = new User(
+            FirstName = 'Other',
+            LastName = 'Owner',
+            Email = 'other.owner@example.com.invalid',
+            Username = 'other.owner.' + String.valueOf(DateTime.now().getTime()) + '@example.com.invalid',
+            Alias = 'oown',
+            TimeZoneSidKey = 'Asia/Seoul',
+            LocaleSidKey = 'ko_KR',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            ProfileId = p.Id
+        );
+        insert otherUser;
+
+        Account foreignAcct = new Account(
+            Name = 'Foreign Owner Acct',
+            Priority_Score__c = 999,
+            Business_Registration_Number__c = String.valueOf(1000000099),
+            OwnerId = otherUser.Id
+        );
+        insert foreignAcct;
+
+        Test.startTest();
+        List<Account> result = AccountPriorityController.getTopAccounts(10);
+        Test.stopTest();
+
+        for (Account acct : result) {
+            System.assertNotEquals(
+                foreignAcct.Id,
+                acct.Id,
+                'Accounts owned by other users must be excluded'
+            );
+        }
+        System.assertEquals(5, result.size(), 'Only the running user\'s scored accounts should be returned');
+    }
+
+    @isTest
     static void defaultsLimitWhenNullOrNonPositive() {
         Test.startTest();
         List<Account> nullResult = AccountPriorityController.getTopAccounts(null);

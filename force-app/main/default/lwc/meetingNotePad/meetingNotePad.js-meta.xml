@@ -25,7 +25,7 @@
             <property
                 name="followUpQuestion"
                 type="String"
-                label="추가 질문"
+                label="추가 질문(미사용)"
                 role="outputOnly"
             />
             <property
@@ -61,6 +61,20 @@
                 type="String"
                 label="정규화된 에이전트 추천"
                 description="Agentforce 응답에서 사용자에게 표시할 추천 메시지만 추출"
+                role="outputOnly"
+            />
+            <property
+                name="meetingNoteId"
+                type="String"
+                label="등록된 미팅 메모 Id"
+                description="[메모 등록]으로 저장된 Meeting_Note__c Id. [미팅 저장] 시 최종 저장 액션에 전달 (docs/60)"
+                role="outputOnly"
+            />
+            <property
+                name="opportunityId"
+                type="String"
+                label="연결된 영업기회 Id"
+                description="메모 등록 시 연결된 Opportunity Id. 완료 팝업 [확인] 시 이동 대상"
                 role="outputOnly"
             />
             <property

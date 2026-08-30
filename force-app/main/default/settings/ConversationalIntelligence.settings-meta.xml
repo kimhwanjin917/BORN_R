@@ -6,6 +6,7 @@
     <enableCallSummarization>false</enableCallSummarization>
     <enableConversationMining>false</enableConversationMining>
     <enableDiarizationPref>false</enableDiarizationPref>
+    <enableECICallScoring>false</enableECICallScoring>
     <enableECIOOTBFlows>false</enableECIOOTBFlows>
     <enableGenECI>false</enableGenECI>
     <enableGenerativeConvInsights>false</enableGenerativeConvInsights>

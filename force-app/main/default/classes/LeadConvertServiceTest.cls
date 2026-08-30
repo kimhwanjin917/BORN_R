@@ -100,7 +100,9 @@ private class LeadConvertServiceTest {
             newFieldPerm(ps.Id, 'Lead', 'Lead.Business_Registration_Number__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Assigned_Company_Code__c', false),
             newFieldPerm(ps.Id, 'Lead', 'Lead.Recommended_Product_Family__c', false),
+            newFieldPerm(ps.Id, 'Lead', 'Lead.Proposed_Yield_Rate__c', false),
             newFieldPerm(ps.Id, 'Opportunity', 'Opportunity.Primary_Product__c', true),
+            newFieldPerm(ps.Id, 'Opportunity', 'Opportunity.RP_Yield__c', true),
             // Account fields are read and written. Business_Registration_Number__c
             // is a required (non-nillable) field, so its FLS is implicit and
             // cannot be granted via FieldPermissions — it is omitted here.
@@ -345,6 +347,39 @@ private class LeadConvertServiceTest {
     }
 
     @isTest
+    static void shouldReconnectExternalRecords_WhenConvertedByStandardPath() {
+        // convertLeads Invocable 을 거치지 않는 표준 전환(Database.convertLead 직접)에서도
+        // 재무·시그널이 새 Account 로 재연결돼야 한다 — 재연결이 LeadConvertedTrigger 로
+        // 옮겨졌기 때문. 예전엔 Invocable 안에만 있어 이 경로에서 재연결이 누락됐다.
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+
+        Id newAccountId;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            LeadStatus convertedStatus = [
+                SELECT ApiName FROM LeadStatus WHERE IsConverted = true ORDER BY IsDefault DESC LIMIT 1
+            ];
+            Database.LeadConvert lc = new Database.LeadConvert();
+            lc.setLeadId(lead.Id);
+            lc.setConvertedStatus(convertedStatus.ApiName);
+            Database.LeadConvertResult result = Database.convertLead(lc);
+            Assert.isTrue(result.isSuccess(), 'Standard conversion should succeed');
+            newAccountId = result.getAccountId();
+        }
+        Test.stopTest();
+
+        CorporateFinancialStatement__c statement =
+            [SELECT Account__c FROM CorporateFinancialStatement__c WHERE Lead__c = :lead.Id];
+        Assert.areEqual(newAccountId, statement.Account__c,
+            'Financial statement should be repointed even without the Invocable');
+
+        ExternalSignal__c signal =
+            [SELECT Account__c FROM ExternalSignal__c WHERE Lead__c = :lead.Id];
+        Assert.areEqual(newAccountId, signal.Account__c,
+            'External signal should be repointed even without the Invocable');
+    }
+
+    @isTest
     static void shouldTransferLeadFieldsToAccount_WhenConverted() {
         // Given
         Lead lead = [SELECT Id FROM Lead LIMIT 1];
@@ -424,5 +459,55 @@ private class LeadConvertServiceTest {
 
         // Then
         Assert.isTrue(responses.isEmpty(), 'Empty input should return empty response list');
+    }
+
+    // ─── 제안 조건 이관 ─────────────────────────────────────────────────
+
+    @isTest
+    static void shouldCarryProposedYieldToOpportunity_WhenSetOnLead() {
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            lead.Recommended_Product_Family__c = 'RP';
+            lead.Proposed_Yield_Rate__c = 3.20;
+            update lead;
+        }
+        LeadConvertService.Request req = new LeadConvertService.Request();
+        req.leadId = lead.Id;
+        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 10, 0, 0);
+
+        List<LeadConvertService.Response> responses;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
+        }
+        Test.stopTest();
+
+        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
+        Opportunity created = [SELECT RP_Yield__c FROM Opportunity WHERE Id = :responses[0].opportunityId];
+        Assert.areEqual(3.20, created.RP_Yield__c,
+            '제안서에 실은 수익률이 딜의 출발값이 돼야 한다 — 없으면 RM 이 처음부터 다시 입력한다');
+    }
+
+    @isTest
+    static void shouldLeaveYieldBlank_WhenLeadHasNoProposedYield() {
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            lead.Recommended_Product_Family__c = 'RP';
+            update lead;
+        }
+        LeadConvertService.Request req = new LeadConvertService.Request();
+        req.leadId = lead.Id;
+        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 10, 0, 0);
+
+        List<LeadConvertService.Response> responses;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
+        }
+        Test.stopTest();
+
+        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
+        Opportunity created = [SELECT RP_Yield__c FROM Opportunity WHERE Id = :responses[0].opportunityId];
+        Assert.isNull(created.RP_Yield__c, '제안 수익률이 없으면 값을 만들어내지 않는다');
     }
 }

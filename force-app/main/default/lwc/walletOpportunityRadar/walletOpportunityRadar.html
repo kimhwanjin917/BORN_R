@@ -1,29 +1,50 @@
 <template>
     <article class="radar-card" aria-labelledby="radar-title">
         <header class="component-header">
-            <div>
-                <p class="eyebrow">OPPORTUNITY RADAR</p>
-                <h1 id="radar-title" class="title">고객 성장 기회 레이더</h1>
-                <p class="subtitle">화이트스페이스와 성공 가능성을 함께 보고 다음 영업 행동을 결정합니다.</p>
+            <div class="component-heading">
+                <span class="component-icon">
+                    <lightning-icon
+                        icon-name="utility:opportunity"
+                        size="small"
+                        variant="inverse"
+                        alternative-text="영업기회"
+                    ></lightning-icon>
+                </span>
+                <div class="component-heading__copy">
+                    <p class="eyebrow">OPPORTUNITY RADAR</p>
+                    <h1 id="radar-title" class="title">고객 성장 기회 레이더</h1>
+                    <p class="subtitle">화이트스페이스와 성공 가능성을 함께 보고 다음 영업 행동을 결정합니다.</p>
+                </div>
             </div>
             <div class="header-meta"><span class="live-dot" aria-hidden="true"></span><span>{generatedLabel}</span></div>
         </header>
 
         <div class="toolbar">
             <template lwc:if={canViewAll}>
-                <lightning-radio-group name="scope" label="범위" variant="label-hidden" type="button" options={scopeOptions} value={scope} onchange={handleScope} class="scope"></lightning-radio-group>
+                <div class="toolbar-control toolbar-control_scope">
+                    <lightning-radio-group name="scope" label="범위" variant="label-hidden" type="button" options={scopeOptions} value={scope} onchange={handleScope} class="scope"></lightning-radio-group>
+                </div>
             </template>
             <template lwc:if={isAppMode}>
-                <lightning-combobox name="segment" label="산업군" variant="label-hidden" value={segment}
-                    options={segmentOptions} onchange={handleSegment} class="segment"></lightning-combobox>
-                <lightning-input type="search" label="기업 검색" variant="label-hidden" placeholder="기업명 검색"
-                    value={searchTerm} onchange={handleSearch} class="search"></lightning-input>
+                <div class="toolbar-control toolbar-control_segment">
+                    <lightning-combobox name="segment" label="산업군" variant="label-hidden" value={segment}
+                        options={segmentOptions} onchange={handleSegment} class="segment"></lightning-combobox>
+                </div>
+                <div class="toolbar-control toolbar-control_search">
+                    <lightning-input type="search" label="기업 검색" variant="label-hidden" placeholder="기업명 검색"
+                        value={searchTerm} onchange={handleSearch} class="search"></lightning-input>
+                </div>
             </template>
-            <lightning-button label="새로고침" icon-name="utility:refresh" onclick={handleRefresh} disabled={isLoading}></lightning-button>
+            <div class="toolbar-control toolbar-control_refresh">
+                <lightning-button class="toolbar-refresh" label="새로고침" icon-name="utility:refresh" onclick={handleRefresh} disabled={isLoading}></lightning-button>
+            </div>
         </div>
 
         <template lwc:if={isLoading}>
-            <div class="loading"><lightning-spinner alternative-text="불러오는 중" size="medium"></lightning-spinner></div>
+            <div class="loading boni-loader" role="status" aria-live="polite">
+                <img class="boni-loader__img" src={boniLoadingUrl} alt="보니가 불러오는 중" />
+                <p class="boni-loader__copy">보니가 기회를 살펴보고 있어요<span class="boni-dots" aria-hidden="true"><i></i><i></i><i></i></span></p>
+            </div>
         </template>
         <template lwc:elseif={error}>
             <div class="slds-notify slds-notify_alert slds-alert_error slds-m-around_medium" role="alert">{error}</div>
@@ -46,7 +67,7 @@
                         <span class="chart-count">{scopeLabel} · {chartCount}</span>
                     </div>
                     <div class="chart-shell">
-                        <svg class="radar-chart" viewBox={viewBox} role="img" aria-label="기업별 화이트스페이스와 성공 가능성">
+                        <svg class="radar-chart" viewBox={viewBox} preserveAspectRatio="xMidYMin meet" role="img" aria-label="기업별 화이트스페이스와 성공 가능성">
                             <rect class="chart-background" x="0" y="0" width={chartWidth} height={chartHeight} rx="12"></rect>
                             <rect class="priority-zone" x={zoneRect.x} y={zoneRect.y} width={zoneRect.w} height={zoneRect.h} rx="8"></rect>
                             <template for:each={yTicks} for:item="t">
@@ -60,7 +81,7 @@
                             <line class="axis-line" x1={chartLeft} y1={chartBottom} x2={chartRight} y2={chartBottom}></line>
                             <line class="axis-line" x1={chartLeft} y1={chartTop} x2={chartLeft} y2={chartBottom}></line>
                             <template for:each={xTicks} for:item="t">
-                                <text key={t.x} class="axis-tick" x={t.x} y="552" text-anchor="middle">{t.label}</text>
+                                <text key={t.x} class="axis-tick" x={t.x} y={xTickY} text-anchor="middle">{t.label}</text>
                             </template>
                             <template for:each={yTicks} for:item="t">
                                 <text key={t.y} class="axis-tick" x="66" y={t.y} text-anchor="end" dominant-baseline="middle">{t.label}점</text>
@@ -95,19 +116,28 @@
                             <div><p class="eyebrow">SELECTED ACCOUNT</p><h3>{detail.name}</h3><p class="subtitle">{detail.industry} · {detail.statementLabel}</p><p class={detail.lastContactClass}>{detail.lastContactLabel}</p></div>
                             <template lwc:if={detail.isPriority}><span class="priority-badge">우선 공략</span></template>
                         </div>
-                        <div class="detail-metrics">
-                            <div><span>지갑 점유율</span><strong>{detail.shareLabel}</strong></div>
-                            <div><span>예상 지갑</span><strong>{detail.walletLabel}</strong></div>
-                            <div><span>화이트스페이스</span><strong class="accent">{detail.whitespaceLabel}</strong></div>
-                            <div><span>성공 가능성</span><strong>{detail.propensityLabel}</strong></div>
-                        </div>
-                        <template lwc:if={detail.families.length}>
-                            <ul class="family-list">
-                                <template for:each={detail.families} for:item="f">
-                                    <li key={f.family}><span class="family-name">{f.family}</span><span>{f.ourLabel} / {f.walletLabel}</span><b>{f.shareLabel}</b><small>{f.basis}</small></li>
+                        <section class="detail-summary" aria-labelledby="account-summary-title">
+                            <button class="detail-toggle" type="button" aria-expanded={isSummaryExpanded} aria-controls="account-summary-content" onclick={handleToggleSummary}>
+                                <span id="account-summary-title">계정 현황</span>
+                                <span class="detail-toggle__state">{summaryToggleLabel}</span>
+                                <span class="detail-toggle__chevron" aria-hidden="true">⌄</span>
+                            </button>
+                            <div id="account-summary-content" class={summaryContentClass}>
+                                <div class="detail-metrics">
+                                    <div><span>지갑 점유율</span><strong>{detail.shareLabel}</strong></div>
+                                    <div><span>예상 지갑</span><strong>{detail.walletLabel}</strong></div>
+                                    <div><span>화이트스페이스</span><strong class="accent">{detail.whitespaceLabel}</strong></div>
+                                    <div><span>성공 가능성</span><strong>{detail.propensityLabel}</strong></div>
+                                </div>
+                                <template lwc:if={detail.families.length}>
+                                    <ul class="family-list">
+                                        <template for:each={detail.families} for:item="f">
+                                            <li key={f.family}><span class="family-name">{f.family}</span><span>{f.ourLabel} / {f.walletLabel}</span><b>{f.shareLabel}</b><small>{f.basis}</small></li>
+                                        </template>
+                                    </ul>
                                 </template>
-                            </ul>
-                        </template>
+                            </div>
+                        </section>
                         <div class="recommendation-heading"><h4>추천 액션</h4><span>공백 × 성공 가능성 순</span></div>
                         <template for:each={detail.recs} for:item="r">
                             <div key={r.id} class={r.cardClass}>
@@ -125,7 +155,7 @@
                                 </ul>
                                 <p>{r.reason}</p>
                                 <template lwc:if={r.isProposed}>
-                                    <button class="recommendation-action" data-rec-id={r.id} onclick={handleCreateOpportunity} disabled={isCreating}>이 추천으로 기회 생성</button>
+                                    <button class="recommendation-action" data-rec-id={r.id} onclick={handlePrepareEmail}>이 추천으로 담당자에게 메일 보내기</button>
                                 </template>
                                 <template lwc:elseif={r.hasOpp}>
                                     <button class="recommendation-action" data-opp-id={r.opportunityId} onclick={handleOpenOpportunity}>영업기회 열기</button>
@@ -200,5 +230,26 @@
             <span><i class="legend-dot upsell"></i>업셀</span><span><i class="legend-dot crosssell"></i>크로스셀</span><span><i class="legend-dot rollover"></i>만기차환</span>
             <span class="footer-note">지갑 = 최신 재무제표(DART) · 점수 = 유사 Won·접점·신호·관계 가중합</span>
         </footer>
+
+        <template lwc:if={emailComposerOpen}>
+            <section class="radar-email-modal" role="dialog" tabindex="-1" aria-modal="true" aria-label="맞춤 메일 작성">
+                <div class="radar-email-modal__container">
+                    <button class="radar-email-modal__close" type="button" title="닫기" onclick={handleCloseEmailComposer}>
+                        <span class="radar-email-modal__close-icon" aria-hidden="true"></span>
+                        <span class="slds-assistive-text">닫기</span>
+                    </button>
+                    <div class="radar-email-modal__content" id="radar-email-modal-content">
+                        <c-radar-email-composer
+                            record-id={emailAccountId}
+                            recommendation-id={emailRecommendationId}
+                            embedded
+                            onclose={handleCloseEmailComposer}
+                        ></c-radar-email-composer>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
     </article>
 </template>

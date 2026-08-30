@@ -4,75 +4,61 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>closingDays</name>
-                    <value>7</value>
+                    <name>eyebrow</name>
+                    <value>보니</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>inactiveDays</name>
-                    <value>30</value>
+                    <name>pose</name>
+                    <value>main</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>stalledDays</name>
-                    <value>14</value>
+                    <name>size</name>
+                    <value>150</value>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>stalledStage</name>
-                    <value>조건협상</value>
-                </componentInstanceProperties>
-                <componentName>opportunityKpiCard</componentName>
-                <identifier>c_opportunityKpiCard</identifier>
+                <componentName>boniBanner</componentName>
+                <identifier>c_boniBanner</identifier>
             </componentInstance>
         </itemInstances>
-        <name>top</name>
+        <itemInstances>
+            <componentInstance>
+                <componentName>homeDashboardTabNav</componentName>
+                <identifier>c_homeDashboardTabNav</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>header</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>leadKpiCard</componentName>
-                <identifier>c_leadKpiCard</identifier>
+                <componentName>homeDashboardTabs</componentName>
+                <identifier>c_homeDashboardTabs</identifier>
             </componentInstance>
         </itemInstances>
-        <name>bottomLeft</name>
+        <name>left</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>maxRows</name>
-                    <value>3</value>
-                </componentInstanceProperties>
-                <componentName>priorityList</componentName>
-                <identifier>c_priorityList</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>bottomRight</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>myKpiCard</componentName>
-                <identifier>c_myKpiCard</identifier>
-            </componentInstance>
-        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>flowApiName</name>
                     <value>Meeting_Session</value>
                 </componentInstanceProperties>
-                <componentName>homeScheduleNews</componentName>
-                <identifier>c_homeScheduleNews</identifier>
+                <componentInstanceProperties>
+                    <name>maxRows</name>
+                    <value>3</value>
+                </componentInstanceProperties>
+                <componentName>homeDashboardRight</componentName>
+                <identifier>c_homeDashboardRight</identifier>
             </componentInstance>
         </itemInstances>
-        <name>sidebar</name>
+        <name>right</name>
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>RM_HomePage</masterLabel>
     <template>
-        <name>home:desktopTemplate</name>
+        <name>boniHomeTemplate</name>
     </template>
     <type>HomePage</type>
 </FlexiPage>

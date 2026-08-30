@@ -30,7 +30,7 @@
 .mp-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 /* 항목 카드 */
@@ -38,8 +38,9 @@
     position: relative;
     background: #ffffff;
     border: 1px solid #eef0f3;
-    border-radius: 1rem;
-    padding: 0.875rem 1rem 1rem;
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.75rem 0.75rem;
+    max-height: 260px;
     box-shadow: 0 2px 10px rgba(16, 24, 40, 0.06);
     overflow: hidden;
     transition: box-shadow 0.15s ease, transform 0.15s ease;
@@ -67,8 +68,8 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.625rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.35rem;
     border-bottom: 2px solid var(--accent-line);
 }
 
@@ -78,13 +79,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 1.625rem;
-    height: 1.625rem;
-    padding: 0 0.4rem;
-    border-radius: 0.5rem;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    padding: 0 0.3rem;
+    border-radius: 0.4rem;
     background: var(--accent);
     color: #ffffff;
-    font-size: 0.8125rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.02em;
     box-shadow: 0 2px 6px rgba(16, 24, 40, 0.2);
@@ -95,7 +96,7 @@
     flex: 1 1 auto;
     min-width: 0;
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.84rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--accent);
@@ -103,9 +104,12 @@
 }
 
 .mp-body {
-    font-size: 0.8125rem;
-    line-height: 1.6;
+    font-size: 0.75rem;
+    line-height: 1.4;
     color: #3e3e3c;
+    max-height: 190px;
+    overflow-y: auto;
+    padding-right: 0.2rem;
     /* 한글이 단어 중간에서 깨지지 않게 - 공백 단위로만 줄바꿈 */
     word-break: keep-all;
     overflow-wrap: break-word;
@@ -114,20 +118,22 @@
     margin: 0;
 }
 
-/* 우선순위 점수 - 헤더 우측 인라인 강조 */
-.mp-score {
-    flex: 0 0 auto;
-    margin-left: auto;
-    display: inline-flex;
-    align-items: baseline;
-    font-size: 1.125rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--accent);
-    letter-spacing: -0.02em;
+/* 우선순위 점수 - 본문 상단 한 줄, 살짝만 강조 */
+.mp-score-line {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #706e6b;
 }
-.mp-score small {
-    margin-left: 0.1rem;
+.mp-score-val {
+    margin-left: 0.15rem;
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+}
+.mp-score-val small {
+    margin-left: 0.05rem;
     font-size: 0.625rem;
     font-weight: 700;
 }
@@ -141,7 +147,7 @@
 .mp-list li {
     position: relative;
     padding-left: 0.95rem;
-    margin: 0.4rem 0;
+    margin: 0.22rem 0;
     word-break: keep-all;
     overflow-wrap: break-word;
 }
@@ -201,7 +207,6 @@
     word-break: keep-all;
     --slds-c-icon-color-foreground: var(--accent);
     --slds-c-icon-color-foreground-default: var(--accent);
-    --sds-c-icon-color-foreground-default: var(--accent);
 }
 
 /* 파싱 실패 시 원문 폴백 */
@@ -211,3 +216,174 @@
     line-height: 1.5;
     font-size: 0.8125rem;
 }
+
+/* Home dashboard visual language: compact white panels, navy hierarchy, blue action. */
+:host {
+    --home-ink: var(--slds-g-color-on-surface-3, #12213b);
+    --home-navy: var(--slds-g-color-brand-base-15, #172b4d);
+    --home-blue: var(--slds-g-color-brand-base-50, #2f6fed);
+    --home-gold: var(--slds-g-color-warning-1, #c99a3d);
+    --home-muted: var(--slds-g-color-on-surface-1, #728098);
+    --home-line: var(--slds-g-color-border-1, #e5eaf2);
+    --home-surface: var(--slds-g-color-surface-container-1, #ffffff);
+    --home-surface-soft: var(--slds-g-color-surface-container-2, #f5f7fb);
+    --home-shadow: var(--slds-g-shadow-2, 0 3px 12px rgba(18, 33, 59, 0.05));
+    display: block;
+    color: var(--home-ink);
+    /* SLDS has no global font-family hook; retain the Home dashboard font stack. */
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+}
+
+.briefing-card {
+    overflow: hidden;
+    border: 1px solid var(--home-line);
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    background: var(--home-surface);
+    box-shadow: var(--home-shadow);
+}
+
+.briefing-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--slds-g-spacing-4, 1rem);
+    padding: var(--slds-g-spacing-4, 1rem) var(--slds-g-spacing-5, 1.5rem);
+    border-bottom: 1px solid var(--home-line);
+}
+
+.briefing-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+    min-width: 0;
+}
+
+.briefing-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    background: var(--home-blue);
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-brand-base-100, #ffffff);
+}
+
+.briefing-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-brand-base-100, #ffffff);
+}
+
+.eyebrow {
+    margin: 0 0 var(--slds-g-spacing-1, 0.25rem);
+    color: var(--home-gold);
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.briefing-header h2 {
+    margin: 0;
+    overflow: hidden;
+    color: var(--home-ink);
+    font-size: var(--slds-g-font-scale-3, 1.25rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: -0.03em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.briefing-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+}
+
+.briefing-content {
+    position: relative;
+    padding: var(--slds-g-spacing-4, 1rem) var(--slds-g-spacing-5, 1.5rem) var(--slds-g-spacing-5, 1.5rem);
+}
+
+.briefing-loading-overlay {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 5rem;
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.briefing-empty-state {
+    min-height: 5rem;
+    color: var(--home-muted);
+}
+
+.briefing-wrap {
+    padding-top: 0;
+}
+
+.mp-grid {
+    gap: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.mp-card {
+    border-color: var(--home-line);
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    background: var(--home-surface);
+    box-shadow: var(--home-shadow);
+}
+
+.mp-card:hover {
+    box-shadow: var(--slds-g-shadow-3, 0 5px 12px rgba(18, 33, 59, 0.1));
+}
+
+.mp-body {
+    color: var(--home-ink);
+}
+
+.mp-score-line,
+.section-heading {
+    color: var(--home-muted);
+}
+
+.mp-note {
+    border: 1px solid var(--accent-line);
+}
+
+.briefing-body {
+    color: var(--home-ink);
+}
+
+@media (max-width: 600px) {
+    .briefing-header {
+        align-items: flex-start;
+        padding-right: var(--slds-g-spacing-4, 1rem);
+        padding-left: var(--slds-g-spacing-4, 1rem);
+    }
+
+    .briefing-content {
+        padding-right: var(--slds-g-spacing-4, 1rem);
+        padding-left: var(--slds-g-spacing-4, 1rem);
+    }
+
+    .briefing-header h2 {
+        white-space: normal;
+    }
+}
+/* ── 보니 로더: lightning-spinner 대체(보니 chart 둥실 + 도트 3개). 되돌리기: 이 블록 삭제 + 템플릿 spinner 복원 ── */
+.boni-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; text-align: center; }
+.boni-loader__img { width: 110px; height: 110px; object-fit: contain; animation: boni-bob 2.2s ease-in-out infinite; }
+.boni-loader__copy { margin: 0; color: #64748B; font-size: 0.875rem; }
+.boni-dots { display: inline-flex; gap: 4px; margin-left: 4px; vertical-align: middle; }
+.boni-dots i { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #2E7CF6; animation: boni-dot 1.2s ease-in-out infinite; }
+.boni-dots i:nth-child(2) { animation-delay: 0.2s; }
+.boni-dots i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes boni-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes boni-dot { 0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .boni-loader__img, .boni-dots i { animation: none; } }
+/* 생성 중에는 보니 로더(110px + 문구)가 잘리지 않도록 빈 영역을 키운다 */
+.briefing-empty-state--boni { min-height: 12rem; }
+.briefing-loading-overlay { padding: 1rem 0; }

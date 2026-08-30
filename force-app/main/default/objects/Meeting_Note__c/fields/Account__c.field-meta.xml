@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>이 미팅 기록이 속한 고객사. Opportunity가 없는 미팅(고객사/담당자 단독 미팅)도 Account 미팅 이력에 남기기 위한 관계. Opportunity__c가 있으면 트리거가 Opportunity.AccountId로 자동 보정한다.</description>
+    <label>고객사</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>미팅 기록</relationshipLabel>
+    <relationshipName>Meeting_Notes</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

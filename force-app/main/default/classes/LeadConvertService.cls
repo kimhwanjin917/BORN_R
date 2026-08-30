@@ -94,7 +94,7 @@ public with sharing class LeadConvertService {
 
         Map<Id, Lead> leadsById = new Map<Id, Lead>([
             SELECT Id, Priority_Score__c, Business_Registration_Number__c, Assigned_Company_Code__c,
-                Recommended_Product_Family__c
+                Recommended_Product_Family__c, Proposed_Yield_Rate__c
             FROM Lead
             WHERE Id IN :leadIds
             WITH USER_MODE
@@ -158,12 +158,12 @@ public with sharing class LeadConvertService {
             return responses;
         }
 
-        // Opportunity 기본값은 LeadConvertedTrigger 가 이미 채웠다 (Database.convertLead 가
-        // Lead 를 업데이트하면서 발화). 여기서 다시 부르면 같은 레코드를 두 번 쓴다.
+        // Opportunity 기본값과 재무·시그널 재연결은 LeadConvertedTrigger 가 이미 처리했다
+        // (Database.convertLead 가 Lead 를 업데이트하면서 발화). 여기서 다시 부르면
+        // 같은 레코드를 두 번 쓴다.
         createMeetingEvents(requests, conversionIndexes, responsesByIndex,
             contactIdByLeadId, opportunityIdByLeadId);
         transferLeadFieldsToAccounts(leadsById, accountIdByLeadId);
-        reconnectExternalRecords(accountIdByLeadId.keySet(), accountIdByLeadId);
 
         return responses;
     }
@@ -211,6 +211,10 @@ public with sharing class LeadConvertService {
         defaultsInProgress = true;
         try {
             applyOpportunityDefaults(leadsById, opportunityIdByLeadId, accountIdByLeadId);
+            // 재무·시그널 재연결은 모든 전환 경로(표준 Convert 버튼·API 포함)가 지나는
+            // 이 트리거 지점에서 한다. 예전에는 convertLeads Invocable 안에서만 돌아
+            // 표준 Convert 로 전환한 리드의 시그널이 Account 로 옮겨오지 못했다.
+            reconnectExternalRecords(accountIdByLeadId.keySet(), accountIdByLeadId);
         } catch (Exception e) {
             System.debug(LoggingLevel.ERROR,
                 'Opportunity defaults skipped after conversion: ' + e.getMessage());
@@ -262,6 +266,14 @@ public with sharing class LeadConvertService {
                 opp.Primary_Product__c = product.Id; // 기준 상품 — 미팅 중 추천·유사 Won 의 기준
                 changed = true;
             }
+            // 제안서에 실어 보낸 조건을 딜로 넘긴다. 넘기지 않으면 RM 이 미팅 후 딜에서
+            // 같은 값을 처음부터 다시 입력해야 하고, "얼마로 제안했는지"가 PDF 안에만 남는다.
+            // 미팅 결과로 조건이 바뀌면 RM 이 딜에서 고치면 된다 — 여기서는 출발값만 준다.
+            if (sourceLead != null && sourceLead.Proposed_Yield_Rate__c != null) {
+                opp.RP_Yield__c = sourceLead.Proposed_Yield_Rate__c;
+                changed = true;
+            }
+
             // 이름에는 구체 상품이 아니라 상품군을 쓴다 (RP / 회사채). 구체 상품은
             // Primary_Product__c 가 들고 있고, 이름까지 특정 상품으로 못 박으면 실제
             // 딜과 어긋나기 쉽다. 회사명을 못 읽으면 convertLead 가 넣어 둔 이름을 둔다.

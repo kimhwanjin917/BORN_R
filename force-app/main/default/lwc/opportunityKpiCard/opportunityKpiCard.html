@@ -10,7 +10,10 @@
                         alternative-text="영업기회"
                     ></lightning-icon>
                 </span>
-                <span>영업기회 단계별 현황</span>
+                <span class="card-head__heading">
+                    <span class="card-head__eyebrow">OPPORTUNITY PIPELINE</span>
+                    <span class="card-head__label">영업기회 단계별 현황</span>
+                </span>
             </div>
         </header>
 
@@ -57,7 +60,12 @@
                                 aria-label={stage.barTitle}
                             ></div>
                         </div>
-                        <span class="pk-col__fee">{stage.feeDisplay}</span>
+                        <template lwc:if={stage.showFee}>
+                            <span class="pk-col__fee">{stage.feeDisplay}</span>
+                        </template>
+                        <template lwc:else>
+                            <span class="pk-col__fee">상담 및 니즈 파악</span>
+                        </template>
                     </div>
                 </template>
             </div>

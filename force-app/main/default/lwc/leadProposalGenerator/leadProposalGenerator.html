@@ -4,7 +4,7 @@
         <template lwc:if={isLoading}>
             <lightning-spinner alternative-text="불러오는 중" size="small"></lightning-spinner>
             <div class="slds-align_absolute-center slds-p-vertical_large slds-text-color_weak">
-                리드 정보와 상품을 불러오는 중입니다…
+                레코드 정보와 상품을 불러오는 중입니다…
             </div>
         </template>
 
@@ -17,7 +17,7 @@
             <p class="slds-text-align_center slds-text-color_weak lpg-filename">{result.fileName}</p>
             <div class="lpg-done">
                 <p class="slds-p-bottom_xx-small"><b>문서번호</b> {result.docNumber}</p>
-                <p>이 리드의 <b>파일</b>에 저장되었습니다. 활동 탭 &gt; 이메일 &gt; 첨부에서
+                현재 레코드의 <b>파일</b>에 저장되었습니다. 활동 탭 &gt; 이메일 &gt; 첨부에서
                    <b>Salesforce 파일 선택</b>으로 첨부해 발송하세요.</p>
             </div>
             <div class="slds-align_absolute-center slds-p-top_medium">
@@ -63,7 +63,7 @@
                             <template lwc:if={row.selected}>
                                 <lightning-input type="number" variant="label-hidden" label="적용 수익률"
                                     placeholder="연 %" step="0.01" formatter="decimal"
-                                    data-id={row.productId} value={row.yieldRate} onchange={handleYieldChange}>
+                                    data-id={row.productId} value={row.yieldRate} onchange={handleYieldChange} oninput={handleYieldChange}>
                                 </lightning-input>
                             </template>
                         </div>
@@ -75,7 +75,8 @@
             <!-- 예치 가정 금액 -->
             <div class="slds-p-top_medium">
                 <lightning-input type="number" label="예치 가정 금액 (원)" placeholder="예: 10000000000"
-                    value={assumedAmount} onchange={handleAmountChange} field-level-help="예상 수익 비교표의 기준 금액입니다.">
+                    value={assumedAmount} onchange={handleAmountChange} oninput={handleAmountChange}
+                    field-level-help="예상 수익 비교표의 기준 금액입니다. 쉼표를 넣어도 됩니다.">
                 </lightning-input>
                 <p class="lpg-hint">{assumedAmountHelp}</p>
             </div>

@@ -1,7 +1,7 @@
 /**
  * docs/51 · ADR-0002 — 미팅 중 추천.
  * Meeting_Note__c 가 저장되어 정제본(Sanitized_Content__c)이 생기면, 트리거 트랜잭션 밖(Queueable)에서
- * RM_Assistant 에이전트를 Agent API 로 호출해 상품 추천 답을 받아
+ * RM_Assistant 에이전트를 Flow 에이전트 액션(AgentFlowClient, docs/60)으로 호출해 상품 추천 답을 받아
  *   - Meeting_Note__c.Product_Recommendation__c (메모별 원문)
  *   - Opportunity.Last_Recommendation__c        (최신값)
  * 에 기록한다. 원문(Raw_Content__c)은 절대 에이전트에 보내지 않는다 — 발화에는 기회 Id 와 메모 Id 만 넣고,
@@ -12,8 +12,7 @@
 public with sharing class MeetingNoteAgentRecommender implements Queueable, Database.AllowsCallouts {
 
     public static final String FAILURE_PREFIX = '[추천 실패] ';
-    @TestVisible
-    private static Boolean bypass = false; // 자기 자신의 필드 갱신으로 트리거가 재진입하는 것을 막는 보조 플래그
+    public static Boolean bypass = false; // 자기 자신(또는 추가 질문 컨트롤러)의 필드 갱신으로 트리거가 재진입하는 것을 막는 보조 플래그
 
     private final List<Id> noteIds;
 
@@ -65,13 +64,16 @@ public with sharing class MeetingNoteAgentRecommender implements Queueable, Data
             }
             processed++;
             String result;
+            String sessionId;
             try {
-                result = AgentApiClient.ask(buildUtterance(note)).text;
+                AgentFlowClient.Reply reply = AgentFlowClient.ask(buildUtterance(note));
+                result = reply.text;
+                sessionId = reply.sessionId;
             } catch (Exception e) {
                 result = FAILURE_PREFIX + e.getMessage().abbreviate(1000);
                 System.debug(LoggingLevel.ERROR, '미팅 중 추천 실패 note=' + note.Id + ' : ' + e.getMessage());
             }
-            noteUpdates.add(new Meeting_Note__c(Id = note.Id, Product_Recommendation__c = result));
+            noteUpdates.add(new Meeting_Note__c(Id = note.Id, Product_Recommendation__c = result, Agent_Session_Id__c = sessionId));
             if (!result.startsWith(FAILURE_PREFIX)) {
                 oppUpdates.add(new Opportunity(Id = note.Opportunity__c, Last_Recommendation__c = result));
             }
@@ -101,6 +103,7 @@ public with sharing class MeetingNoteAgentRecommender implements Queueable, Data
         return '기회 Id ' + note.Opportunity__c + ' (기회명: ' + oppLabel + ', 고객사: ' + accLabel + ') 의 '
             + '방금 저장된 미팅 메모(메모 Id ' + note.Id + ') 기준으로 상품을 추천해줘. '
             + '기회 검색 없이 이 기회 Id 를 그대로 사용하고, 미팅 메모 마스킹본 조회와 상품 추천 후보 조회를 실행한 뒤 '
-            + '① 기준 상품 유지 여부 ② 추천 상품 1~3개와 근거 ③ 보유상품 만기 안내 순서로 답해줘.';
+            + '① 기준 상품 유지 여부 ② 추천 상품 1~3개와 근거 ③ 보유상품 만기 안내 순서로 답해줘. '
+            + '③으로 답을 끝내고, 마무리 인사나 추가 질문을 유도하는 문장은 붙이지 마.';
     }
 }

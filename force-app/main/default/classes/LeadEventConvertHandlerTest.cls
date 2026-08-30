@@ -234,4 +234,5 @@ private class LeadEventConvertHandlerTest {
             WHERE Subject = '고객 미팅' AND WhatId = :responses[0].opportunityId
         ], '플래그를 안 넘긴 호출은 기존대로 고객 미팅 Event를 생성해야 한다');
     }
+
 }

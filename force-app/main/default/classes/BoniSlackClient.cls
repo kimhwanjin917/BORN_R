@@ -1,4 +1,4 @@
-/** 본이 전용 Slack Web API 래퍼. Named Credential "Slack" 사용. DM·홈 탭·에페메랄 지원(기존 SlackChannelMessageService 는 채널 텍스트 전용). */
+/** 보니 전용 Slack Web API 래퍼. Named Credential "Slack" 사용. DM·홈 탭·에페메랄 지원(기존 SlackChannelMessageService 는 채널 텍스트 전용). */
 public with sharing class BoniSlackClient {
 
     public class SlackApiException extends Exception { public String errorCode; }
@@ -22,6 +22,11 @@ public with sharing class BoniSlackClient {
 
     public static void postEphemeral(String channelId, String slackUserId, String text) {
         call('/chat.postEphemeral', new Map<String, Object>{ 'channel' => channelId, 'user' => slackUserId, 'text' => text });
+    }
+
+    /** docs/58: 게시된 카드를 교체한다(chat.update). 회신 후 입력칸을 없애 재제출을 막는다. */
+    public static void updateBlocks(String channelId, String ts, String fallbackText, List<Object> blocks) {
+        call('/chat.update', new Map<String, Object>{ 'channel' => channelId, 'ts' => ts, 'text' => fallbackText, 'blocks' => blocks });
     }
 
     public static String lookupUserIdByEmail(String email) {

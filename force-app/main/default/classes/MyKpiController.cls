@@ -1,6 +1,6 @@
 /**
- * Personal KPI figures for the running user: fee revenue against target and
- * new accounts won against target.
+ * Personal KPI figures for the running user: second-half fee revenue against
+ * target and new accounts won against target.
  *
  * Fee revenue — not deal amount — is the performance measure here: a large
  * deal on a low-margin product earns less than a small deal on a high-margin
@@ -24,9 +24,9 @@ public with sharing class MyKpiController {
     }
 
     /**
-     * Half-open quarter bounds plus the label the card shows.
+     * Half-year bounds plus the label the card shows.
      */
-    private class Quarter {
+    private class PerformancePeriod {
         Date startDate;
         Date endDate;
         String key;
@@ -34,7 +34,7 @@ public with sharing class MyKpiController {
     }
 
     /**
-     * Returns the running user's KPI for the quarter containing today.
+     * Returns the running user's KPI for the half-year containing today.
      *
      * @return KPI figures for the running user.
      * @example
@@ -44,7 +44,7 @@ public with sharing class MyKpiController {
     public static MyKpi getMyKpi() {
         try {
             Id meId = UserInfo.getUserId();
-            Quarter current = quarterOf(Date.today());
+            PerformancePeriod current = halfYearOf(Date.today());
 
             MyKpi kpi = new MyKpi();
             kpi.periodLabel = current.label;
@@ -117,15 +117,18 @@ public with sharing class MyKpiController {
     }
 
     /**
-     * The calendar quarter containing the given date.
+     * The half-year containing the given date.
      */
-    private static Quarter quarterOf(Date d) {
-        Integer index = (d.month() - 1) / 3;
-        Quarter q = new Quarter();
-        q.startDate = Date.newInstance(d.year(), index * 3 + 1, 1);
-        q.endDate = q.startDate.addMonths(3).addDays(-1);
-        q.key = d.year() + '-Q' + (index + 1);
-        q.label = d.year() + ' ' + (index + 1) + 'Q';
-        return q;
+    private static PerformancePeriod halfYearOf(Date d) {
+        Integer half = d.month() <= 6 ? 1 : 2;
+        Integer startMonth = half == 1 ? 1 : 7;
+        Date startDate = Date.newInstance(d.year(), startMonth, 1);
+
+        PerformancePeriod period = new PerformancePeriod();
+        period.startDate = startDate;
+        period.endDate = startDate.addMonths(6).addDays(-1);
+        period.key = String.valueOf(d.year()) + '-H' + half;
+        period.label = String.valueOf(d.year()) + (half == 1 ? ' 상반기' : ' 하반기');
+        return period;
     }
 }

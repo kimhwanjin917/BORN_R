@@ -77,16 +77,21 @@
                 </div>
             </div>
 
-            <div class="slds-grid slds-grid_align-end">
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-center">
+                <template if:true={sending}>
+                    <span class="slds-text-body_small slds-text-color_weak slds-m-right_small">발송 중...</span>
+                </template>
                 <lightning-button
                     label="Cancel"
                     onclick={handleClose}
+                    disabled={sending}
                     class="slds-m-right_x-small"
                 ></lightning-button>
                 <lightning-button
                     variant="brand"
                     label="Send"
                     onclick={handleSend}
+                    disabled={sendDisabled}
                 ></lightning-button>
             </div>
         </div>

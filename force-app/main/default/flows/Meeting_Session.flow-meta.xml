@@ -2,131 +2,39 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
         <name>Confirm_Meeting_Note</name>
-        <label>저장·확정</label>
+        <label>미팅 최종 저장</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>MeetingNoteConfirmAction</actionName>
         <actionType>apex</actionType>
-        <flowTransactionModel>Automatic</flowTransactionModel>
+        <connector>
+            <targetReference>Screen_Saved</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Screen_Save_Failed</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>meetingNoteId</name>
             <value>
-                <elementReference>Create_Meeting_Note</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <elementReference>Meeting_Note_Pad.meetingNoteId</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>recommendationText</name>
             <value>
-                <elementReference>Agent_Recommendation_Panel.normalizedRecommendation</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <elementReference>Meeting_Note_Pad.normalizedRecommendation</elementReference>
             </value>
         </inputParameters>
         <nameSegment>MeetingNoteConfirmAction</nameSegment>
-        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
-    <actionCalls>
-        <description>추천 결과 화면에서 입력한 후속 질문을 동일한 RM Agentforce 세션에 전달합니다.</description>
-        <name>UniqueNameFollow_Up_With_RM_Agent</name>
-        <label>에이전트 후속 질문</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>RM_Assistant</actionName>
-        <actionType>generateAiAgentResponse</actionType>
-        <connector>
-            <targetReference>UniqueNameScreen_Agent_Follow_Up_Response</targetReference>
-        </connector>
-        <dataTypeMappings>
-            <apexClass>AgentInvAction__AIAgentCompositeDefault</apexClass>
-            <typeName>U__agentResponseApex</typeName>
-        </dataTypeMappings>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>sessionId</name>
-            <value>
-                <elementReference>UniqueNameRecommend_With_RM_Agent.sessionId</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>userMessage</name>
-            <value>
-                <stringValue>이전 추천에 대한 사용자의 추가 질문입니다: {!Agent_Recommendation_Panel.followUpQuestion}</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>RM_Assistant</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionString>1.1.0</versionString>
-    </actionCalls>
-    <actionCalls>
-        <description>방금 저장된 미팅 메모를 근거로 활성 RM Agentforce 에이전트가 상품을 추천합니다.</description>
-        <name>UniqueNameRecommend_With_RM_Agent</name>
-        <label>에이전트 상품 추천</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>RM_Assistant</actionName>
-        <actionType>generateAiAgentResponse</actionType>
-        <connector>
-            <targetReference>UniqueNameScreen_Agent_Recommendation</targetReference>
-        </connector>
-        <dataTypeMappings>
-            <apexClass>AgentInvAction__AIAgentCompositeDefault</apexClass>
-            <typeName>U__agentResponseApex</typeName>
-        </dataTypeMappings>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>userMessage</name>
-            <value>
-                <stringValue>기회 ID는 {!recordId} 입니다. 방금 작성된 미팅 메모 ID는 {!Create_Meeting_Note}이며, 최신 마스킹본은 다음과 같습니다: {!Get_Masked_Note.Sanitized_Content__c}. 상품 추천 Topic의 기존 절차를 따라 get_sanitized_note로 최신 마스킹본을 확인하고 recommend_products로 활성 상품 카탈로그를 조회한 뒤, 고객 니즈에 맞는 상품 1~3개와 조건 및 추천 근거를 제시해 주세요. 반드시 마스킹본과 액션이 반환한 값만 사용하세요.</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>RM_Assistant</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionString>1.1.0</versionString>
     </actionCalls>
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <customProperties>
-        <name>ScreenProgressIndicator</name>
-        <value>
-            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
-        </value>
-    </customProperties>
-    <decisions>
-        <name>Check_Follow_Up_Question</name>
-        <label>추가 질문 확인</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Screen_Confirm_Without_Follow_Up</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>추가 질문 없음</defaultConnectorLabel>
-        <rules>
-            <name>Has_Follow_Up</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Has_Follow_Up_Question</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>UniqueNameFollow_Up_With_RM_Agent</targetReference>
-            </connector>
-            <label>추가 질문 있음</label>
-        </rules>
-    </decisions>
-    <description>미팅 중 사용 흐름. 홈/Event의 &apos;미팅 시작&apos;에서 Opportunity Id(recordId)를 받아 메모 작성 → Meeting_Note 생성 → 마스킹 결과 재조회 → 상품 추천 → 저장·확정까지 연결한다. Flow가 레코드 생성·화면 전환을 담당하고 LWC는 표시만 한다.</description>
+    <description>docs/60 (2026-08-29) — 미팅 세션 v11. 화면 하나: 메모 등록(저장·마스킹·백그라운드 에이전트 추천·추가 질문은 LWC 안에서 처리) → [미팅 저장] → MeetingNoteConfirmAction 으로 최종 저장 → 완료 화면. 에이전트 호출은 Flow 에서 하지 않는다(MeetingNoteAgentRecommender + Agent_Recommend_Meeting_Note 가 담당).</description>
     <environments>Default</environments>
-    <formulas>
-        <name>Has_Follow_Up_Question</name>
-        <dataType>Boolean</dataType>
-        <expression>NOT(ISBLANK({!Agent_Recommendation_Panel.followUpQuestion}))</expression>
-    </formulas>
     <interviewLabel>Meeting Session {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
     <label>Meeting Session</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -147,118 +55,16 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
-    <recordCreates>
-        <name>Create_Meeting_Note</name>
-        <label>Meeting Note 생성</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Get_Masked_Note</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Opportunity__c</field>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Raw_Content__c</field>
-            <value>
-                <elementReference>Meeting_Note_Pad.rawContent</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Meeting_Note__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordLookups>
-        <name>Get_Masked_Note</name>
-        <label>마스킹 결과 재조회</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Commit_Meeting_Note_Before_Agent</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Create_Meeting_Note</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Meeting_Note__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <screens>
-        <description>Meeting Note 커밋 후 Agentforce를 새 트랜잭션에서 호출합니다.</description>
-        <name>Commit_Meeting_Note_Before_Agent</name>
-        <label>메모 저장 및 마스킹 완료</label>
+        <name>Screen_MemoInput</name>
+        <label>미팅 메모</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>UniqueNameRecommend_With_RM_Agent</targetReference>
-        </connector>
-        <fields>
-            <name>Commit_Message</name>
-            <fieldText>&lt;p&gt;미팅 메모가 저장되고 마스킹되었습니다. 다음을 눌러 메모 근거 상품 추천을 생성합니다.&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <nextOrFinishButtonLabel>상품 추천 생성</nextOrFinishButtonLabel>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <description>추가 질문 없이 Agentforce 추천 결과를 확인하고 저장·확정합니다.</description>
-        <name>Screen_Confirm_Without_Follow_Up</name>
-        <label>최종 저장 확인</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <connector>
             <targetReference>Confirm_Meeting_Note</targetReference>
-        </connector>
-        <fields>
-            <name>Display_Final_Recommendation</name>
-            <fieldText>&lt;p&gt;아래 추천 결과를 Meeting Note와 Opportunity 미팅 로그에 저장합니다.&lt;/p&gt;&lt;p&gt;{!Agent_Recommendation_Panel.normalizedRecommendation}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <nextOrFinishButtonLabel>저장·확정</nextOrFinishButtonLabel>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Screen_MemoInput</name>
-        <label>메모 작성</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Create_Meeting_Note</targetReference>
         </connector>
         <fields>
             <name>Meeting_Note_Pad</name>
@@ -276,24 +82,20 @@
                 </width>
             </styleProperties>
         </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
     </screens>
     <screens>
-        <description>사용자의 후속 질문에 대한 RM Agentforce 응답을 표시합니다.</description>
-        <name>UniqueNameScreen_Agent_Follow_Up_Response</name>
-        <label>에이전트 후속 답변</label>
+        <name>Screen_Save_Failed</name>
+        <label>미팅 저장 실패</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Confirm_Meeting_Note</targetReference>
-        </connector>
+        <allowPause>false</allowPause>
         <fields>
-            <name>Display_Agent_Follow_Up_Response</name>
-            <fieldText>&lt;p&gt;{!UniqueNameFollow_Up_With_RM_Agent.agentResponse}&lt;/p&gt;</fieldText>
+            <name>Failed_Message</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;미팅 저장에 실패했습니다.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;&lt;p&gt;메모와 마스킹 결과는 이미 저장되어 있습니다. 이전으로 돌아가 다시 시도해 주세요.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -304,30 +106,49 @@
                 </width>
             </styleProperties>
         </fields>
-        <nextOrFinishButtonLabel>저장·확정</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <description>활성 RM Agentforce 에이전트가 미팅 메모를 근거로 생성한 상품 추천을 표시하고 후속 질문을 받습니다.</description>
-        <name>UniqueNameScreen_Agent_Recommendation</name>
-        <label>에이전트 추천 결과</label>
+        <name>Screen_Saved</name>
+        <label>미팅 저장 완료</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Check_Follow_Up_Question</targetReference>
-        </connector>
+        <allowPause>false</allowPause>
         <fields>
-            <name>Agent_Recommendation_Panel</name>
-            <extensionName>c:meetingNotePad</extensionName>
+            <name>Boni_Done_Banner</name>
+            <extensionName>c:boniDoneBanner</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
-                <name>recommendation</name>
+                <name>title</name>
                 <value>
-                    <elementReference>UniqueNameRecommend_With_RM_Agent.agentResponse</elementReference>
+                    <stringValue>미팅이 저장되었습니다.</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>subtitle</name>
+                <value>
+                    <stringValue>메모와 보니의 추천이 영업기회에 기록되었습니다.</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>pose</name>
+                <value>
+                    <stringValue>flag</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>size</name>
+                <value>
+                    <numberValue>140.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>modal</name>
+                <value>
+                    <booleanValue>true</booleanValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -342,9 +163,8 @@
                 </width>
             </styleProperties>
         </fields>
-        <nextOrFinishButtonLabel>추천 확정으로 이동</nextOrFinishButtonLabel>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
     </screens>
     <start>
         <locationX>0</locationX>
@@ -355,7 +175,7 @@
     </start>
     <status>Active</status>
     <variables>
-        <description>미팅 시작 버튼(32 LWC)에서 전달받는 Opportunity Id. Flow 진입 컨텍스트.</description>
+        <description>미팅 시작 버튼(32 LWC)에서 전달받는 진입 레코드 Id. LWC 가 URL/페이지 참조에서 직접 읽어 컨텍스트를 해석한다.</description>
         <name>recordId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>

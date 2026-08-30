@@ -3,13 +3,34 @@ import { NavigationMixin } from 'lightning/navigation';
 import getTopLeads from '@salesforce/apex/LeadPriorityController.getTopLeads';
 import getTopAccounts from '@salesforce/apex/AccountPriorityController.getTopAccounts';
 
+const HOME_DASHBOARD_TAB_CHANGE_EVENT = 'home-dashboard-tab-change';
+
 export default class PriorityList extends NavigationMixin(LightningElement) {
     @api maxRows = 10;
+    @api initialTab = 'dashboard';
 
+    activeTab = 'dashboard';
     leads;
     leadError;
     accounts;
     accountError;
+
+    connectedCallback() {
+        this.activeTab = this.initialTab === 'insight' ? 'insight' : 'dashboard';
+        window.addEventListener(HOME_DASHBOARD_TAB_CHANGE_EVENT, this.handleDashboardTabChange);
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener(HOME_DASHBOARD_TAB_CHANGE_EVENT, this.handleDashboardTabChange);
+    }
+
+    handleDashboardTabChange = (event) => {
+        this.activeTab = event.detail?.tab === 'insight' ? 'insight' : 'dashboard';
+    };
+
+    get isInsightTab() {
+        return this.activeTab === 'insight';
+    }
 
     @wire(getTopLeads, { maxRows: '$maxRows' })
     wiredLeads({ data, error }) {

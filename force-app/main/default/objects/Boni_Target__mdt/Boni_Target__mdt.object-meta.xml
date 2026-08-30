@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>본이 대시보드 대상. Data_User_Id__c(데이터 소유 SF User)와 Slack_User_Id__c(수신 Slack 사용자)를 분리해 데모 매핑을 지원한다.</description>
+    <description>보니 대시보드 대상. Data_User_Id__c(데이터 소유 SF User)와 Slack_User_Id__c(수신 Slack 사용자)를 분리해 데모 매핑을 지원한다.</description>
     <label>Boni Target</label>
     <pluralLabel>Boni Targets</pluralLabel>
     <visibility>Public</visibility>

@@ -8,12 +8,21 @@
  *   2. Account numbers        -> all digits masked (e.g. ***-**-******)
  *   3. Email addresses        -> first two local characters kept + ***@domain
  *   4. Contact names (Korean) -> surname (first character) kept + **
+ *   5. Account names (company)-> first character kept + **
+ *
+ * Categories 4 and 5 are not regular-expression based: the org's Contact.Name and
+ * Account.Name values are read and matched literally, so only names that actually
+ * exist as records are masked.
  *
  * Callable standalone (no trigger dependency).
  */
 public with sharing class MaskingService {
     @TestVisible
     private static final Integer MAX_CONTACTS = 5000;
+    @TestVisible
+    private static final Integer MAX_ACCOUNTS = 5000;
+    // Single-character company names are too ambiguous to replace safely.
+    private static final Integer MIN_COMPANY_LENGTH = 2;
 
     // Mobile (010-1234-5678), Seoul landline (02-123-4567), other landlines (0XX-...).
     private static final Pattern PHONE_PATTERN = Pattern.compile(
@@ -27,6 +36,8 @@ public with sharing class MaskingService {
     );
     // A Korean personal name: 2-4 Hangul syllables.
     private static final Pattern KOREAN_NAME_PATTERN = Pattern.compile('^[\\uAC00-\\uD7A3]{2,4}$');
+
+
 
     /**
      * Holds the masked text and the number of individual values that were masked.
@@ -42,7 +53,8 @@ public with sharing class MaskingService {
     }
 
     /**
-     * Masks phone numbers, account numbers, emails, and known Contact names in the given text.
+     * Masks phone numbers, account numbers, emails, and known Contact and Account
+     * names in the given text.
      *
      * @param rawText The text to sanitize. Null or blank input returns an empty result.
      * @return A MaskingResult with the sanitized text and the count of masked values.
@@ -52,6 +64,20 @@ public with sharing class MaskingService {
      * // result.maskedCount   => 1
      */
     public static MaskingResult mask(String rawText) {
+        return mask(rawText, null, null);
+    }
+
+    /**
+     * 현재 미팅의 담당자/고객사 이름을 정확히 알고 있을 때 쓰는 오버로드.
+     *
+     * contactName / accountName 은 문맥 추측 없이 **정확히 일치하는 문자열만**
+     * 길이만큼 '*' 로 바꾼다(예: 김민준 → ***). 조직 전체 Contact/Account 를
+     * 훑는 기존 규칙보다 먼저 돌기 때문에, 현재 고객은 부분 마스킹(김**)이 아니라
+     * 전체 마스킹이 적용된다.
+     *
+     * 현재 미팅과 무관한 이름/회사/기관은 여기서 가리지 않는다.
+     */
+    public static MaskingResult mask(String rawText, String contactName, String accountName) {
         if (String.isBlank(rawText)) {
             return new MaskingResult(rawText == null ? '' : rawText, 0);
         }
@@ -78,10 +104,24 @@ public with sharing class MaskingService {
         working = emailOutcome.text;
         maskedCount += emailOutcome.count;
 
+        // 3.5 현재 미팅의 담당자/고객사 — 정확 일치만 전체 '*' 처리.
+        //     레코드 기반 규칙보다 먼저 돌려서 현재 고객이 부분 마스킹되지 않게 한다.
+        MaskOutcome contextOutcome = maskExactNames(
+            working, new List<String>{ contactName, accountName }
+        );
+        working = contextOutcome.text;
+        maskedCount += contextOutcome.count;
+
         // 4. Contact names sourced from the org.
         MaskOutcome nameOutcome = maskContactNames(working);
         working = nameOutcome.text;
         maskedCount += nameOutcome.count;
+
+        // 5. Account (company) names sourced from the org. Runs after personal
+        //    names so a company name that contains one is not partially rewritten.
+        MaskOutcome companyOutcome = maskAccountNames(working);
+        working = companyOutcome.text;
+        maskedCount += companyOutcome.count;
 
         return new MaskingResult(working, maskedCount);
     }
@@ -217,6 +257,45 @@ public with sharing class MaskingService {
     }
 
     /**
+     * Queries Account names and replaces any that appear in the text with the
+     * first character + **. Unlike phone/email masking this is data driven: only
+     * companies that exist as Account records in the org are masked.
+     */
+    private static MaskOutcome maskAccountNames(String text) {
+        List<Account> accounts = [
+            SELECT Name
+            FROM Account
+            WHERE Name != null
+            WITH USER_MODE
+            LIMIT :MAX_ACCOUNTS
+        ];
+
+        Set<String> companyNames = new Set<String>();
+        for (Account account : accounts) {
+            String name = account.Name == null ? '' : account.Name.trim();
+            if (name.length() >= MIN_COMPANY_LENGTH) {
+                companyNames.add(name);
+            }
+        }
+
+        // Longer names first so "보르니증권 서울지점" is masked before "보르니증권".
+        List<String> sortedNames = new List<String>(companyNames);
+        sortByLengthDesc(sortedNames);
+
+        Integer count = 0;
+        String working = text;
+        for (String name : sortedNames) {
+            if (!working.contains(name)) {
+                continue;
+            }
+            String masked = name.substring(0, 1) + '**';
+            count += countOccurrences(working, name);
+            working = working.replace(name, masked);
+        }
+        return new MaskOutcome(working, count);
+    }
+
+    /**
      * Counts non-overlapping occurrences of a literal substring.
      */
     private static Integer countOccurrences(String text, String target) {
@@ -239,5 +318,42 @@ public with sharing class MaskingService {
             }
             values[j + 1] = current;
         }
+    }
+
+
+    /**
+     * 주어진 이름들과 정확히 일치하는 부분만 길이만큼 '*' 로 바꾼다.
+     * 문맥 추측이나 패턴 추론은 하지 않는다. 카운트는 기존 규칙과 동일하게
+     * occurrence 단위로 센다.
+     */
+    private static MaskOutcome maskExactNames(String text, List<String> names) {
+        if (String.isBlank(text) || names == null) {
+            return new MaskOutcome(text, 0);
+        }
+
+        Set<String> targets = new Set<String>();
+        for (String name : names) {
+            if (String.isNotBlank(name)) {
+                targets.add(name.trim());
+            }
+        }
+        if (targets.isEmpty()) {
+            return new MaskOutcome(text, 0);
+        }
+
+        // 긴 이름부터 처리해 짧은 이름이 긴 이름을 부분적으로 깨뜨리지 않게 한다.
+        List<String> sorted = new List<String>(targets);
+        sortByLengthDesc(sorted);
+
+        Integer count = 0;
+        String working = text;
+        for (String name : sorted) {
+            if (!working.contains(name)) {
+                continue;
+            }
+            count += countOccurrences(working, name);
+            working = working.replace(name, '*'.repeat(name.length()));
+        }
+        return new MaskOutcome(working, count);
     }
 }

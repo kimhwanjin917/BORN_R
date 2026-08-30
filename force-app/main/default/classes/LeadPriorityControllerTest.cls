@@ -8,7 +8,8 @@ private class LeadPriorityControllerTest {
                 LastName = 'Priority Lead ' + i,
                 name_new__c = 'PL' + i,
                 Company = 'Priority Co ' + i,
-                Status = 'New',
+                Status = '신규',
+                Email = 'priority' + i + '@example.com',
                 Priority_Score__c = i * 10,
                 Priority_Rationale_Summary__c = 'Reason ' + i
             ));
@@ -17,7 +18,8 @@ private class LeadPriorityControllerTest {
             LastName = 'No Score Lead',
             name_new__c = 'NoScore',
             Company = 'No Score Co',
-            Status = 'New'
+            Status = '신규',
+            Email = 'noscore@example.com'
         ));
         insert leads;
     }

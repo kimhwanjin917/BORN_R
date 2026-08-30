@@ -1,9 +1,2 @@
-<template>
-    <div class="launcher">
-        <lightning-spinner alternative-text="Meeting Session 여는 중" size="small"></lightning-spinner>
-        <p>Meeting Session으로 이동하고 있습니다.</p>
-        <template lwc:if={showFallback}>
-            <lightning-button variant="brand" label="Meeting Session 열기" onclick={openMeetingSession}></lightning-button>
-        </template>
-    </div>
-</template>
+<!-- 모달에 보이는 내용을 두지 않는다. connectedCallback이 즉시 전체 페이지로 이동시킨다. -->
+<template></template>

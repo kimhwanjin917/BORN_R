@@ -81,6 +81,8 @@ export default class OpportunityKpiCard extends NavigationMixin(LightningElement
                 stageName: stage.stageName,
                 count: stage.count,
                 feeDisplay: formatKrw(stage.feeRevenue),
+                // 미팅 단계는 수수료 금액 대상이 아니므로 하단 금액을 표시하지 않는다.
+                showFee: stage.stageName?.trim() !== '미팅',
                 cardClass: isAlerted ? 'pk-col pk-col_alerted' : 'pk-col',
                 railStyle: `background:${color};`,
                 // Zero-count stages keep a hairline so the column still reads as a bar.

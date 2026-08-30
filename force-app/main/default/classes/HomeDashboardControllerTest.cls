@@ -39,6 +39,7 @@ private class HomeDashboardControllerTest {
         Contact meetingContact = new Contact(
             LastName = 'Meeting Contact',
             AccountId = topAcct.Id,
+            Email = 'meeting.contact@example.com',
             name_new__c = 'C001'
         );
         insert meetingContact;
@@ -60,10 +61,21 @@ private class HomeDashboardControllerTest {
             DurationInMinutes = 30
         );
 
+        Product2 maturityProduct = new Product2(Name = '현재 상품명', IsActive = true);
+        insert maturityProduct;
+
+        Asset maturityAsset = new Asset(
+            Name = '테스트 자산명',
+            AccountId = topAcct.Id,
+            Product2Id = maturityProduct.Id,
+            UsageEndDate = Date.today().addDays(10)
+        );
+        insert maturityAsset;
+
         insert new Task(
             OwnerId = userId,
             Subject = MATURITY_SUBJECT,
-            WhatId = topAcct.Id,
+            WhatId = maturityAsset.Id,
             Status = 'Open',
             ActivityDate = Date.today().addDays(10)
         );
@@ -129,12 +141,20 @@ private class HomeDashboardControllerTest {
     static void getMaturityAlertTasksReturnsOpenAlerts() {
         Test.startTest();
         List<Task> tasks = HomeDashboardController.getMaturityAlertTasks();
+        List<HomeDashboardController.MaturityAlertTaskRow> rows = HomeDashboardController.getMaturityAlertTaskRows();
         Test.stopTest();
 
         System.assertEquals(1, tasks.size(), 'Open maturity-alert task must be returned');
         System.assert(
             tasks[0].Subject.startsWith('만기 30일 전 후속 영업'),
             'Subject must match the maturity-alert prefix'
+        );
+        Assert.areEqual(1, rows.size(), 'One enriched maturity-alert row must be returned');
+        Assert.areEqual('테스트 자산명', rows[0].assetName, 'Current Asset name must be returned');
+        Assert.areEqual(
+            Date.today().addDays(10),
+            rows[0].maturityDate,
+            'Current Asset maturity date must be returned'
         );
     }
 

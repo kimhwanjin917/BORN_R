@@ -12,7 +12,7 @@ public with sharing class BoniBlockKitBuilder {
     // ── public entry points ───────────────────────────────────────────
     public static Map<String, Object> homeView(BoniDashboardData d) {
         List<Object> blocks = new List<Object>();
-        blocks.add(header(':boni: 근본증권 본이 · ' + dateKo(d.today)));
+        blocks.add(header('근본증권 보니 · ' + dateKo(d.today) + ' :boni_wave:'));
         blocks.add(actions(new List<Object>{ button('새로고침', ACTION_REFRESH, 'refresh', false) }));
         blocks.add(divider());
         blocks.addAll(eventsSection(d, true));
@@ -25,18 +25,18 @@ public with sharing class BoniBlockKitBuilder {
         blocks.add(divider());
         blocks.addAll(taskSection(d));
         blocks.add(divider());
-        blocks.add(context('마지막 갱신 ' + timeKo(d.generatedAt) + ' · 본이에게 물어보기는 준비 중이에요'));
+        blocks.add(context('마지막 갱신 ' + timeKo(d.generatedAt) + ' · 보니에게 물어보기는 준비 중이에요'));
         return new Map<String, Object>{ 'type' => 'home', 'blocks' => blocks };
     }
 
     public static List<Object> briefingBlocks(BoniDashboardData d) {
         List<Object> blocks = new List<Object>();
-        blocks.add(header(':boni: 좋은 아침이에요! ' + dateKo(d.today) + ' 브리핑'));
+        blocks.add(header('좋은 아침이에요! ' + dateKo(d.today) + ' 브리핑 :boni_front:'));
         blocks.addAll(eventsSection(d, false));
         blocks.addAll(maturitySection(d, false));
         blocks.addAll(taskSection(d));
         if (d.events.isEmpty() && d.maturities.isEmpty() && d.tasks.isEmpty()) {
-            blocks.add(section('오늘은 여유로운 날이에요 :boni_happy:'));
+            blocks.add(section('오늘은 여유로운 날이에요 :boni_34:'));
         }
         blocks.add(actions(new List<Object>{ linkButton('홈에서 전체 보기', ACTION_OPEN_HOME, HOME_DEEPLINK) }));
         return blocks;
@@ -49,7 +49,7 @@ public with sharing class BoniBlockKitBuilder {
     public static List<Object> wrapupBlocks(BoniDashboardData d) {
         BoniDashboardData.WrapupData w = d.wrapup == null ? new BoniDashboardData.WrapupData() : d.wrapup;
         List<Object> blocks = new List<Object>();
-        blocks.add(header(':boni_cheer: 오늘도 수고하셨어요 · ' + dateKo(d.today) + ' 마감'));
+        blocks.add(header('오늘도 수고하셨어요 · ' + dateKo(d.today) + ' 마감 :boni_flag:'));
         String opps = w.updatedOpps.isEmpty() ? '오늘 갱신된 딜이 없습니다' : '• ' + String.join(limitList(w.updatedOpps), '\n• ');
         blocks.add(section('*오늘 갱신된 딜 ' + w.updatedOpps.size() + '건*\n' + opps));
         blocks.add(section('*할 일* 완료 ' + w.completedTasks + '건 · 이월 ' + w.carriedTasks + '건'));

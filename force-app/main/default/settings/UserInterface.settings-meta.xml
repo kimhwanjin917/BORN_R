@@ -16,7 +16,6 @@
     <enableNewPageLayoutEditor>true</enableNewPageLayoutEditor>
     <enablePersonalCanvas>true</enablePersonalCanvas>
     <enablePrintableListViews>true</enablePrintableListViews>
-    <enableProfileCustomTabsets>true</enableProfileCustomTabsets>
     <enableQuickCreate>true</enableQuickCreate>
     <enableQuickSetupPanel>false</enableQuickSetupPanel>
     <enableRelatedListHovers>true</enableRelatedListHovers>

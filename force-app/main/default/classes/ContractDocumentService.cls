@@ -33,7 +33,7 @@ public with sharing class ContractDocumentService {
         }
         Map<Id, Opportunity> opps = new Map<Id, Opportunity>([
             SELECT Id, Name, OwnerId, Owner.Name, AccountId, Account.Name, Account.Business_Registration_Number__c,
-                   Amount, RP_Yield__c, RP_Maturity_Date__c, Issuer_Name__c, Coupon_Rate__c, CurrencyIsoCode,
+                   Amount, RP_Yield__c, RP_Maturity_Date__c, Issuer_Name__c, Coupon_Rate__c, CurrencyIsoCode, Fee_Rate__c,
                    Primary_Product__c, Primary_Product__r.Name, Primary_Product__r.Family, Primary_Product__r.Default_Fee_Rate__c
             FROM Opportunity WHERE Id IN :oppsIn
         ]);
@@ -59,7 +59,9 @@ public with sharing class ContractDocumentService {
             pr.opp = opp;
             Integer termMonths = opp.RP_Maturity_Date__c == null ? 12
                 : Math.max(1, startDate.monthsBetween(opp.RP_Maturity_Date__c) + (opp.RP_Maturity_Date__c.day() > startDate.day() ? 1 : 0));
-            Decimal fee = opp.Primary_Product__r == null ? null : opp.Primary_Product__r.Default_Fee_Rate__c;
+            // docs/58: RM 확정 수수료(Fee_Rate__c)가 있으면 그 값, 없으면 상품 기본 요율
+            Decimal fee = opp.Fee_Rate__c != null ? opp.Fee_Rate__c
+                : (opp.Primary_Product__r == null ? null : opp.Primary_Product__r.Default_Fee_Rate__c);
             pr.con = new Contract(
                 AccountId = opp.AccountId, SourceOpportunityId = opp.Id, OwnerId = opp.OwnerId, Status = 'Draft',
                 StartDate = startDate, ContractTerm = termMonths, CurrencyIsoCode = opp.CurrencyIsoCode,

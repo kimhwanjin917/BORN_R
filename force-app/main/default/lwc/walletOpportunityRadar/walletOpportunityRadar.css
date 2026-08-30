@@ -3,7 +3,7 @@
     --radar-ink: var(--slds-g-color-neutral-base-10, #172033);
     --radar-navy: var(--slds-g-color-brand-base-30, #173b72);
     --radar-muted: var(--slds-g-color-neutral-base-50, #647084);
-    --radar-line: var(--slds-g-color-border-base-1, #dfe5ee);
+    --radar-line: var(--slds-g-color-border-1, #dfe5ee);
     --radar-surface: var(--slds-g-color-surface-container-1, #fff);
     --radar-surface-2: var(--slds-g-color-surface-container-2, #fbfcfe);
     --radar-upsell: #3b9b65;
@@ -28,7 +28,7 @@ h4 { margin: 0; font-size: 13px; }
 .toolbar { display: flex; align-items: flex-end; justify-content: flex-end; gap: 9px; padding: 12px 26px; background: var(--radar-surface-2); border-bottom: 1px solid var(--radar-line); }
 .segment { width: 160px; }
 .search { width: 220px; }
-.loading { position: relative; min-height: 220px; }
+.loading { position: relative; min-height: 220px; padding: 1.5rem 0; }
 .kpi-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 16px 26px; overflow: hidden; border: 1px solid var(--radar-line); border-radius: 12px; background: var(--radar-line); }
 .kpi { padding: 13px 16px; background: var(--radar-surface); }
 .kpi-label, .kpi-note { display: block; color: var(--radar-muted); font-size: 11px; }
@@ -109,6 +109,15 @@ h4 { margin: 0; font-size: 13px; }
 .whitespace { color: var(--radar-crosssell); font-weight: 800; }
 .component-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 12px 26px 16px; color: var(--radar-muted); font-size: 10px; }
 .footer-note { margin-left: auto; }
+.radar-email-modal { position: fixed; inset: 0; z-index: 9001; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; padding: 6rem 3rem 1rem; box-sizing: border-box; }
+.radar-email-modal__container { position: relative; width: min(820px, calc(100vw - 2rem)); max-width: 820px; height: min(69rem, calc(100vh - 7.5rem)); min-height: 0; margin: 0; overflow: visible; display: flex; flex-direction: column; border-radius: 2rem; background: #fff; box-shadow: 0 1rem 2.5rem rgba(20, 20, 20, .28); }
+.radar-email-modal__close { position: absolute; top: -2.5rem; right: 0; z-index: 9003; display: grid; place-items: center; width: 2rem; height: 2rem; padding: 0; border: 1px solid #c9c9c9; border-radius: 50%; color: #0b5cab; background: #fff; cursor: pointer; box-shadow: 0 1px 3px rgba(0, 0, 0, .18); }
+.radar-email-modal__close-icon, .radar-email-modal__close-icon::after { display: block; width: 1rem; height: .14rem; border-radius: .2rem; background: currentColor; }
+.radar-email-modal__close-icon { transform: rotate(45deg); }
+.radar-email-modal__close-icon::after { content: ''; transform: rotate(90deg); }
+.radar-email-modal__close:hover, .radar-email-modal__close:focus-visible { color: #014486; background: #f3f6fa; outline: 2px solid var(--radar-accent); outline-offset: 1px; }
+.radar-email-modal__content { min-height: 0; height: 100%; flex: 1 1 auto; display: flex; flex-direction: column; overflow: hidden; }
+@media (max-width: 900px) { .radar-email-modal { padding: 5rem 1rem 1rem; } .radar-email-modal__container { width: 100%; height: calc(100vh - 6rem); border-radius: 1.25rem; } .radar-email-modal__close { top: -2.5rem; right: 0; width: 2rem; height: 2rem; } .radar-email-modal__close-icon, .radar-email-modal__close-icon::after { width: 1rem; height: .14rem; } }
 @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
 .contact { margin: 4px 0 0; font-size: 11px; font-weight: 700; color: var(--radar-success-ink); }
 .contact.stale { color: var(--radar-crosssell); }
@@ -234,3 +243,592 @@ h2 { font-size: 18px; font-weight: 800; color: var(--radar-navy); }
 .pager-btn:hover:not(:disabled) { background: #eaf2ff; border-color: var(--radar-accent); }
 .pager-btn:disabled { opacity: .35; cursor: default; }
 .component-footer { font-size: 12.5px; font-weight: 500; }
+
+/* Home dashboard visual language: compact white panels, navy hierarchy, blue action. */
+:host {
+    --home-ink: var(--slds-g-color-on-surface-3, #12213b);
+    --home-navy: var(--slds-g-color-brand-base-15, #172b4d);
+    --home-blue: var(--slds-g-color-brand-base-50, #2f6fed);
+    --home-gold: var(--slds-g-color-warning-1, #c99a3d);
+    --home-muted: var(--slds-g-color-on-surface-1, #728098);
+    --home-line: var(--slds-g-color-border-1, #e5eaf2);
+    --home-surface: var(--slds-g-color-surface-container-1, #ffffff);
+    --home-surface-soft: var(--slds-g-color-surface-container-2, #f5f7fb);
+    --home-shadow: var(--slds-g-shadow-2, 0 3px 12px rgba(18, 33, 59, 0.05));
+    color: var(--home-ink);
+    /* SLDS has no global font-family hook; retain the Home dashboard font stack. */
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+}
+
+.radar-card {
+    border-color: var(--home-line);
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    background: var(--home-surface);
+    box-shadow: var(--home-shadow);
+}
+
+.component-header {
+    padding: var(--slds-g-spacing-5, 1.5rem) var(--slds-g-spacing-5, 1.5rem) var(--slds-g-spacing-4, 1rem);
+    border-bottom-color: var(--home-line);
+}
+
+.component-header .eyebrow {
+    color: var(--home-gold);
+    text-transform: uppercase;
+}
+
+.component-header .title,
+.panel-heading h2,
+.detail-panel h3,
+.account-name,
+.family-list .family-name {
+    color: var(--home-ink);
+}
+
+.component-header .subtitle,
+.header-meta,
+.panel-heading p,
+.chart-count,
+.kpi-label,
+.kpi-note,
+.component-footer {
+    color: var(--home-muted);
+}
+
+.toolbar {
+    padding: var(--slds-g-spacing-3, 0.75rem) var(--slds-g-spacing-5, 1.5rem);
+    background: var(--home-surface-soft);
+    border-bottom-color: var(--home-line);
+}
+
+.kpi-strip,
+.account-list,
+.panel {
+    border-color: var(--home-line);
+    background: var(--home-surface);
+}
+
+.kpi-strip {
+    margin: var(--slds-g-spacing-4, 1rem) var(--slds-g-spacing-5, 1.5rem);
+}
+
+.kpi {
+    background: var(--home-surface);
+}
+
+.kpi-value,
+.account-action,
+.row-button.account-name {
+    color: var(--home-blue);
+}
+
+.main-grid {
+    gap: var(--slds-g-spacing-4, 1rem);
+    padding: 0 var(--slds-g-spacing-5, 1.5rem);
+}
+
+.panel,
+.account-list {
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    box-shadow: var(--home-shadow);
+}
+
+.panel-heading {
+    padding: var(--slds-g-spacing-4, 1rem);
+}
+
+.detail-panel {
+    background: var(--home-surface);
+}
+
+.queue thead th {
+    background: var(--home-surface-soft);
+}
+
+.account-list {
+    margin: var(--slds-g-spacing-4, 1rem) var(--slds-g-spacing-5, 1rem) 0;
+}
+
+.component-footer {
+    padding-right: var(--slds-g-spacing-5, 1.5rem);
+    padding-left: var(--slds-g-spacing-5, 1.5rem);
+}
+
+/* Home dashboard icon language: blue rounded tile, no icon shadow. */
+.component-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+    min-width: 0;
+}
+
+.component-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-top: 0.125rem;
+    place-items: center;
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, #3b6cf6, #2948d6);
+    box-shadow: none;
+}
+
+.component-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: #ffffff;
+}
+
+.component-heading__copy {
+    min-width: 0;
+}
+
+/* Match the Home dashboard card header geometry and typography. */
+.component-header {
+    padding: 1rem 1.25rem;
+}
+
+.component-heading {
+    align-items: center;
+}
+
+.component-icon {
+    margin-top: 0;
+}
+
+.component-header .eyebrow {
+    margin-bottom: var(--slds-g-spacing-1, 0.25rem);
+    color: var(--slds-g-color-warning-1, #9f5c00);
+    font-family: inherit;
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: 0.08em;
+    line-height: 1;
+}
+
+.component-header .title {
+    color: var(--home-ink);
+    font-family: inherit;
+    font-size: var(--slds-g-font-scale-1, 1rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.component-header .subtitle {
+    margin-top: var(--slds-g-spacing-1, 0.25rem);
+    color: var(--home-muted);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+    .kpi-strip,
+    .account-list {
+        margin-right: var(--slds-g-spacing-4, 1rem);
+        margin-left: var(--slds-g-spacing-4, 1rem);
+    }
+
+    .main-grid {
+        padding-right: var(--slds-g-spacing-4, 1rem);
+        padding-left: var(--slds-g-spacing-4, 1rem);
+    }
+}
+
+/* Selected account: keep the account overview collapsible without hiding recommendations. */
+.detail-summary {
+    margin: 20px 0;
+    border-top: 1px solid var(--radar-line);
+    border-bottom: 1px solid var(--radar-line);
+}
+
+.detail-toggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 0;
+    border: 0;
+    color: var(--radar-navy);
+    background: transparent;
+    font-family: var(--radar-font-family);
+    font-size: var(--radar-font-size-body);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.detail-toggle__state {
+    margin-left: auto;
+    color: var(--radar-muted);
+    font-size: var(--radar-font-size-small);
+    font-weight: 400;
+}
+
+.detail-toggle__chevron {
+    color: var(--radar-muted);
+    font-size: 18px;
+    line-height: 1;
+    transform: translateY(-2px);
+    transition: transform .16s ease;
+}
+
+.detail-toggle[aria-expanded="false"] .detail-toggle__chevron {
+    transform: rotate(-90deg) translateX(2px);
+}
+
+.detail-toggle:focus-visible {
+    outline: 2px solid var(--radar-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.detail-summary__content.is-collapsed {
+    display: none;
+}
+
+.detail-summary .detail-metrics {
+    margin: 0;
+    border-top: 0;
+}
+
+/* Toolbar controls: align base components to one shared center line and height. */
+.toolbar {
+    align-items: center;
+}
+
+.toolbar > .scope,
+.toolbar > .segment,
+.toolbar > .search,
+.toolbar > .toolbar-refresh {
+    align-self: center;
+    flex: 0 0 auto;
+    min-height: 40px;
+}
+
+.toolbar > .toolbar-refresh {
+    display: flex;
+    align-items: center;
+}
+
+/* Toolbar wrappers: center the visible base-component boxes as one group. */
+.toolbar-control {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    flex: 0 0 auto;
+    transform: translateY(4px);
+}
+
+.toolbar-control_scope {
+    min-width: 160px;
+}
+
+.toolbar-control_segment {
+    width: 160px;
+}
+
+.toolbar-control_search {
+    width: 220px;
+}
+
+.toolbar-control > .scope,
+.toolbar-control > .segment,
+.toolbar-control > .search,
+.toolbar-control > .toolbar-refresh {
+    width: 100%;
+    min-height: 40px;
+}
+
+/* Opportunity queue: separate the list rows from pagination controls. */
+.account-list .pager {
+    border-top: 1px solid var(--home-line, var(--radar-line));
+}
+
+/* Unified typography: use the component header as the visual reference. */
+:host {
+    --radar-font-family: "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+    --radar-font-size-body: 13px;
+    --radar-font-size-small: 12px;
+    --radar-font-size-caption: 11px;
+    --radar-font-size-section: 17px;
+    --radar-font-size-title: 24px;
+    font-family: var(--radar-font-family);
+    font-size: var(--radar-font-size-body);
+}
+
+.radar-card,
+.radar-card button,
+.radar-card input,
+.radar-card select,
+.radar-card textarea,
+.radar-card svg text {
+    font-family: var(--radar-font-family);
+}
+
+.radar-card {
+    font-size: var(--radar-font-size-body);
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.component-header .eyebrow {
+    font-size: var(--radar-font-size-caption);
+    line-height: 1.2;
+}
+
+.component-header .title {
+    font-size: var(--radar-font-size-title);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.component-header .subtitle {
+    font-size: var(--radar-font-size-body);
+    line-height: 1.5;
+}
+
+.header-meta,
+.panel-heading p,
+.chart-count,
+.kpi-note,
+.pager-label {
+    font-size: var(--radar-font-size-small);
+}
+
+.header-meta,
+.chart-count,
+.pager-label {
+    font-weight: 500;
+}
+
+.panel-heading p,
+.kpi-note {
+    font-weight: 400;
+}
+
+.kpi-label,
+.detail-metrics span,
+.family-list small,
+.recommendation-heading span,
+.pill,
+.priority-badge,
+.outcome-status,
+.outcome-link,
+.breakdown li,
+.skip,
+.component-footer {
+    font-size: var(--radar-font-size-caption);
+}
+
+.kpi-label,
+.detail-metrics span,
+.family-list small,
+.recommendation-heading span,
+.component-footer {
+    font-weight: 400;
+}
+
+.pill,
+.priority-badge,
+.outcome-status,
+.outcome-link {
+    font-weight: 600;
+}
+
+.kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.panel-heading h2 {
+    font-size: var(--radar-font-size-section);
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.detail-panel {
+    font-size: var(--radar-font-size-body);
+}
+
+.detail-panel h3 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.detail-panel .subtitle,
+.family-list,
+.recommendation-meta,
+.recommendation p,
+.outcome,
+.queue,
+.queue td {
+    font-size: var(--radar-font-size-body);
+}
+
+.detail-panel .subtitle,
+.recommendation p,
+.queue td {
+    font-weight: 400;
+}
+
+.detail-panel .contact {
+    font-size: var(--radar-font-size-small);
+    font-weight: 600;
+}
+
+.detail-panel .detail-metrics strong,
+.family-list b {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.recommendation-topline strong,
+.queue .account-name {
+    font-size: var(--radar-font-size-body);
+    font-weight: 600;
+}
+
+.recommendation-action,
+.account-action,
+.queue thead th {
+    font-size: var(--radar-font-size-small);
+}
+
+.recommendation-action,
+.account-action,
+.queue thead th {
+    font-weight: 600;
+}
+
+.axis-tick,
+.axis-title,
+.zone-label,
+.marker-label,
+.chart-legend {
+    font-family: var(--radar-font-family);
+    font-size: var(--radar-font-size-small);
+}
+
+.axis-title,
+.zone-label,
+.marker-label {
+    font-weight: 600;
+}
+
+.chart-legend {
+    font-size: var(--radar-font-size-caption);
+    font-weight: 400;
+}
+
+.detail-panel .breakdown-value {
+    font-size: var(--radar-font-size-caption);
+    font-weight: 600;
+}
+
+.queue .account-name,
+.queue .whitespace,
+.queue td.score {
+    font-size: var(--radar-font-size-body);
+    font-weight: 600;
+}
+
+/* Opportunity queue: explicitly normalize every table text element. */
+.queue,
+.queue thead,
+.queue tbody,
+.queue tr,
+.queue th,
+.queue td,
+.queue button,
+.queue span {
+    font-family: var(--radar-font-family);
+}
+
+.queue {
+    font-size: var(--radar-font-size-body);
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.queue thead th {
+    font-size: var(--radar-font-size-caption);
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.queue tbody th,
+.queue tbody td,
+.queue .share-cell > span:first-child {
+    font-size: var(--radar-font-size-body);
+    font-weight: 400;
+}
+
+.queue tbody th .account-name {
+    font-size: var(--radar-font-size-body);
+    font-weight: 600;
+}
+
+.queue tbody td.whitespace,
+.queue tbody td.score {
+    font-size: var(--radar-font-size-body);
+    font-weight: 600;
+}
+
+.queue .pill {
+    font-size: var(--radar-font-size-caption);
+    font-weight: 600;
+}
+
+/* Radar chart: keep the left panel aligned with the Selected Account panel. */
+@media (min-width: 901px) {
+    .main-grid > .panel:first-child {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-grid > .panel:first-child .chart-shell {
+        min-height: 0;
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        overflow: visible;
+    }
+
+    .main-grid > .panel:first-child .radar-chart {
+        width: 100%;
+        height: auto;
+        min-height: 560px;
+        max-height: none;
+        flex: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-grid > .panel:first-child .chart-shell {
+        overflow: visible;
+    }
+
+    .main-grid > .panel:first-child .radar-chart {
+        height: auto;
+        min-height: 360px;
+        max-height: none;
+        flex: none;
+    }
+}
+/* ── 보니 로더: lightning-spinner 대체(보니 chart 둥실 + 도트 3개). 되돌리기: 이 블록 삭제 + 템플릿 spinner 복원 ── */
+.boni-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; text-align: center; }
+.boni-loader__img { width: 140px; height: 140px; object-fit: contain; animation: boni-bob 2.2s ease-in-out infinite; }
+.boni-loader__copy { margin: 0; color: #64748B; font-size: 0.875rem; }
+.boni-dots { display: inline-flex; gap: 4px; margin-left: 4px; vertical-align: middle; }
+.boni-dots i { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #2E7CF6; animation: boni-dot 1.2s ease-in-out infinite; }
+.boni-dots i:nth-child(2) { animation-delay: 0.2s; }
+.boni-dots i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes boni-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes boni-dot { 0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .boni-loader__img, .boni-dots i { animation: none; } }

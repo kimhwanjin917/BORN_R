@@ -46,6 +46,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>CorporateFinancialStatement__c.Disclosure_Period_YM__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>CorporateFinancialStatement__c.External_Key__c</field>
         <readable>true</readable>
@@ -178,21 +183,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Lead.Department__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.Meeting_Attendees__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.Meeting_Content__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.Meeting_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

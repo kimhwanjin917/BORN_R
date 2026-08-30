@@ -3,6 +3,7 @@
     <enableAccountDiscovery>false</enableAccountDiscovery>
     <enableAccountHistoryTracking>true</enableAccountHistoryTracking>
     <enableAccountInsightsInMobile>false</enableAccountInsightsInMobile>
+    <enableAccountOwnerReport>false</enableAccountOwnerReport>
     <enableAccountTeams>true</enableAccountTeams>
     <enableContactHistoryTracking>true</enableContactHistoryTracking>
     <enableRelateContactToMultipleAccounts>true</enableRelateContactToMultipleAccounts>

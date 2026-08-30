@@ -24,7 +24,7 @@
 .priority-card {
     display: block;
     background: var(--slds-g-color-surface-1, #fff);
-    border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+    border: 1px solid var(--slds-g-color-border-1, #e5e5e5);
     border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     overflow: hidden;
@@ -251,4 +251,71 @@
 .section_account .score-pill {
     background: #e1f6f2;
     color: #00706a;
+}
+
+/* Home header aligned to the meeting-briefing typography. Icon containers stay flat. */
+:host {
+    --home-ink: var(--slds-g-color-on-surface-3, #12213b);
+    --home-line: var(--slds-g-color-border-1, #e5eaf2);
+    --home-surface: var(--slds-g-color-surface-container-1, #ffffff);
+    display: block;
+    color: var(--home-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+}
+
+.priority-card {
+    border-color: var(--home-line);
+    background: var(--home-surface);
+}
+
+.card-head {
+    border-bottom-color: var(--home-line);
+}
+
+.card-head__title {
+    color: var(--home-ink);
+    font-family: inherit;
+    font-size: var(--slds-g-font-scale-3, 1.25rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: -0.03em;
+}
+
+.card-head__icon,
+.section_account .card-head__icon {
+    box-shadow: none;
+}
+
+/* Briefing-style eyebrow above a more compact Korean title. */
+.card-head__title {
+    align-items: center;
+    font-size: var(--slds-g-font-scale-1, 1rem);
+}
+
+.card-head__heading {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.card-head__eyebrow {
+    margin: 0;
+    color: var(--slds-g-color-warning-1, #9f5c00);
+    font-size: var(--slds-g-font-scale-neg-2, 0.625rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.card-head__label {
+    overflow: hidden;
+    color: var(--home-ink);
+    font-family: inherit;
+    font-size: var(--slds-g-font-scale-1, 1rem);
+    font-weight: var(--slds-g-font-weight-7, 700);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

@@ -101,6 +101,12 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>leadMeetingPrepBriefing</componentName>
+                <identifier>c_leadMeetingPrepBriefing</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>label</name>
                     <value>Tabs</value>

@@ -15,7 +15,10 @@ export default class LeadProposalGenerator extends NavigationMixin(LightningElem
     isGenerating = false;
     errorMessage;
 
-    @track context;
+    // 빈 객체로 시작한다. Apex 호출이 실패하면 context 가 채워지지 않는데,
+    // undefined 인 채로 템플릿이 context.rationale 을 읽으면 컴포넌트가 통째로 죽어
+    // 정작 사용자에게 보여줘야 할 오류 메시지조차 안 나온다.
+    @track context = {};
     @track rows = [];
     backgroundMemo = '';
     assumedAmount;
@@ -37,7 +40,7 @@ export default class LeadProposalGenerator extends NavigationMixin(LightningElem
 
     async load() {
         try {
-            const ctx = await getContext({ leadId: this.recordId });
+            const ctx = await getContext({ recordId: this.recordId });
             this.context = ctx;
             this.rows = (ctx.catalog || []).map((item) => ({
                 ...item,
@@ -131,10 +134,20 @@ export default class LeadProposalGenerator extends NavigationMixin(LightningElem
         this.rows = this.rows.map((r) => (r.productId === id ? { ...r, selected: event.target.checked } : r));
     }
 
+    // 숫자 입력은 onchange 만 걸면 값을 치고 바로 버튼을 눌렀을 때 커밋 전이라 반영되지 않는다.
+    // oninput 도 함께 받고, 쉼표를 섞어 쳐도(10,000,000,000) 숫자로 읽는다.
+    toNumber(raw) {
+        if (raw === '' || raw === null || raw === undefined) {
+            return null;
+        }
+        const cleaned = String(raw).replace(/[,\s]/g, '');
+        const parsed = parseFloat(cleaned);
+        return Number.isNaN(parsed) ? null : parsed;
+    }
+
     handleYieldChange(event) {
         const id = event.currentTarget.dataset.id;
-        const raw = event.target.value;
-        const parsed = raw === '' || raw === null ? null : parseFloat(raw);
+        const parsed = this.toNumber(event.target.value);
         this.rows = this.rows.map((r) => (r.productId === id ? { ...r, yieldRate: parsed } : r));
     }
 
@@ -143,8 +156,7 @@ export default class LeadProposalGenerator extends NavigationMixin(LightningElem
     }
 
     handleAmountChange(event) {
-        const raw = event.target.value;
-        this.assumedAmount = raw === '' || raw === null ? null : parseFloat(raw);
+        this.assumedAmount = this.toNumber(event.target.value);
     }
 
     async handleGenerate() {
@@ -160,12 +172,26 @@ export default class LeadProposalGenerator extends NavigationMixin(LightningElem
             return;
         }
 
+        // 상품 Id 가 빠진 행이 섞이면 서버에서 "상품 Id: null" 로만 보여 원인을 알 수 없다.
+        // 화면이 낡은 캐시로 돌 때 실제로 이런 일이 있었다 — 여기서 걸러 안내한다.
+        const selections = this.selectedRows
+            .filter((r) => r.productId)
+            .map((r) => ({ productId: r.productId, yieldRate: r.yieldRate }));
+        if (selections.length === 0) {
+            this.errorMessage =
+                '상품 정보를 읽지 못했습니다. 브라우저를 강력 새로고침(Cmd+Shift+R) 후 다시 시도해 주세요.';
+            return;
+        }
+
         this.isGenerating = true;
         this.errorMessage = undefined;
         try {
+            // 객체 배열을 그대로 넘기면 Apex 쪽 Selection 의 필드가 전부 null 로 도착한다.
+            // (Aura 복합 타입 파라미터 바인딩에서 값이 유실된다 — 여기서는 값이 멀쩡하다.)
+            // 문자열로 직렬화해 보내고 Apex 가 JSON.deserialize 로 되돌린다. 객체 배열로 되돌리지 말 것.
             this.result = await generate({
-                leadId: this.recordId,
-                selections: this.selectedRows.map((r) => ({ productId: r.productId, yieldRate: r.yieldRate })),
+                recordId: this.recordId,
+                selectionsJson: JSON.stringify(selections),
                 backgroundMemo: this.backgroundMemo,
                 assumedAmount: this.assumedAmount || null
             });

@@ -4,7 +4,7 @@
         <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="masking-modal-heading" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container mnp-mask-modal">
                 <header class="slds-modal__header">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="닫기" onclick={handleCloseMaskingModal}>
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="닫기" disabled={modalCloseDisabled} onclick={handleCloseMaskingModal}>
                         <lightning-icon icon-name="utility:close" size="small" alternative-text="닫기"></lightning-icon>
                     </button>
                     <h2 id="masking-modal-heading" class="slds-modal__title">마스킹 처리 결과</h2>
@@ -15,6 +15,50 @@
                         <span class="mnp-mask-summary__icon"><lightning-icon icon-name="utility:shield" size="small" alternative-text="보호"></lightning-icon></span>
                         <div><strong>{maskingStatusLabel}</strong><p>개인정보 보호 상태를 확인한 뒤 메모를 계속 수정할 수 있습니다.</p></div>
                     </div>
+
+                    <!-- 진행 상태: 저장 → 마스킹 → 상품 추천 -->
+                    <ul class="mnp-steps">
+                        <li class="mnp-step">
+                            <template lwc:if={stepSaveDone}>
+                                <lightning-icon icon-name="utility:check" size="xx-small" variant="success" alternative-text="완료"></lightning-icon>
+                                <span>메모 저장 완료</span>
+                            </template>
+                            <template lwc:else>
+                                <span class="mnp-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span>메모 저장 중…</span>
+                            </template>
+                        </li>
+                        <template lwc:if={stepMaskDone}>
+                            <li class="mnp-step">
+                                <lightning-icon icon-name="utility:check" size="xx-small" variant="success" alternative-text="완료"></lightning-icon>
+                                <span>{maskedCountLabel}</span>
+                            </li>
+                        </template>
+                        <template lwc:if={stepRecommending}>
+                            <li class="mnp-step">
+                                <span class="mnp-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                                <span>상품 추천은 오른쪽 카드에서 생성 중입니다. [확인]을 눌러 메모를 계속 수정하세요.</span>
+                            </li>
+                        </template>
+                        <template lwc:if={stepRecoDone}>
+                            <li class="mnp-step">
+                                <lightning-icon icon-name="utility:check" size="xx-small" variant="success" alternative-text="완료"></lightning-icon>
+                                <span>상품 추천 생성 완료 — 오른쪽 카드에서 확인하세요.</span>
+                            </li>
+                        </template>
+                        <template lwc:if={stepRecoFailed}>
+                            <li class="mnp-step mnp-step--warn">
+                                <lightning-icon icon-name="utility:warning" size="xx-small" variant="warning" alternative-text="주의"></lightning-icon>
+                                <span>상품 추천을 불러오지 못했습니다. 메모와 마스킹은 정상 저장되었습니다.</span>
+                            </li>
+                        </template>
+                        <template lwc:if={stepNoOpportunity}>
+                            <li class="mnp-step mnp-step--warn">
+                                <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="안내"></lightning-icon>
+                                <span>이 미팅은 영업기회와 연결되지 않아 상품 추천을 생성하지 않습니다. 영업기회 화면의 [미팅 시작]으로 열면 추천이 생성됩니다.</span>
+                            </li>
+                        </template>
+                    </ul>
                     <div class="mnp-mask-content">
                         <div class="mnp-masked-preview__label">마스킹된 메모</div>
                         <template lwc:if={hasSanitizedContent}>
@@ -25,7 +69,7 @@
                         </template>
                     </div>
                 </div>
-                <footer class="slds-modal__footer"><button class="slds-button slds-button_brand" onclick={handleCloseMaskingModal}>확인</button></footer>
+                <footer class="slds-modal__footer"><button class="slds-button slds-button_brand" disabled={modalCloseDisabled} onclick={handleCloseMaskingModal}>확인</button></footer>
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
@@ -130,7 +174,6 @@
                             <div class="mnp-memo-status-row">
                                 <span class="mnp-status-dot"></span>
                                 <span>{maskingStatusLabel}</span>
-                                <button type="button" class="mnp-inline-button" onclick={handleOpenMaskingModal}>상세 보기</button>
                             </div>
                         </template>
 
@@ -165,6 +208,19 @@
                                 마스킹 결과 자세히 보기
                             </button>
                         </template>
+
+                        <!-- 메모 등록: Flow footer 대신 카드 안에서 저장한다(화면 이동 없음) -->
+                        <template lwc:if={saveError}>
+                            <p class="mnp-context__error mnp-save-error">{saveError}</p>
+                        </template>
+                        <div class="mnp-card__footer">
+                            <lightning-button
+                                variant="brand"
+                                label={saveButtonLabel}
+                                disabled={saveDisabled}
+                                onclick={handleSaveMemo}
+                            ></lightning-button>
+                        </div>
 
                     </div>
                 </article>
@@ -249,7 +305,7 @@
                 </article>
             </section>
 
-            <!-- ── PANEL 3 : AGENTFORCE RECOMMENDATION + FOLLOW-UP ── -->
+            <!-- ── PANEL 3 : AGENTFORCE RECOMMENDATION ── -->
             <section class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 mnp-col">
                 <article class="mnp-card">
                     <div class="mnp-card__header">
@@ -305,34 +361,28 @@
 
                         </template>
 
+                        <template lwc:elseif={stepRecommending}>
+                            <!-- 추천 생성 중 — 보니(차트) 둥실 + 도트 로더. 모달을 닫아도 여기서 대기 상태가 보인다. -->
+                            <div class="mnp-empty-reco mnp-empty-reco--boni" role="status" aria-live="polite">
+                                <img class="mnp-boni mnp-boni--thinking" src={boniChartUrl} alt="보니가 분석 중" />
+                                <p class="mnp-boni-copy">보니가 상품을 분석하고 있어요<span class="mnp-dots mnp-dots--inline" aria-hidden="true"><i></i><i></i><i></i></span></p>
+                            </div>
+                        </template>
                         <template lwc:else>
-                            <div class="mnp-empty-reco" aria-live="polite">
-                                추천 내용이 아직 생성되지 않았습니다.
+                            <!-- docs/60 별건(보니) — 빈 상태 일러스트. 되돌리기: 이 div 를 원래 텍스트 div 로 교체 -->
+                            <div class="mnp-empty-reco mnp-empty-reco--boni" aria-live="polite">
+                                <img class="mnp-boni" src={boniTabletUrl} alt="보니" />
+                                <p class="mnp-boni-copy">메모를 등록하면 보니가 상품을 추천해 드릴게요.</p>
                             </div>
                         </template>
 
-                        <!-- Expandable follow-up question -->
-                        <div class="mnp-followup slds-m-top_medium">
-                            <button
-                                type="button"
-                                class="mnp-followup__toggle"
-                                onclick={handleToggleFollowUp}
-                                aria-expanded={isFollowUpExpanded}
-                                aria-controls="mnp-followup-panel"
-                            >
-                                <lightning-icon icon-name={followUpChevron} size="xx-small" alternative-text="펼치기/접기"></lightning-icon>
-                                Agentforce에 추가 질문
-                            </button>
-                            <div id="mnp-followup-panel" class={followUpPanelClass}>
-                                <lightning-textarea
-                                    data-id="follow-up"
-                                    label="추가 질문"
-                                    placeholder="추천에 대해 추가로 질문할 내용을 입력해주세요."
-                                    value={followUpQuestionValue}
-                                    onchange={handleFollowUpQuestionChange}
-                                    class="slds-m-top_x-small"
-                                ></lightning-textarea>
-                            </div>
+                        <div class="mnp-card__footer">
+                            <lightning-button
+                                variant="brand"
+                                label={primaryButtonLabel}
+                                onclick={handlePrimaryAction}
+                                disabled={isSubmitting}
+                            ></lightning-button>
                         </div>
 
                     </div>
@@ -341,14 +391,5 @@
 
         </div><!-- /slds-grid -->
 
-        <!-- Bottom action row -->
-        <div class="slds-grid slds-grid_align-end slds-m-top_medium">
-            <lightning-button
-                variant="brand"
-                label={primaryButtonLabel}
-                onclick={handlePrimaryAction}
-                disabled={isSubmitting}
-            ></lightning-button>
-        </div>
     </div><!-- /mnp-page -->
 </template>

@@ -40,7 +40,7 @@ public with sharing class LeadRationaleQueueable implements Queueable, Database.
         List<Lead> topLeads = [
             SELECT Id, Company, Assigned_Company_Code__c, Priority_Score__c
             FROM Lead
-            WHERE IsConverted = false AND Status = '신규' AND Priority_Score__c != null
+            WHERE IsConverted = false AND Priority_Score__c != null
             WITH USER_MODE
             ORDER BY Priority_Score__c DESC NULLS LAST, Name ASC
             LIMIT :topCount

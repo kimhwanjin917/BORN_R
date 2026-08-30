@@ -1,109 +1,117 @@
 <template>
-    <article class="priority-card">
-        <!-- 신규기업 (Lead) -->
-        <section class="section section_lead">
-            <header class="card-head">
-                <div class="card-head__title">
-                    <span class="card-head__icon">
-                        <lightning-icon
-                            icon-name="utility:lead"
-                            size="small"
-                            variant="inverse"
-                            alternative-text="신규기업"
-                        ></lightning-icon>
-                    </span>
-                    <span>우선순위 신규기업</span>
-                </div>
+    <template lwc:if={isInsightTab}>
+        <article class="priority-card">
+            <!-- 신규기업 (Lead) -->
+            <section class="section section_lead">
+                <header class="card-head">
+                    <div class="card-head__title">
+                        <span class="card-head__icon">
+                            <lightning-icon
+                                icon-name="utility:lead"
+                                size="small"
+                                variant="inverse"
+                                alternative-text="신규기업"
+                            ></lightning-icon>
+                        </span>
+                        <span class="card-head__heading">
+                            <span class="card-head__eyebrow">NEW ACCOUNTS</span>
+                            <span class="card-head__label">우선순위 신규기업</span>
+                        </span>
+                    </div>
+                    <template lwc:if={hasLeads}>
+                        <span class="card-head__count">{leadCount}</span>
+                    </template>
+                </header>
+
                 <template lwc:if={hasLeads}>
-                    <span class="card-head__count">{leadCount}</span>
-                </template>
-            </header>
-
-            <template lwc:if={hasLeads}>
-                <ul class="rows">
-                    <template for:each={leads} for:item="lead">
-                        <li
-                            key={lead.Id}
-                            class="row"
-                            data-id={lead.Id}
-                            onclick={handleOpenLead}
-                        >
-                            <span class={lead.rankClass}>{lead.rank}</span>
-                            <div class="row__body">
-                                <span class="row__name" title={lead.name}>{lead.name}</span>
-                            </div>
-                            <span class="score-pill" title="우선순위 점수">{lead.score}</span>
-                            <template lwc:if={lead.reason}>
-                                <div class="reason-popover" role="tooltip">
-                                    <span class="reason-popover__label">추천 사유</span>
-                                    <p class="reason-popover__text">{lead.reason}</p>
+                    <ul class="rows">
+                        <template for:each={leads} for:item="lead">
+                            <li
+                                key={lead.Id}
+                                class="row"
+                                data-id={lead.Id}
+                                onclick={handleOpenLead}
+                            >
+                                <span class={lead.rankClass}>{lead.rank}</span>
+                                <div class="row__body">
+                                    <span class="row__name" title={lead.name}>{lead.name}</span>
                                 </div>
-                            </template>
-                        </li>
+                                <span class="score-pill" title="우선순위 점수">{lead.score}</span>
+                                <template lwc:if={lead.reason}>
+                                    <div class="reason-popover" role="tooltip">
+                                        <span class="reason-popover__label">추천 사유</span>
+                                        <p class="reason-popover__text">{lead.reason}</p>
+                                    </div>
+                                </template>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <template lwc:elseif={leadError}>
+                    <div class="state state_error">{leadError}</div>
+                </template>
+
+                <template lwc:else>
+                    <div class="state state_empty">우선순위 점수가 있는 신규기업이 없습니다.</div>
+                </template>
+            </section>
+
+            <!-- 기존기업 (Account) -->
+            <section class="section section_account">
+                <header class="card-head">
+                    <div class="card-head__title">
+                        <span class="card-head__icon">
+                            <lightning-icon
+                                icon-name="utility:account"
+                                size="small"
+                                variant="inverse"
+                                alternative-text="기존기업"
+                            ></lightning-icon>
+                        </span>
+                        <span class="card-head__heading">
+                            <span class="card-head__eyebrow">EXISTING ACCOUNTS</span>
+                            <span class="card-head__label">우선순위 기존기업</span>
+                        </span>
+                    </div>
+                    <template lwc:if={hasAccounts}>
+                        <span class="card-head__count">{accountCount}</span>
                     </template>
-                </ul>
-            </template>
+                </header>
 
-            <template lwc:elseif={leadError}>
-                <div class="state state_error">{leadError}</div>
-            </template>
-
-            <template lwc:else>
-                <div class="state state_empty">우선순위 점수가 있는 신규기업이 없습니다.</div>
-            </template>
-        </section>
-
-        <!-- 기존기업 (Account) -->
-        <section class="section section_account">
-            <header class="card-head">
-                <div class="card-head__title">
-                    <span class="card-head__icon">
-                        <lightning-icon
-                            icon-name="utility:account"
-                            size="small"
-                            variant="inverse"
-                            alternative-text="기존기업"
-                        ></lightning-icon>
-                    </span>
-                    <span>우선순위 기존기업</span>
-                </div>
                 <template lwc:if={hasAccounts}>
-                    <span class="card-head__count">{accountCount}</span>
-                </template>
-            </header>
-
-            <template lwc:if={hasAccounts}>
-                <ul class="rows">
-                    <template for:each={accounts} for:item="acct">
-                        <li
-                            key={acct.Id}
-                            class="row"
-                            data-id={acct.Id}
-                            onclick={handleOpenAccount}
-                        >
-                            <span class={acct.rankClass}>{acct.rank}</span>
-                            <div class="row__body">
-                                <span class="row__name" title={acct.name}>{acct.name}</span>
-                            </div>
-                            <span class="score-pill" title="우선순위 점수">{acct.score}</span>
-                            <template lwc:if={acct.reason}>
-                                <div class="reason-popover" role="tooltip">
-                                    <span class="reason-popover__label">추천 사유</span>
-                                    <p class="reason-popover__text">{acct.reason}</p>
+                    <ul class="rows">
+                        <template for:each={accounts} for:item="acct">
+                            <li
+                                key={acct.Id}
+                                class="row"
+                                data-id={acct.Id}
+                                onclick={handleOpenAccount}
+                            >
+                                <span class={acct.rankClass}>{acct.rank}</span>
+                                <div class="row__body">
+                                    <span class="row__name" title={acct.name}>{acct.name}</span>
                                 </div>
-                            </template>
-                        </li>
-                    </template>
-                </ul>
-            </template>
+                                <span class="score-pill" title="우선순위 점수">{acct.score}</span>
+                                <template lwc:if={acct.reason}>
+                                    <div class="reason-popover" role="tooltip">
+                                        <span class="reason-popover__label">추천 사유</span>
+                                        <p class="reason-popover__text">{acct.reason}</p>
+                                    </div>
+                                </template>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
 
-            <template lwc:elseif={accountError}>
-                <div class="state state_error">{accountError}</div>
-            </template>
+                <template lwc:elseif={accountError}>
+                    <div class="state state_error">{accountError}</div>
+                </template>
 
-            <template lwc:else>
-                <div class="state state_empty">우선순위 점수가 있는 기업이 없습니다.</div>
-            </template>
-        </section>
-    </article>
+                <template lwc:else>
+                    <div class="state state_empty">우선순위 점수가 있는 기업이 없습니다.</div>
+                </template>
+            </section>
+        </article>
+    </template>
 </template>

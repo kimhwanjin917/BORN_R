@@ -83,15 +83,14 @@ public with sharing class LeadRecommendationSaveAction {
             if (rationale != null && rationale.length() > 2000) {
                 rationale = rationale.substring(0, 2000);
             }
-            Lead toUpdate = new Lead(
-                Id = req.leadId,
-                Recommended_Product_Family__c = family,
-                Recommended_Product_Rationale__c = rationale,
-                // 종목이 안 오면 지운다 — 낡은 종목이 새 상품군과 모순되게 남지 않도록
-                Recommended_Product__c = null,
-                Recommended_Term_Days__c = null,
-                Recommended_Fee_Rate__c = null
-            );
+            Lead toUpdate = new Lead(Id = req.leadId);
+            putIfUpdateable(toUpdate, 'Recommended_Product_Family__c', family);
+            putIfUpdateable(toUpdate, 'Recommended_Product_Rationale__c', rationale);
+            // 종목이 안 오면 지운다 — 낡은 종목이 새 상품군과 모순되게 남지 않도록.
+            // 단, 현재 사용자가 해당 필드를 수정할 수 없으면 아예 건드리지 않는다.
+            putIfUpdateable(toUpdate, 'Recommended_Product__c', null);
+            putIfUpdateable(toUpdate, 'Recommended_Term_Days__c', null);
+            putIfUpdateable(toUpdate, 'Recommended_Fee_Rate__c', null);
 
             String productName = req.productName == null ? '' : req.productName.trim();
             if (String.isNotBlank(productName)) {
@@ -108,11 +107,17 @@ public with sharing class LeadRecommendationSaveAction {
                         + product.Family + '")이 맞지 않습니다: "' + productName + '"';
                     continue;
                 }
-                toUpdate.Recommended_Product__c = product.Id;
-                toUpdate.Recommended_Term_Days__c =
-                    req.termDays != null ? req.termDays : product.Min_Term_Days__c;
-                toUpdate.Recommended_Fee_Rate__c =
-                    req.feeRate != null ? req.feeRate : product.Default_Fee_Rate__c;
+                putIfUpdateable(toUpdate, 'Recommended_Product__c', product.Id);
+                putIfUpdateable(
+                    toUpdate,
+                    'Recommended_Term_Days__c',
+                    req.termDays != null ? req.termDays : product.Min_Term_Days__c
+                );
+                putIfUpdateable(
+                    toUpdate,
+                    'Recommended_Fee_Rate__c',
+                    req.feeRate != null ? req.feeRate : product.Default_Fee_Rate__c
+                );
             }
 
             updates.add(toUpdate);
@@ -128,9 +133,7 @@ public with sharing class LeadRecommendationSaveAction {
             Response res = responses[updateIndexes[u]];
             if (results[u].isSuccess()) {
                 res.isSuccess = true;
-                res.message = updates[u].Recommended_Product__c == null
-                    ? '추천 상품군 "' + updates[u].Recommended_Product_Family__c + '" 을(를) 기록했습니다.'
-                    : '추천 상품군 "' + updates[u].Recommended_Product_Family__c + '" 과 종목을 기록했습니다.';
+                res.message = '추천 상품군을 기록했습니다.';
             } else {
                 res.isSuccess = false;
                 List<String> msgs = new List<String>();
@@ -141,6 +144,13 @@ public with sharing class LeadRecommendationSaveAction {
             }
         }
         return responses;
+    }
+
+    private static void putIfUpdateable(SObject record, String fieldApiName, Object value) {
+        Schema.SObjectField fieldToken = Schema.SObjectType.Lead.fields.getMap().get(fieldApiName);
+        if (fieldToken != null && fieldToken.getDescribe().isUpdateable()) {
+            record.put(fieldApiName, value);
+        }
     }
 
     /** 요청에 실린 종목명을 한 번에 조회한다. 벌크 호출에서도 SOQL 은 한 번이다. */

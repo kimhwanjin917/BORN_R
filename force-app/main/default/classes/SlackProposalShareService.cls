@@ -315,6 +315,24 @@ public with sharing class SlackProposalShareService {
             : title;
     }
 
+    /**
+     * docs/58 Scene 3: Lead 와 무관하게 ContentDocument 1건을 지정 채널에 공유한다.
+     * 기존 Lead 흐름(shareProposal)은 그대로 두고 내부 uploadAndShareFile 을 재사용한다.
+     * @return 공유된 파일명. 실패 시 SlackProposalShareException / CalloutException.
+     */
+    public static String shareContentDocumentToChannel(Id contentDocumentId, String channelId) {
+        ContentVersion version = [
+            SELECT Id, Title, PathOnClient, FileExtension, ContentSize
+            FROM ContentVersion
+            WHERE ContentDocumentId = :contentDocumentId AND IsLatest = true
+            WITH USER_MODE
+            LIMIT 1
+        ];
+        String fileName = displayName(version);
+        uploadAndShareFile(version, fileName, channelId);
+        return fileName;
+    }
+
     // ─── Request / Response DTOs ─────────────────────────────────────────
 
     /** Flow 입력 */

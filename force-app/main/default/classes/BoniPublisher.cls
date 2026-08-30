@@ -45,9 +45,9 @@ public with sharing class BoniPublisher implements Queueable, Database.AllowsCal
     private static void alert(Mode runMode, Boni_Target__mdt t, Exception e) {
         if (!alertOnFailure) return;
         try {
-            BoniSlackClient.postBlocks(ALERT_CHANNEL, '본이 ' + runMode + ' 전송 실패',
+            BoniSlackClient.postBlocks(ALERT_CHANNEL, '보니 ' + runMode + ' 전송 실패',
                 new List<Object>{ new Map<String, Object>{ 'type' => 'section', 'text' => new Map<String, Object>{ 'type' => 'mrkdwn',
-                    'text' => ':boni_curious: *본이 ' + runMode + ' 전송 실패* — 대상 `' + t.DeveloperName + '` (' + t.Slack_User_Id__c + ')\n> ' + e.getMessage() } } });
+                    'text' => '*보니 ' + runMode + ' 전송 실패* — 대상 `' + t.DeveloperName + '` (' + t.Slack_User_Id__c + ')\n> ' + e.getMessage() + ' :boni_curious:' } } });
         } catch (Exception ignore) { System.debug(LoggingLevel.ERROR, 'alert 실패: ' + ignore.getMessage()); }
     }
 }

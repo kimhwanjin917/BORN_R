@@ -1,13 +1,13 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import BONI from '@salesforce/resourceUrl/BoniImages'; // 보니 로더(스피너 대체)
 import getRadar from '@salesforce/apex/OpportunityRadarController.getRadar';
-import createOpportunity from '@salesforce/apex/OpportunityRadarController.createOpportunity';
 import resolveAccountId from '@salesforce/apex/OpportunityRadarController.resolveAccountId';
 
 const EOK = 100000000;
 const PRIORITY_SCORE = 75;
-const CHART = { width: 1000, height: 600, left: 78, right: 964, top: 44, bottom: 528 };
+const CHART = { width: 1000, height: 700, left: 78, right: 964, top: 44, bottom: 600 };
 const EOK_UNIT = 100000000;
 const NICE_TICKS = [0, 500, 1000, 2000, 3000, 5000, 7000, 10000, 15000, 20000, 30000, 50000]; // 억
 const PAGE_SIZE = 10;
@@ -27,8 +27,12 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     scope = 'all'; // Apex downgrades to 'mine' unless the user has Opportunity_Radar_View_All
     searchTerm = '';
     selectedId;
-    isCreating = false;
     page = 1;
+    isSummaryExpanded = false;
+    get boniLoadingUrl() { return BONI + '/chart.png'; }
+    emailComposerOpen = false;
+    emailAccountId;
+    emailRecommendationId;
 
     @wire(CurrentPageReference)
     handlePageRef(pageRef) {
@@ -150,8 +154,8 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     }
 
     yPos(score) {
-        const clamped = Math.min(Math.max((score || 0) - 30, 0), 65);
-        return CHART.bottom - (clamped / 65) * (CHART.bottom - CHART.top);
+        const clamped = Math.min(Math.max(score || 0, 0), 100);
+        return CHART.bottom - (clamped / 100) * (CHART.bottom - CHART.top);
     }
 
     get chartPoints() {
@@ -197,7 +201,7 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     }
 
     get yTicks() {
-        return [30, 40, 50, 60, 70, 80, 90].map((v) => ({ y: this.yPos(v), label: `${v}` }));
+        return [0, 20, 40, 60, 80, 100].map((v) => ({ y: this.yPos(v), label: `${v}` }));
     }
 
     get zoneRect() {
@@ -219,6 +223,7 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     get chartTop() { return CHART.top; }
     get chartBottom() { return CHART.bottom; }
     get xTitleX() { return (CHART.left + CHART.right) / 2; }
+    get xTickY() { return CHART.bottom + 26; }
     get xTitleY() { return CHART.bottom + 52; }
     get yTitleY() { return (CHART.top + CHART.bottom) / 2; }
     get yTitleTransform() { return `rotate(-90 22 ${(CHART.top + CHART.bottom) / 2})`; }
@@ -285,6 +290,8 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     get isFirstPage() { return this.currentPage <= 1; }
     get isLastPage() { return this.currentPage >= this.pageCount; }
     get hasPager() { return this.rankedAccounts.length > PAGE_SIZE; }
+    get summaryToggleLabel() { return this.isSummaryExpanded ? '접기' : '펼치기'; }
+    get summaryContentClass() { return `detail-summary__content${this.isSummaryExpanded ? '' : ' is-collapsed'}`; }
 
     handlePrevPage() { if (!this.isFirstPage) this.page = this.currentPage - 1; }
     handleNextPage() { if (!this.isLastPage) this.page = this.currentPage + 1; }
@@ -309,6 +316,7 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     handleScope(e) { this.scope = e.detail.value; this.load(false); }
     handleSearch(e) { this.searchTerm = e.target.value || ''; this.page = 1; }
     handleRefresh() { this.load(true); }
+    handleToggleSummary() { this.isSummaryExpanded = !this.isSummaryExpanded; }
     handleSelect(e) {
         this.selectedId = e.currentTarget.dataset.id;
         const idx = this.rankedAccounts.findIndex((a) => a.accountId === this.selectedId);
@@ -324,19 +332,23 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
         this.navigateTo(e.currentTarget.dataset.oppId, 'Opportunity');
     }
 
-    async handleCreateOpportunity(e) {
+    handlePrepareEmail(e) {
         const recommendationId = e.currentTarget.dataset.recId;
-        this.isCreating = true;
-        try {
-            const oppId = await createOpportunity({ recommendationId });
-            this.dispatchEvent(new ShowToastEvent({ title: '기회 생성 완료', message: '추천이 영업기회로 등록되었습니다.', variant: 'success' }));
-            await this.load(false);
-            this.navigateTo(oppId, 'Opportunity');
-        } catch (err) {
-            this.toastError(err);
-        } finally {
-            this.isCreating = false;
+        const accountId = this.selected?.accountId;
+        if (!accountId || !recommendationId) {
+            this.toastError({ body: { message: '메일을 보낼 고객사와 추천을 확인해 주세요.' } });
+            return;
         }
+
+        this.emailAccountId = accountId;
+        this.emailRecommendationId = recommendationId;
+        this.emailComposerOpen = true;
+    }
+
+    handleCloseEmailComposer() {
+        this.emailComposerOpen = false;
+        this.emailAccountId = undefined;
+        this.emailRecommendationId = undefined;
     }
 
     async load(force) {
@@ -391,5 +403,13 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
 
     pct(v) {
         return v == null ? '-' : `${(v * 100).toFixed(1)}%`;
+    }
+
+    toHtml(text) {
+        return String(text || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\n/g, '<br/>');
     }
 }

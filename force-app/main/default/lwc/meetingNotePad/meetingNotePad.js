@@ -1,6 +1,10 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import getMeetingContext from '@salesforce/apex/MeetingSessionContextController.getMeetingContext';
+import saveMeetingNote from '@salesforce/apex/MeetingSessionContextController.saveMeetingNote';
+import getRecommendation from '@salesforce/apex/MeetingSessionContextController.getRecommendation';
+import saveDealTerms from '@salesforce/apex/MeetingSessionContextController.saveDealTerms';
+import BONI from '@salesforce/resourceUrl/BoniImages'; // docs/60 별건(보니)
 import {
     FlowAttributeChangeEvent,
     FlowNavigationNextEvent
@@ -25,7 +29,6 @@ export default class MeetingNotePad extends LightningElement {
     @api availableActions = [];
 
     _rawContent = '';
-    _followUpQuestion = '';
     _recommendation = '';
     _sanitizedContent = '';
     _maskedCount = 0;
@@ -36,8 +39,16 @@ export default class MeetingNotePad extends LightningElement {
     @track _selectedRecommendationText = '';
     @track showConfirmModal = false;
     @track _pendingProductName = '';
-    @track _isFollowUpExpanded = false;
     @track showMaskingModal = false;
+    @track saving = false;
+    // 모달 진행 상태: '' | 'saving' | 'masked' | 'recommending' | 'done' | 'recoFailed'
+    @track saveStep = '';
+    @track recoError = '';
+    _pollTimer = null;
+    _pollAttempts = 0;
+    _meetingNoteId = null;      // 재등록 시 같은 Note 를 update 한다(중복 생성 방지)
+    _opportunityId = '';        // saveMeetingNote 가 돌려주는 연결 영업기회 Id
+    saveError = '';
     @track showBriefing = false;
     @track contextLoading = false;
     @track contextError = '';
@@ -85,13 +96,14 @@ export default class MeetingNotePad extends LightningElement {
         }
     }
 
+    // Flow 버전들이 참조 중이라 삭제 불가 — UI 없음, 항상 빈 문자열
+    @api
+    get followUpQuestion() { return ''; }
+    set followUpQuestion(value) {}
+
     @api
     get rawContent() { return this._rawContent; }
     set rawContent(value) { this._rawContent = value || ''; }
-
-    @api
-    get followUpQuestion() { return this._followUpQuestion; }
-    set followUpQuestion(value) { this._followUpQuestion = value || ''; }
 
     @api
     get recommendation() { return this._recommendation; }
@@ -115,6 +127,14 @@ export default class MeetingNotePad extends LightningElement {
     @api
     get normalizedRecommendation() { return this._recommendation; }
 
+    // outputOnly – [미팅 저장] 시 Flow 의 MeetingNoteConfirmAction 에 넘길 메모 Id (docs/60)
+    @api
+    get meetingNoteId() { return this._meetingNoteId; }
+
+    // outputOnly – 메모가 연결된 영업기회 Id. 완료 팝업 [확인] 시 이동 대상 (Flow 에서 boniDoneBanner 로 전달)
+    @api
+    get opportunityId() { return this._opportunityId; }
+
     @api
     get selectedProductName() { return this._selectedProductName; }
     set selectedProductName(value) { this._selectedProductName = value || ''; }
@@ -126,8 +146,12 @@ export default class MeetingNotePad extends LightningElement {
     // ─── Template getters ──────────────────────────────────────────────────
 
     get rawContentValue() { return this._rawContent; }
-    get followUpQuestionValue() { return this._followUpQuestion; }
     get rawContentLength() { return this._rawContent.length; }
+
+    /** docs/60 별건(보니) — 추천 빈 상태 일러스트 */
+    get boniTabletUrl() { return BONI + '/tablet.png'; }
+    /** 추천 생성 중 — 보니가 차트를 설명하는 일러스트 */
+    get boniChartUrl() { return BONI + '/chart.png'; }
 
     get hasRecommendation() {
         return Boolean(this._recommendation && this._recommendation.trim());
@@ -163,29 +187,8 @@ export default class MeetingNotePad extends LightningElement {
         return this._maskedCount > 0 ? `${this._maskedCount}건 마스킹 완료` : '마스킹 완료';
     }
 
-    get primaryButtonLabel() {
-        if (this.hasRecommendation) {
-            return (this._isFollowUpExpanded && this._followUpQuestion.trim())
-                ? '추가 질문 보내기'
-                : '추천 확정';
-        }
-        return '메모 등록';
-    }
-
-    // ─── Follow-up collapsible ─────────────────────────────────────────────
-
-    get isFollowUpExpanded() { return String(this._isFollowUpExpanded); }
-
-    get followUpChevron() {
-        return this._isFollowUpExpanded ? 'utility:chevronup' : 'utility:chevrondown';
-    }
-
-    get followUpPanelClass() {
-        return this._isFollowUpExpanded
-            ? 'mnp-followup__panel mnp-followup__panel--open'
-            : 'mnp-followup__panel';
-    }
-
+    // docs/60 — 하단 버튼은 언제나 "미팅 저장"(최종 저장만). 추천은 이 화면 안에서 끝낸다.
+    get primaryButtonLabel() { return '미팅 저장'; }
     // ─── Confirmation modal ────────────────────────────────────────────────
 
     get confirmModalMessage() {
@@ -257,13 +260,6 @@ export default class MeetingNotePad extends LightningElement {
         event.target.reportValidity();
     }
 
-    handleFollowUpQuestionChange(event) {
-        this._followUpQuestion = event.target.value;
-        this._cacheDraft();
-        event.target.setCustomValidity('');
-        event.target.reportValidity();
-    }
-
     handleCalculatorChange(event) {
         const field = event.target.dataset.field;
         this[field] = event.target.value === '' ? null : Number(event.target.value);
@@ -271,11 +267,128 @@ export default class MeetingNotePad extends LightningElement {
     }
 
     handleToggleBriefing() { this.showBriefing = !this.showBriefing; }
-    handleOpenMaskingModal() { this.showMaskingModal = true; }
-    handleCloseMaskingModal() { this.showMaskingModal = false; }
+    get saveDisabled() {
+        return this.saving || !(this._rawContent && this._rawContent.trim());
+    }
 
-    handleToggleFollowUp() {
-        this._isFollowUpExpanded = !this._isFollowUpExpanded;
+    get saveButtonLabel() {
+        return this.saving ? '등록 중…' : '메모 등록';
+    }
+
+    /**
+     * 메모 등록. Flow 다음 Screen 으로 이동하지 않는다.
+     * 저장 → MeetingNoteTrigger 가 MaskingService 로 마스킹 → 저장본 재조회 순서라
+     * 마스킹이 끝난 뒤에만 모달을 연다.
+     */
+    async handleSaveMemo() {
+        if (this.saveDisabled) {
+            return;
+        }
+        this.saving = true;
+        this.saveError = '';
+        this.recoError = '';
+        this.saveStep = 'saving';
+        this.showMaskingModal = true;
+        try {
+            const result = await saveMeetingNote({
+                recordId: this._recordId,
+                rawContent: this._rawContent,
+                meetingNoteId: this._meetingNoteId
+            });
+            this._meetingNoteId = result?.meetingNoteId || this._meetingNoteId;
+            this._sanitizedContent = result?.sanitizedContent || '';
+            this._maskedCount = Number(result?.maskedCount) || 0;
+            this._opportunityId = result?.opportunityId || '';
+            this.saveStep = 'masked';
+            // 저장·마스킹은 여기서 이미 성공이다. 추천 실패가 이 상태를 되돌리지 않는다.
+            if (!result?.opportunityId) {
+                // docs/60 — 기회에 연결되지 않은 미팅(일정만 있는 경우 등)은 추천 대상이 아니다. 기다리지 않고 바로 안내.
+                this.saveStep = 'noOpportunity';
+            } else {
+                this._startRecommendationPolling();
+            }
+        } catch (error) {
+            this.saveError = this._saveErrorText(error);
+            this.saveStep = '';
+            this.showMaskingModal = false;
+        } finally {
+            this.saving = false;
+        }
+    }
+
+    /**
+     * 추천은 저장 후 비동기로 생성되므로 짧게 폴링한다.
+     * 실패/타임아웃이어도 메모 저장과 마스킹 결과는 그대로 유지한다.
+     */
+    _startRecommendationPolling() {
+        if (!this._meetingNoteId) {
+            return;
+        }
+        this.saveStep = 'recommending';
+        this._pollAttempts = 0;
+        this._clearPollTimer();
+        this._pollTimer = setInterval(() => {
+            this._pollAttempts += 1;
+            getRecommendation({ meetingNoteId: this._meetingNoteId })
+                .then((state) => {
+                    if (!state?.ready) {
+                        // 에이전트 응답이 보통 20~30초 걸리므로 최대 90초(2초×45회) 기다린다. (docs/60)
+                        if (this._pollAttempts >= 45) {
+                            this._clearPollTimer();
+                            this.recoError = '추천 생성이 지연되고 있습니다. 잠시 후 다시 확인해 주세요.';
+                            this.saveStep = 'recoFailed';
+                        }
+                        return;
+                    }
+                    this._clearPollTimer();
+                    if (state.failed) {
+                        this.recoError = state.errorMessage || '상품 추천을 불러오지 못했습니다.';
+                        this.saveStep = 'recoFailed';
+                    } else {
+                        this._recommendation = state.recommendation || '';
+                        this.saveStep = 'done';
+                    }
+                })
+                .catch((error) => {
+                    this._clearPollTimer();
+                    this.recoError = this._saveErrorText(error);
+                    this.saveStep = 'recoFailed';
+                });
+        }, 2000);
+    }
+
+    _clearPollTimer() {
+        if (this._pollTimer) {
+            clearInterval(this._pollTimer);
+            this._pollTimer = null;
+        }
+    }
+
+    disconnectedCallback() {
+        this._clearPollTimer();
+    }
+
+    // ─── 모달 진행 상태 표시용 getter ────────────────────────────────────
+    get stepSaveDone()      { return this.saveStep !== '' && this.saveStep !== 'saving'; }
+    get stepMaskDone()      { return this.stepSaveDone; }
+    get stepRecommending()  { return this.saveStep === 'recommending'; }
+    get stepRecoDone()      { return this.saveStep === 'done'; }
+    get stepRecoFailed()    { return this.saveStep === 'recoFailed'; }
+    get stepNoOpportunity() { return this.saveStep === 'noOpportunity'; }
+    get modalBusy()         { return this.saveStep === 'saving' || this.saveStep === 'recommending'; }
+    /** 저장·마스킹이 끝나면 바로 닫을 수 있다. 추천 대기는 모달 밖(추천 카드)에서 보여준다. */
+    get modalCloseDisabled() { return this.saveStep === 'saving'; }
+    get maskedCountLabel()  { return `개인정보 ${this._maskedCount}건 마스킹 완료`; }
+
+    _saveErrorText(error) {
+        return error?.body?.message || error?.message || '메모를 저장하지 못했습니다.';
+    }
+
+    handleOpenMaskingModal() { this.showMaskingModal = true; }
+    // 모달을 닫아도 추천 폴링은 계속된다. 결과는 오른쪽 추천 카드에 자동 표시.
+    handleCloseMaskingModal() {
+        if (this.modalCloseDisabled) return;
+        this.showMaskingModal = false;
     }
 
     handleSelectProduct(event) {
@@ -301,17 +414,39 @@ export default class MeetingNotePad extends LightningElement {
         );
     }
 
-    handlePrimaryAction() {
-        if (this._isSubmitting || !this._validatePrimaryInput()) return;
-
+    /**
+     * docs/60 — [미팅 저장]: 이미 등록된 메모(+추천)를 최종 저장하는 Flow 단계로 넘긴다.
+     * 메모 등록 전이면 막는다. 에이전트 호출은 여기서 하지 않는다.
+     */
+    async handlePrimaryAction() {
+        if (this._isSubmitting) return;
+        if (!this._meetingNoteId) {
+            this.saveError = '먼저 [메모 등록]으로 메모를 저장해 주세요.';
+            return;
+        }
+        this._clearPollTimer();
         this._isSubmitting = true;
         this._cacheDraft();
+        // docs/58·60 연장 — 미팅 저장 시 수수료 조건을 기회에 저장. 실패해도 저장 흐름은 막지 않는다.
+        try {
+            await saveDealTerms({
+                recordId: this._recordId,
+                dealAmount: this.dealAmount,
+                annualYield: this.annualYield,
+                feeRate: this.feeRate,
+                termDays: this.termDays
+            });
+        } catch (error) {
+            // 조건 저장 실패는 미팅 저장을 막지 않는다.
+        }
         this.dispatchEvent(new FlowAttributeChangeEvent('rawContent', this._rawContent));
+        this.dispatchEvent(new FlowAttributeChangeEvent('meetingNoteId', this._meetingNoteId));
+        this.dispatchEvent(new FlowAttributeChangeEvent('opportunityId', this._opportunityId));
         this.dispatchEvent(
-            new FlowAttributeChangeEvent('followUpQuestion', this._followUpQuestion)
+            new FlowAttributeChangeEvent('normalizedRecommendation', this._recommendation)
         );
 
-        if (this.availableActions.includes('NEXT')) {
+        if (this.availableActions.includes('NEXT') || this.availableActions.includes('FINISH')) {
             this.dispatchEvent(new FlowNavigationNextEvent());
             return;
         }
@@ -322,16 +457,6 @@ export default class MeetingNotePad extends LightningElement {
 
     _validatePrimaryInput() {
         if (this.hasRecommendation) {
-            // Only require follow-up text when the panel is open and the user
-            // clicked "추가 질문 보내기"; "추천 확정" path skips this check.
-            if (this._isFollowUpExpanded && this._followUpQuestion.trim() === '') {
-                const el = this.template.querySelector('[data-id="follow-up"]');
-                if (el) {
-                    el.setCustomValidity('추가 질문을 입력하거나 패널을 닫아주세요.');
-                    el.reportValidity();
-                }
-                return false;
-            }
             return true;
         }
 
@@ -368,7 +493,6 @@ export default class MeetingNotePad extends LightningElement {
         if (!this._recordId) return;
         draftCache.set(this._recordId, {
             rawContent: this._rawContent,
-            followUpQuestion: this._followUpQuestion,
             dealAmount: this.dealAmount,
             annualYield: this.annualYield,
             feeRate: this.feeRate,
@@ -380,7 +504,6 @@ export default class MeetingNotePad extends LightningElement {
         const draft = draftCache.get(this._recordId);
         if (!draft) return;
         if (!this._rawContent) this._rawContent = draft.rawContent || '';
-        if (!this._followUpQuestion) this._followUpQuestion = draft.followUpQuestion || '';
         this.dealAmount = draft.dealAmount ?? this.dealAmount;
         this.annualYield = draft.annualYield ?? this.annualYield;
         this.feeRate = draft.feeRate ?? this.feeRate;

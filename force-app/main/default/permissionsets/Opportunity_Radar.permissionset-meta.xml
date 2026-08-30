@@ -28,7 +28,7 @@
         <apexClass>WalletShareService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <description>Opportunity Radar (docs/55): 추천 이력 오브젝트·필드, 레이더 Apex 접근. 철거 시 함께 삭제.</description>
+    <description>Opportunity Radar (docs/55): 추천 이력 오브젝트·필드, 레이더 Apex 접근. Product2.Family 읽기 권한 포함.</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>Asset.AccountId</field>
@@ -47,6 +47,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Amount</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Product2.Family</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

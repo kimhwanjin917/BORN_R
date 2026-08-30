@@ -17,8 +17,9 @@ public with sharing class BoniSlackEventHandler {
                     String actionId = String.valueOf(((Map<String, Object>) a).get('action_id'));
                     String value = String.valueOf(((Map<String, Object>) a).get('value'));
                     if (actionId == BoniBlockKitBuilder.ACTION_REFRESH) refreshUsers.add(user);
-                    else if (actionId == BoniBlockKitBuilder.ACTION_PREP) replies.add(new Reply(user, channel, ':boni_curious: 미팅 준비카드는 준비 중이에요. 곧 여기서 바로 볼 수 있어요. (' + value + ')'));
-                    else if (actionId == BoniBlockKitBuilder.ACTION_ROLLOVER) replies.add(new Reply(user, channel, ':boni_trust: 롤오버 제안 흐름은 준비 중이에요. 운용데스크 조건조회와 함께 연결됩니다. (' + value + ')'));
+                    else if (actionId == BoniBlockKitBuilder.ACTION_PREP) replies.add(new Reply(user, channel, '미팅 준비카드는 준비 중이에요. 곧 여기서 바로 볼 수 있어요. (' + value + ') :boni_tablet:'));
+                    else if (actionId == BoniBlockKitBuilder.ACTION_ROLLOVER) replies.add(new Reply(user, channel, '롤오버 제안 흐름은 준비 중이에요. 운용데스크 조건조회와 함께 연결됩니다. (' + value + ') :boni_chart:'));
+                    else if (actionId == OpportunityDealChannelService.ACTION_REPLY) DealTermReplyHandler.handle(p); // docs/58 상품팀 조건 회신
                 }
             }
         }

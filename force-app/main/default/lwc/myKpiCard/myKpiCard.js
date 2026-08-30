@@ -23,11 +23,11 @@ export default class MyKpiCard extends NavigationMixin(LightningElement) {
         return this.kpi.periodLabel;
     }
 
-    // The first tile is labelled by quarter — "3Q 수수료" — so the figure and
+    // The first tile is labelled by half-year — "2026 하반기 수수료" — so the figure and
     // the period it covers read as one thing.
     get feeLabel() {
         const label = this.kpi.periodLabel;
-        return label ? `${label.split(' ')[1]} 수수료` : '수수료';
+        return label ? `${label} 수수료` : '수수료';
     }
 
     get feePercentDisplay() {
@@ -54,7 +54,7 @@ export default class MyKpiCard extends NavigationMixin(LightningElement) {
         return barWidth(this.kpi.newAccountPercent);
     }
 
-    // The list view is the whole object, not this quarter's won deals — the
+    // The list view is the whole object, not this year's won deals — the
     // tile is a way in, not a filtered drill-down.
     handleTileClick(event) {
         const objectApiName = event.currentTarget.dataset.object;

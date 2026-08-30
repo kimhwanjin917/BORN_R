@@ -1,103 +1,132 @@
 <template>
-    <lightning-card title="미팅 준비 브리핑" icon-name="utility:einstein">
-        <lightning-button-icon
-            slot="actions"
-            icon-name="utility:refresh"
-            variant="border-filled"
-            alternative-text={refreshLabel}
-            title={refreshLabel}
-            disabled={isGenerating}
-            onclick={handleRefresh}
-        ></lightning-button-icon>
-
-        <div class="slds-var-p-horizontal_medium slds-var-p-bottom_medium">
-            <template lwc:if={isGenerating}>
-                <div class="slds-align_absolute-center slds-var-p-vertical_large">
-                    <lightning-spinner
-                        alternative-text="브리핑 생성 중"
+    <article class="briefing-card" aria-labelledby="briefing-title">
+        <header class="briefing-header">
+            <div class="briefing-heading">
+                <span class="briefing-icon">
+                    <lightning-icon
+                        icon-name="utility:einstein"
                         size="small"
-                    ></lightning-spinner>
-                    <span class="slds-var-m-left_small slds-text-body_small slds-text-color_weak">
-                        AI가 브리핑을 생성하고 있습니다…
-                    </span>
+                        alternative-text=""
+                    ></lightning-icon>
+                </span>
+                <div>
+                    <p class="eyebrow">AI BRIEFING</p>
+                    <h2 id="briefing-title">{briefingTitle}</h2>
                 </div>
-            </template>
+            </div>
+            <div class="briefing-actions">
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    variant="border-filled"
+                    alternative-text={refreshLabel}
+                    title={refreshLabel}
+                    disabled={isGenerating}
+                    onclick={handleRefresh}
+                ></lightning-button-icon>
 
-            <template lwc:else>
+                <lightning-button-icon
+                    icon-name={toggleIcon}
+                    variant="bare"
+                    alternative-text={toggleLabel}
+                    title={toggleLabel}
+                    aria-expanded={isExpandedStr}
+                    onclick={handleToggle}
+                ></lightning-button-icon>
+            </div>
+        </header>
+
+        <template lwc:if={isExpanded}>
+            <div class="briefing-content" aria-busy={isGenerating}>
                 <template lwc:if={hasBriefing}>
-                    <template lwc:if={hasCards}>
-                        <div class="briefing-wrap">
-                            <div class="mp-grid">
-                                <template for:each={cards} for:item="item">
-                                    <article
-                                        key={item.key}
-                                        class="mp-card"
-                                        style={item.themeStyle}
-                                    >
-                                        <div class="mp-head">
-                                            <span class="mp-num">{item.number}</span>
-                                            <h3 class="mp-title">{item.label}</h3>
-                                            <template lwc:if={item.score}>
-                                                <span class="mp-score"
-                                                    >{item.score}<small>점</small></span
-                                                >
-                                            </template>
-                                        </div>
-                                        <div class="mp-body">
-                                            <template lwc:if={item.asList}>
-                                                <ul class="mp-list">
-                                                    <template
-                                                        for:each={item.bullets}
-                                                        for:item="b"
-                                                    >
-                                                        <li key={b.key}>
-                                                            <span class="mp-text">{b.text}</span>
-                                                            <template lwc:if={b.hasChip}>
-                                                                <span class={b.chipClass}
-                                                                    >{b.chip}</span
-                                                                >
-                                                            </template>
-                                                        </li>
-                                                    </template>
-                                                </ul>
-                                            </template>
-                                            <template lwc:else>
-                                                <p>{item.text}</p>
-                                            </template>
+                        <template lwc:if={hasCards}>
+                            <div class="briefing-wrap">
+                                <div class="mp-grid">
+                                    <template for:each={cards} for:item="item">
+                                        <article
+                                            key={item.key}
+                                            class="mp-card"
+                                            style={item.themeStyle}
+                                        >
+                                            <div class="mp-head">
+                                                <span class="mp-num">{item.number}</span>
+                                                <h3 class="mp-title">{item.label}</h3>
+                                            </div>
+                                            <div class="mp-body">
+                                                <template lwc:if={item.score}>
+                                                    <p class="mp-score-line">
+                                                        우선순위 점수
+                                                        <span class="mp-score-val"
+                                                            >{item.score}<small
+                                                                >점</small
+                                                            ></span
+                                                        >
+                                                    </p>
+                                                </template>
+                                                <template lwc:if={item.asList}>
+                                                    <ul class="mp-list">
+                                                        <template
+                                                            for:each={item.bullets}
+                                                            for:item="b"
+                                                        >
+                                                            <li key={b.key}>
+                                                                <span class="mp-text">{b.text}</span>
+                                                                <template lwc:if={b.hasChip}>
+                                                                    <span class={b.chipClass}
+                                                                        >{b.chip}</span
+                                                                    >
+                                                                </template>
+                                                            </li>
+                                                        </template>
+                                                    </ul>
+                                                </template>
+                                                <template lwc:else>
+                                                    <p>{item.text}</p>
+                                                </template>
 
-                                            <template lwc:if={item.note}>
-                                                <div class="mp-note">
-                                                    <lightning-icon
-                                                        icon-name="utility:event"
-                                                        size="xx-small"
-                                                    ></lightning-icon>
-                                                    <span>{item.note}</span>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </article>
-                                </template>
+                                                <template lwc:if={item.note}>
+                                                    <div class="mp-note">
+                                                        <lightning-icon
+                                                            icon-name={item.noteIcon}
+                                                            size="xx-small"
+                                                        ></lightning-icon>
+                                                        <span>{item.note}</span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </article>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
 
-                    <!-- 파싱 실패 시: 원문 그대로(안전망) -->
-                    <template lwc:else>
-                        <div class="briefing-body">{briefing}</div>
-                    </template>
+                        <!-- 파싱 실패 시: 원문 그대로(안전망) -->
+                        <template lwc:else>
+                            <div class="briefing-body">{briefing}</div>
+                        </template>
 
-                    <p class="slds-text-body_small slds-text-color_weak slds-var-m-top_x-small">
-                        {updatedLabel}
-                    </p>
+                        <p class="slds-text-body_small slds-text-color_weak slds-var-m-top_x-small">
+                            {updatedLabel}
+                        </p>
                 </template>
 
                 <template lwc:else>
-                    <div class="slds-text-color_weak slds-var-p-vertical_medium">
-                        아직 생성된 미팅 준비 브리핑이 없습니다.
-                        오른쪽 위 새로고침 버튼을 눌러 브리핑을 생성하세요.
+                    <div class={emptyStateClass}>
+                        <template lwc:if={isNotGenerating}>
+                            아직 생성된 미팅 준비 브리핑이 없습니다.
+                            오른쪽 위 새로고침 버튼을 눌러 브리핑을 생성하세요.
+                        </template>
                     </div>
                 </template>
-            </template>
-        </div>
-    </lightning-card>
+
+                <template lwc:if={isGenerating}>
+                    <div class="briefing-loading-overlay" role="status" aria-live="polite">
+                        <div class="boni-loader">
+                            <img class="boni-loader__img" src={boniLoadingUrl} alt="보니가 브리핑 생성 중" />
+                            <p class="boni-loader__copy">보니가 미팅 브리핑을 준비하고 있어요<span class="boni-dots" aria-hidden="true"><i></i><i></i><i></i></span></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </article>
 </template>

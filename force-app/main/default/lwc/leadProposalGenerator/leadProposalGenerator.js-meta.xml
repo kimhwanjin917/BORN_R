@@ -11,6 +11,7 @@
             <actionType>ScreenAction</actionType>
             <objects>
                 <object>Lead</object>
+                <object>Opportunity</object>
             </objects>
         </targetConfig>
     </targetConfigs>
