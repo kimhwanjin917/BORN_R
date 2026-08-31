@@ -1,5 +1,8 @@
 /* 타이포·색 기준: homeScheduleNews 뉴스 요약 카드 */
 :host {
+    /* 2단(homeKpiRow) 배치 시 셀 높이에 맞춰 늘어남. 단독 배치(부모 높이 auto)에선 효과 없음. */
+    display: block;
+    height: 100%;
     --dash-font-title: 1.125rem;
     --dash-font-section: 1.0625rem;
     --dash-font-metric: 1.5rem;
@@ -26,6 +29,7 @@
 
 .kpi-card {
     display: block;
+    height: 100%;
     background: var(--slds-g-color-surface-1, #fff);
     border: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
     border-radius: 0.75rem;
@@ -79,12 +83,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     gap: 0.75rem;
-    padding: 1.125rem 1.25rem 1.25rem;
+    padding: 2.6rem 1.25rem 1.25rem;
 }
 
 .tile {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.125rem;
     padding: 0.75rem 0.875rem;
     border: 1px solid var(--dash-color-border);
@@ -125,6 +131,7 @@
 }
 
 .tile__track {
+    align-self: stretch;
     height: 0.375rem;
     margin-top: 0.375rem;
     border-radius: 999px;

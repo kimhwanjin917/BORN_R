@@ -1,0 +1,16 @@
+{
+  "status": 0,
+  "result": {
+    "id": "00Daj000011rq4GEAQ",
+    "apiVersion": "67.0",
+    "accessToken": "[REDACTED] Use 'sf org auth show-access-token' to view",
+    "instanceUrl": "https://trailsignup-6e973b0119b58d.my.salesforce.com",
+    "username": "pl_hj@aicrm2group3.com",
+    "clientId": "PlatformCLI",
+    "connectedStatus": "Connected",
+    "alias": "main pjt"
+  },
+  "warnings": [
+    "Secrets are now hidden from 'sf org display' command output. Use the 'sf org auth' commands instead. As a temporary workaround, you can set SF_TEMP_SHOW_SECRETS=true to render these secrets. This workaround will be removed in an upcoming release."
+  ]
+}

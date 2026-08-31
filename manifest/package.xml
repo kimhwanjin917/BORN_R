@@ -50,6 +50,7 @@
         <members>CommunitiesSelfRegConfirmControllerTest</members>
         <members>CommunitiesSelfRegController</members>
         <members>CommunitiesSelfRegControllerTest</members>
+        <members>CfsGroundingBlock</members>
         <members>DartCollectionBatch</members>
         <members>DartCollectionBatchTest</members>
         <members>DartCollectionQueueable</members>

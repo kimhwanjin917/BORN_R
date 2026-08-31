@@ -2,7 +2,7 @@
  * 프롬프트 템플릿 "Lead_Priority_Rationale"(Flex) 의 grounding 용 Apex.
  *
  * Prompt Builder 에서 리소스로 추가하면 템플릿 본문의 {!$Apex:LeadPriorityRationaleProvider.Prompt} 자리에
- * 해당 발굴 리드의 최신 연간 재무제표 수치와 최근 외부 시그널(공시 등)이 텍스트로 주입된다.
+ * 해당 발굴 리드의 최신 공시(분기 포함) 재무제표 수치와 전년 동기 대비 증감, 최근 외부 시그널(공시 등)이 텍스트로 주입된다.
  * 이 텍스트가 "왜 이 우선순위 점수인지"를 LLM 이 구체적 수치로 서술하는 근거가 된다.
  *
  * AI 이원화 원칙: 이 클래스는 Lead.Priority_Score__c 를 재계산하지 않는다. 점수는 PriorityScoreBatch 가
@@ -15,7 +15,6 @@
  */
 public with sharing class LeadPriorityRationaleProvider {
 
-    @TestVisible private static final String ANNUAL_PERIOD = '4분기';
     @TestVisible private static final String DISCLOSURE_SIGNAL = '공시';
     @TestVisible private static final Integer MAX_SIGNALS = 5;
     @TestVisible private static final String NO_LEAD_MESSAGE =
@@ -27,7 +26,7 @@ public with sharing class LeadPriorityRationaleProvider {
 
     @InvocableMethod(
         label='Lead 우선순위 사유: 재무·시그널 grounding'
-        description='발굴 리드의 최신 연간 재무제표와 최근 외부 시그널을 텍스트로 묶어 Lead_Priority_Rationale 프롬프트 템플릿에 주입합니다. 점수는 재계산하지 않습니다.'
+        description='발굴 리드의 최신 공시(분기 포함) 재무제표와 전년 동기 대비 증감, 최근 외부 시그널을 텍스트로 묶어 Lead_Priority_Rationale 프롬프트 템플릿에 주입합니다. 점수는 재계산하지 않습니다.'
     )
     public static List<Response> getRationaleContext(List<Request> requests) {
         List<Response> responses = new List<Response>();
@@ -67,33 +66,26 @@ public with sharing class LeadPriorityRationaleProvider {
         }
     }
 
-    /** 최신 연간 재무제표 1건을 텍스트로. 없으면 null. */
+    /**
+     * 최신 공시(분기 포함) 재무제표 1건과 전년 동기 대비 증감을 텍스트로. 없으면 null.
+     * 점수 산정과 동일하게 최신은 recencyKey(Fiscal_Year*10+보고서 서수) 최대,
+     * 전년 동기는 동일 보고서 코드·Fiscal_Year-1 로 골라 YoY 근거를 제공한다.
+     */
     private static String buildFinancialBlock(Id leadId) {
         List<CorporateFinancialStatement__c> statements = [
-            SELECT Fiscal_Year__c, Total_Assets__c, Total_Equity__c,
+            SELECT Fiscal_Year__c, Period_Type__c, External_Key__c,
+                   Total_Assets__c, Total_Equity__c,
                    Cash_And_Equivalents__c, Short_Term_Financial_Instruments__c,
                    Short_Term_Borrowings__c, Long_Term_Borrowings__c, Bonds_Payable__c
             FROM CorporateFinancialStatement__c
-            WHERE Lead__c = :leadId AND Period_Type__c = :ANNUAL_PERIOD
+            WHERE Lead__c = :leadId
             WITH USER_MODE
-            ORDER BY Fiscal_Year__c DESC NULLS LAST
-            LIMIT 1
+            ORDER BY Fiscal_Year__c DESC NULLS LAST, Id ASC
         ];
         if (statements.isEmpty()) {
             return null;
         }
-        CorporateFinancialStatement__c cfs = statements[0];
-        List<String> lines = new List<String>();
-        lines.add('[최신 연간 재무제표'
-            + (cfs.Fiscal_Year__c == null ? '' : ' (' + cfs.Fiscal_Year__c.intValue() + '년)') + ']');
-        lines.add('- 자산총계: ' + formatWon(cfs.Total_Assets__c));
-        lines.add('- 자본총계: ' + formatWon(cfs.Total_Equity__c));
-        lines.add('- 현금및현금성자산: ' + formatWon(cfs.Cash_And_Equivalents__c));
-        lines.add('- 단기금융상품: ' + formatWon(cfs.Short_Term_Financial_Instruments__c));
-        lines.add('- 단기차입금: ' + formatWon(cfs.Short_Term_Borrowings__c));
-        lines.add('- 장기차입금: ' + formatWon(cfs.Long_Term_Borrowings__c));
-        lines.add('- 사채: ' + formatWon(cfs.Bonds_Payable__c));
-        return String.join(lines, '\n');
+        return CfsGroundingBlock.render(statements);
     }
 
     /** 최근 외부 시그널 몇 건을 텍스트로. 없으면 null. */
@@ -122,15 +114,6 @@ public with sharing class LeadPriorityRationaleProvider {
             lines.add(line);
         }
         return String.join(lines, '\n');
-    }
-
-    /** 원화 금액을 억 단위로 읽기 쉽게. 값이 없으면 "정보 없음". */
-    private static String formatWon(Decimal amount) {
-        if (amount == null) {
-            return '정보 없음';
-        }
-        Decimal inEok = (amount / 100000000L).setScale(1);
-        return inEok.toPlainString().replaceAll('\\.0$', '') + '억 원';
     }
 
     /** 템플릿 입력과 동일한 이름/타입이어야 Prompt Builder 에서 이 클래스를 선택할 수 있다. */

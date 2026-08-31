@@ -2,11 +2,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    align-items: start;
+    align-items: stretch;
 }
 
 .kpi-row__cell {
     min-width: 0;
+    display: flex;
+}
+
+/* 자식 카드(호스트)가 셀 높이를 꽉 채우게 하여 두 카드 높이를 맞춤 */
+.kpi-row__cell > * {
+    width: 100%;
 }
 
 /* 좁은 화면에서는 세로로 쌓기 */

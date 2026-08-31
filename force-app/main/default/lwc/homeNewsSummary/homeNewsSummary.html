@@ -1,0 +1,137 @@
+<template>
+    <!-- ─── 뉴스 요약 (카드 뉴스) ───────────────────────────── -->
+    <article class="card news">
+        <header class="news-head">
+            <span class="news-head__icon">
+                <lightning-icon
+                    icon-name="utility:news"
+                    size="small"
+                    variant="inverse"
+                    alternative-text="뉴스 요약"
+                ></lightning-icon>
+            </span>
+            <div class="news-head__titles">
+                <h2 class="news-head__title">뉴스 요약</h2>
+                <lightning-formatted-date-time
+                    value={today}
+                    year="numeric"
+                    month="numeric"
+                    day="numeric"
+                    class="news-head__date"
+                ></lightning-formatted-date-time>
+            </div>
+        </header>
+
+        <template lwc:if={hasNews}>
+            <!-- 요약 통계 -->
+            <div class="news-stats">
+                <div class="stat">
+                    <span class="stat__icon stat__icon_blue">
+                        <lightning-icon icon-name="utility:knowledge_base" size="small" variant="inverse"></lightning-icon>
+                    </span>
+                    <div class="stat__body">
+                        <span class="stat__label">오늘의 뉴스</span>
+                        <span class="stat__value">{newsCount}<em>건</em></span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <span class="stat__icon stat__icon_green">
+                        <lightning-icon icon-name="utility:company" size="small" variant="inverse"></lightning-icon>
+                    </span>
+                    <div class="stat__body">
+                        <span class="stat__label">핵심 산업</span>
+                        <span class="stat__value stat__value_sm">{topIndustry}</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <span class="stat__icon stat__icon_purple">
+                        <lightning-icon icon-name="utility:trending" size="small" variant="inverse"></lightning-icon>
+                    </span>
+                    <div class="stat__body">
+                        <span class="stat__label">관심 기업</span>
+                        <span class="stat__value stat__value_sm">{topParty}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 한 줄 인사이트 -->
+            <template lwc:if={insight}>
+                <div class="insight">
+                    <span class="insight__icon">
+                        <lightning-icon icon-name="utility:touch_action" size="small" variant="inverse"></lightning-icon>
+                    </span>
+                    <div class="insight__body">
+                        <span class="insight__label">오늘의 한 줄 인사이트</span>
+                        <p class="insight__text">{insight}</p>
+                    </div>
+                </div>
+            </template>
+
+            <!-- 주요 뉴스 -->
+            <div class="news-main">
+                <div class="news-main__head">
+                    <h3 class="news-main__title">주요 뉴스</h3>
+                    <div class="seg">
+                        <button type="button" class={allBtnClass} data-filter="all" onclick={handleFilter}>전체</button>
+                        <button type="button" class={industryBtnClass} data-filter="industry" onclick={handleFilter}>산업군</button>
+                    </div>
+                </div>
+
+                <template lwc:if={hasDisplayNews}>
+                    <ul class="news-grid">
+                        <template for:each={displayNews} for:item="signal">
+                            <li key={signal.Id} class={signal.cardClass}>
+                                <a
+                                    href={signal.linkUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="ncard__link"
+                                >
+                                    <div class="ncard__top">
+                                        <span class={signal.badgeClass}>{signal.categoryLabel}</span>
+                                        <template lwc:if={signal.featured}>
+                                            <span class="ncard__flag">주목</span>
+                                        </template>
+                                    </div>
+                                    <h4 class="ncard__title" title={signal.Title__c}>{signal.Title__c}</h4>
+                                    <template lwc:if={signal.Summary__c}>
+                                        <p class="ncard__desc" title={signal.Summary__c}>{signal.Summary__c}</p>
+                                    </template>
+                                    <div class="ncard__foot">
+                                        <span class="ncard__date">
+                                            <lightning-icon
+                                                icon-name="utility:event"
+                                                size="xx-small"
+                                                class="ncard__date-icon"
+                                            ></lightning-icon>
+                                            <lightning-formatted-date-time
+                                                value={signal.Signal_Date__c}
+                                            ></lightning-formatted-date-time>
+                                        </span>
+                                        <template lwc:if={signal.linkUrl}>
+                                            <lightning-icon
+                                                icon-name="utility:new_window"
+                                                size="xx-small"
+                                                alternative-text="뉴스 보기"
+                                                class="ncard__ext"
+                                            ></lightning-icon>
+                                        </template>
+                                    </div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template lwc:else>
+                    <div class="state state_empty">해당 조건의 뉴스가 없습니다.</div>
+                </template>
+            </div>
+        </template>
+        <template lwc:elseif={newsError}>
+            <div class="state state_error">{newsError}</div>
+        </template>
+        <template lwc:else>
+            <div class="state state_empty">표시할 뉴스가 없습니다.</div>
+        </template>
+    </article>
+</template>

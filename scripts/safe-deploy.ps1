@@ -14,8 +14,18 @@
         그 외         -> retrieve 이후 제3자가 org에서 이 컴포넌트를 바꿈 -> 충돌 -> 배포 중단
     충돌이 하나라도 있으면 배포하지 않고 종료(exit 2). 낡은 로컬 배포가 원천 차단된다.
 
+    삭제(-DestructiveMetadata)도 같은 3-way 로 검증한다. 삭제 대상은 LOCAL 파일이 없으므로(=삭제됨):
+        ORG 없음      -> 이미 삭제됨 -> 안전
+        ORG == BASE   -> org 가 baseline 그대로 -> 삭제해도 제3자 작업 유실 없음 -> 안전
+        그 외         -> git baseline 과 다름(제3자 변경 또는 git 미추적) -> 충돌 -> 사람 검토 필요
+    (git 미추적 컴포넌트 삭제는 BASE=null 이라 CONFLICT 로 잡혀 -AcknowledgeOrgChanges 가 필요하다. 의도된 안전 기본값.)
+
 .PARAMETER Metadata
-    배포할 컴포넌트. 유형:API명 형식. 여러 개 반복 지정. 예: ApexClass:Foo, ApexClass:FooTest
+    배포(생성/수정)할 컴포넌트. 유형:API명 형식. 여러 개 반복 지정. 예: ApexClass:Foo, CustomField:Case.Bar__c
+
+.PARAMETER DestructiveMetadata
+    org 에서 삭제할 컴포넌트. 유형:API명 형식. destructiveChangesPost.xml 로 묶어 삭제 배포한다.
+    예: CustomField:Case.Fee_Stage__c, ApexClass:FeeNegotiationService, ApexPage:FeeDocumentPdf
 
 .PARAMETER TargetOrg
     org 별칭. 생략 시 sf 기본 target-org 사용.
@@ -29,10 +39,16 @@
 
 .EXAMPLE
     pwsh scripts/safe-deploy.ps1 -Metadata ApexClass:MaskingService,ApexClass:MaskingServiceTest
+
+.EXAMPLE
+    pwsh scripts/safe-deploy.ps1 `
+        -Metadata CustomField:Case.Agreed_Yield_Rate__c,CustomField:Case.Contract_Term_Months__c,"Layout:Case-Case Layout" `
+        -DestructiveMetadata CustomField:Case.Fee_Stage__c,ApexClass:FeeNegotiationService
 #>
 [CmdletBinding()]
 param(
     [string[]] $Metadata,
+    [string[]] $DestructiveMetadata,
     [string]   $TargetOrg,
     [switch]   $AcknowledgeOrgChanges,
     [switch]   $SelfTest
@@ -41,7 +57,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # 배포 허용 유형 (AGENTS.md 절대 금지 #2). 그 외 유형은 기계적으로 차단.
-$AllowedTypes = @('ApexClass','ApexTrigger','LightningComponentBundle','StaticResource','CustomField')
+$AllowedTypes = @('ApexClass','ApexTrigger','LightningComponentBundle','StaticResource','CustomField','ApexPage','Layout')
 
 function Norm($text) {
     if ($null -eq $text) { return $null }
@@ -51,35 +67,67 @@ function Norm($text) {
 # 3-way 판정: 'safe-new' | 'safe-unchanged' | 'safe-noop' | 'CONFLICT'
 function Get-Verdict($orgText, $baseText, $localText) {
     $o = Norm $orgText; $b = Norm $baseText; $l = Norm $localText
-    if ($null -eq $o)  { return 'safe-new' }        # org에 없음 -> 신규 -> 덮어쓸 게 없음
+    if ($null -eq $o)  { return 'safe-new' }        # org에 없음 -> 신규(또는 이미 삭제됨) -> 덮어쓸/지울 게 없음
     if ($o -eq $b)     { return 'safe-unchanged' }  # org == baseline -> 제3자 변경 없음
     if ($o -eq $l)     { return 'safe-noop' }       # org == 내 로컬 -> 배포해도 안 바뀜
-    return 'CONFLICT'                                # org가 baseline과도 로컬과도 다름 -> 제3자 변경
+    return 'CONFLICT'                                # org가 baseline과도 로컬과도 다름 -> 제3자 변경/미추적
+}
+
+# destructiveChanges.xml 본문 생성 (유형별 members 묶음)
+function Build-DestructiveXml([string[]] $items) {
+    $byType = [ordered]@{}
+    foreach ($m in $items) {
+        $parts = $m -split ':',2
+        $t = $parts[0].Trim(); $n = $parts[1].Trim()
+        if (-not $byType.Contains($t)) { $byType[$t] = New-Object System.Collections.Generic.List[string] }
+        $byType[$t].Add($n)
+    }
+    $sb = New-Object System.Text.StringBuilder
+    [void]$sb.AppendLine('<?xml version="1.0" encoding="UTF-8"?>')
+    [void]$sb.AppendLine('<Package xmlns="http://soap.sforce.com/2006/04/metadata">')
+    foreach ($t in $byType.Keys) {
+        [void]$sb.AppendLine('    <types>')
+        foreach ($n in $byType[$t]) { [void]$sb.AppendLine("        <members>$n</members>") }
+        [void]$sb.AppendLine("        <name>$t</name>")
+        [void]$sb.AppendLine('    </types>')
+    }
+    [void]$sb.AppendLine('</Package>')
+    return $sb.ToString()
 }
 
 if ($SelfTest) {
     $cases = @(
-        @{ n='org==base (아무도 안 건드림)';     o='A'; b='A'; l='B'; exp='safe-unchanged' },
-        @{ n='org==local (이미 동일)';           o='B'; b='A'; l='B'; exp='safe-noop' },
-        @{ n='org 없음 (신규)';                  o=$null; b=$null; l='B'; exp='safe-new' },
-        @{ n='제3자 변경 (충돌)';                o='C'; b='A'; l='B'; exp='CONFLICT' },
-        @{ n='내가 안 건드린 파일, org만 변경';  o='C'; b='A'; l='A'; exp='CONFLICT' },
-        @{ n='공백만 다름 (정상)';               o="A`r`n"; b='A'; l='B'; exp='safe-unchanged' }
+        @{ n='org==base (아무도 안 건드림)';       o='A'; b='A'; l='B'; exp='safe-unchanged' },
+        @{ n='org==local (이미 동일)';             o='B'; b='A'; l='B'; exp='safe-noop' },
+        @{ n='org 없음 (신규)';                    o=$null; b=$null; l='B'; exp='safe-new' },
+        @{ n='제3자 변경 (충돌)';                  o='C'; b='A'; l='B'; exp='CONFLICT' },
+        @{ n='내가 안 건드린 파일, org만 변경';    o='C'; b='A'; l='A'; exp='CONFLICT' },
+        @{ n='공백만 다름 (정상)';                 o="A`r`n"; b='A'; l='B'; exp='safe-unchanged' },
+        @{ n='삭제: org==base, local없음 (안전)';  o='A'; b='A'; l=$null; exp='safe-unchanged' },
+        @{ n='삭제: 이미 org에 없음';              o=$null; b='A'; l=$null; exp='safe-new' },
+        @{ n='삭제: git 미추적(base없음) 충돌';    o='A'; b=$null; l=$null; exp='CONFLICT' }
     )
     $fail = 0
     foreach ($c in $cases) {
         $got = Get-Verdict $c.o $c.b $c.l
         $ok  = ($got -eq $c.exp)
         if (-not $ok) { $fail++ }
-        "{0}  {1,-28} 기대={2,-14} 실제={3}" -f $(if($ok){'PASS'}else{'FAIL'}), $c.n, $c.exp, $got | Write-Host
+        "{0}  {1,-32} 기대={2,-14} 실제={3}" -f $(if($ok){'PASS'}else{'FAIL'}), $c.n, $c.exp, $got | Write-Host
+    }
+    # destructiveChanges.xml 생성 스모크 테스트
+    $xml = Build-DestructiveXml @('CustomField:Case.Fee_Stage__c','ApexClass:FeeNegotiationService','ApexClass:FeeNegotiationQueueable')
+    if ($xml -notmatch '<members>Case.Fee_Stage__c</members>' -or $xml -notmatch '<name>ApexClass</name>') {
+        Write-Host "FAIL  Build-DestructiveXml 출력이 올바르지 않음" -ForegroundColor Red; $fail++
+    } else {
+        Write-Host "PASS  Build-DestructiveXml (유형별 members 묶음)" -ForegroundColor Green
     }
     if ($fail -gt 0) { Write-Host "SelfTest 실패 $fail건" -ForegroundColor Red; exit 1 }
     Write-Host "SelfTest 전부 통과" -ForegroundColor Green
     exit 0
 }
 
-if (-not $Metadata -or $Metadata.Count -eq 0) {
-    Write-Host "사용법: safe-deploy.ps1 -Metadata ApexClass:Foo,ApexClass:FooTest [-TargetOrg born-org]" -ForegroundColor Yellow
+if ((-not $Metadata -or $Metadata.Count -eq 0) -and (-not $DestructiveMetadata -or $DestructiveMetadata.Count -eq 0)) {
+    Write-Host "사용법: safe-deploy.ps1 -Metadata ApexClass:Foo [-DestructiveMetadata CustomField:Case.Bar__c] [-TargetOrg born-org]" -ForegroundColor Yellow
     exit 64
 }
 
@@ -95,9 +143,12 @@ if (-not $TargetOrg) {
 }
 if (-not $TargetOrg) { Write-Host "target-org를 확인할 수 없습니다. -TargetOrg로 지정하세요." -ForegroundColor Red; exit 1 }
 
-# 유형 허용 검사
+# 유형 허용 검사 (배포 + 삭제 대상 모두)
+$AllTargets = @()
+if ($Metadata) { $AllTargets += $Metadata }
+if ($DestructiveMetadata) { $AllTargets += $DestructiveMetadata }
 $badTypes = @()
-foreach ($m in $Metadata) {
+foreach ($m in $AllTargets) {
     $type = ($m -split ':',2)[0].Trim()
     if ($AllowedTypes -notcontains $type) { $badTypes += $m }
 }
@@ -108,7 +159,8 @@ if ($badTypes.Count -gt 0) {
 }
 
 Write-Host "==> org-우선 충돌 검증 (org=$TargetOrg)" -ForegroundColor Cyan
-Write-Host "    대상: $($Metadata -join ', ')"
+if ($Metadata)            { Write-Host "    배포(생성/수정): $($Metadata -join ', ')" }
+if ($DestructiveMetadata) { Write-Host "    삭제(destructive): $($DestructiveMetadata -join ', ')" -ForegroundColor Magenta }
 
 # org 현재본을 임시 source 프로젝트로 retrieve (로컬 작업본을 절대 건드리지 않음)
 $TempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("safe-deploy-" + [guid]::NewGuid().ToString('N').Substring(0,8))
@@ -117,12 +169,14 @@ try {
     Copy-Item (Join-Path $RepoRoot 'sfdx-project.json') (Join-Path $TempRoot 'sfdx-project.json')
 
     # sfdx-project.json 의 packageDirectories 를 임시 프로젝트에도 생성한다.
-    # (sf CLI 는 retrieve 전에 이 경로 존재를 검사하므로, 없으면 MissingPackageDirectoryError 로 검증이 실패한다.)
-    $pkgDirs = (Get-Content -Raw (Join-Path $RepoRoot 'sfdx-project.json') | ConvertFrom-Json).packageDirectories
+    $pkgDirsJson = (Get-Content -Raw (Join-Path $RepoRoot 'sfdx-project.json') | ConvertFrom-Json)
+    $pkgDirs = $pkgDirsJson.packageDirectories
     foreach ($pd in $pkgDirs) { New-Item -ItemType Directory -Path (Join-Path $TempRoot $pd.path) -Force | Out-Null }
+    $apiVersion = if ($pkgDirsJson.sourceApiVersion) { $pkgDirsJson.sourceApiVersion } else { '62.0' }
 
+    # 배포 + 삭제 대상을 모두 retrieve 해서 3-way 검증한다.
     $mdArgs = @()
-    foreach ($m in $Metadata) { $mdArgs += @('--metadata', $m) }
+    foreach ($m in $AllTargets) { $mdArgs += @('--metadata', $m) }
 
     Push-Location $TempRoot
     try {
@@ -152,8 +206,12 @@ try {
             $localPath = Join-Path $RepoRoot $rel
             $localText = if (Test-Path -LiteralPath $localPath) { Get-Content -Raw -Encoding UTF8 -LiteralPath $localPath } else { $null }
 
-            $baseText = & git -C $RepoRoot show "HEAD:$rel" 2>$null
-            if ($LASTEXITCODE -ne 0) { $baseText = $null }
+            # HEAD에 없는 신규/미추적 파일이면 git show가 실패한다. 이 경우 baseText=null 로 처리한다.
+            $baseText = $null
+            try {
+                $baseText = & git -C $RepoRoot show "HEAD:$rel" 2>$null
+                if ($LASTEXITCODE -ne 0) { $baseText = $null }
+            } catch { $baseText = $null }
             if ($baseText -is [array]) { $baseText = $baseText -join "`n" }
 
             $verdict = Get-Verdict $orgText $baseText $localText
@@ -171,14 +229,14 @@ try {
 
     if ($conflicts.Count -gt 0) {
         Write-Host ""
-        Write-Host "🚨 충돌 감지 — retrieve 이후 org에서 다음 컴포넌트가 제3자에 의해 변경됨:" -ForegroundColor Red
+        Write-Host "🚨 충돌/미검증 감지 — 다음 컴포넌트가 git baseline과 다름(제3자 변경 또는 미추적):" -ForegroundColor Red
         foreach ($c in $conflicts) { Write-Host "    - $c" -ForegroundColor Red }
         Write-Host ""
-        Write-Host "지금 배포하면 그 작업을 덮어씁니다. 먼저 org 변경을 retrieve해서 병합하세요:" -ForegroundColor Yellow
+        Write-Host "배포/삭제 시 org 현재본을 덮어쓰거나 지웁니다. 먼저 org 현재본을 검토하세요:" -ForegroundColor Yellow
         Write-Host "    sf project retrieve start $($mdArgs -join ' ') -o $TargetOrg" -ForegroundColor Yellow
         if (-not $AcknowledgeOrgChanges) {
             Write-Host ""
-            Write-Host "배포를 중단합니다. (검토·병합을 마쳤다면 -AcknowledgeOrgChanges 로만 강행 가능)" -ForegroundColor Red
+            Write-Host "배포를 중단합니다. (검토를 마쳤다면 -AcknowledgeOrgChanges 로만 강행 가능)" -ForegroundColor Red
             exit 2
         }
         Write-Host ""
@@ -186,16 +244,38 @@ try {
     }
 
     # 여기까지 왔으면 안전 — 실제 배포
-    Write-Host ""
-    Write-Host "==> 충돌 없음. 배포 실행" -ForegroundColor Green
     Push-Location $RepoRoot
     try {
-        & sf project deploy start @mdArgs --target-org $TargetOrg
-        $deployExit = $LASTEXITCODE
+        # 1) 생성/수정 배포
+        if ($Metadata -and $Metadata.Count -gt 0) {
+            Write-Host ""
+            Write-Host "==> 충돌 없음. 배포(생성/수정) 실행" -ForegroundColor Green
+            $addArgs = @()
+            foreach ($m in $Metadata) { $addArgs += @('--metadata', $m) }
+            & sf project deploy start @addArgs --target-org $TargetOrg
+            $deployExit = $LASTEXITCODE
+            if ($deployExit -ne 0) { Write-Host "생성/수정 배포 실패 (exit $deployExit) — 삭제 단계 건너뜀." -ForegroundColor Red; exit $deployExit }
+        }
+
+        # 2) 삭제 배포 (destructiveChangesPost.xml)
+        if ($DestructiveMetadata -and $DestructiveMetadata.Count -gt 0) {
+            Write-Host ""
+            Write-Host "==> 삭제(destructive) 실행" -ForegroundColor Magenta
+            $manifestDir = Join-Path $TempRoot 'destr'
+            New-Item -ItemType Directory -Path $manifestDir -Force | Out-Null
+            $pkgPath   = Join-Path $manifestDir 'package.xml'
+            $destrPath = Join-Path $manifestDir 'destructiveChangesPost.xml'
+            $emptyPkg  = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>`n<Package xmlns=`"http://soap.sforce.com/2006/04/metadata`">`n    <version>$apiVersion</version>`n</Package>`n"
+            Set-Content -Path $pkgPath   -Value $emptyPkg -Encoding UTF8
+            Set-Content -Path $destrPath -Value (Build-DestructiveXml $DestructiveMetadata) -Encoding UTF8
+            & sf project deploy start --manifest $pkgPath --post-destructive-changes $destrPath --target-org $TargetOrg
+            $destrExit = $LASTEXITCODE
+            if ($destrExit -ne 0) { Write-Host "삭제 배포 실패 (exit $destrExit)." -ForegroundColor Red; exit $destrExit }
+        }
     } finally {
         Pop-Location
     }
-    exit $deployExit
+    exit 0
 }
 finally {
     Remove-Item -Recurse -Force -LiteralPath $TempRoot -ErrorAction SilentlyContinue

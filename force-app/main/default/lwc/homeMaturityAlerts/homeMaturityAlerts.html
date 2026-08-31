@@ -1,0 +1,47 @@
+<template>
+    <!-- ─── 만기 알림 배지 ────────────────────────────────── -->
+    <article class="card">
+        <header class="card-head card-head_button" onclick={toggleTaskList}>
+            <div class="card-head__title">
+                <span class="card-head__icon">
+                    <lightning-icon
+                        icon-name="utility:clock"
+                        size="small"
+                        variant="inverse"
+                        alternative-text="만기 알림"
+                    ></lightning-icon>
+                </span>
+                <span>만기 알림</span>
+            </div>
+            <span class="badge" title="열린 만기 알림 건수">{taskCount}</span>
+        </header>
+
+        <template lwc:if={showTaskList}>
+            <template lwc:if={hasTasks}>
+                <ul class="rows">
+                    <template for:each={tasks} for:item="tsk">
+                        <li key={tsk.Id} class="row row_link" data-id={tsk.Id} data-what-id={tsk.WhatId} onclick={handleOpenTask} title="클릭하면 기회 레이더에서 이 고객을 봅니다">
+                            <div class="row__body">
+                                <span class="row__name" title={tsk.Subject}>{tsk.Subject}</span>
+                                <template lwc:if={tsk.What.Name}>
+                                    <span class="row__reason">{tsk.What.Name}</span>
+                                </template>
+                            </div>
+                            <lightning-formatted-date-time
+                                value={tsk.ActivityDate}
+                                class="row__time"
+                            ></lightning-formatted-date-time>
+                            <lightning-icon icon-name="utility:chevronright" size="x-small" class="row__chevron" alternative-text="기회 레이더로 이동"></lightning-icon>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:elseif={tasksError}>
+                <div class="state state_error">{tasksError}</div>
+            </template>
+            <template lwc:else>
+                <div class="state state_empty">열린 만기 알림이 없습니다.</div>
+            </template>
+        </template>
+    </article>
+</template>

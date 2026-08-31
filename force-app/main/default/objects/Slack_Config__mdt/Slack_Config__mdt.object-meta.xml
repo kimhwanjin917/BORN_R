@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Slack Config</label>
+    <pluralLabel>Slack Config</pluralLabel>
+    <description>Slack 연동 설정. 인바운드 인터랙티브 콜백의 요청 서명 검증에 쓰는 Signing Secret과 게시 채널 ID를 보관한다. 관리자가 Setup에서 직접 입력하며, 시크릿 값은 git에 커밋하지 않는다. 심사(Screening) Case 승인/반려 워크플로우가 사용한다.</description>
+    <visibility>Protected</visibility>
+</CustomObject>

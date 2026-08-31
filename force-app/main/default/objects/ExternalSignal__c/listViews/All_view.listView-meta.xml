@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_view</fullName>
+    <columns>NAME</columns>
+    <columns>Signal_Type__c</columns>
+    <columns>Title__c</columns>
+    <columns>Account__c</columns>
+    <columns>Industry__c</columns>
+    <columns>Relevance_Score__c</columns>
+    <columns>Signal_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>전체</label>
+</ListView>
