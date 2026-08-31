@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상품 판매 승인 요청 흐름 — RM ↔ 상품팀 (Case 수동 생성)</title>
+<style>
+  :root {
+    --blue: #1a73e8;
+    --blue-bg: #e8f0fe;
+    --green: #0d652d;
+    --green-bg: #e6f4ea;
+    --red: #c5221f;
+    --red-bg: #fce8e6;
+    --orange: #e37400;
+    --orange-bg: #fef7e0;
+    --purple: #7b1fa2;
+    --purple-bg: #f3e5f5;
+    --teal: #00796b;
+    --teal-bg: #e0f2f1;
+    --gray: #5f6368;
+    --gray-bg: #f1f3f4;
+    --border: #dadce0;
+    --bg: #fff;
+    --text: #202124;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: #f8f9fa;
+    color: var(--text);
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { color: var(--gray); font-size: 15px; margin-bottom: 28px; }
+  .subtitle .chip {
+    background: var(--purple-bg); color: var(--purple);
+    padding: 2px 10px; border-radius: 12px; font-size: 13px;
+    font-weight: 600; margin-left: 8px;
+  }
+
+  /* ── Scenario banner (8% 예시) ── */
+  .scenario {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e8f0fe 100%);
+    border: 1px solid #ce93d8;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .scenario h2 { font-size: 17px; color: #4a148c; margin-bottom: 14px; }
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .sc-card {
+    background: #fff; border-radius: 10px; padding: 12px 14px;
+    border: 1px solid #e6d4ee;
+  }
+  .sc-card .k { font-size: 12px; color: var(--gray); margin-bottom: 2px; }
+  .sc-card .v { font-size: 16px; font-weight: 700; color: var(--text); }
+  .sc-card .v.hot { color: var(--red); }
+  .rule-line {
+    background: #fff; border-radius: 10px; padding: 12px 16px;
+    font-size: 14px; border: 1px dashed #ce93d8;
+  }
+  .rule-line strong { color: var(--purple); }
+  .rule-line .hot { color: var(--red); font-weight: 700; }
+
+  /* ── Actor legend ── */
+  .legend {
+    display: flex; gap: 22px; flex-wrap: wrap;
+    margin-bottom: 24px; padding: 16px 20px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Section heading ── */
+  .sec-head {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--gray);
+    margin: 32px 0 14px;
+  }
+  .sec-head::before { content: ''; width: 4px; height: 18px; border-radius: 2px; background: var(--purple); }
+  .sec-head.common::before { background: var(--gray); }
+  .sec-head.merge::before { background: var(--teal); }
+
+  /* ── Step card ── */
+  .step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .step::after {
+    content: '↓'; display: block; text-align: center;
+    font-size: 22px; color: var(--border);
+    position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+  }
+  .step.no-arrow::after { display: none; }
+
+  .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .step-num {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #fff; flex-shrink: 0;
+  }
+  .step-num.blue { background: var(--blue); }
+  .step-num.gray { background: var(--gray); }
+  .step-num.orange { background: var(--orange); }
+  .step-num.green { background: var(--green); }
+  .step-num.purple { background: var(--purple); }
+  .step-num.teal { background: var(--teal); }
+  .step-title { font-size: 17px; font-weight: 600; }
+  .step-actor {
+    margin-left: auto; font-size: 13px; padding: 3px 12px;
+    border-radius: 16px; font-weight: 600; white-space: nowrap;
+  }
+  .actor-rm { background: var(--blue-bg); color: var(--blue); }
+  .actor-product { background: var(--orange-bg); color: #8a4500; }
+  .actor-manager { background: var(--purple-bg); color: var(--purple); }
+  .actor-system { background: var(--gray-bg); color: var(--gray); }
+  .step p.desc { color: var(--gray); font-size: 14px; margin-bottom: 10px; }
+  .manual-badge {
+    display:inline-block; margin-left:8px; font-size:12px; font-weight:700;
+    padding:2px 10px; border-radius:10px; background:var(--blue-bg); color:var(--blue);
+    border:1px solid #a8c7fa;
+  }
+
+  /* ── Case record mockup card ── */
+  .pdf {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 0;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+  .pdf-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: #37474f; color: #fff;
+    padding: 8px 14px; font-size: 13px; font-weight: 600;
+  }
+  .pdf-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #ff5f56; }
+  .pdf-bar .dot.y { background: #ffbd2e; }
+  .pdf-bar .dot.g { background: #27c93f; }
+  .pdf-bar .name { margin-left: 6px; }
+  .pdf-body { padding: 16px 18px; font-size: 13.5px; }
+  .pdf-body .row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dotted #e0e0e0; }
+  .pdf-body .row:last-child { border-bottom: none; }
+  .pdf-body .row .lbl { color: var(--gray); }
+  .pdf-body .row .lbl code { background: #eceff1; padding: 1px 5px; border-radius: 4px; font-size: 11.5px; color: #455a64; }
+  .pdf-body .row .val { font-weight: 600; }
+  .pdf-body .row .val.hot { color: var(--red); }
+
+  /* ── Slack mockup ── */
+  .slack {
+    background: #fff; border-left: 4px solid var(--blue);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 12px 0;
+    font-size: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .slack .t { font-weight: 700; margin-bottom: 6px; }
+  .slack .l { color: var(--gray); margin-bottom: 2px; }
+  .slack .link { color: var(--blue); font-weight: 600; text-decoration: none; }
+
+  /* ── Decision diamond block ── */
+  .decision {
+    text-align: center;
+    background: #fff3e0;
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-weight: 700; font-size: 16px; color: #8a4500;
+    margin: 4px auto 0;
+  }
+  .decision small { display:block; font-weight:500; font-size:13px; color:var(--gray); margin-top:4px; }
+
+  /* ── Two-branch grid ── */
+  .branches { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 4px; }
+  .branch-col {
+    border-radius: 12px; padding: 4px;
+    position: relative;
+  }
+  .branch-col.a { background: var(--green-bg); border: 1px solid #a8dab5; }
+  .branch-col.b { background: var(--purple-bg); border: 1px solid #ce93d8; }
+  .branch-head {
+    padding: 12px 16px; font-weight: 700; font-size: 15px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .branch-col.a .branch-head { color: var(--green); }
+  .branch-col.b .branch-head { color: var(--purple); }
+  .branch-head .tag {
+    margin-left: auto; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; background: #fff;
+  }
+  .branch-col.a .branch-head .tag { color: var(--green); }
+  .branch-col.b .branch-head .tag { color: var(--purple); }
+  .bstep {
+    background: #fff; border-radius: 9px; padding: 12px 14px;
+    margin: 8px; font-size: 13.5px; position: relative;
+    border: 1px solid rgba(0,0,0,.05);
+  }
+  .bstep + .bstep { margin-top: 0; }
+  .bstep::after {
+    content:'↓'; position:absolute; bottom:-14px; left:50%;
+    transform:translateX(-50%); color: rgba(0,0,0,.25); font-size:15px; z-index:1;
+  }
+  .bstep:last-child::after { display:none; }
+  .bstep strong { display:block; margin-bottom:4px; font-size:14px; }
+  .bstep code { background: #eceff1; padding: 1px 5px; border-radius: 4px; font-size: 11.5px; color: #455a64; }
+  .bstep .who { font-size:11px; font-weight:700; padding:1px 7px; border-radius:8px; float:right; }
+  .who.rm { background: var(--blue-bg); color: var(--blue); }
+  .who.pt { background: var(--orange-bg); color:#8a4500; }
+  .who.mg { background: var(--purple-bg); color: var(--purple); }
+  .who.sys { background: var(--gray-bg); color: var(--gray); }
+  .bstep.oos { background: #f5f5f5; border: 1px dashed #bdbdbd; }
+  .bstep.oos strong { color: var(--gray); }
+  .oos-badge {
+    display:inline-block; margin-top:6px; font-size:11px; font-weight:700;
+    padding:2px 8px; border-radius:8px; background:#eceff1; color:#607d8b;
+    border:1px dashed #b0bec5;
+  }
+  .build-badge {
+    display:inline-block; margin-top:6px; font-size:11px; font-weight:700;
+    padding:2px 8px; border-radius:8px; background:var(--green-bg); color:var(--green);
+  }
+  /* ── Scope note callout ── */
+  .scope-note {
+    background: #fffde7; border: 1px solid #ffe082; border-left: 4px solid #f9a825;
+    border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 14px;
+  }
+  .scope-note b { color: #e65100; }
+
+  /* ── Merge / final ── */
+  .final {
+    border: 2px solid var(--teal); background: var(--teal-bg);
+    border-radius: 12px; padding: 20px 24px; margin-top: 4px; text-align:center;
+  }
+  .final .big { font-size: 18px; font-weight: 700; color: var(--teal); margin-bottom: 6px; }
+  .final .sub { font-size: 14px; color: var(--gray); }
+
+  /* ── Comparison table ── */
+  .cmp {
+    width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;
+  }
+  .cmp th {
+    padding: 12px 16px; text-align: left; background: var(--gray-bg);
+    font-weight: 600; border-bottom: 2px solid var(--border); font-size: 13px; color: var(--gray);
+  }
+  .cmp td { padding: 12px 16px; border-bottom: 1px solid #f1f3f4; vertical-align: top; }
+  .cmp .col-a { background: #f2faf4; }
+  .cmp .col-b { background: #faf5fc; }
+  .cmp code { background: var(--gray-bg); padding: 2px 6px; border-radius: 4px; font-size: 12.5px; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+  .pill-a { background: var(--green-bg); color: var(--green); }
+  .pill-b { background: var(--purple-bg); color: var(--purple); }
+  .ok { color: var(--green); font-weight: 700; }
+
+  /* ── Implementation list ── */
+  .impl {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 28px; margin-top: 32px;
+  }
+  .impl h2 { font-size: 18px; margin-bottom: 14px; }
+  .impl table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .impl th { text-align:left; padding: 9px 12px; background: var(--gray-bg);
+    font-weight:600; border-bottom: 2px solid var(--border); font-size:13px; color:var(--gray); }
+  .impl td { padding: 9px 12px; border-bottom: 1px solid #f1f3f4; vertical-align: top; }
+  .impl code { background: var(--gray-bg); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .tag2 { display:inline-block; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:600; }
+  .tag-flow { background: var(--blue-bg); color: var(--blue); }
+  .tag-doc { background: var(--teal-bg); color: var(--teal); }
+  .tag-field { background: var(--orange-bg); color:#8a4500; }
+  .tag-exist { background: var(--green-bg); color: var(--green); }
+
+  @media (max-width: 760px) {
+    .scenario-grid { grid-template-columns: 1fr 1fr; }
+    .branches { grid-template-columns: 1fr; }
+    .step-actor { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>상품 판매 승인 요청 흐름 — RM → 상품팀</h1>
+  <p class="subtitle">RM이 상품 판매 허가를 요청(Case 생성) → <strong>상품팀 Slack 채널에 자동 게시</strong> → 상품팀이 <strong>승인/반려 결정</strong> → RM에게 결과 통보 <span class="chip">Case 수동 생성 · Opportunity 미사용</span></p>
+
+  <!-- ════════ 시나리오 배너 ════════ -->
+  <div class="scenario">
+    <h2>📌 예시 시나리오 — 상품 판매 허가 요청</h2>
+    <div class="scenario-grid">
+      <div class="sc-card"><div class="k">고객</div><div class="v">(주)한국전자</div></div>
+      <div class="sc-card"><div class="k">상품 / 금액</div><div class="v">RP · 50억</div></div>
+      <div class="sc-card"><div class="k">RM 제안 약정수익률</div><div class="v hot">8.0%</div></div>
+      <div class="sc-card"><div class="k">결정 주체</div><div class="v">상품팀</div></div>
+    </div>
+    <div class="rule-line">
+      <strong>흐름:</strong> RM이 특정 조건으로 상품 판매 허가가 필요하면 <strong>Case를 생성</strong> ·
+      Case가 만들어지면 <strong>상품팀 Slack 채널에 Case 내용이 자동 게시</strong>됩니다.
+      &nbsp;→&nbsp; <span class="hot">상품팀이 이 건의 판매를 허락할지(승인/반려)를 직접 결정</span>합니다.
+      <em>(별도 임계값·자동 판정 기준 없음 — 상품팀 재량으로 판단)</em>
+    </div>
+  </div>
+
+  <!-- ── 액터 범례 ── -->
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span> RM (영업)</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span> 상품팀 (승인 의사결정권)</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--gray)"></span> 시스템 (Slack 알림)</div>
+  </div>
+
+  <!-- ════════ 단계 흐름 ════════ -->
+  <div class="sec-head common">전체 흐름</div>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num blue">1</div>
+      <div class="step-title">RM이 Case를 직접 생성</div>
+      <div class="step-actor actor-rm">RM (Salesforce)</div>
+    </div>
+    <p class="desc">
+      RM이 상품팀에 "이 조건으로 판매해도 되는지" 허가를 받기 위해 <strong>Case를 손으로 만듭니다.</strong>
+      <span class="manual-badge">✋ 자동 생성 아님 — RM 수동 입력</span>
+    </p>
+    <div class="pdf">
+      <div class="pdf-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="name">🗂 Case (신규) · RecordType: 심사(Screening)</span></div>
+      <div class="pdf-body">
+        <div class="row"><span class="lbl">고객 <code>Account</code></span><span class="val">(주)한국전자</span></div>
+        <div class="row"><span class="lbl">제목 <code>Subject</code></span><span class="val">[한국전자] RP 50억 판매 승인 요청</span></div>
+        <div class="row"><span class="lbl">약정수익률 <code>Agreed_Yield_Rate__c</code></span><span class="val hot">8.00%</span></div>
+        <div class="row"><span class="lbl">계약 기간 <code>Contract_Term_Months__c</code></span><span class="val">12개월</span></div>
+        <div class="row"><span class="lbl">상세 <code>Description</code></span><span class="val">상품/금액·요청 사유</span></div>
+        <div class="row"><span class="lbl">상태 <code>Status</code></span><span class="val">신규 (New)</span></div>
+        <div class="row"><span class="lbl">소유자 <code>Owner</code></span><span class="val">상품팀 큐 / 담당자</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num gray">2</div>
+      <div class="step-title">Case 생성 → 상품팀 Slack 채널에 자동 게시</div>
+      <div class="step-actor actor-system">시스템</div>
+    </div>
+    <p class="desc">Case가 생성되면 시스템이 <strong>상품팀 채널</strong>에 Case 내용을 자동으로 올립니다. 상품팀은 Slack에서 바로 내용을 확인하고 Case로 이동할 수 있습니다.
+      <span class="manual-badge" style="background:var(--green-bg);color:var(--green);border-color:#a8dab5;">★ 신규 자동화</span>
+    </p>
+    <div class="slack">
+      <div class="t">🗂 판매 승인 요청 — [한국전자] RP 50억</div>
+      <div class="l">고객: (주)한국전자 · 상품/금액: RP · 50억</div>
+      <div class="l">약정수익률: <strong>8.00%</strong> · 계약기간: 12개월</div>
+      <div class="l">요청 RM: 홍길동 · 상태: 신규(New)</div>
+      <div class="l" style="margin-top:6px;">👉 <a class="link" href="#">Case 열어서 승인/반려 결정하기</a></div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step no-arrow">
+    <div class="step-header">
+      <div class="step-num orange">3</div>
+      <div class="step-title">상품팀이 승인/반려를 결정</div>
+      <div class="step-actor actor-product">상품팀</div>
+    </div>
+    <p class="desc">상품팀이 Case 내용을 확인하고 <strong>판매를 허락할지 직접 결정</strong>합니다. 상품팀이 <strong>승인 의사결정 권한</strong>을 가지며, 별도 임계값·자동 판정 없이 상품팀 재량으로 판단합니다.</p>
+    <div class="decision">
+      상품팀 결정: 이 조건으로 판매를 허락할까?
+      <small><code>Decision__c</code> = 승인 / 조건부 승인 / 반려 → <code>Status</code> = 종료(Closed)</small>
+    </div>
+  </div>
+
+  <!-- ════════ 결정 결과 2분기 ════════ -->
+  <div class="sec-head">상품팀 결정 결과</div>
+  <div class="branches">
+
+    <!-- 분기 A: 승인 -->
+    <div class="branch-col a">
+      <div class="branch-head">✅ 승인 / 조건부 승인 <span class="tag">판매 허가</span></div>
+      <div class="bstep">
+        <span class="who pt">상품팀</span>
+        <strong>승인 결정</strong>
+        <code>Decision__c</code> = <em>승인 / 조건부 승인</em>,
+        필요 시 <code>Decision_Reason__c</code>에 조건 입력.
+      </div>
+      <div class="bstep">
+        <span class="who pt">상품팀</span>
+        <strong>Case 종료</strong>
+        확정 후 <code>Status</code> = <em>종료(Closed)</em>.
+      </div>
+      <div class="bstep">
+        <span class="who sys">시스템</span>
+        <strong>RM에게 결과 통보</strong>
+        Slack으로 "판매 승인 완료" RM에게 알림.
+      </div>
+    </div>
+
+    <!-- 분기 B: 반려 -->
+    <div class="branch-col b">
+      <div class="branch-head">⛔ 반려 <span class="tag">판매 불가</span></div>
+      <div class="bstep">
+        <span class="who pt">상품팀</span>
+        <strong>반려 결정</strong>
+        <code>Decision__c</code> = <em>반려</em>,
+        <code>Decision_Reason__c</code>에 반려 사유 입력.
+      </div>
+      <div class="bstep">
+        <span class="who pt">상품팀</span>
+        <strong>Case 종료</strong>
+        확정 후 <code>Status</code> = <em>종료(Closed)</em>.
+      </div>
+      <div class="bstep">
+        <span class="who sys">시스템</span>
+        <strong>RM에게 결과 통보</strong>
+        Slack으로 반려 결과와 <code>Decision_Reason__c</code> 사유를 함께 RM에게 알림.
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ 병합 — 최종 ════════ -->
+  <div class="sec-head merge">최종 산출물</div>
+  <div class="final">
+    <div class="big">🧾 상품팀 결정 확정 → RM에게 통보</div>
+    <div class="sub">상품팀이 <code>Decision__c</code>(승인/조건부 승인/반려)를 확정하고 <code>Status</code>를 종료(Closed)로 바꾸면 요청한 RM에게 Slack으로 결과가 전달됩니다. 반려 시 <code>Decision_Reason__c</code> 사유가 함께 전달됩니다.</div>
+  </div>
+
+  <!-- ════════ 필드 충분성 확인표 ════════ -->
+  <div class="sec-head">지금 Case 필드로 충분한가? — 시나리오 ↔ 실제 필드 매핑</div>
+  <table class="cmp">
+    <thead>
+      <tr>
+        <th style="width:230px;">시나리오에서 필요한 정보</th>
+        <th>실제 Case 필드 (현재 존재)</th>
+        <th style="width:90px;">충분?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>어느 고객인가</td><td><code>Account</code> (표준 조회)</td><td class="ok">✓</td></tr>
+      <tr><td>상품 / 금액</td><td><code>Description</code> · <code>Opportunity__c</code> · <code>Quote__c</code> <span style="color:var(--gray);font-size:12px;">(전용 금액 숫자필드는 없음)</span></td><td class="ok">✓</td></tr>
+      <tr><td><strong>약정수익률 (핵심)</strong></td><td><code>Agreed_Yield_Rate__c</code> — Percent(5,2), <strong>이력추적 ON</strong> → 협상 중 변경값도 이력에 남음</td><td class="ok">✓</td></tr>
+      <tr><td>계약 기간</td><td><code>Contract_Term_Months__c</code> — Number</td><td class="ok">✓</td></tr>
+      <tr><td><strong>상품팀 판매 결정</strong></td><td><code>Decision__c</code> — 승인 / 조건부 승인 / 반려</td><td class="ok">✓</td></tr>
+      <tr><td>결정 / 반려 사유</td><td><code>Decision_Reason__c</code> — Text(255)</td><td class="ok">✓</td></tr>
+      <tr><td>진행 상태 / 종료</td><td><code>Status</code> — 신규 / 처리중 / 종료, <strong>이력추적 ON</strong></td><td class="ok">✓</td></tr>
+      <tr><td>우선순위</td><td><code>Priority</code> — High / Medium / Low</td><td class="ok">✓</td></tr>
+      <tr><td>요청 RM / 처리 상품팀</td><td><code>Owner</code> + 생성자 (표준)</td><td class="ok">✓</td></tr>
+    </tbody>
+  </table>
+  <div class="scope-note" style="background:#e6f4ea; border-color:#a8dab5; border-left-color:var(--green);">
+    <b style="color:var(--green);">결론:</b> 이 시나리오는 <b>현재 Case 필드만으로 충분합니다. 신규 필드 추가 불필요.</b>
+    승인/반려 판단은 <b>상품팀 재량</b>이며, 시스템에 <b>별도 임계값·자동 판정 기준을 만들지 않습니다.</b>
+  </div>
+
+  <!-- ════════ 구현 필요 항목 ════════ -->
+  <div class="impl">
+    <h2>구현 필요 항목</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>이름</th><th>유형</th><th>트리거 / 설명</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>A</strong></td>
+          <td>Case 생성 자체</td>
+          <td><span class="tag2" style="background:var(--blue-bg);color:var(--blue);">RM 수동</span></td>
+          <td>RM이 심사(Screening) 레코드타입으로 Case를 직접 생성 · 자동화 없음</td>
+        </tr>
+        <tr>
+          <td><strong>B</strong></td>
+          <td>Case_Notify_ProductTeam</td>
+          <td><span class="tag2 tag-flow">Record-Triggered Flow</span></td>
+          <td><strong>Case 생성 시(after create)</strong> → <strong>상품팀 Slack 채널에 Case 내용 게시</strong> (고객·상품/금액·약정수익률·요청 RM·Case 링크)</td>
+        </tr>
+        <tr>
+          <td><strong>C</strong></td>
+          <td>Case_Decision_Notify_RM</td>
+          <td><span class="tag2 tag-flow">Record-Triggered Flow</span></td>
+          <td><code>Decision__c</code> 확정 &amp; <code>Status</code> = 종료(Closed) → <strong>요청 RM에게 Slack 통보</strong> (반려 시 <code>Decision_Reason__c</code> 포함)</td>
+        </tr>
+        <tr>
+          <td><strong>D</strong></td>
+          <td>기존 Case 필드</td>
+          <td><span class="tag2 tag-exist">이미 존재</span></td>
+          <td><code>Agreed_Yield_Rate__c</code> · <code>Contract_Term_Months__c</code> · <code>Decision__c</code> · <code>Decision_Reason__c</code> · <code>Status</code> · <code>Priority</code> — <strong>신규 필드 추가 불필요</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px; font-size:13.5px; color:var(--gray);">
+      Slack 전송은 기존 <code>SlackChannelMessageService</code>(Invocable Apex) 재사용 · <strong>Opportunity는 사용하지 않음</strong> · <strong>Case는 RM이 직접 생성</strong>(자동 생성 Flow 없음) · <strong>별도 임계값/기준 없음 — 상품팀이 승인 의사결정권 보유.</strong>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

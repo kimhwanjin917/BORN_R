@@ -21,7 +21,7 @@ private class LeadPriorityRationaleProviderTest {
         String text = LeadPriorityRationaleProvider.buildContextText(grounded);
         Test.stopTest();
 
-        Assert.isTrue(text.contains('최신 연간 재무제표'), '재무 블록이 포함돼야 한다');
+        Assert.isTrue(text.contains('최신 공시 재무제표'), '재무 블록이 포함돼야 한다');
         Assert.isTrue(text.contains('최근 외부 시그널'), '시그널 블록이 포함돼야 한다');
         Assert.isTrue(text.contains('유상증자 결정'), '시그널 제목이 인용돼야 한다');
         Assert.isTrue(text.contains('억 원'), '재무 수치가 억 단위로 표기돼야 한다');
@@ -35,7 +35,7 @@ private class LeadPriorityRationaleProviderTest {
         Lead grounded = [SELECT Id FROM Lead WHERE Id = :lead.Id];
         String text = LeadPriorityRationaleProvider.buildContextText(grounded);
 
-        Assert.isTrue(text.contains('최신 연간 재무제표'), '재무 블록은 있어야 한다');
+        Assert.isTrue(text.contains('최신 공시 재무제표'), '재무 블록은 있어야 한다');
         Assert.isTrue(!text.contains('최근 외부 시그널'), '시그널이 없으면 시그널 블록은 없어야 한다');
     }
 
@@ -80,7 +80,7 @@ private class LeadPriorityRationaleProviderTest {
 
         Assert.areEqual(1, responses.size(), '요청 1건에 응답 1건이어야 한다');
         Assert.isTrue(
-            responses[0].Prompt.contains('최신 연간 재무제표'),
+            responses[0].Prompt.contains('최신 공시 재무제표'),
             'Invocable 경로로도 재무 근거가 반환돼야 한다'
         );
     }
@@ -90,6 +90,22 @@ private class LeadPriorityRationaleProviderTest {
         List<LeadPriorityRationaleProvider.Response> responses =
             LeadPriorityRationaleProvider.getRationaleContext(null);
         Assert.areEqual(0, responses.size(), '요청이 없으면 빈 응답이어야 한다');
+    }
+
+    @isTest
+    static void shouldUseLatestQuarter_AndShowYoY() {
+        Lead lead = createLead('YoY Lead');
+        // 오래된 연간(2022 사업보고서)보다 최신 분기(2024 1분기)가 근거로 선택돼야 한다.
+        insertQuarterStatement(lead.Id, 2022, '11011', '4분기', 10000000000L);  // 사업보고서
+        insertQuarterStatement(lead.Id, 2023, '11013', '1분기', 20000000000L);  // 전년 동기
+        insertQuarterStatement(lead.Id, 2024, '11013', '1분기', 30000000000L);  // 최신
+
+        Lead grounded = [SELECT Id FROM Lead WHERE Id = :lead.Id];
+        String text = LeadPriorityRationaleProvider.buildContextText(grounded);
+
+        Assert.isTrue(text.contains('2024년 1분기'), '최신 분기 공시를 근거로 삼아야 한다');
+        Assert.isTrue(text.contains('전년 동기比'), '전년 동기 대비 증감이 표기돼야 한다');
+        Assert.isTrue(text.contains('+50%'), '운용자금 200억→300억 = +50% 가 표기돼야 한다');
     }
 
     // ─── 헬퍼 ──────────────────────────────────────────────────────────────
@@ -129,6 +145,24 @@ private class LeadPriorityRationaleProviderTest {
             Short_Term_Borrowings__c = 0,
             Long_Term_Borrowings__c = 0,
             External_Key__c = 'K_' + leadId + '_' + fiscalYear
+        );
+    }
+
+    private static void insertQuarterStatement(
+        Id leadId, Integer fiscalYear, String reportCode, String periodType, Decimal cash
+    ) {
+        insert new CorporateFinancialStatement__c(
+            Lead__c = leadId,
+            Fiscal_Year__c = fiscalYear,
+            Period_Type__c = periodType,
+            Total_Assets__c = ASSETS,
+            Total_Equity__c = ASSETS,
+            Cash_And_Equivalents__c = cash,
+            Short_Term_Financial_Instruments__c = 0,
+            Bonds_Payable__c = 0,
+            Short_Term_Borrowings__c = 0,
+            Long_Term_Borrowings__c = 0,
+            External_Key__c = 'K_' + leadId + '_' + fiscalYear + '_' + reportCode
         );
     }
 

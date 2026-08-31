@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>상품팀 결정 결과(허가/불허가+사유)를 상품팀 검토 채널에 후속 게시</description>
+        <name>Post_To_Slack</name>
+        <label>Slack 상품팀-검토 채널에 결과 게시</label>
+        <locationX>176</locationX>
+        <locationY>276</locationY>
+        <actionName>SlackChannelMessageService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>channelId</name>
+            <value>
+                <stringValue>C0BRTMCTUN5</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <elementReference>fmtMessage</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>SlackChannelMessageService</nameSegment>
+    </actionCalls>
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>심사(Screening) Case의 상품팀 결정(Decision__c 승인/조건부 승인/반려)이 확정되고 Status가 종료(Closed)로 바뀌면, 허가/불허가 결과와 사유를 요청 RM 앞으로 상품팀 검토 Slack 채널(#상품팀-검토, C0BRTMCTUN5)에 후속 게시한다. Slack 전송은 기존 SlackChannelMessageService(Invocable Apex) 재사용.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Case 레코드로 이동하는 절대 URL</description>
+        <name>fmtCaseUrl</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Api.Partner_Server_URL_260}, FIND(&quot;/services&quot;, {!$Api.Partner_Server_URL_260})) &amp; {!$Record.Id}</expression>
+    </formulas>
+    <formulas>
+        <description>승인/조건부 승인은 허가, 반려는 불허가 아이콘</description>
+        <name>fmtResultLabel</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!$Record.Decision__c}) = &quot;반려&quot;, &quot;⛔ 불허가 (반려)&quot;, &quot;✅ 허가 (&quot; &amp; TEXT({!$Record.Decision__c}) &amp; &quot;)&quot;)</expression>
+    </formulas>
+    <formulas>
+        <description>RM에게 보낼 결정 결과 메시지</description>
+        <name>fmtMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;📣 *판매 승인 요청 결과* → RM &quot; &amp; BLANKVALUE({!$Record.CreatedBy.Name}, &quot;-&quot;) &amp; BR()
+&amp; &quot;• Case: &quot; &amp; {!$Record.CaseNumber} &amp; &quot; — &quot; &amp; BLANKVALUE({!$Record.Subject}, &quot;(제목 없음)&quot;) &amp; BR()
+&amp; &quot;• 고객: &quot; &amp; BLANKVALUE({!$Record.Account.Name}, &quot;-&quot;) &amp; BR()
+&amp; &quot;• 약정수익률: &quot; &amp; IF(ISBLANK({!$Record.Agreed_Yield_Rate__c}), &quot;-&quot;, TEXT({!$Record.Agreed_Yield_Rate__c}) &amp; &quot;%&quot;) &amp; BR()
+&amp; &quot;• 결정: &quot; &amp; {!fmtResultLabel} &amp; BR()
+&amp; &quot;• 사유: &quot; &amp; BLANKVALUE({!$Record.Decision_Reason__c}, &quot;-&quot;) &amp; BR()
+&amp; &quot;👉 &quot; &amp; {!fmtCaseUrl}</expression>
+    </formulas>
+    <interviewLabel>Case_Decision_Notify_RM {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case 결정 확정 → RM에게 결과 통보</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>AND(
+  NOT(ISBLANK({!$Record.Agreed_Yield_Rate__c})),
+  NOT(ISBLANK(TEXT({!$Record.Decision__c}))),
+  ISPICKVAL({!$Record.Status}, &quot;Closed&quot;)
+)</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Run_Async</name>
+            <connector>
+                <targetReference>Post_To_Slack</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

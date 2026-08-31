@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Review_Channel_Id__c</fullName>
+    <label>Review Channel Id</label>
+    <description>승인요청 인터랙티브 메시지를 게시할 Slack 채널 ID (예: #상품팀-검토 = C0BRTMCTUN5).</description>
+    <inlineHelpText>Slack 채널 세부정보 하단의 채널 ID를 입력하세요. 예: C0BRTMCTUN5</inlineHelpText>
+    <type>Text</type>
+    <length>32</length>
+    <required>false</required>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+</CustomField>
