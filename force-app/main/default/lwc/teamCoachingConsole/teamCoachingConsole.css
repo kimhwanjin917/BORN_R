@@ -1,0 +1,470 @@
+/*
+ * overflow 를 걸면 안 된다 — 조상에 overflow 가 있으면 자식의 position: sticky 가 통째로 무력화된다.
+ * 우측 패널이 스크롤을 따라오지 않던 원인이 이것이었다(2026-09-02).
+ */
+.console {
+    font-family: var(--lwc-fontFamily, 'Salesforce Sans', Arial, sans-serif);
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.cols {
+    display: flex;
+    align-items: stretch;
+}
+
+.viz-col {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 4px;
+}
+
+/* 높이는 JS 가 대시보드 비율(1440:1320)로 계산해 넣는다. */
+.viz-box {
+    width: 100%;
+    min-height: 560px;
+    background: #f4f6f9;
+}
+
+/* 기둥은 대시보드 높이만큼 내려온다 — 카드만 붙어 있으면 그 아래가 흰 여백으로 뚝 끊겨 보인다 */
+.panel-col {
+    align-self: stretch;
+    flex: 0 0 380px;
+    min-width: 0;
+    border-left: 1px solid #d8dde6;
+    background: #eef2f7;
+}
+
+/*
+ * 뷰가 세로로 길어 페이지가 스크롤된다. 카드가 같이 흘러가면 조치 패널이 화면 밖으로 나가므로
+ * sticky 로 붙잡아 스크롤을 따라오게 한다.
+ *
+ * 단, 카드가 화면보다 크면 위에 붙는 순간 아래쪽(발송 버튼)이 잘린다.
+ * 그래서 각 요소 크기를 화면 하나에 들어오도록 잡아 뒀다 — 창이 아주 작을 때만 내부 스크롤이 생긴다.
+ * (position 이 잡혀 있어야 .busy 오버레이도 이 안에 갇힌다)
+ */
+/*
+ * 90px = 화면에 고정으로 남는 영역(글로벌 헤더 50px + 앱·탭 바 약 38px, 2026-09-02 실측).
+ * JS 로 매번 재던 방식은 이미 스크롤된 상태에서 다시 재면 0 에 가까운 값이 나와
+ * 카드가 헤더 뒤로 올라가는 사고를 냈다. 값이 고정이므로 여기에 상수로 둔다.
+ */
+.panel {
+    position: sticky;
+    top: 90px;
+    padding: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ─── 선택 없음 ─────────────────────────────────────────────── */
+
+.empty {
+    margin-top: 40px;
+    text-align: center;
+    color: #5c6b82;
+}
+
+.empty__mark {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px auto;
+    border: 2px dashed #b7c4d6;
+    border-radius: 50%;
+    line-height: 44px;
+    font-size: 22px;
+    color: #b7c4d6;
+}
+
+.empty__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #16325c;
+}
+
+.empty__detail {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ─── 머리 ──────────────────────────────────────────────────── */
+
+/* 어느 블록도 줄어들지 않는다 — flex 가 이들을 눌러 이름 줄이 사라진 적이 있다(2026-09-02). */
+.head,
+.card,
+.tiles,
+.chips,
+.metrics,
+.notice {
+    flex: 0 0 auto;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.head__name {
+    font-size: 21px;
+    font-weight: 700;
+    color: #0b1f45;
+    letter-spacing: -0.01em;
+}
+
+.head__stage {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #dbe7ff;
+    color: #1c4d9e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.head__note {
+    font-size: 12px;
+    color: #b07b00;
+}
+
+/* ─── 요약 카드 ─────────────────────────────────────────────── */
+
+.card {
+    border: 1px solid #dfe6f0;
+    border-radius: 8px;
+    background: #fff;
+    padding: 9px 12px;
+}
+
+.card--hero {
+    background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+}
+
+.card__label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7a90;
+    letter-spacing: 0.06em;
+}
+
+.card__note {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #b23a2f;
+}
+
+.bignum {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #0b1f45;
+    letter-spacing: -0.02em;
+}
+
+/* 체류일 심각도. 21일 기준은 워크북 계산식(DwellDays >= 21 = 정체)과 같다 */
+.bignum--warn {
+    color: #b07b00;
+}
+
+.bignum--danger {
+    color: #c23934;
+}
+
+/* 달성률 진행 바. 값을 못 읽으면 아예 그리지 않는다 */
+.bar {
+    margin-top: 8px;
+    height: 7px;
+    border-radius: 999px;
+    background: #e4eaf3;
+    overflow: hidden;
+}
+
+.bar__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #3f8cff 0%, #1b56d3 100%);
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.tile {
+    border: 1px solid #dfe6f0;
+    border-radius: 8px;
+    background: #fff;
+    padding: 7px 10px;
+}
+
+.tile__label {
+    font-size: 11px;
+    color: #6b7a90;
+    font-weight: 600;
+}
+
+.tile__value {
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0b1f45;
+}
+
+.risk {
+    margin-top: 6px;
+}
+
+.risk__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 3px 0;
+    font-size: 14px;
+    color: #6b7a90;
+}
+
+.risk__row strong {
+    font-size: 18px;
+    color: #0b1f45;
+}
+
+.risk__row--total {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px solid #eceff3;
+}
+
+.risk__high {
+    color: #c23934 !important;
+}
+
+.chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: #e7edf6;
+    color: #44506b;
+    font-size: 12px;
+}
+
+.chip strong {
+    color: #16325c;
+}
+
+.chip--danger {
+    background: #fde7e6;
+    color: #a3312a;
+}
+
+.chip--danger strong {
+    color: #a3312a;
+}
+
+/* 목록에 없는 지표가 왔을 때만 쓰는 예비 표시 */
+.metrics {
+    margin: 0;
+}
+
+.metrics__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+    font-size: 14px;
+}
+
+.metrics__row dt {
+    color: #6b7a90;
+}
+
+.metrics__row dd {
+    margin: 0;
+    font-weight: 600;
+    color: #0b1f45;
+}
+
+/* ─── 안내·경고 ─────────────────────────────────────────────── */
+
+.notice {
+    border: 1px solid #d8dde6;
+    border-radius: 8px;
+    background: #fff;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.notice--warn {
+    border-color: #ffb75d;
+    background: #fff6e6;
+}
+
+.notice--error {
+    border-color: #c23934;
+    background: #fdf2f2;
+    margin-bottom: 8px;
+}
+
+.notice__detail {
+    color: #54698d;
+    margin-top: 4px;
+    word-break: break-word;
+}
+
+/* ─── Slack 코칭 ────────────────────────────────────────────── */
+
+/* Slack 작성창 흉내. 남는 세로를 흡수해 입력창이 그만큼 커진다 */
+.section--slack {
+    flex: 0 0 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    padding: 0;
+}
+
+/* 입력창과 하단 바를 한 상자로 묶는다 — Slack 의 메시지 작성 영역 */
+/* Slack 브랜드 줄 — 이 상자가 무엇인지 한눈에 알리는 역할 */
+.slack__brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.slack__logo {
+    width: 15px;
+    height: 15px;
+}
+
+.slack__name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4a154b;
+    letter-spacing: 0.01em;
+}
+
+.composer {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #c9d3e0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.composer:focus-within {
+    border-color: #1264a3;
+    box-shadow: 0 0 0 1px #1264a3;
+}
+
+.composer__bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-top: 1px solid #eceff3;
+}
+
+.composer__hint {
+    font-size: 11px;
+    color: #8a94a6;
+}
+
+.send {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 4px;
+    background: #007a5a;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.send:hover {
+    background: #148567;
+}
+
+.send[disabled] {
+    background: #cfd6df;
+    color: #8a94a6;
+    cursor: not-allowed;
+}
+
+.send__icon {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+}
+
+/* 작성창 안쪽. 테두리는 바깥 .composer 가 갖는다 — Slack 처럼 입력창과 버튼이 한 상자로 보이게 */
+/* 고정 높이. 남는 세로를 다 먹게 두면 화면마다 카드 크기가 달라져 위가 잘린다 */
+.draft {
+    width: 100%;
+    height: 240px;
+    box-sizing: border-box;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1d1c1d;
+    background: transparent;
+    border: 0;
+    border-radius: 8px 8px 0 0;
+    resize: none;
+}
+
+.draft:focus {
+    outline: 0;
+}
+
+/* 발송 중에는 패널 전체를 덮는다. 같은 조치를 두 번 보내지 않게 하는 것이 목적 */
+.busy {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 2;
+}
+
+.busy__text {
+    margin-top: 48px;
+    font-size: 14px;
+    color: #16325c;
+}
+
+@media (max-width: 1024px) {
+    .cols {
+        flex-direction: column;
+    }
+
+    .panel-col {
+        flex: 1 1 auto;
+        border-left: 0;
+        border-top: 1px solid #d8dde6;
+    }
+
+    .panel {
+        position: static;
+    }
+}

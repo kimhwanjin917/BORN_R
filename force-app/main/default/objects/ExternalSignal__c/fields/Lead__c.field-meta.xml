@@ -9,6 +9,7 @@
     <relationshipLabel>외부 시그널</relationshipLabel>
     <relationshipName>External_Signals</relationshipName>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customApplications>
+        <label><!-- BORN Management --></label>
+        <name>BORN_Management1</name>
+    </customApplications>
     <customTabs>
         <label><!-- 고객 성장 기회 분석 --></label>
         <name>Growth_Opportunity</name>
@@ -8,6 +12,34 @@
         <label><!-- 기회 레이더 --></label>
         <name>Opportunity_Radar</name>
     </customTabs>
+    <customTabs>
+        <label><!-- RM 팀 관리 대시보드 --></label>
+        <name>RM_Team_Dashboard</name>
+    </customTabs>
+    <customTabs>
+        <label><!-- 이주성 --></label>
+        <name>Tab</name>
+    </customTabs>
+    <customTabs>
+        <label><!-- 주성 테스트 --></label>
+        <name>Tab1</name>
+    </customTabs>
+    <customTabs>
+        <label><!-- BORN Management --></label>
+        <name>Tab2</name>
+    </customTabs>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Agent_Recommend_Meeting_Note</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Case_Decision_Notify_RM</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Case_Notify_ProductTeam</fullName>
+    </flowDefinitions>
     <flowDefinitions>
         <flows/>
         <fullName>Create_Customer_Return_Order</fullName>
@@ -67,6 +99,10 @@
     <flowDefinitions>
         <flows/>
         <fullName>Inform_Merchant_of_Return</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Lead_Create_Meeting_Task_After_ConvertLead_Create_Meeting_Task_After_Convert</fullName>
     </flowDefinitions>
     <flowDefinitions>
         <flows>
@@ -168,6 +204,14 @@
     </flowDefinitions>
     <flowDefinitions>
         <flows>
+            <customErrorMessages>
+                <developerName>Meeting_Required_Before_Convert</developerName>
+            </customErrorMessages>
+        </flows>
+        <fullName>Lead_Require_Meeting_Before_ConvertLead_Require_Meeting_Before_Convert</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows>
             <screens>
                 <fields>
                     <name>Error_Text</name>
@@ -259,6 +303,10 @@
                     </inputParameters>
                     <inputParameters>
                         <name>pose</name>
+                        <value/>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>position</name>
                         <value/>
                     </inputParameters>
                     <inputParameters>

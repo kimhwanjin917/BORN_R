@@ -8,6 +8,7 @@
     <label>외부 키</label>
     <length>255</length>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>true</unique>

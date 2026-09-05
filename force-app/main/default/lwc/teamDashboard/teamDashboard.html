@@ -1,0 +1,25 @@
+<template>
+    <div class="dashboard">
+        <header class="dashboard__head">
+            <div class="dashboard__title">
+                <h1 class="dashboard__h1">RM 팀 관리 대시보드</h1>
+                <span class="dashboard__sub">(팀장 전용)</span>
+            </div>
+        </header>
+
+        <div class="dashboard__grid">
+            <div class="dashboard__cell">
+                <c-team-kpi-summary></c-team-kpi-summary>
+            </div>
+            <div class="dashboard__cell">
+                <c-team-funnel-panel></c-team-funnel-panel>
+            </div>
+            <div class="dashboard__cell">
+                <c-team-activity-panel></c-team-activity-panel>
+            </div>
+            <div class="dashboard__cell">
+                <c-team-risk-panel></c-team-risk-panel>
+            </div>
+        </div>
+    </div>
+</template>

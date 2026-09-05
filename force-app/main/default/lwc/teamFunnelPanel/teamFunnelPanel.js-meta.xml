@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>팀 총합 영업 퍼널 통계</masterLabel>
+    <description>팀장 팀의 단계별 퍼널(건수/금액/전환/체류/감소), 월별 파이프라인 추이, 예상매출 Forecast 및 전환율/손실/체류 요약.</description>
+</LightningComponentBundle>

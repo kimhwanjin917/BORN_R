@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>RM이 Salesforce 모바일 앱에서 org에 접속할 수 있도록 API 접근을 허용한다. RM 프로파일에 API Enabled가 없어 모바일 로그인 후 보안 연결이 실패하는 문제를 해결.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>RM Mobile API Access</label>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ApiEnabled</name>
+    </userPermissions>
+</PermissionSet>

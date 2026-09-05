@@ -5,7 +5,7 @@
     <precision>5</precision>
     <required>false</required>
     <scale>1</scale>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Percent</type>
 </CustomField>

@@ -1,0 +1,21 @@
+<template>
+    <template lwc:if={visible}>
+        <div class="deal-toast-viewport">
+            <div class={toastClass} role={ariaRole} aria-live="polite">
+                <span class="deal-toast__icon">
+                    <lightning-icon icon-name={iconName} size="small" variant="inverse"></lightning-icon>
+                </span>
+                <div class="deal-toast__body">
+                    <p class="deal-toast__title">{title}</p>
+                    <template lwc:if={message}>
+                        <p class="deal-toast__text">{message}</p>
+                    </template>
+                </div>
+                <button type="button" class="deal-toast__close" title="닫기"
+                    aria-label="알림 닫기" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" size="x-small" variant="inverse"></lightning-icon>
+                </button>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,112 @@
+<template>
+    <article class="block">
+        <header class="block-head">
+            <span class="block-head__no">2</span>
+            <span class="block-head__title">팀 총합 영업 퍼널 통계</span>
+            <span class="block-head__en">(Pipeline &amp; Funnel)</span>
+            <template lwc:if={periodLabel}>
+                <span class="block-head__period">{periodLabel}</span>
+            </template>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <div class="split">
+                <section class="panel">
+                    <template lwc:if={hasFunnel}>
+                        <table class="funnel">
+                            <thead>
+                                <tr>
+                                    <th>단계</th>
+                                    <th class="funnel__num">건수</th>
+                                    <th class="funnel__num">금액</th>
+                                    <th class="funnel__num">전환율</th>
+                                    <th class="funnel__num">평균 체류일</th>
+                                    <th class="funnel__num">전단계 대비</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={funnelRows} for:item="row">
+                                    <tr key={row.key}>
+                                        <td class="funnel__stage">{row.stageName}</td>
+                                        <td class="funnel__num">{row.countDisplay}</td>
+                                        <td class="funnel__num">{row.feeDisplay}</td>
+                                        <td class="funnel__num">{row.conversionDisplay}</td>
+                                        <td class="funnel__num">{row.dwellDisplay}</td>
+                                        <td class="funnel__num">
+                                            <span class={row.dropClass}>{row.dropDisplay}</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template lwc:else>
+                        <div class="state state_empty">표시할 퍼널 데이터가 없습니다.</div>
+                    </template>
+                </section>
+
+                <section class="panel">
+                    <h3 class="panel__title">월별 파이프라인 추이</h3>
+                    <template lwc:if={hasMonthly}>
+                        <div class="bars">
+                            <template for:each={monthlyBars} for:item="bar">
+                                <div key={bar.key} class="bars__col">
+                                    <span class="bars__val">{bar.feeDisplay}</span>
+                                    <span class="bars__track">
+                                        <span class="bars__fill" style={bar.barStyle}></span>
+                                    </span>
+                                    <span class="bars__label">{bar.monthLabel}</span>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="state state_empty">표시할 추이가 없습니다.</div>
+                    </template>
+                </section>
+            </div>
+
+            <div class="foot">
+                <div class="foot__stats">
+                    <div class="stat">
+                        <span class="stat__label">전체 전환율</span>
+                        <span class="stat__value">{overallConversionDisplay}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">누적 손실(Leakage)</span>
+                        <span class="stat__value">{leakageDisplay}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">평균 거래 체류기간</span>
+                        <span class="stat__value">{avgDwellDisplay}</span>
+                    </div>
+                </div>
+
+                <div class="forecast">
+                    <span class="forecast__title">예상 매출 Forecast</span>
+                    <ul class="forecast__list">
+                        <li class="forecast__item">
+                            <span class="forecast__dot forecast__dot_commit"></span>
+                            <span class="forecast__name">Commit</span>
+                            <span class="forecast__val">{committedDisplay}</span>
+                        </li>
+                        <li class="forecast__item">
+                            <span class="forecast__dot forecast__dot_best"></span>
+                            <span class="forecast__name">Best Case</span>
+                            <span class="forecast__val">{bestCaseDisplay}</span>
+                        </li>
+                        <li class="forecast__item">
+                            <span class="forecast__dot forecast__dot_pipe"></span>
+                            <span class="forecast__name">Pipeline</span>
+                            <span class="forecast__val">{pipelineDisplay}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </article>
+</template>

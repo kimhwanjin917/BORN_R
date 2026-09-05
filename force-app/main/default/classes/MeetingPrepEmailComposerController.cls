@@ -2,14 +2,12 @@ public with sharing class MeetingPrepEmailComposerController {
 
     private static final String PROMPT_TEMPLATE_NAME = 'Meeting_Prep_Email_Draft';
     private static final String RADAR_PROMPT_TEMPLATE_NAME = 'Opportunity_Radar_Email_Draft';
-    // 맞춤 메일에 자동 첨부할 RP 고객용 브로슈어를 찾는 기준.
-    // 상품 Id/Name 은 하드코딩하지 않고, 활성 RP 상품(Family='RP', IsActive=true)에
-    // 이 제목 계열로 실제 연결된 파일만 대상으로 한다.
+    // 맞춤 메일에 기본 첨부할 전사 상품 카탈로그(상품소개서)를 찾는 기준.
+    // 파일 Id 를 하드코딩하지 않고, Files(ContentDocument)에 이 제목 접두사로 올라온
+    // 최신 PDF 1건을 대상으로 한다. 파일 교체/버전업 시 코드 수정이 필요 없다.
     @TestVisible
-    private static final String BROCHURE_RP_FAMILY = 'RP';
-    @TestVisible
-    private static final String BROCHURE_TITLE_PREFIX = 'BORN_Securities_RP_Customer_Brochure';
-    private static final String BROCHURE_CONTENT_TYPE = 'application/pdf';
+    private static final String CATALOG_TITLE_PREFIX = '근본증권 상품 카탈로그';
+    private static final String CATALOG_FILE_TYPE = 'PDF';
     /**
      * 프롬프트 템플릿은 '제목:' · '본문:' 을 요구하지만 LLM 이 'Subject:' 로 내는 일이 실제로 있었다
      * (한쪽만 영문으로 섞여 나오기도 한다). 형식이 한 번 어긋났다고 화면이 죽으면 안 되므로
@@ -46,6 +44,70 @@ public with sharing class MeetingPrepEmailComposerController {
         @AuraEnabled public String leadName;
         @AuraEnabled public String fromAddress;
         @AuraEnabled public List<String> fromOptions;
+    }
+
+    /** 화면 첨부 칩 표시용 파일 메타. contentDocumentId 로 발송 시 실제 첨부를 재조회한다. */
+    public class AttachmentOption {
+        @AuraEnabled public String contentDocumentId;
+        @AuraEnabled public String fileName;
+    }
+
+    /**
+     * 메일 팝업이 열릴 때 기본으로 담을 전사 상품 카탈로그 파일을 돌려준다.
+     * 제목이 카탈로그 계열(CATALOG_TITLE_PREFIX)인 최신 PDF 1건만 대상으로 하며,
+     * 없으면 빈 목록을 돌려준다(카탈로그 미업로드 시 화면은 첨부 없이 정상 동작).
+     *
+     * @return 기본 첨부 후보 파일 메타 목록(현재 최대 1건)
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<AttachmentOption> getDefaultAttachments() {
+        List<AttachmentOption> options = new List<AttachmentOption>();
+        String titlePattern = CATALOG_TITLE_PREFIX + '%';
+        List<ContentVersion> versions = [
+            SELECT ContentDocumentId, Title, PathOnClient
+            FROM ContentVersion
+            WHERE IsLatest = true
+              AND FileType = :CATALOG_FILE_TYPE
+              AND Title LIKE :titlePattern
+            WITH USER_MODE
+            ORDER BY LastModifiedDate DESC
+            LIMIT 1
+        ];
+        for (ContentVersion version : versions) {
+            AttachmentOption option = new AttachmentOption();
+            option.contentDocumentId = version.ContentDocumentId;
+            option.fileName = resolveFileName(version.PathOnClient, version.Title);
+            options.add(option);
+        }
+        return options;
+    }
+
+    /**
+     * 사용자가 org 파일 검색으로 고른 문서들의 표시용 메타를 돌려준다.
+     * 화면 첨부 칩 라벨(파일명) 표시에만 쓰이며, 실제 첨부 본문은 발송 시 재조회한다.
+     *
+     * @param contentDocumentIds 선택한 ContentDocument Id 목록
+     * @return 각 문서의 파일 메타 목록
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<AttachmentOption> getFileInfo(List<String> contentDocumentIds) {
+        List<AttachmentOption> options = new List<AttachmentOption>();
+        Set<Id> documentIds = toDocumentIds(contentDocumentIds);
+        if (documentIds.isEmpty()) {
+            return options;
+        }
+        for (ContentVersion version : [
+            SELECT ContentDocumentId, Title, PathOnClient
+            FROM ContentVersion
+            WHERE ContentDocumentId IN :documentIds AND IsLatest = true
+            WITH USER_MODE
+        ]) {
+            AttachmentOption option = new AttachmentOption();
+            option.contentDocumentId = version.ContentDocumentId;
+            option.fileName = resolveFileName(version.PathOnClient, version.Title);
+            options.add(option);
+        }
+        return options;
     }
 
     // 창을 즉시 띄우기 위한 빠른 컨텍스트 (LLM 호출 없음)
@@ -267,15 +329,17 @@ public with sharing class MeetingPrepEmailComposerController {
      *
      * @param subject 메일 제목
      * @param htmlBody HTML 형식의 메일 본문
-     * @param relatedToId 활동으로 연결할 Lead Id
+     * @param relatedToId 활동으로 연결할 Lead/Account Id
      * @param recipientIds 수신 대상 Lead/Contact Id 목록
+     * @param contentDocumentIds 화면에서 첨부로 확정한 ContentDocument Id 목록(선택)
      */
     @AuraEnabled
     public static void sendEmail(
         String subject,
         String htmlBody,
         Id relatedToId,
-        List<String> recipientIds
+        List<String> recipientIds,
+        List<String> contentDocumentIds
     ) {
         try {
             if (String.isBlank(subject) || String.isBlank(htmlBody)) {
@@ -368,13 +432,11 @@ public with sharing class MeetingPrepEmailComposerController {
             message.setSubject(subject.trim());
             message.setHtmlBody(htmlBody);
             message.setSaveAsActivity(true);
-            // Lead 맞춤 메일 경로에서만 RP 고객용 브로슈어를 자동 첨부한다.
-            // Account(레이더 등) 경로에는 첨부하지 않는다. 브로슈어가 없으면 첨부 없이 발송된다.
-            if (relatedToId.getSObjectType() == Lead.SObjectType) {
-                List<Messaging.EmailFileAttachment> attachments = buildBrochureAttachments();
-                if (!attachments.isEmpty()) {
-                    message.setFileAttachments(attachments);
-                }
+            // 화면에서 확정한 첨부(카탈로그 자동 + 사용자 추가)를 Lead·Account 양쪽 경로 모두에 싣는다.
+            // 첨부가 없으면 첨부 없이 정상 발송된다.
+            List<Messaging.EmailFileAttachment> attachments = buildAttachments(contentDocumentIds);
+            if (!attachments.isEmpty()) {
+                message.setFileAttachments(attachments);
             }
             Messaging.sendEmail(new Messaging.SingleEmailMessage[]{ message });
         } catch (AuraHandledException e) {
@@ -385,58 +447,75 @@ public with sharing class MeetingPrepEmailComposerController {
     }
 
     /**
-     * 활성 RP 상품(Family='RP', IsActive=true)에 연결된 고객용 브로슈어 파일을
-     * EmailFileAttachment 목록으로 만든다. 상품·파일 Id 를 하드코딩하지 않고
-     * 파일 제목이 브로슈어 계열(BROCHURE_TITLE_PREFIX)인 것만, 각 문서의 최신
-     * ContentVersion 1건씩만 첨부한다. 브로슈어가 없으면 빈 목록을 돌려준다.
+     * 화면에서 확정한 ContentDocument Id 목록을 EmailFileAttachment 목록으로 만든다.
+     * 파일 Id 를 하드코딩하지 않고, 각 문서의 최신 ContentVersion(IsLatest=true) 본문을
+     * 발송 시점에 재조회해 첨부한다. 선택 파일이 없으면 빈 목록을 돌려준다.
+     *
+     * @param contentDocumentIds 첨부할 ContentDocument Id 목록
+     * @return EmailFileAttachment 목록
      */
     @TestVisible
-    private static List<Messaging.EmailFileAttachment> buildBrochureAttachments() {
+    private static List<Messaging.EmailFileAttachment> buildAttachments(List<String> contentDocumentIds) {
         List<Messaging.EmailFileAttachment> attachments = new List<Messaging.EmailFileAttachment>();
-
-        Set<Id> rpProductIds = new Set<Id>();
-        for (Product2 product : [
-            SELECT Id FROM Product2 WHERE Family = :BROCHURE_RP_FAMILY AND IsActive = true WITH USER_MODE
-        ]) {
-            rpProductIds.add(product.Id);
-        }
-        if (rpProductIds.isEmpty()) {
-            return attachments;
-        }
-
-        String titlePattern = BROCHURE_TITLE_PREFIX + '%';
-        Set<Id> documentIds = new Set<Id>();
-        for (ContentDocumentLink link : [
-            SELECT ContentDocumentId
-            FROM ContentDocumentLink
-            WHERE LinkedEntityId IN :rpProductIds
-              AND ContentDocument.Title LIKE :titlePattern
-            WITH USER_MODE
-        ]) {
-            documentIds.add(link.ContentDocumentId);
-        }
+        Set<Id> documentIds = toDocumentIds(contentDocumentIds);
         if (documentIds.isEmpty()) {
             return attachments;
         }
-
-        // 각 문서의 최신 버전(IsLatest=true) 1건만 첨부한다. 동일 브로슈어가
-        // 여러 버전이어도 최신 하나만, 다른 파일이 섞여 있어도 브로슈어만 대상이다.
         for (ContentVersion version : [
-            SELECT Title, PathOnClient, VersionData
+            SELECT Title, PathOnClient, VersionData, FileType
             FROM ContentVersion
             WHERE ContentDocumentId IN :documentIds AND IsLatest = true
             WITH USER_MODE
         ]) {
             Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
-            String fileName = String.isNotBlank(version.PathOnClient)
-                ? version.PathOnClient
-                : version.Title + '.pdf';
-            attachment.setFileName(fileName);
+            attachment.setFileName(resolveFileName(version.PathOnClient, version.Title));
             attachment.setBody(version.VersionData);
-            attachment.setContentType(BROCHURE_CONTENT_TYPE);
             attachments.add(attachment);
         }
         return attachments;
+    }
+
+    /** 문자열 Id 목록을 유효한 ContentDocument Id Set 으로 정규화한다(중복·공백 제거). */
+    private static Set<Id> toDocumentIds(List<String> contentDocumentIds) {
+        Set<Id> documentIds = new Set<Id>();
+        if (contentDocumentIds == null) {
+            return documentIds;
+        }
+        for (String documentIdText : contentDocumentIds) {
+            if (String.isBlank(documentIdText)) {
+                continue;
+            }
+            try {
+                Id documentId = (Id) documentIdText;
+                if (documentId.getSObjectType() == ContentDocument.SObjectType) {
+                    documentIds.add(documentId);
+                }
+            } catch (Exception ignored) {
+                // 잘못된 Id 는 첨부에서 조용히 제외한다.
+            }
+        }
+        return documentIds;
+    }
+
+    /**
+     * 표시·첨부용 파일명을 정한다.
+     * Title(한글)이 있으면 Title + PathOnClient 의 확장자를 조합해 첨부명으로 쓴다.
+     * Title 이 없으면 PathOnClient 를 그대로, 둘 다 없으면 'attachment' 을 돌려준다.
+     */
+    private static String resolveFileName(String pathOnClient, String title) {
+        if (String.isNotBlank(title)) {
+            String ext = extensionOf(pathOnClient);
+            return String.isBlank(ext) ? title : title + '.' + ext;
+        }
+        return String.isNotBlank(pathOnClient) ? pathOnClient : 'attachment';
+    }
+
+    private static String extensionOf(String path) {
+        if (String.isBlank(path)) {
+            return null;
+        }
+        Integer dotIdx = path.lastIndexOf('.');
+        return dotIdx > 0 && dotIdx < path.length() - 1 ? path.substring(dotIdx + 1).toLowerCase() : null;
     }
 
     private static void addEmailAddress(

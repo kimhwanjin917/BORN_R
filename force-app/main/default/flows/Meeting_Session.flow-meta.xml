@@ -27,6 +27,7 @@
             </value>
         </inputParameters>
         <nameSegment>MeetingNoteConfirmAction</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>67.0</apiVersion>
@@ -149,6 +150,12 @@
                 <name>modal</name>
                 <value>
                     <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>position</name>
+                <value>
+                    <stringValue>top</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

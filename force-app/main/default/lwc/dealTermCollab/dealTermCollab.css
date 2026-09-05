@@ -1,0 +1,22 @@
+.step {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+.muted {
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+.done-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.boni {
+    width: 96px;
+    height: 96px;
+    flex: 0 0 96px;
+    object-fit: contain;
+}

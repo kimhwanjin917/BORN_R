@@ -8,7 +8,7 @@ public with sharing class HomeDashboardController {
 
     private static final Integer TOP_ACCOUNTS = 3;
     private static final Integer TOP_LEADS = 3;
-    private static final Integer NEWS_LIMIT = 6;
+    private static final Integer NEWS_LIMIT = 12;
     private static final String NEWS_SIGNAL_TYPE = '뉴스';
     private static final String MATURITY_SUBJECT_LIKE = '만기 30일 전 후속 영업%';
 
@@ -194,7 +194,8 @@ public with sharing class HomeDashboardController {
 
         return [
             SELECT Id, Title__c, Summary__c, Signal_Date__c, Source_URL__c,
-                   Account__c, Account__r.Name, Lead__c, Lead__r.Company, Industry__c
+                   Account__c, Account__r.Name, Account__r.Industry,
+                   Lead__c, Lead__r.Company, Lead__r.Industry, Industry__c
             FROM ExternalSignal__c
             WHERE Signal_Type__c = :NEWS_SIGNAL_TYPE
               AND (Account__c IN :partyIds

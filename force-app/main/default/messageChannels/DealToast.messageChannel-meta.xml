@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>딜 관련 Quick Action 성공/경고/오류를 홈 대시보드 스타일 커스텀 토스트로 표시하기 위한 채널.</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>토스트 제목 (굵게).</description>
+        <fieldName>title</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>토스트 본문 설명.</description>
+        <fieldName>message</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>success | warning | error. 색상/아이콘 결정.</description>
+        <fieldName>variant</fieldName>
+    </lightningMessageFields>
+    <masterLabel>Deal Toast</masterLabel>
+</LightningMessageChannel>

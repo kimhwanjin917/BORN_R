@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>팀 전체 KPI 현황</masterLabel>
+    <description>팀장 팀의 반기 KPI 요약(목표/달성/예상매출/전환율), 단계별 파이프라인 도넛, RM 수익 TOP5.</description>
+</LightningComponentBundle>

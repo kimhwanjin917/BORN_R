@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>RM 팀 관리 대시보드</masterLabel>
+    <description>팀장 전용 RM 팀 관리 대시보드. KPI 요약·영업 퍼널·체류/활동·리스크존 4개 블록을 2×2로 배치합니다.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+</LightningComponentBundle>

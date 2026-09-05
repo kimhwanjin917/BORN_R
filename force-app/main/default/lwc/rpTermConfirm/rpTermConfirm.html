@@ -1,0 +1,214 @@
+<template>
+    <div class="rp-term">
+        <template lwc:if={isLoading}>
+            <div class="slds-align_absolute-center slds-p-vertical_large">
+                <lightning-spinner alternative-text="불러오는 중" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <template lwc:if={loadError}>
+                <div class="slds-p-around_medium">
+                    <div class="rp-alert rp-alert_error" role="alert">
+                        <span class="rp-alert__icon">
+                            <lightning-icon icon-name="utility:error" size="x-small" variant="inverse"></lightning-icon>
+                        </span>
+                        <div class="rp-alert__body">
+                            <p class="rp-alert__title">조건을 불러오지 못했어요</p>
+                            <p class="rp-alert__text">{loadError}</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <template lwc:if={isReconfirm}>
+                    <div class="slds-p-horizontal_medium slds-p-top_medium">
+                        <div class="rp-alert rp-alert_info" role="status">
+                            <span class="rp-alert__icon">
+                                <lightning-icon icon-name="utility:info" size="x-small" variant="inverse"></lightning-icon>
+                            </span>
+                            <div class="rp-alert__body">
+                                <p class="rp-alert__title">이미 확정된 조건이 있어요</p>
+                                <p class="rp-alert__text">수정 후 다시 확정하면 조건서가 새 버전으로 저장됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── 거래 개요 (자동 표시) ── -->
+                <div class="slds-p-horizontal_medium slds-p-top_medium">
+                    <h3 class="rp-section-title">거래 개요</h3>
+                    <dl class="rp-auto-grid">
+                        <div class="rp-auto-item"><dt>거래ID</dt><dd>{dealId}</dd></div>
+                        <div class="rp-auto-item"><dt>고객사</dt><dd>{accountName}</dd></div>
+                        <div class="rp-auto-item"><dt>담당 RM</dt><dd>{ownerName}</dd></div>
+                        <div class="rp-auto-item"><dt>상품팀 확정자</dt><dd>{productTeamConfirmer}</dd></div>
+                        <div class="rp-auto-item">
+                            <dt>최종 협의 링크</dt>
+                            <dd>
+                                <template lwc:if={hasSlackReplyLink}>
+                                    <a href={slackReplyLink} target="_blank" rel="noopener noreferrer">협의 메시지 열기</a>
+                                </template>
+                                <template lwc:else>-</template>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters_small slds-p-around_medium">
+                    <!-- 좌: 상품 / 거래방향 / 매매·환매일 / 거래금액 -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-combobox
+                            name="productId" label="상품" placeholder="RP 상품 선택"
+                            value={form.productId} options={productOptions} onchange={handleChange}
+                            required message-when-value-missing="상품을 선택하세요." class="rp-input"></lightning-combobox>
+                        <template lwc:if={errors.productId}><div class="rp-error">{errors.productId}</div></template>
+
+                        <lightning-combobox
+                            name="dealDirection" label="거래방향" placeholder="선택"
+                            value={form.dealDirection} options={dealDirectionOptions} onchange={handleChange}
+                            required class="rp-input"></lightning-combobox>
+                        <template lwc:if={errors.dealDirection}><div class="rp-error">{errors.dealDirection}</div></template>
+
+                        <lightning-input
+                            type="date" name="startDate" label="최초 매매일"
+                            value={form.startDate} onchange={handleChange} required class="rp-input"></lightning-input>
+                        <template lwc:if={errors.startDate}><div class="rp-error">{errors.startDate}</div></template>
+
+                        <lightning-input
+                            type="date" name="endDate" label="환매일"
+                            value={form.endDate} onchange={handleChange} required class="rp-input"></lightning-input>
+                        <template lwc:if={errors.endDate}><div class="rp-error">{errors.endDate}</div></template>
+
+                        <lightning-input
+                            type="number" name="amount" label="거래금액" formatter="currency" step="1"
+                            value={form.amount} onchange={handleChange} required class="rp-input"></lightning-input>
+                        <template lwc:if={errors.amount}><div class="rp-error">{errors.amount}</div></template>
+                    </div>
+
+                    <!-- 우: 수익률 / 수수료 / 기타 조건 -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input
+                            type="number" name="rpYield" label="약정수익률 (연 %)" step="0.01" min="0" max="100"
+                            value={form.rpYield} onchange={handleChange} required class="rp-input"></lightning-input>
+                        <template lwc:if={errors.rpYield}><div class="rp-error">{errors.rpYield}</div></template>
+
+                        <lightning-combobox
+                            name="yieldStructure" label="수익률 구조" placeholder="선택"
+                            value={form.yieldStructure} options={yieldStructureOptions} onchange={handleChange}
+                            required class="rp-input"></lightning-combobox>
+                        <template lwc:if={errors.yieldStructure}><div class="rp-error">{errors.yieldStructure}</div></template>
+
+                        <lightning-combobox
+                            name="yieldBasis" label="수익률 기준" placeholder="선택"
+                            value={form.yieldBasis} options={yieldBasisOptions} onchange={handleChange}
+                            required class="rp-input"></lightning-combobox>
+                        <template lwc:if={errors.yieldBasis}><div class="rp-error">{errors.yieldBasis}</div></template>
+
+                        <!-- 환매예정금액: 읽기전용, 실시간 계산 -->
+                        <div class="rp-readonly rp-input">
+                            <span class="rp-readonly__label">환매예정금액 (자동 계산)</span>
+                            <span class="rp-readonly__value">{redemptionAmountText}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── 수수료 ── -->
+                <div class="slds-p-horizontal_medium">
+                    <h3 class="rp-section-title">수수료</h3>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-combobox
+                                name="feeMethod" label="수수료 방식" placeholder="선택"
+                                value={form.feeMethod} options={feeMethodOptions} onchange={handleChange}
+                                required class="rp-input"></lightning-combobox>
+                            <template lwc:if={errors.feeMethod}><div class="rp-error">{errors.feeMethod}</div></template>
+
+                            <!-- 정률 → 수수료율만 -->
+                            <template lwc:if={isFeeRateMethod}>
+                                <lightning-input
+                                    type="number" name="feeRate" label="확정 수수료율 (%)" step="0.0001" min="0" max="9.9999"
+                                    value={form.feeRate} onchange={handleChange} required class="rp-input"></lightning-input>
+                                <template lwc:if={errors.feeRate}><div class="rp-error">{errors.feeRate}</div></template>
+                            </template>
+
+                            <!-- 정액 → 수수료 금액만 -->
+                            <template lwc:if={isFeeAmountMethod}>
+                                <lightning-input
+                                    type="number" name="feeAmount" label="확정 수수료 금액" formatter="currency" step="1" min="0"
+                                    value={form.feeAmount} onchange={handleChange} required class="rp-input"></lightning-input>
+                                <template lwc:if={errors.feeAmount}><div class="rp-error">{errors.feeAmount}</div></template>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-combobox
+                                name="feeBearer" label="수수료 부담 주체" placeholder="선택"
+                                value={form.feeBearer} options={feeBearerOptions} onchange={handleChange}
+                                required class="rp-input"></lightning-combobox>
+                            <template lwc:if={errors.feeBearer}><div class="rp-error">{errors.feeBearer}</div></template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── 계약 조건 ── -->
+                <div class="slds-p-horizontal_medium slds-p-top_small">
+                    <h3 class="rp-section-title">계약 조건</h3>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-combobox
+                                name="earlyRedemption" label="중도환매" placeholder="선택"
+                                value={form.earlyRedemption} options={earlyRedemptionOptions} onchange={handleChange}
+                                required class="rp-input"></lightning-combobox>
+                            <template lwc:if={errors.earlyRedemption}><div class="rp-error">{errors.earlyRedemption}</div></template>
+
+                            <lightning-combobox
+                                name="customerFinalAgreement" label="고객 최종합의" placeholder="선택"
+                                value={form.customerFinalAgreement} options={customerFinalAgreementOptions} onchange={handleChange}
+                                required class="rp-input"></lightning-combobox>
+                            <template lwc:if={errors.customerFinalAgreement}><div class="rp-error">{errors.customerFinalAgreement}</div></template>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input
+                                type="number" name="couponRate" label="표면금리 (%)" step="0.01"
+                                value={form.couponRate} onchange={handleChange} class="rp-input"></lightning-input>
+
+                            <lightning-input
+                                type="number" name="collateralRatio" label="담보비율 (%)" step="0.01"
+                                value={form.collateralRatio} onchange={handleChange} class="rp-input"></lightning-input>
+
+                            <lightning-textarea
+                                name="specialTerms" label="특약" placeholder="특약이 없으면 비워두세요."
+                                value={form.specialTerms} onchange={handleChange} class="rp-input"></lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <template lwc:if={submitError}>
+                    <div class="slds-p-horizontal_medium slds-p-bottom_small">
+                        <div class="rp-alert rp-alert_error" role="alert">
+                            <span class="rp-alert__icon">
+                                <lightning-icon icon-name="utility:warning" size="x-small" variant="inverse"></lightning-icon>
+                            </span>
+                            <div class="rp-alert__body">
+                                <p class="rp-alert__title">입력값을 확인해 주세요</p>
+                                <p class="rp-alert__text">{submitError}</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <footer class="slds-modal__footer slds-p-around_x-small">
+            <lightning-button variant="neutral" label="취소" onclick={handleCancel}
+                disabled={isSaving} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button variant="brand" label="확정하기" onclick={handleConfirm}
+                disabled={confirmDisabled}></lightning-button>
+        </footer>
+
+        <template lwc:if={isSaving}>
+            <lightning-spinner alternative-text="확정하는 중" size="small"></lightning-spinner>
+        </template>
+    </div>
+</template>

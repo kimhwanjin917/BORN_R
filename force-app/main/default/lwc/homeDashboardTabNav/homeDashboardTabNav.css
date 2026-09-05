@@ -1,0 +1,43 @@
+:host {
+    display: block;
+}
+
+.home-tab-nav {
+    width: 100%;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.home-tab-nav__tabs {
+    display: flex;
+    align-items: flex-end;
+}
+
+.home-tab-nav__tab {
+    min-height: 35px;
+    margin: 0;
+    padding: 0 16px 8px;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: #5f636b;
+    cursor: pointer;
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 16.8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.home-tab-nav__tab:hover,
+.home-tab-nav__tab:focus-visible {
+    color: #04205a;
+    outline: none;
+}
+
+.home-tab-nav__tab_active {
+    border-bottom-color: #0c51d2;
+    color: #0c3c9f;
+}

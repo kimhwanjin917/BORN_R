@@ -26,7 +26,7 @@
 
             <div class="slds-form-element slds-m-bottom_x-small">
                 <label class="slds-form-element__label">To</label>
-                <div class="slds-form-element__control">
+                <div class="slds-form-element__control recipient-row">
                     <template if:true={hasRecipients}>
                         <lightning-pill-container
                             items={recipientItems}
@@ -35,6 +35,7 @@
                     </template>
                     <lightning-record-picker
                         data-id="to-picker"
+                        class="to-picker"
                         label="받는 사람 추가"
                         variant="label-hidden"
                         placeholder="받는 사람 이름 검색..."
@@ -62,6 +63,51 @@
                 onchange={handleBodyChange}
                 class="slds-m-bottom_x-small"
             ></lightning-input-rich-text>
+
+            <div class="slds-form-element slds-m-bottom_x-small">
+                <label class="slds-form-element__label">첨부</label>
+                <div class="slds-form-element__control">
+                    <template if:true={hasAttachments}>
+                        <ul class="slds-listbox slds-listbox_horizontal" role="list">
+                            <template for:each={attachments} for:item="attachment">
+                                <li key={attachment.id} class="slds-listbox-item" role="listitem">
+                                    <span class="slds-pill" role="option">
+                                        <lightning-icon
+                                            icon-name="doctype:pdf"
+                                            size="x-small"
+                                            class="slds-pill__icon_container"
+                                            alternative-text="파일"
+                                        ></lightning-icon>
+                                        <span class="slds-pill__label" title={attachment.name}>{attachment.name}</span>
+                                        <button
+                                            class="slds-button slds-button_icon slds-pill__remove"
+                                            type="button"
+                                            data-id={attachment.id}
+                                            title="첨부 삭제"
+                                            aria-label="첨부 삭제"
+                                            onclick={handleRemoveAttachment}
+                                        >
+                                            <lightning-icon
+                                                icon-name="utility:close"
+                                                size="xx-small"
+                                                alternative-text="첨부 삭제"
+                                            ></lightning-icon>
+                                        </button>
+                                    </span>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <lightning-record-picker
+                        data-id="file-picker"
+                        label="파일 추가"
+                        variant="label-hidden"
+                        placeholder="파일 검색 후 추가..."
+                        object-api-name="ContentDocument"
+                        onchange={handleAddAttachment}
+                    ></lightning-record-picker>
+                </div>
+            </div>
 
             <div class="slds-form-element slds-m-top_small slds-m-bottom_medium">
                 <label class="slds-form-element__label">Related To</label>

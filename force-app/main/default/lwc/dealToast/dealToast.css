@@ -1,0 +1,104 @@
+.deal-toast-viewport {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9500;
+    width: max-content;
+    max-width: min(90vw, 34rem);
+    pointer-events: none;
+}
+
+.deal-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 10px 30px rgba(10, 27, 61, 0.18);
+    border: 1px solid transparent;
+    pointer-events: auto;
+    animation: deal-toast-in 0.22s ease-out;
+}
+
+@keyframes deal-toast-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.deal-toast__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+}
+
+.deal-toast__body {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.deal-toast__title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #0a1b3d;
+    line-height: 1.3;
+}
+
+.deal-toast__text {
+    margin: 0.2rem 0 0 0;
+    font-size: 0.8125rem;
+    color: #3d4a5c;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.deal-toast__close {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    padding: 0;
+    margin-left: 0.25rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    --slds-c-icon-color-foreground-default: rgba(10, 27, 61, 0.55);
+}
+.deal-toast__close:hover {
+    background: rgba(10, 27, 61, 0.08);
+}
+
+/* 성공 — #7DA9FF 블루 톤 */
+.deal-toast_success {
+    background: #e8f0ff;
+    border-color: #c5d8ff;
+}
+.deal-toast_success .deal-toast__icon {
+    background: #7DA9FF;
+}
+
+/* 경고 — 앰버 톤 */
+.deal-toast_warning {
+    background: #fff4e0;
+    border-color: #f6dfae;
+}
+.deal-toast_warning .deal-toast__icon {
+    background: #e8912d;
+}
+
+/* 오류 — 부드러운 레드 톤 */
+.deal-toast_error {
+    background: #fdecef;
+    border-color: #f6c9d2;
+}
+.deal-toast_error .deal-toast__icon {
+    background: #e0335a;
+}

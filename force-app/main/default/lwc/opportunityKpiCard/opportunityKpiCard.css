@@ -352,3 +352,15 @@
 .state_error {
     color: #ba0517;
 }
+
+/* 헤더 우측 분기 배지 — myKpiCard의 .card-head__period와 같은 규격 */
+.card-head__period {
+    flex: 0 0 auto;
+    padding: 0.1875rem 0.5rem;
+    border-radius: 999px;
+    background: #e8eefe;
+    color: var(--dash-color-brand);
+    font-size: var(--dash-font-badge);
+    font-weight: var(--dash-weight-bold);
+    white-space: nowrap;
+}

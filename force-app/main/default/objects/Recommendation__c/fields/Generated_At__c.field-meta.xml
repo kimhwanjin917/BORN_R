@@ -3,7 +3,7 @@
     <fullName>Generated_At__c</fullName>
     <label>생성 시각</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>DateTime</type>
 </CustomField>

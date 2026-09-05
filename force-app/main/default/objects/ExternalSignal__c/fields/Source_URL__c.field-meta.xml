@@ -3,6 +3,7 @@
     <fullName>Source_URL__c</fullName>
     <label>출처 URL</label>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Url</type>
 </CustomField>

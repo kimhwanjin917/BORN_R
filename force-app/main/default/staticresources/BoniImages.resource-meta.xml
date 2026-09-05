@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>application/zip</contentType>
+    <description>근본증권 마스코트 보니 이미지 4장(main/chart/tablet/flag). LWC 빈 상태·완료 화면용.</description>
+</StaticResource>

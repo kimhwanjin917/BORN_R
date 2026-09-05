@@ -4,6 +4,7 @@
     <description>미팅이 진행된(또는 예정된) 날짜. 리드 전환 마법사에서 입력되며 Opportunity.CloseDate 및 후속 Task 기한과 동일하게 매핑된다.</description>
     <label>Meeting Date</label>
     <required>false</required>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Date</type>
 </CustomField>

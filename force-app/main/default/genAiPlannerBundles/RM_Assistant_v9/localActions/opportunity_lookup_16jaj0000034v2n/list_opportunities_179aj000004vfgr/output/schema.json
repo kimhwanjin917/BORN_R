@@ -1,0 +1,42 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "closedFallback" : {
+      "title" : "종결 건으로 대체됨",
+      "description" : "true 면 진행 중 기회가 없어서 종결된(Closed Won/Lost) 기회를 대신 반환한 것",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "itemCount" : {
+      "title" : "결과 수",
+      "description" : "반환된 기회 수 (최대 10). 0이면 접근 가능한 기회 없음",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "items" : {
+      "title" : "기회 목록",
+      "description" : "opportunityId, opportunityName, accountName, ownerName, amount, stageName, closeDate, createdDate",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__OpportunityListAction$Item"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "message" : {
+      "title" : "메시지",
+      "description" : "조회 조건과 건수 요약",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

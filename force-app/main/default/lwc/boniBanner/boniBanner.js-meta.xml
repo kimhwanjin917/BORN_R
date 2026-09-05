@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>보니 인사 배너</masterLabel>
+    <description>docs/60 별건 — 홈 페이지용 보니 인사 배너(이름·오늘 미팅·만기 임박). 기존 HomeDashboardController 호출만.</description>
+    <targets>
+        <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage,lightning__AppPage,lightning__RecordPage">
+            <property name="pose" type="String" label="포즈(main/flag/chart/tablet)" default="main"/>
+            <property name="size" type="Integer" label="이미지 크기(px)" default="150"/>
+            <property name="eyebrow" type="String" label="작은 제목" default="보니"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

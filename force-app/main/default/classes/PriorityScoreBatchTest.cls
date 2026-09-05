@@ -211,6 +211,23 @@ private class PriorityScoreBatchTest {
     }
 
     @isTest
+    static void shouldSkipLockedLead_WhenScoreLocked() {
+        // Given: 원래라면 69.9 가 나올 재무. 그러나 점수를 95.4 로 수기 고정하고 잠금.
+        Lead lead = createLead('Locked Lead');
+        insertStatement(lead.Id, null, 2023, ASSETS, ASSETS, RP_FUND_FULL, 0);
+        update new Lead(Id = lead.Id, Priority_Score__c = 95.4, Priority_Score_Locked__c = true);
+
+        // When: 배치 재계산
+        Test.startTest();
+        Database.executeBatch(new PriorityScoreBatch(PriorityScoreBatch.Target.LEAD), 200);
+        Test.stopTest();
+
+        // Then: 잠긴 리드는 스코프에서 빠져 고정값 95.4 가 그대로 유지되어야 한다.
+        Lead result = [SELECT Priority_Score__c FROM Lead WHERE Id = :lead.Id];
+        Assert.areEqual(95.4, result.Priority_Score__c, '잠긴 리드는 배치가 재계산하지 않고 고정값(95.4)을 유지해야 한다');
+    }
+
+    @isTest
     static void shouldThrow_WhenConstructedWithNullTarget() {
         try {
             new PriorityScoreBatch(null);

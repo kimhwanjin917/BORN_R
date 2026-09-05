@@ -17,6 +17,7 @@ CASE(RIGHT(External_Key__c, 5),
     <inlineHelpText>DART 보고서코드(11011 사업보고서→12월, 11012 반기→06월, 11013 1분기→03월, 11014 3분기→09월) 기준 공시 연월. External_Key가 비정형이면 기간 구분으로 폴백.</inlineHelpText>
     <label>공시기준(년/월)</label>
     <required>false</required>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>

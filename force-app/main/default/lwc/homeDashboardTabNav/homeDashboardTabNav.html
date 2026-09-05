@@ -1,0 +1,28 @@
+<template>
+    <nav class="home-tab-nav" aria-label="홈 대시보드 메뉴">
+        <div class="home-tab-nav__tabs" role="tablist">
+            <button
+                class={dashboardTabClass}
+                type="button"
+                role="tab"
+                aria-selected={isDashboard}
+                data-tab="dashboard"
+                onclick={handleTabSelect}
+                onkeydown={handleKeydown}
+            >
+                영업 대시보드
+            </button>
+            <button
+                class={insightTabClass}
+                type="button"
+                role="tab"
+                aria-selected={isInsight}
+                data-tab="insight"
+                onclick={handleTabSelect}
+                onkeydown={handleKeydown}
+            >
+                시장 인사이트
+            </button>
+        </div>
+    </nav>
+</template>

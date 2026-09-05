@@ -223,6 +223,79 @@ private class LeadConvertServiceTest {
         Assert.areEqual('채권', lastPrimaryProductFamily, '기준 상품 = 채권 상품군');
     }
 
+    // ─── 표준 Convert 화면: RM 이 고른 RecordType 이 추천보다 우선 (2026-09-01) ──
+
+    /**
+     * 표준 Convert 화면은 Database.convertLead 로 그대로 재현할 수 없다 — RecordType 을
+     * 지정하는 API 가 없어 화면만 지정할 수 있기 때문이다. 그래서 전환된 Opportunity 의
+     * RecordType 을 RM 이 고른 값으로 바꿔 놓고, 화면 경로와 같은 조건(codePathConversion
+     * = false)에서 기본값 채우기를 다시 태워 검증한다.
+     */
+    @isTest
+    static void shouldKeepUserChosenRecordType_WhenConvertedFromStandardScreen() {
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            lead.Recommended_Product_Family__c = '회사채'; // 추천은 회사채
+            update lead;
+        }
+        LeadConvertService.Request req = new LeadConvertService.Request();
+        req.leadId = lead.Id;
+        req.meetingDateTime = Datetime.newInstance(2026, 9, 1, 10, 0, 0);
+
+        List<LeadConvertService.Response> responses;
+        Test.startTest();
+        System.runAs(getTestUser()) {
+            responses = LeadConvertService.convertLeads(new List<LeadConvertService.Request>{ req });
+        }
+        Assert.isTrue(responses[0].isSuccess, 'Conversion should succeed: ' + responses[0].errorMessage);
+        Id opportunityId = responses[0].opportunityId;
+
+        // RM 이 화면에서 RP Deal 을 고른 상태를 만든다.
+        Id rpDealRtId = Schema.SObjectType.Opportunity
+            .getRecordTypeInfosByDeveloperName()
+            .get('RP_Deal')
+            .getRecordTypeId();
+        update new Opportunity(Id = opportunityId, RecordTypeId = rpDealRtId);
+
+        Lead converted = [
+            SELECT Id, ConvertedAccountId, Recommended_Product_Family__c, Proposed_Yield_Rate__c
+            FROM Lead WHERE Id = :lead.Id
+        ];
+        System.runAs(getTestUser()) {
+            LeadConvertService.applyOpportunityDefaults(
+                new Map<Id, Lead>{ converted.Id => converted },
+                new Map<Id, Id>{ converted.Id => opportunityId },
+                new Map<Id, Id>{ converted.Id => converted.ConvertedAccountId }
+            );
+        }
+        Test.stopTest();
+
+        Opportunity result = [
+            SELECT Name, RecordType.DeveloperName, Primary_Product__r.Family
+            FROM Opportunity WHERE Id = :opportunityId
+        ];
+        Assert.areEqual('RP_Deal', result.RecordType.DeveloperName,
+            '화면에서 고른 RecordType 은 추천이 회사채여도 유지돼야 한다');
+        Assert.areEqual('Acme Corp - RP', result.Name,
+            '이름은 고른 RecordType 에서 되짚은 상품군을 따라야 한다');
+        Assert.areEqual('RP', result.Primary_Product__r.Family,
+            '기준 상품도 고른 RecordType 기준이어야 한다');
+    }
+
+    /**
+     * 역매핑이 정매핑과 어긋나면 화면에서 고른 RT 가 엉뚱한 상품군으로 되짚힌다.
+     * 상품군을 새로 추가할 때 한쪽만 고치는 실수를 여기서 잡는다.
+     */
+    @isTest
+    static void shouldMapEveryRecordTypeBackToItsFamily() {
+        for (String family : LeadConvertService.OPP_RECORD_TYPE_BY_FAMILY.keySet()) {
+            String devName = LeadConvertService.OPP_RECORD_TYPE_BY_FAMILY.get(family);
+            Assert.areEqual(family,
+                LeadConvertService.RECOMMENDATION_BY_OPP_RECORD_TYPE.get(devName),
+                devName + ' 의 역매핑은 상품군 ' + family + ' 와 일치해야 한다');
+        }
+    }
+
     // ─── Opportunity Name: "{회사명} - {상품군}" ────────────────────────────
 
     @isTest

@@ -1,0 +1,21 @@
+{
+  "required" : [ "industry" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "industry" : {
+      "title" : "산업군 (Account.Industry)",
+      "description" : "고객사의 산업군. Salesforce Account.Industry 픽리스트 값과 정확히 일치해야 한다. 예: Manufacturing, Media, Financial Services, 제조업, 금융 및 보험업",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "productType" : {
+      "title" : "상품 유형 (선택)",
+      "description" : "선택. 상품군(Product2.Family: RP, 채권, 퇴직연금, IPO, 자금운용) 또는 상품명. 지정하면 해당 상품이 주력 상품인 기회만 집계한다. 사용자가 말하지 않았으면 비워 둔다.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -5,6 +5,7 @@
     <inlineHelpText>산업군 뉴스일 때만 Account 산업군(KSIC 대분류)과 동일한 값을 선택하세요. 특정 회사 뉴스는 비워두고 Account/Lead 룩업으로 연결합니다.</inlineHelpText>
     <label>산업군</label>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

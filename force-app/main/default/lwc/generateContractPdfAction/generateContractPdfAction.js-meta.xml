@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>계약서 PDF 생성</masterLabel>
+    <description>저장된 계약의 전체 항목 계약서 PDF 를 만들어 계약에 첨부하는 헤드리스 Quick Action</description>
+    <targets>
+        <target>lightning__RecordAction</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>Action</actionType>
+            <objects><object>Contract</object></objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

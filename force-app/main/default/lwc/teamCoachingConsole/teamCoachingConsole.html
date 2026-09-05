@@ -1,0 +1,194 @@
+<template>
+    <div class="console">
+        <div class="cols">
+            <!-- 왼쪽: Tableau 뷰. 숫자는 전부 여기서 나온다 -->
+            <div class="viz-col">
+                <template if:true={vizError}>
+                    <div class="notice notice--error">
+                        <p><strong>대시보드를 불러오지 못했습니다.</strong></p>
+                        <p class="notice__detail">{vizError}</p>
+                        <p>
+                            <a href={vizUrl} target="_blank" rel="noopener noreferrer">
+                                Tableau 에서 직접 열기
+                            </a>
+                        </p>
+                    </div>
+                </template>
+                <div class="viz-box"></div>
+            </div>
+
+            <!-- 오른쪽: 조치 패널. 조회하지 않고 쓰기만 한다 -->
+            <!-- 기둥은 대시보드 높이만큼 내려오고, 그 안의 카드만 스크롤을 따라붙는다 -->
+            <div class="panel-col">
+                <div class="panel">
+                    <template if:false={hasSelection}>
+                        <div class="empty">
+                            <div class="empty__mark">＋</div>
+                            <div class="empty__title">RM 을 선택해 주세요</div>
+                            <div class="empty__detail">
+                                팀원 KPI 행이나 히트맵의 RM × 단계 칸을 클릭하면
+                                요약과 코칭 초안이 여기에 나타납니다.
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={hasSelection}>
+                        <div class="head">
+                            <div class="head__name">{headTitle}</div>
+                            <template if:true={showStageBadge}>
+                                <span class="head__stage">{selection.stage}</span>
+                            </template>
+                        </div>
+                        <template if:true={multiNote}>
+                            <div class="head__note">{multiNote}</div>
+                        </template>
+
+                        <!-- 팀원 KPI 를 클릭했을 때: 성과 요약 -->
+                        <template if:true={hasKpiSummary}>
+                            <div class="card card--hero">
+                                <div class="card__label">달성률</div>
+                                <div class="bignum">{summary.attainText}</div>
+                                <template if:true={showAttainBar}>
+                                    <div class="bar">
+                                        <div class="bar__fill" style={attainBarStyle}></div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="tiles">
+                                <template for:each={summary.tiles} for:item="tile">
+                                    <div class="tile" key={tile.key}>
+                                        <div class="tile__label">{tile.label}</div>
+                                        <div class="tile__value">{tile.value}</div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- 히트맵을 클릭했을 때: 병목 단계 -->
+                        <template if:true={hasStageSummary}>
+                            <div class="card card--hero">
+                                <div class="card__label">{dwellLabel}</div>
+                                <div class={summary.dwell.className}>{summary.dwell.text}</div>
+                                <template if:true={summary.dwell.note}>
+                                    <div class="card__note">{summary.dwell.note}</div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:true={summary.chips.length}>
+                            <div class="chips">
+                                <template for:each={summary.chips} for:item="chip">
+                                    <span class={chip.className} key={chip.key} title={chip.hint}>
+                                        {chip.label} <strong>{chip.value}</strong>
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- 워크북이 새 지표를 보내면 조용히 사라지지 않게 여기에 붙는다 -->
+                        <template if:true={summary.extras.length}>
+                            <dl class="metrics">
+                                <template for:each={summary.extras} for:item="metric">
+                                    <div class="metrics__row" key={metric.key}>
+                                        <dt>{metric.label}</dt>
+                                        <dd>{metric.value}</dd>
+                                    </div>
+                                </template>
+                            </dl>
+                        </template>
+
+                        <!-- 퍼널 단계를 골랐을 때, 그 단계로 걸러진 리스크존 건수 -->
+                        <template if:true={stageRisk}>
+                            <div class="card">
+                                <div class="card__label">리스크</div>
+                                <div class="risk">
+                                    <template if:true={stageRisk.split}>
+                                        <div class="risk__row">
+                                            <span>위험</span>
+                                            <strong class="risk__high">{stageRisk.high}</strong>
+                                        </div>
+                                        <div class="risk__row">
+                                            <span>주의</span>
+                                            <strong>{stageRisk.medium}</strong>
+                                        </div>
+                                    </template>
+                                    <div class="risk__row risk__row--total">
+                                        <span>합계</span>
+                                        <strong>{stageRisk.total}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template if:true={blockedReason}>
+                            <div class="notice notice--warn">{blockedReason}</div>
+                        </template>
+
+                        <!-- Slack 작성창 모양 — 입력창과 보내기 버튼을 한 상자로 -->
+                        <template if:true={hasRm}>
+                        <div class="section section--slack">
+                            <div class="slack__brand">
+                                <!-- Slack 공식 마크. 이미지 파일 없이 벡터라 어느 배율에서도 선명하다 -->
+                                <svg class="slack__logo" viewBox="0 0 122.8 122.8" aria-hidden="true">
+                                    <path
+                                        fill="#E01E5A"
+                                        d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zM32.3 77.6c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z"
+                                    ></path>
+                                    <path
+                                        fill="#36C5F0"
+                                        d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zM45.2 32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z"
+                                    ></path>
+                                    <path
+                                        fill="#2EB67D"
+                                        d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zM90.5 45.2c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z"
+                                    ></path>
+                                    <path
+                                        fill="#ECB22E"
+                                        d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zM77.6 90.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z"
+                                    ></path>
+                                </svg>
+                                <span class="slack__name">Slack</span>
+                            </div>
+                            <!--
+                                lightning-textarea 는 높이를 지정할 방법이 없어 두 줄짜리 스크롤 상자가 된다.
+                                초안을 통째로 보면서 다듬어야 하므로 기본 textarea 를 쓴다.
+                            -->
+                            <div class="composer">
+                                <textarea
+                                    id="draft"
+                                    class="draft"
+                                    aria-label="코칭 메시지"
+                                    oninput={handleDraftChange}
+                                    disabled={actionsDisabled}
+                                ></textarea>
+                                <div class="composer__bar">
+                                    <span class="composer__hint">보내면 Task 도 함께 생성됩니다</span>
+                                    <button
+                                        class="send"
+                                        type="button"
+                                        onclick={handleSend}
+                                        disabled={actionsDisabled}
+                                    >
+                                        <svg class="send__icon" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path d="M2 10 18 3l-5 15-3.2-5.6L2 10z"></path>
+                                        </svg>
+                                        보내기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        </template>
+                    </template>
+
+                    <template if:true={busy}>
+                        <div class="busy">
+                            <lightning-spinner alternative-text={busyMessage} size="small"></lightning-spinner>
+                            <div class="busy__text">{busyMessage}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

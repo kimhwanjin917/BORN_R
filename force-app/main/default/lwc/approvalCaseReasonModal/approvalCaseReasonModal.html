@@ -1,0 +1,26 @@
+<template>
+    <lightning-modal-header label={headerText}></lightning-modal-header>
+    <lightning-modal-body>
+        <div class="slds-box slds-theme_warning slds-m-bottom_small" role="alert">
+            {warningText}
+        </div>
+        <lightning-textarea
+            data-id="reason"
+            name="reason"
+            label="Case 사유"
+            placeholder="상한 초과 승인이 필요한 사유를 입력하세요."
+            value={reason}
+            required
+            onchange={handleReasonChange}
+        ></lightning-textarea>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="취소" onclick={handleCancel}></lightning-button>
+        <lightning-button
+            variant="brand"
+            label="Case 생성"
+            onclick={handleCreate}
+            class="slds-m-left_x-small"
+        ></lightning-button>
+    </lightning-modal-footer>
+</template>

@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-p-around_medium">
+        <template lwc:if={done}>
+            <div class={resultClass}>
+                <lightning-icon icon-name={resultIcon} size="small" class="slds-m-right_x-small"></lightning-icon>
+                <span>{message}</span>
+            </div>
+            <div class="slds-m-top_medium slds-text-align_right">
+                <lightning-button variant="brand" label="확인" onclick={handleClose}></lightning-button>
+            </div>
+        </template>
+
+        <template lwc:elseif={isWorking}>
+            <div class="slds-align_absolute-center slds-p-vertical_large">
+                <lightning-spinner alternative-text="처리 중" size="small"></lightning-spinner>
+                <span class="slds-m-left_medium">상품팀 채널에 승인 요청을 올리는 중…</span>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <p class="slds-m-bottom_medium">
+                이 Case의 딜 조건을 <b>상품팀 매니저 승인</b>에 올립니다.<br />
+                상품팀 전용 Slack 채널에 확정조건서와 승인 카드가 게시되고, 승인 프로세스에 제출됩니다.
+            </p>
+            <div class="slds-text-align_right">
+                <lightning-button label="취소" onclick={handleClose} class="slds-m-right_x-small"></lightning-button>
+                <lightning-button variant="brand" label="매니저 승인 요청 보내기" onclick={handleConfirm}></lightning-button>
+            </div>
+        </template>
+    </div>
+</template>

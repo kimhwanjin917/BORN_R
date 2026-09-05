@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>정렬 스페이서(보니 홈)</masterLabel>
+    <description>docs/60 별건 — 홈 사이드바 상단 투명 여백. 왼쪽 탭 줄 높이만큼 띄워 카드 윗선을 맞춘다.</description>
+    <targets><target>lightning__HomePage</target><target>lightning__AppPage</target><target>lightning__RecordPage</target></targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage,lightning__AppPage,lightning__RecordPage">
+            <property name="height" type="Integer" label="높이(px)" default="52"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

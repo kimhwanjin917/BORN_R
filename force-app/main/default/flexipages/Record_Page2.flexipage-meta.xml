@@ -540,6 +540,12 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>dealToast</componentName>
+                <identifier>c_dealToast</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>label</name>
                     <value>Tabs</value>

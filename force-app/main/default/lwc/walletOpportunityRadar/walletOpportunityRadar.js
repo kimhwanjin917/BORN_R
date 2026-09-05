@@ -7,6 +7,10 @@ import resolveAccountId from '@salesforce/apex/OpportunityRadarController.resolv
 
 const EOK = 100000000;
 const PRIORITY_SCORE = 75;
+// 녹색 '우선 공략' 존의 X축 경계 — 최대 화이트스페이스 대비 비율.
+// 2026-09-03: 0.25에서 완화. 점수 75점을 넘긴 계정이 공백 규모 때문에 존 밖에 그려져,
+// 상단 KPI·목록 배지(점수>=75 기준)와 그림이 어긋나 존이 비어 보이던 것을 맞춘 값.
+const ZONE_WS_RATIO = 0.15;
 const CHART = { width: 1000, height: 700, left: 78, right: 964, top: 44, bottom: 600 };
 const EOK_UNIT = 100000000;
 const NICE_TICKS = [0, 500, 1000, 2000, 3000, 5000, 7000, 10000, 15000, 20000, 30000, 50000]; // 억
@@ -99,25 +103,36 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     }
 
     // ---------- filtering / ranking ----------
-    get rankedAccounts() {
+    /** Every account the server returned, normalised and ranked, before any filter is applied. */
+    get allAccounts() {
         const rows = (this.data?.accounts || [])
-            .filter((a) => this.segment === '전체' || a.industry === this.segment)
-            .filter((a) => !this.searchTerm || a.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-            .map((a) => ({ ...a, share: num(a.share), wallet: num(a.wallet), ourBalance: num(a.ourBalance), whitespace: num(a.whitespace), propensity: num(a.propensity), priority: num(a.priority),
+            .map((a) => ({ ...a, share: num(a.share), wallet: num(a.wallet), reportedWallet: num(a.reportedWallet), ourBalance: num(a.ourBalance), whitespace: num(a.whitespace), propensity: num(a.propensity), priority: num(a.priority),
                 recommendations: (a.recommendations || []).map((r) => ({ ...r, score: num(r.score), expectedAmount: num(r.expectedAmount) })),
-                families: (a.families || []).map((f) => ({ ...f, wallet: num(f.wallet), ourBalance: num(f.ourBalance), share: num(f.share) })) }))
+                families: (a.families || []).map((f) => ({ ...f, wallet: num(f.wallet), reportedWallet: num(f.reportedWallet), ourBalance: num(f.ourBalance), share: num(f.share) })) }))
             .sort((a, b) => (b.priority || 0) - (a.priority || 0));
         return rows.map((a, i) => ({ ...a, rank: i + 1 }));
+    }
+
+    get rankedAccounts() {
+        return this.allAccounts
+            .filter((a) => this.segment === '전체' || a.industry === this.segment)
+            .filter((a) => !this.searchTerm || a.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+            .map((a, i) => ({ ...a, rank: i + 1 }));  // renumber 1..n so a filtered table still reads 1, 2, 3
     }
 
     get hasRows() {
         return this.rankedAccounts.length > 0;
     }
 
+    /**
+     * Resolved against the UNFILTERED list on purpose. Looking it up in the filtered list meant that
+     * searching, switching industry or flipping scope silently dropped the chosen customer and showed
+     * whatever sat at rank 1 instead, which reads as the panel jumping to another company on its own.
+     */
     get selected() {
-        const list = this.rankedAccounts;
-        if (!list.length) return null;
-        return list.find((a) => a.accountId === this.selectedId) || list[0];
+        const picked = this.allAccounts.find((a) => a.accountId === this.selectedId);
+        if (picked) return picked;
+        return this.rankedAccounts[0] || this.allAccounts[0] || null;
     }
 
     // ---------- KPIs ----------
@@ -129,7 +144,7 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
         const priority = list.filter((a) => (a.propensity || 0) >= PRIORITY_SCORE && a.whitespace > 0).length;
         const expected = list.reduce((s, a) => s + a.recommendations.reduce((t, r) => t + (r.expectedAmount || 0), 0), 0);
         return [
-            { label: '총 화이트스페이스', value: this.eok(whitespace), note: '고객 지갑 − 우리 잔액' },
+            { label: '총 화이트스페이스', value: this.eok(whitespace), note: '접근가능 지갑 − 우리 잔액' },
             { label: '평균 지갑 점유율', value: this.pct(avg), note: `${list.length}개 고객 평균` },
             { label: '우선 공략 고객', value: `${priority}개`, note: `성공 가능성 ${PRIORITY_SCORE}점 이상` },
             { label: '추천 예상 금액', value: this.eok(expected), note: '상위 추천 합계' }
@@ -205,14 +220,14 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
     }
 
     get zoneRect() {
-        const x = this.xPos(this.chartMaxWs * 0.25);
+        const x = this.xPos(this.chartMaxWs * ZONE_WS_RATIO);
         const y = this.yPos(PRIORITY_SCORE);
         return { x, y: CHART.top, w: CHART.right - x, h: y - CHART.top };
     }
 
-    get quadrantX() { return this.xPos(this.chartMaxWs * 0.25); }
+    get quadrantX() { return this.xPos(this.chartMaxWs * ZONE_WS_RATIO); }
     get quadrantY() { return this.yPos(PRIORITY_SCORE); }
-    get zoneLabelX() { return this.xPos(this.chartMaxWs * 0.25) + 12; }
+    get zoneLabelX() { return this.xPos(this.chartMaxWs * ZONE_WS_RATIO) + 12; }
     get zoneLabelY() { return CHART.top + 22; }
     get nurtureLabelX() { return CHART.left + 12; }
     get nurtureLabelY() { return CHART.bottom - 12; }
@@ -237,6 +252,7 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
             ...a,
             shareLabel: this.pct(a.share),
             walletLabel: this.eok(a.wallet),
+            reportedWalletTitle: a.reportedWallet ? `재무제표상 ${this.eok(a.reportedWallet)} 중 접근가능분` : '',
             ourLabel: this.eok(a.ourBalance),
             whitespaceLabel: this.eok(a.whitespace),
             propensityLabel: a.propensity != null ? `${a.propensity}점` : '-',
@@ -267,9 +283,24 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
                 hasOpp: Boolean(o.opportunityId)
             })),
             families: (a.families || []).filter((f) => f.wallet != null).map((f) => ({
-                ...f, walletLabel: this.eok(f.wallet), ourLabel: this.eok(f.ourBalance), shareLabel: this.pct(f.share)
+                ...f,
+                walletLabel: this.eok(f.wallet),
+                ourLabel: this.eok(f.ourBalance),
+                shareLabel: this.pct(f.share),
+                basis: f.reportedWallet ? `${f.basis} ${this.eok(f.reportedWallet)} 중 접근가능분` : f.basis
             }))
         };
+    }
+
+    /**
+     * @param share 0..1 of the addressable wallet we already hold
+     * @returns band class so the bar reads as "barely in" / "getting there" / "well held" at a glance
+     */
+    shareBand(share) {
+        const pct = (share || 0) * 100;
+        if (pct < 15) return 'share-low';
+        if (pct < 40) return 'share-mid';
+        return 'share-high';
     }
 
     get pageCount() {
@@ -301,11 +332,14 @@ export default class WalletOpportunityRadar extends NavigationMixin(LightningEle
         return this.rankedAccounts.slice(start, start + PAGE_SIZE).map((a) => ({
             ...a,
             rowClass: a.accountId === this.selected?.accountId ? 'selected' : '',
+            isNewLogo: a.hasDealHistory === false,
             shareLabel: this.pct(a.share),
             shareStyle: 'width:' + Math.min(Math.round((a.share || 0) * 100), 100) + '%',
+            shareFillClass: 'share-fill ' + this.shareBand(a.share),
+            shareTitle: `접근가능 지갑 ${this.eok(a.wallet)} 중 우리 ${this.eok(a.ourBalance)}`,
             walletLabel: this.eok(a.wallet),
             whitespaceLabel: this.eok(a.whitespace),
-            propensityLabel: a.propensity != null ? `${a.propensity}` : '-',
+            propensityLabel: a.propensity != null ? `${a.propensity}점` : '-',
             topLabel: a.topProduct ? `${a.topProduct}` : '-',
             topPillClass: `pill pill-${TYPE_CLASS[a.topType] || 'none'}`
         }));

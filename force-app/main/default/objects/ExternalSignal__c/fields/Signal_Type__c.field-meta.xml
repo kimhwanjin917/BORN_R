@@ -3,6 +3,7 @@
     <fullName>Signal_Type__c</fullName>
     <label>시그널 유형</label>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

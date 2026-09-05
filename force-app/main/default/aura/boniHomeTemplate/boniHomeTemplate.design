@@ -1,0 +1,7 @@
+<design:component label="보니 홈 (헤더 + 2컬럼)">
+    <flexipage:template>
+        <flexipage:region name="header" defaultWidth="Xlarge" />
+        <flexipage:region name="left" defaultWidth="Large" />
+        <flexipage:region name="right" defaultWidth="Small" />
+    </flexipage:template>
+</design:component>

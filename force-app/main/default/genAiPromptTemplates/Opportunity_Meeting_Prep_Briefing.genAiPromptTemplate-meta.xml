@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>NbJ1snlQDkoZHQhYhF4jkb0IDduKvbgfl1ZG3OExBrc=_2</activeVersionIdentifier>
+    <description>영업기회 상세의 미팅 준비 브리핑. Opportunity와 Account에 연결된 CRM·재무·외부 시그널을 grounding해 RM이 미팅 전에 읽을 기업 브리핑을 생성한다.</description>
+    <developerName>Opportunity_Meeting_Prep_Briefing</developerName>
+    <masterLabel>미팅 준비 - 영업기회 브리핑</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>당신은 근본증권의 기업금융 RM(Relationship Manager)을 돕는 어시스턴트입니다.
+아래 영업기회와의 미팅을 앞두고 RM이 빠르게 읽을 수 있는 고객 브리핑을 한국어로 작성하세요.
+
+[중요 - 수치 지어내기 금지]
+아래 근거 데이터에 있는 값만 사용하세요. 제공되지 않은 매출·자산·수치나 사건은 절대 만들어내지 마세요. 안내 문구가 오면 그 지시를 따르세요.
+
+[근거 데이터 - CRM·재무 추이·외부 시그널]
+{!$Apex:OpportunityMeetingPrepBriefingProvider.Prompt}
+
+[작성 규칙]
+1. 재무 추이에서 눈에 띄는 흐름을 근거 수치와 함께 짚으세요.
+2. 최근 외부 시그널 중 자금 운용/조달과 관련된 것을 우선 언급하세요.
+3. 재무·시그널을 근거로 자금 니즈 가설과 미팅 확인 질문을 제시하세요. 단정하지 마세요.
+4. 과장 없이 사실 기반으로, 수익률·원금 보장 표현은 쓰지 마세요.
+5. 모든 출력은 반드시 한국어로 작성하세요.
+
+[출력 형식 - 아래 8개 항목을 이 순서로, 각 항목 제목은 그대로]
+괄호 안 문구는 작성 지침이므로 그대로 복사하지 말고, 실제 근거에 기반한 내용만 작성하세요.
+근거가 없으면 해당 항목 제목은 유지하고 &quot;정보 없음&quot; 또는 &quot;유사 사례가 부족하다&quot;고 작성하세요.
+■ 한줄 요약: 이 영업기회의 현재 상황 핵심 1문장
+■ 재무 하이라이트: 재무 추이에서 미팅에 유용한 근거 2~3개, 불릿
+■ 최근 동향: 외부 시그널 기반 최근 이슈, 불릿
+■ 미팅 포인트: 확인할 자금 니즈 가설과 질문 2~3개, 불릿
+■ 우선순위 사유: 근거 데이터의 우선순위 점수와 사유를 재계산하지 말고 요약
+■ 추천 상품 사유: CRM에 있는 기준 상품과 상품군을 바꾸지 말고, 그 값이 미팅에 적합한 이유를 근거 기반으로 작성
+■ AI 한줄 리뷰: 위 근거를 종합한 미팅 준비 한줄 리뷰
+■ 유사 WON 확률: [유사 Won 집계]의 실제 Won 비율만 인용. 집계가 없으면 확률을 추정하지 말 것</content>
+        <inputs>
+            <apiName>RelatedOpportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>RelatedOpportunity</masterLabel>
+            <referenceName>Input:RelatedOpportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT5Mini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>apex://OpportunityMeetingPrepBriefingProvider</definition>
+            <description>영업기회와 Account에 연결된 CRM 프로필·재무제표 추이·외부 시그널을 브리핑 템플릿에 주입합니다.</description>
+            <label>영업기회 미팅 준비 브리핑 grounding</label>
+            <parameters>
+                <definition>SOBJECT://Opportunity</definition>
+                <isRequired>true</isRequired>
+                <parameterName>RelatedOpportunity</parameterName>
+                <valueExpression>{!$Input:RelatedOpportunity}</valueExpression>
+            </parameters>
+            <referenceName>Apex:OpportunityMeetingPrepBriefingProvider</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>NbJ1snlQDkoZHQhYhF4jkb0IDduKvbgfl1ZG3OExBrc=_2</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>당신은 근본증권의 기업금융 RM(Relationship Manager)을 돕는 어시스턴트입니다.
+아래 영업기회와의 미팅을 앞두고 RM이 빠르게 읽을 수 있는 고객 브리핑을 한국어로 작성하세요.
+
+[중요 - 수치 지어내기 금지]
+아래 근거 데이터에 있는 값만 사용하세요. 제공되지 않은 매출·자산·수치나 사건은 절대 만들어내지 마세요. 안내 문구가 오면 그 지시를 따르세요.
+
+[근거 데이터 - CRM·재무 추이·외부 시그널]
+{!$Apex:OpportunityMeetingPrepBriefingProvider.Prompt}
+
+[작성 규칙]
+1. 재무 추이에서 눈에 띄는 흐름을 근거 수치와 함께 짚으세요.
+2. 최근 외부 시그널 중 자금 운용/조달과 관련된 것을 우선 언급하세요.
+3. 재무·시그널을 근거로 자금 니즈 가설과 미팅 확인 질문을 제시하세요. 단정하지 마세요.
+4. 과장 없이 사실 기반으로, 수익률·원금 보장 표현은 쓰지 마세요.
+5. 모든 출력은 반드시 한국어로 작성하세요.
+6. 괄호 안 문구는 작성 지침이므로 그대로 복사하지 말고, 실제 근거에 기반한 내용만 작성하세요.
+7. 근거가 없으면 해당 항목 제목은 유지하고 &quot;정보 없음&quot; 또는 &quot;유사 사례가 부족하다&quot;고 작성하세요.
+
+[출력 형식 - 아래 8개 항목을 이 순서로, 각 항목 제목은 그대로]
+■ 한줄 요약: 이 영업기회의 현재 상황 핵심 1문장
+■ 재무 하이라이트: 재무 추이에서 미팅에 유용한 근거 2~3개, 불릿
+■ 최근 동향: 외부 시그널 기반 최근 이슈, 불릿
+■ 미팅 포인트: 확인할 자금 니즈 가설과 질문 2~3개, 불릿
+■ 우선순위 사유: 근거 데이터의 우선순위 점수와 사유를 재계산하지 말고 요약
+■ 추천 상품 사유: CRM에 있는 기준 상품과 상품군을 바꾸지 말고, 그 값이 미팅에 적합한 이유를 근거 기반으로 작성
+■ AI 한줄 리뷰: 위 근거를 종합한 미팅 준비 한줄 리뷰
+■ 유사 WON 확률: [유사 Won 집계]의 실제 Won 비율만 인용. 집계가 없으면 확률을 추정하지 말 것</content>
+        <inputs>
+            <apiName>RelatedOpportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>RelatedOpportunity</masterLabel>
+            <referenceName>Input:RelatedOpportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT5Mini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>apex://OpportunityMeetingPrepBriefingProvider</definition>
+            <description>영업기회와 Account에 연결된 CRM 프로필·재무제표 추이·외부 시그널을 브리핑 템플릿에 주입합니다.</description>
+            <label>영업기회 미팅 준비 브리핑 grounding</label>
+            <parameters>
+                <definition>SOBJECT://Opportunity</definition>
+                <isRequired>true</isRequired>
+                <parameterName>RelatedOpportunity</parameterName>
+                <valueExpression>{!$Input:RelatedOpportunity}</valueExpression>
+            </parameters>
+            <referenceName>Apex:OpportunityMeetingPrepBriefingProvider</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>NbJ1snlQDkoZHQhYhF4jkb0IDduKvbgfl1ZG3OExBrc=_2</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

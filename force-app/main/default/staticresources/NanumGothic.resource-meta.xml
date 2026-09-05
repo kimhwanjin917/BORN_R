@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>font/ttf</contentType>
+    <description>NanumGothic (네이버, SIL OFL 1.1) — VF renderAs=pdf 한글 임베드용 폰트. FeeDocumentPdf 에서 @font-face 로 사용.</description>
+</StaticResource>

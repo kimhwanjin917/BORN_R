@@ -1,0 +1,82 @@
+<template>
+    <lightning-card title="상품팀 조건 협의" icon-name="standard:partner_fund_request">
+        <lightning-button-icon slot="actions" icon-name="utility:refresh" alternative-text="새로고침" title="새로고침" onclick={handleRefresh}></lightning-button-icon>
+        <div class="slds-card__body_inner">
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="불러오는 중" size="small"></lightning-spinner>
+            </template>
+            <template lwc:elseif={error}>
+                <p class="slds-text-color_error">{error}</p>
+            </template>
+            <template lwc:else>
+
+                <template lwc:if={isWaiting}>
+                    <p class="step">① 대기</p>
+                    <p>확정 수수료율을 입력한 뒤 상단 <b>[상품팀 전달]</b> 버튼을 누르면 상품팀 채널이 열립니다.</p>
+                    <template lwc:if={hasFee}>
+                        <p class="muted">확정 수수료율 {feeText} (기본 {baseFeeText})</p>
+                    </template>
+                    <template lwc:else>
+                        <p class="muted slds-text-color_error">확정 수수료율이 비어 있습니다.</p>
+                    </template>
+                </template>
+
+                <template lwc:if={isReviewing}>
+                    <p class="step">③ 검토 중</p>
+                    <p>🟡 상품팀 검토 중 — 담당 {state.repName}</p>
+                    <p class="muted">확정 수수료율 {feeText} (기본 {baseFeeText})</p>
+                    <p><a href={state.channelLink} target="_blank" rel="noopener">Slack 채널 열기</a></p>
+                    <p class="muted">회신이 오면 이 화면이 자동으로 바뀝니다. Slack 카드 대신 여기서 바로 회신할 수도 있습니다.</p>
+                    <div class="reply-form slds-m-top_small">
+                        <p class="step">적용 조건 회신</p>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-xx-small">
+                                <lightning-input type="number" step="0.01" label="약정수익률 (%)" name="rpYield" value={replyForm.rpYield} onchange={handleReplyChange} disabled={isSubmitting}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-xx-small">
+                                <lightning-input type="number" step="0.01" label="적용 수수료율 (%)" name="appliedFeeRate" value={replyForm.appliedFeeRate} onchange={handleReplyChange} disabled={isSubmitting}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-xx-small">
+                                <lightning-input type="number" step="0.01" label="표면금리 (%)" name="couponRate" value={replyForm.couponRate} onchange={handleReplyChange} disabled={isSubmitting}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-xx-small">
+                                <lightning-input type="text" label="발행회사" name="issuerName" value={replyForm.issuerName} onchange={handleReplyChange} disabled={isSubmitting}></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-button variant="brand" label="회신 제출" onclick={handleSubmitReply} disabled={isSubmitting} class="slds-m-top_x-small"></lightning-button>
+                    </div>
+                </template>
+
+                <template lwc:if={isReplied}>
+                    <p class="step">④ 회신 도착</p>
+                    <p>🟢 {state.replyBy} · {replyAtText}</p>
+                    <dl class="slds-dl_horizontal slds-m-top_x-small">
+                        <dt class="slds-dl_horizontal__label">약정수익률</dt>
+                        <dd class="slds-dl_horizontal__detail">{state.rpYield}%</dd>
+                        <dt class="slds-dl_horizontal__label">표면금리</dt>
+                        <dd class="slds-dl_horizontal__detail">{state.couponRate}%</dd>
+                        <dt class="slds-dl_horizontal__label">발행회사</dt>
+                        <dd class="slds-dl_horizontal__detail">{state.issuerName}</dd>
+                    </dl>
+                    <p><a href={state.replyLink} target="_blank" rel="noopener">Slack 회신 원문</a></p>
+                    <lightning-button variant="brand" label="계약서 생성" onclick={handleCreateContract} disabled={isCreating} class="slds-m-top_small"></lightning-button>
+                </template>
+
+                <template lwc:if={isDone}>
+                    <p class="step">⑤ 완료</p>
+                    <div class="done-row">
+                        <img class="boni" src={boniFlagUrl} alt="보니 - 완료" />
+                        <div>
+                            <p>✅ 계약서 생성 · 공유 완료</p>
+                            <p>계약 <a href={contractUrl}>{state.contractNumber}</a>
+                                <template lwc:if={pdfUrl}> · <a href={pdfUrl} target="_blank" rel="noopener">계약서 PDF</a></template>
+                            </p>
+                            <p class="muted">Contract는 Draft 상태로 남습니다.</p>
+                        </div>
+                    </div>
+                </template>
+
+            </template>
+        </div>
+    </lightning-card>
+</template>

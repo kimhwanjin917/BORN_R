@@ -1,9 +1,12 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { publish, MessageContext } from 'lightning/messageService';
+import DEAL_TOAST_CHANNEL from '@salesforce/messageChannel/DealToast__c';
 import getEmailContext from '@salesforce/apex/MeetingPrepEmailComposerController.getEmailContext';
 import getEmailDraft from '@salesforce/apex/MeetingPrepEmailComposerController.getEmailDraft';
 import getRecordName from '@salesforce/apex/MeetingPrepEmailComposerController.getRecordName';
+import getDefaultAttachments from '@salesforce/apex/MeetingPrepEmailComposerController.getDefaultAttachments';
+import getFileInfo from '@salesforce/apex/MeetingPrepEmailComposerController.getFileInfo';
 import sendEmail from '@salesforce/apex/MeetingPrepEmailComposerController.sendEmail';
 
 export default class MeetingPrepEmailComposer extends LightningElement {
@@ -12,11 +15,15 @@ export default class MeetingPrepEmailComposer extends LightningElement {
     errorMessage;
     _started = false;
 
+    @wire(MessageContext)
+    messageContext;
+
     @track fromOptions = [];
     @track fromAddress = '';
     @track subject = '';
     @track htmlBody = '';
     @track recipients = []; // [{ id, name }]
+    @track attachments = []; // [{ id, name }]
     @track relatedToId;
     hasDraft = false;
     bodyLoading = false;
@@ -52,6 +59,14 @@ export default class MeetingPrepEmailComposer extends LightningElement {
             this.errorMessage =
                 error?.body?.message || error?.message || '메일 창을 여는 중 오류가 발생했습니다.';
             return;
+        }
+
+        // 카탈로그(상품소개서)를 제목 하단 첨부 영역에 미리 담아 둔다. 실패해도 메일 작성은 계속 가능.
+        try {
+            const defaults = await getDefaultAttachments();
+            this.attachments = (defaults || []).map((a) => ({ id: a.contentDocumentId, name: a.fileName }));
+        } catch (error) {
+            this.attachments = [];
         }
 
         // 2단계: AI 초안(제목/본문)은 뒤이어 채움
@@ -129,6 +144,38 @@ export default class MeetingPrepEmailComposer extends LightningElement {
         this.relatedToId = event.detail.recordId;
     }
 
+    get hasAttachments() {
+        return this.attachments.length > 0;
+    }
+
+    async handleAddAttachment(event) {
+        const documentId = event.detail.recordId;
+        const picker = this.template.querySelector('[data-id="file-picker"]');
+        if (!documentId) {
+            return;
+        }
+        if (this.attachments.some((a) => a.id === documentId)) {
+            if (picker) picker.clearSelection();
+            return;
+        }
+        try {
+            const info = await getFileInfo({ contentDocumentIds: [documentId] });
+            const name = info && info.length ? info[0].fileName : documentId;
+            this.attachments = [...this.attachments, { id: documentId, name }];
+        } catch (error) {
+            this.attachments = [...this.attachments, { id: documentId, name: documentId }];
+        }
+        if (picker) picker.clearSelection();
+    }
+
+    handleRemoveAttachment(event) {
+        const documentId = event.currentTarget?.dataset?.id;
+        if (!documentId) {
+            return;
+        }
+        this.attachments = this.attachments.filter((a) => a.id !== documentId);
+    }
+
     get isBodyEmpty() {
         return !this.htmlBody || this.htmlBody.replace(/<[^>]*>/g, '').trim() === '';
     }
@@ -139,33 +186,27 @@ export default class MeetingPrepEmailComposer extends LightningElement {
 
     async handleSend() {
         if (!this.hasRecipients) {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: '받는 사람 필요',
-                    message: '받는 사람을 최소 1명 이상 지정해 주세요.',
-                    variant: 'error'
-                })
-            );
+            publish(this.messageContext, DEAL_TOAST_CHANNEL, {
+                title: '받는 사람 필요',
+                message: '받는 사람을 최소 1명 이상 지정해 주세요.',
+                variant: 'error'
+            });
             return;
         }
         if (!this.subject || !this.subject.trim() || this.isBodyEmpty) {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: '내용 필요',
-                    message: '제목과 본문을 입력해 주세요.',
-                    variant: 'error'
-                })
-            );
+            publish(this.messageContext, DEAL_TOAST_CHANNEL, {
+                title: '내용 필요',
+                message: '제목과 본문을 입력해 주세요.',
+                variant: 'error'
+            });
             return;
         }
         if (!this.relatedToId) {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Related To 필요',
-                    message: 'Related To(Lead)를 지정해 주세요.',
-                    variant: 'error'
-                })
-            );
+            publish(this.messageContext, DEAL_TOAST_CHANNEL, {
+                title: 'Related To 필요',
+                message: 'Related To(Lead)를 지정해 주세요.',
+                variant: 'error'
+            });
             return;
         }
 
@@ -175,24 +216,21 @@ export default class MeetingPrepEmailComposer extends LightningElement {
                 subject: this.subject,
                 htmlBody: this.htmlBody,
                 relatedToId: this.relatedToId,
-                recipientIds: this.recipients.map((r) => r.id)
+                recipientIds: this.recipients.map((r) => r.id),
+                contentDocumentIds: this.attachments.map((a) => a.id)
             });
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: '발송 완료',
-                    message: '메일이 발송되었습니다.',
-                    variant: 'success'
-                })
-            );
+            publish(this.messageContext, DEAL_TOAST_CHANNEL, {
+                title: '발송 완료',
+                message: '메일이 발송되었습니다.',
+                variant: 'success'
+            });
             this.handleClose();
         } catch (error) {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: '발송 실패',
-                    message: error?.body?.message || error?.message || '메일 발송 중 오류가 발생했습니다.',
-                    variant: 'error'
-                })
-            );
+            publish(this.messageContext, DEAL_TOAST_CHANNEL, {
+                title: '발송 실패',
+                message: error?.body?.message || error?.message || '메일 발송 중 오류가 발생했습니다.',
+                variant: 'error'
+            });
         } finally {
             this.sending = false;
         }

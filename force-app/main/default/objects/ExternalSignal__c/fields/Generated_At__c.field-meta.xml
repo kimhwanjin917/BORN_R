@@ -5,6 +5,7 @@
     <inlineHelpText>일일 요약이 마지막으로 생성된 시각입니다.</inlineHelpText>
     <label>생성 시각</label>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>DateTime</type>
 </CustomField>

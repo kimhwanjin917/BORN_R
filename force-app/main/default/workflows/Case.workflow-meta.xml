@@ -10,4 +10,24 @@
         <protected>false</protected>
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Approval_Status_Approved</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>승인</literalValue>
+        <name>승인상태_승인으로</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Approval_Status_Rejected</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>반려</literalValue>
+        <name>승인상태_반려로</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
 </Workflow>

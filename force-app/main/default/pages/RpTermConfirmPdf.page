@@ -1,0 +1,146 @@
+<apex:page renderAs="pdf" applyBodyTag="false" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false" cache="false">
+<!-- RP 확정 조건서 PDF.
+     UI 는 상품 제안서(LeadProposalPdf)와 같은 문서 시스템을 쓴다 — 아래 <style> 블록은 LeadProposalPdf.page 에서
+     그대로 복사한 것이고(두 문서의 타이포·색·표 규칙을 물리적으로 같게 두기 위함), 골격도 동일하다:
+       로고 헤더 → rule/rule2 → h1 + tag → h2 섹션 → table.pd / table.kv → .note 유의사항
+     내용만 "제안 상품"이 아니라 "확정된 거래 조건"이다.
+     LeadProposalPdf 를 직접 재사용하지 않은 이유: 그 컨트롤러(ProposalDoc)가 제안상품 목록·수익 시뮬레이션·
+     DART 재무공시 모델이라 확정 조건과 자료 구조가 다르다. 공통 CSS 로 분리하지 않은 이유: 그러려면
+     LeadProposalPdf 의 인라인 CSS 를 걷어내야 하는데, 살아있는 제안서 PDF 를 건드리게 된다.
+     값은 URL 파라미터로 전달한다 — getContentAsPDF() 는 별도 요청으로 렌더링되므로 미커밋 DML 이 보이지 않는다.
+     한글: VF PDF 렌더러 내장 'Arial Unicode MS' -->
+<html>
+<head>
+<style type="text/css">
+    @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+    body { font-family: 'Arial Unicode MS'; font-size: 10.5pt; color: #0A1B3D; line-height: 1.5; }
+
+    table.hd { width: 100%; border-collapse: collapse; margin-bottom: 6pt; }
+    table.hd td { vertical-align: bottom; padding: 0; }
+    td.hd-r { text-align: right; font-size: 8.5pt; color: #8A93A6; }
+    .rule { border-bottom: 2.5pt solid #1565FF; height: 0; margin-bottom: 3pt; }
+    .rule2 { border-bottom: 0.8pt solid #E6EBF2; height: 0; margin-bottom: 16pt; }
+
+    h1 { font-size: 19pt; color: #0A1B3D; margin: 0 0 3pt 0; letter-spacing: -0.5pt; }
+    .tag { font-size: 9.5pt; color: #1565FF; margin: 0 0 16pt 0; }
+
+    h2 { font-size: 11.5pt; color: #0A1B3D; margin: 0 0 6pt 0; padding-left: 7pt; border-left: 3pt solid #1565FF; }
+    .sec { margin-bottom: 15pt; }
+
+    table.kv { width: 100%; border-collapse: collapse; }
+    table.kv td { border: 0.8pt solid #E6EBF2; padding: 5.5pt 8pt; font-size: 10pt; }
+    table.kv td.k { background: #F3F6FA; color: #4A5568; width: 15%; }
+
+    .memo { background: #F3F6FA; border-left: 3pt solid #00D0FF; padding: 9pt 11pt; font-size: 10pt; line-height: 1.6; }
+
+    table.fin { width: 100%; border-collapse: collapse; }
+    table.fin td { border-bottom: 0.8pt solid #E6EBF2; padding: 6pt 8pt; font-size: 10pt; }
+    table.fin td.fk { color: #4A5568; }
+    table.fin td.fv { text-align: right; font-weight: bold; }
+    span.unit { display: block; font-size: 8.5pt; color: #8A93A6; font-weight: normal; }
+
+    table.pd { width: 100%; border-collapse: collapse; }
+    table.pd th { background: #0A1B3D; color: #FFFFFF; padding: 6pt 8pt; font-size: 9.5pt; text-align: left; font-weight: normal; }
+    table.pd td { border-bottom: 0.8pt solid #E6EBF2; padding: 6.5pt 8pt; font-size: 10pt; }
+    table.pd td.c { text-align: center; }
+    table.pd td.r { text-align: right; }
+    table.pd td.y { color: #1565FF; font-weight: bold; }
+    table.pd td.g { color: #8A93A6; }
+    table.pd td.nm { font-weight: bold; }
+    .fam { display: inline; font-size: 8.5pt; color: #1565FF; background: #F3F6FA; padding: 1.5pt 5pt; }
+
+    .desc { font-size: 9.5pt; color: #4A5568; line-height: 1.6; margin: 0 0 5pt 0; }
+    .desc b { color: #0A1B3D; }
+
+    .note { margin-top: 4pt; border-top: 0.8pt solid #E6EBF2; padding-top: 8pt; font-size: 8.5pt; color: #8A93A6; line-height: 1.55; }
+    .note b.nb { color: #0A1B3D; }
+    .rev { display: block; margin-top: 7pt; padding-top: 6pt; border-top: 0.8pt solid #E6EBF2; color: #A0A8B8; }
+    .src { font-size: 8.5pt; color: #8A93A6; margin-top: 5pt; }
+</style>
+</head>
+<body>
+
+<table class="hd">
+  <tr>
+    <td><apex:image url="{!$Resource.BornLogoHorizontal}" style="height: 26pt;"/></td>
+    <td class="hd-r">문서구분 RP 확정 조건서{!$CurrentPage.parameters.titleTag}<br/>확정일 {!$CurrentPage.parameters.confirmedText}</td>
+  </tr>
+</table>
+<div class="rule"></div>
+<div class="rule2"></div>
+
+<!-- titleTag: 미전달 시 빈 문자열(기존 출력 불변). 매니저 결재 재렌더링이 "(심사 완료)" 를 넘긴다(2026-09-02). -->
+<h1>RP 확정 조건서{!$CurrentPage.parameters.titleTag}</h1>
+<p class="tag">기본이 탄탄한 투자, 근본 있는 성장.</p>
+
+<div class="sec">
+<table class="kv">
+  <tr><td class="k">거래ID</td><td>{!$CurrentPage.parameters.opportunityName}</td><td class="k">고객사</td><td>{!$CurrentPage.parameters.accountName}</td></tr>
+  <tr><td class="k">담당 RM</td><td>{!$CurrentPage.parameters.ownerName}</td><td class="k">상품팀 확정자</td><td>{!$CurrentPage.parameters.productTeamConfirmer}</td></tr>
+  <tr><td class="k">확정일</td><td>{!$CurrentPage.parameters.confirmedText}</td><td class="k">고객 최종합의</td><td>{!$CurrentPage.parameters.customerFinalAgreement}</td></tr>
+</table>
+</div>
+
+<div class="sec">
+<h2>확정 상품</h2>
+<table class="pd">
+  <tr><th style="width:28%">상품명</th><th style="width:12%">상품군</th><th style="width:16%">거래방향</th><th style="width:16%">최초 매매일</th><th style="width:16%">환매일</th><th>약정수익률(연)</th></tr>
+  <tr>
+    <td class="nm">{!$CurrentPage.parameters.productName}</td>
+    <td><span class="fam">{!$CurrentPage.parameters.productFamily}</span></td>
+    <td class="c">{!$CurrentPage.parameters.dealDirection}</td>
+    <td class="c">{!$CurrentPage.parameters.startText}</td>
+    <td class="c">{!$CurrentPage.parameters.endText}</td>
+    <td class="c y">{!$CurrentPage.parameters.yieldText}</td>
+  </tr>
+</table>
+<p class="src">위 조건은 담당 RM 이 확정일 기준으로 확정한 거래 조건입니다.</p>
+</div>
+
+<div class="sec">
+<h2>확정 거래 조건</h2>
+<table class="kv">
+  <tr><td class="k">거래금액</td><td>{!$CurrentPage.parameters.amountText}</td><td class="k">환매예정금액</td><td>{!$CurrentPage.parameters.redemptionText}</td></tr>
+  <tr><td class="k">약정수익률</td><td>{!$CurrentPage.parameters.yieldText}</td><td class="k">수익률 구조</td><td>{!$CurrentPage.parameters.yieldStructure}</td></tr>
+  <tr><td class="k">수익률 기준</td><td>{!$CurrentPage.parameters.yieldBasis}</td><td class="k">중도환매</td><td>{!$CurrentPage.parameters.earlyRedemption}</td></tr>
+  <tr><td class="k">표면금리</td><td>{!$CurrentPage.parameters.couponRateText}</td><td class="k">담보비율</td><td>{!$CurrentPage.parameters.collateralRatioText}</td></tr>
+</table>
+</div>
+
+<div class="sec">
+<h2>확정 수수료</h2>
+<table class="kv">
+  <tr><td class="k">수수료 방식</td><td>{!$CurrentPage.parameters.feeMethod}</td>
+      <td class="k">수수료 부담 주체</td><td>{!$CurrentPage.parameters.feeBearer}</td></tr>
+  <apex:outputPanel rendered="{!$CurrentPage.parameters.feeMethod == '정액'}" layout="none">
+    <tr><td class="k">확정 수수료 금액</td><td colspan="3">{!$CurrentPage.parameters.feeAmountText}</td></tr>
+  </apex:outputPanel>
+  <apex:outputPanel rendered="{!$CurrentPage.parameters.feeMethod != '정액'}" layout="none">
+    <tr><td class="k">확정 수수료율</td><td colspan="3">{!$CurrentPage.parameters.feeRateText}</td></tr>
+  </apex:outputPanel>
+</table>
+</div>
+
+<apex:outputPanel rendered="{!$CurrentPage.parameters.specialTerms != ''}" layout="none">
+<div class="sec">
+<h2>특약</h2>
+<div class="memo">{!$CurrentPage.parameters.specialTerms}</div>
+</div>
+</apex:outputPanel>
+
+<div class="sec">
+<h2>확정 조건 안내</h2>
+<div class="memo">본 문서는 위 영업기회에 대하여 담당 RM 이 확정한 거래 조건을 상품팀 검토를 위해 정리한 조건서입니다. 확정 조건은 상품팀 회신 및 내부 승인 절차를 거쳐 최종 계약서에 반영됩니다.</div>
+</div>
+
+<div class="note">
+<b class="nb">확인 사항</b><br/>
+· 본 조건서는 계약서가 아니며, 그 자체로 매매 계약의 성립을 의미하지 않습니다.<br/>
+· 환매조건부채권(RP)은 <b class="nb">예금자보호법에 따라 보호되지 않는 금융투자상품</b>입니다.<br/>
+· 최종 적용 조건은 상품팀 회신 및 내부 승인 완료 후 계약서에 기재된 내용을 따릅니다.<br/>
+· 약정 만기 이전 중도 환매 시에는 약정 수익률보다 낮은 중도환매 수익률이 적용됩니다.<br/>
+<span class="rev">확정일 {!$CurrentPage.parameters.confirmedText} · 담당 RM {!$CurrentPage.parameters.ownerName}</span>
+</div>
+</body>
+</html>
+</apex:page>

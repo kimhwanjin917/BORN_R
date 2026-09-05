@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>상품팀 전달</masterLabel>
+    <description>docs/58 Scene 3 — 딜 Slack 채널 생성·초대·조건 카드 게시 (헤드리스 Quick Action)</description>
+    <targets>
+        <target>lightning__RecordAction</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>Action</actionType>
+            <objects><object>Opportunity</object></objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

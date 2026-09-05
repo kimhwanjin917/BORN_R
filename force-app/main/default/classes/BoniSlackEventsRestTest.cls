@@ -70,6 +70,24 @@ private class BoniSlackEventsRestTest {
         return RestContext.response;
     }
 
+    /**
+     * Sites 의 Apex REST 는 form-urlencoded 본문을 params 로 분해할 때 UTF-8 을 Latin-1 로 잘못 해석해
+     * 한글이 깨진다(2026-08-31 실측 — 카드 블록·회신자 이름 오염). fixEncoding 이 되돌린다.
+     */
+    @IsTest
+    static void fixEncoding_repairsMojibakeKorean_keepsNormalStrings() {
+        String korean = '{"text":"상품팀 회신 이주연"}';
+        // UTF-8 바이트를 Latin-1 로 잘못 읽은 상태 재현: 각 UTF-8 바이트가 0xFF 이하 문자 하나로 풀림
+        String mojibake = EncodingUtil.urlDecode(EncodingUtil.urlEncode(korean, 'UTF-8'), 'ISO-8859-1');
+        Assert.areNotEqual(korean, mojibake, '재현 전제: 깨진 상태여야 함');
+
+        Assert.areEqual(korean, BoniSlackEventsRest.fixEncoding(mojibake), '깨진 한글 복구');
+        Assert.areEqual(korean, BoniSlackEventsRest.fixEncoding(korean), '정상 한글은 그대로');
+        String ascii = '{"type":"block_actions","token":"VTOKEN"}';
+        Assert.areEqual(ascii, BoniSlackEventsRest.fixEncoding(ascii), 'ASCII 는 그대로');
+        Assert.areEqual(null, BoniSlackEventsRest.fixEncoding(null));
+    }
+
     @IsTest
     static void blockActions_formEncoded_validToken_200() {
         Test.setMock(HttpCalloutMock.class, new Mock());

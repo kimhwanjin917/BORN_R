@@ -19,13 +19,65 @@ private class OpportunityRadarControllerTest {
         Test.stopTest();
 
         Assert.areEqual(2, dto.accountCount, 'both accounts with statements');
-        Assert.areEqual(2 * 2000 * EOK, dto.totalWhitespace, 'cash 1,000억 + bonds 1,000억 per account, nothing outstanding');
+        Assert.areEqual(2 * 400 * EOK, dto.totalWhitespace, 'addressable cash 200억 + bonds 200억 per account, nothing outstanding');
         Assert.areEqual(0, dto.averageShare, 'no deals → 0 share');
         OpportunityRadarController.AccountRow row = dto.accounts[0];
         Assert.areEqual('대기업', row.segment, '1.2조 assets → 대기업');
         Assert.areEqual(2, row.recommendations.size(), 'RP cross + 채권 cross generated on first load');
         Assert.isNotNull(row.propensity, 'top score exposed');
-        Assert.areEqual(row.whitespace * row.propensity, row.priority, 'priority = whitespace × propensity');
+        Assert.isFalse(row.hasDealHistory, 'the setup accounts have never traded with us');
+        Assert.areEqual(row.whitespaceScore * row.propensity * 0.5, row.priority,
+            'priority = normalised whitespace × propensity, halved for an account with no deal history');
+        Assert.isTrue(row.whitespaceScore > 0 && row.whitespaceScore <= 100, 'whitespace is normalised into 0..100');
+    }
+
+    /**
+     * A prospect with a far bigger balance sheet must not outrank a live customer purely on size:
+     * that ordering is what made the radar unusable as a daily queue.
+     */
+    @IsTest
+    static void shouldRankCustomerAboveLargerProspect_WhenOnlyOneHasDealHistory() {
+        // Name is selected because RadarTestDataFactory.buildOpportunity names the deal after the account.
+        Account customer = [SELECT Id, Name FROM Account WHERE Name = 'Radar Test Account 0' LIMIT 1];
+        Product2 rp = [SELECT Id, Name FROM Product2 WHERE Family = 'RP' LIMIT 1];
+        insert RadarTestDataFactory.buildOpportunity(
+            customer, rp, 20 * EOK, Date.today().addDays(-10), Date.today().addDays(200), true);
+
+        Test.startTest();
+        OpportunityRadarController.RadarDTO dto = OpportunityRadarController.getRadar(null, true, 'all');
+        Test.stopTest();
+
+        Map<Id, OpportunityRadarController.AccountRow> byId = new Map<Id, OpportunityRadarController.AccountRow>();
+        for (OpportunityRadarController.AccountRow row : dto.accounts) {
+            byId.put(row.accountId, row);
+        }
+        OpportunityRadarController.AccountRow traded = byId.get(customer.Id);
+        Assert.isTrue(traded.hasDealHistory, 'the account with a Won deal counts as an existing customer');
+        Assert.isTrue(traded.whitespace < 400 * EOK, 'its whitespace is now smaller than the untouched prospect');
+        for (OpportunityRadarController.AccountRow other : dto.accounts) {
+            if (other.accountId == customer.Id) {
+                continue;
+            }
+            Assert.isFalse(other.hasDealHistory, 'the other account is still a prospect');
+            Assert.isTrue(traded.priority > other.priority,
+                'the customer outranks the larger prospect once the new-logo factor applies');
+        }
+    }
+
+    /**
+     * The whole point of normalising: a customer worth ten times more in whitespace must not be worth
+     * ten times more in the ranking, or the propensity score never changes an order.
+     */
+    @IsTest
+    static void shouldCompressWhitespaceIntoScoreRange_WhenAmountsSpanOrdersOfMagnitude() {
+        Decimal small = OpportunityRadarController.whitespaceScore(150 * EOK);
+        Decimal large = OpportunityRadarController.whitespaceScore(1500 * EOK);
+
+        Assert.areEqual(0, OpportunityRadarController.whitespaceScore(0), 'nothing to win scores 0');
+        Assert.areEqual(0, OpportunityRadarController.whitespaceScore(null), 'missing whitespace scores 0');
+        Assert.isTrue(large > small, 'more whitespace still ranks higher');
+        Assert.isTrue(large < small * 1.5, '10× the money must not become 10× the rank');
+        Assert.areEqual(100, OpportunityRadarController.whitespaceScore(999999 * EOK), 'score is capped at 100');
     }
 
     @IsTest

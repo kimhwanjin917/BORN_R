@@ -4,6 +4,7 @@
     <description>마스킹 전 미팅 메모 원문(Raw). 개인정보 포함 가능 - 접근 제한 필요.</description>
     <label>Raw Content</label>
     <length>32768</length>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>
     <visibleLines>25</visibleLines>

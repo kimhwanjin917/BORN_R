@@ -1,0 +1,17 @@
+/* 선택된 수신인 칩과 검색 입력란을 한 줄에 나란히 둔다.
+   칩이 검색란 위에 쌓여 To 란이 세로로 늘어지지 않도록 하고, 수가 많으면 줄바꿈만 한다. */
+.recipient-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.recipient-row .to-picker {
+    flex: 1 1 12rem;
+    min-width: 12rem;
+}
+
+.recipient-row lightning-pill-container {
+    flex: 0 1 auto;
+}

@@ -1,0 +1,20 @@
+<template>
+    <div class="hero">
+        <div class="figure">
+            <img class="boni" src={imageUrl} style={imageStyle} alt="보니" />
+        </div>
+        <div class="text">
+            <p class="eyebrow">{eyebrow}</p>
+            <p class="greet">{greeting}</p>
+            <p class="sub">{summary}</p>
+        </div>
+        <div class="chips">
+            <template for:each={chips} for:item="c">
+                <div key={c.key} class={c.cls}>
+                    <p class="k">{c.label}</p>
+                    <p class="v">{c.value}<span class="unit">건</span></p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,36 @@
+<template>
+    <section class="home-tabs" aria-label="홈 대시보드">
+        <div
+            class="home-tabs__panel"
+            id="home-tabpanel"
+            role="tabpanel"
+            tabindex="0"
+        >
+            <template lwc:if={isDashboard}>
+                <div id="home-dashboard-panel">
+                    <article class="home-tabs__card">
+                        <c-opportunity-kpi-card
+                            stalled-stage="조건협상"
+                            stalled-days="14"
+                            inactive-days="30"
+                            closing-days="7"
+                        ></c-opportunity-kpi-card>
+                    </article>
+                    <div class="home-tabs__kpi-row">
+                        <div class="home-tabs__kpi-cell">
+                            <c-lead-kpi-card></c-lead-kpi-card>
+                        </div>
+                        <div class="home-tabs__kpi-cell">
+                            <c-my-kpi-card></c-my-kpi-card>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template lwc:else>
+                <div id="home-insight-panel">
+                    <c-home-news-summary></c-home-news-summary>
+                </div>
+            </template>
+        </div>
+    </section>
+</template>

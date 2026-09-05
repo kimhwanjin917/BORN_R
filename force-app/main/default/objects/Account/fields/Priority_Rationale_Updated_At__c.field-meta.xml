@@ -6,6 +6,6 @@
     <label>우선순위 사유 갱신 시각</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <type>DateTime</type>
 </CustomField>

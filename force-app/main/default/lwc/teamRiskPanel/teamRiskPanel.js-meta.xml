@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>리스크존 거래현황</masterLabel>
+    <description>팀장 팀의 리스크 거래 리스트(HIGH/MEDIUM), 거래 체류기간 분포, 장기 체류 TOP5, 위험도 분포 도넛.</description>
+</LightningComponentBundle>

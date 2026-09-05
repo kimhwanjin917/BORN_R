@@ -7,7 +7,7 @@
     <relationshipLabel>추천 이력</relationshipLabel>
     <relationshipName>Recommendations</relationshipName>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

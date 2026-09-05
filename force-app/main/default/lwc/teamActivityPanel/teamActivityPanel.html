@@ -1,0 +1,97 @@
+<template>
+    <article class="block">
+        <header class="block-head">
+            <span class="block-head__no">3</span>
+            <span class="block-head__title">체류 히트맵 &amp; RM KPI 현황</span>
+            <span class="block-head__en">(Performance &amp; Activity)</span>
+            <template lwc:if={periodLabel}>
+                <span class="block-head__period">{periodLabel}</span>
+            </template>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:elseif={hasRows}>
+            <div class="split">
+                <section class="panel">
+                    <h3 class="panel__title">거래 단계별 평균 체류 히트맵 <span class="panel__unit">(단위: 일)</span></h3>
+                    <div class="heatmap-scroll">
+                        <table class="heatmap">
+                            <thead>
+                                <tr>
+                                    <th class="heatmap__rm">RM</th>
+                                    <template for:each={stageNames} for:item="stage">
+                                        <th key={stage} class="heatmap__stage">{stage}</th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={heatmapRows} for:item="row">
+                                    <tr key={row.key}>
+                                        <td class="heatmap__rm">{row.rmName}</td>
+                                        <template for:each={row.cells} for:item="cell">
+                                            <td key={cell.key} class={cell.cls}>{cell.display}</td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="heat-legend">
+                        <span>낮음</span>
+                        <span class="heat-legend__bar"></span>
+                        <span>높음</span>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <h3 class="panel__title">RM KPI 상세 현황</h3>
+                    <table class="kpi">
+                        <thead>
+                            <tr>
+                                <th>RM명</th>
+                                <th class="kpi__num">달성률</th>
+                                <th class="kpi__num">진행</th>
+                                <th class="kpi__num">완료</th>
+                                <th class="kpi__num">실적</th>
+                                <th class="kpi__num">활동량</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={kpiRows} for:item="row">
+                                <tr key={row.key}>
+                                    <td class="kpi__name">{row.rmName}</td>
+                                    <td class="kpi__num kpi__ach">{row.achievementDisplay}</td>
+                                    <td class="kpi__num">{row.openDeals}</td>
+                                    <td class="kpi__num">{row.wonDeals}</td>
+                                    <td class="kpi__num">{row.achievedFeeDisplay}</td>
+                                    <td class="kpi__num">{row.activityCount}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <section class="scatter-wrap">
+                <h3 class="panel__title">활동량 vs 성과 (달성률)</h3>
+                <div class="scatter">
+                    <span class="scatter__axis-y">달성률 (%)</span>
+                    <div class="scatter__plot">
+                        <span class="scatter__grid scatter__grid_100"></span>
+                        <template for:each={scatterDots} for:item="dot">
+                            <span key={dot.key} class="scatter__dot" style={dot.style} title={dot.rmName}></span>
+                        </template>
+                    </div>
+                    <span class="scatter__axis-x">활동량 (건)</span>
+                </div>
+            </section>
+        </template>
+
+        <template lwc:else>
+            <div class="state state_empty">표시할 활동 데이터가 없습니다.</div>
+        </template>
+    </article>
+</template>

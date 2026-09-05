@@ -103,6 +103,8 @@ h4 { margin: 0; font-size: 13px; }
 .row-button { padding: 0; border: 0; color: inherit; background: transparent; cursor: pointer; font: inherit; }
 .row-button:focus-visible { outline: 2px solid var(--radar-accent); outline-offset: 2px; border-radius: 3px; }
 .account-name { color: var(--radar-navy); font-weight: 800; }
+.new-logo { margin-left: 6px; padding: 2px 5px; border-radius: 999px; font-size: 9px; font-weight: 800;
+    color: var(--radar-muted); background: #f0f3f7; vertical-align: middle; white-space: nowrap; }
 .share-cell { display: flex; align-items: center; gap: 7px; min-width: 120px; }
 .share-track { width: 72px; height: 6px; overflow: hidden; border-radius: 999px; background: #e5eaf1; }
 .share-fill { display: block; height: 100%; border-radius: inherit; background: var(--radar-accent); }
@@ -237,6 +239,16 @@ h2 { font-size: 18px; font-weight: 800; color: var(--radar-navy); }
 .queue tbody tr.selected { background: #e8f0ff; box-shadow: inset 4px 0 0 var(--radar-navy); }
 .queue tbody tr:hover { background: #f1f5fb; }
 .queue td.score { font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Money and score columns are read by comparing digits down the column, so they line up on the right
+   with fixed-width figures instead of drifting under a centred layout. */
+.queue th.num, .queue td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.queue td.wallet, .queue td.whitespace { font-weight: 700; }
+/* the track is always the full addressable wallet, so a short bar reads as room left to win */
+.queue .share-fill.share-low { background: #b7c2d0; }
+.queue .share-fill.share-mid { background: var(--radar-accent); }
+.queue .share-fill.share-high { background: var(--radar-upsell); }
+.queue thead th { position: sticky; top: 0; z-index: 2; background: var(--radar-surface-2); }
 .pager { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 10px 16px 14px; }
 .pager-label { font-size: 13px; font-weight: 700; color: #4b5563; }
 .pager-btn { width: 34px; height: 34px; border: 1px solid #cbd5e2; border-radius: 8px; background: var(--radar-surface); color: var(--radar-navy); font-size: 20px; line-height: 1; cursor: pointer; }
@@ -759,6 +771,7 @@ h2 { font-size: 18px; font-weight: 800; color: var(--radar-navy); }
     font-size: var(--radar-font-size-caption);
     font-weight: 600;
     letter-spacing: 0;
+    text-align: center;
 }
 
 .queue tbody th,
@@ -773,10 +786,12 @@ h2 { font-size: 18px; font-weight: 800; color: var(--radar-navy); }
     font-weight: 600;
 }
 
+.queue tbody td.wallet,
 .queue tbody td.whitespace,
 .queue tbody td.score {
     font-size: var(--radar-font-size-body);
     font-weight: 600;
+    text-align: center;
 }
 
 .queue .pill {

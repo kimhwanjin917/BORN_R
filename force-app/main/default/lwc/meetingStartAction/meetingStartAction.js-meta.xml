@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>미팅 시작</masterLabel>
+    <description>하이라이트 패널 액션에서 Meeting Session Flow를 전체 페이지로 엽니다(모달 없음).</description>
+    <targets>
+        <target>lightning__RecordAction</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>Action</actionType>
+            <objects>
+                <object>Account</object>
+                <object>Contact</object>
+                <object>Opportunity</object>
+                <object>Event</object>
+            </objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

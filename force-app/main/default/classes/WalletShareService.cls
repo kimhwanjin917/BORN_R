@@ -2,10 +2,18 @@
  * Computes customer wallet, our outstanding balance and wallet share per product family
  * (docs/54 definition ported from the Tableau workbook, extended to 5 families in docs/55).
  *
- * Wallet (denominator) comes from the latest CorporateFinancialStatement__c of the account:
+ * The reported wallet comes from the latest CorporateFinancialStatement__c of the account:
  *  - RP / 자금운용 share the "cash wallet" = 단기금융상품 + 현금및현금성자산
  *  - 채권 = 사채, falling back to 장기차입금 when 사채 is empty (basis is reported)
  *  - 퇴직연금 / IPO have no statement-derived wallet (wallet = null)
+ *
+ * The reported figure is the customer's whole balance sheet line, not money a securities firm can
+ * realistically take: treating it as the denominator pins every share near 0% and makes whitespace a
+ * restatement of company size, so the radar ranks by balance sheet instead of by opportunity.
+ * The denominator used everywhere downstream is therefore the ADDRESSABLE wallet:
+ *   addressable = reported × Target_Share_Pct  (×0.5 again when 채권 fell back to 장기차입금,
+ *   which is bank debt we could only reach by refinancing it into a bond issue).
+ * `reportedWallet` keeps the raw figure so the UI and the recommendation reasons can still cite it.
  * Our balance (numerator) = Won Opportunity Amount outstanding as of the reference date:
  *  closeDate <= asOf < maturity, where maturity = RP만기일 (or +91d) for RP/자금운용, +3y for 채권, none for 퇴직연금.
  *
@@ -21,16 +29,23 @@ public with sharing class WalletShareService {
 
     private static final Integer DEFAULT_RP_TENOR_DAYS = 91;
     private static final Integer BOND_TENOR_YEARS = 3;
+    /** 장기차입금 is bank debt, reachable only by refinancing it into a bond issue: half the usual reach. */
+    private static final Decimal FALLBACK_REACH_FACTOR = 0.5;
     private static final Map<String, Integer> QUARTER_BY_PERIOD = new Map<String, Integer>{ '1분기' => 1, '2분기' => 2, '3분기' => 3, '4분기' => 4 };
 
     /** Wallet figures for one account × product family. */
     public class FamilyWallet {
         @AuraEnabled public String family;
-        @AuraEnabled public Decimal wallet;        // null when not derivable
+        @AuraEnabled public Decimal wallet;        // ADDRESSABLE wallet, null when not derivable
+        @AuraEnabled public Decimal reportedWallet; // raw balance sheet figure the addressable wallet came from
         @AuraEnabled public Decimal ourBalance = 0;
-        @AuraEnabled public Decimal share;         // 0..1, null when wallet is null/0
+        @AuraEnabled public Decimal share;         // ourBalance / addressable wallet, null when wallet is null/0
         @AuraEnabled public String basis;          // e.g. '단기금융상품+현금', '사채', '장기차입금(폴백)'
         @AuraEnabled public Boolean hasDeal = false;
+        @AuraEnabled public Decimal maturingAmount = 0;  // outstanding balance maturing inside the window
+        @AuraEnabled public Decimal maturedAmount = 0;   // balance that matured inside the trailing window (차환 실기)
+        @AuraEnabled public Date nextMaturity;           // earliest upcoming maturity inside the window
+        @AuraEnabled public Date lastMaturedOn;          // latest maturity already passed inside the trailing window
     }
 
     /** Aggregated wallet view for one account. */
@@ -40,12 +55,13 @@ public with sharing class WalletShareService {
         @AuraEnabled public String industry;
         @AuraEnabled public Decimal totalAssets;
         @AuraEnabled public Decimal priorityScore;      // Account.Priority_Score__c (RM priority, may be null)
-        @AuraEnabled public Decimal priorCashWallet;    // cash wallet ~4 quarters earlier (null if unavailable)
+        @AuraEnabled public Decimal priorCashWallet;    // ADDRESSABLE cash wallet ~4 quarters earlier (null if unavailable)
         @AuraEnabled public Decimal priorDebtWallet;    // bonds+long-term borrowings ~4 quarters earlier
         @AuraEnabled public Decimal latestDebtWallet;   // bonds+long-term borrowings of the latest statement
         @AuraEnabled public String segment;
         @AuraEnabled public String statementPeriod;   // e.g. '2026 Q2'
-        @AuraEnabled public Decimal expectedWallet = 0; // sum of derivable wallets (cash counted once)
+        @AuraEnabled public Decimal expectedWallet = 0; // sum of derivable ADDRESSABLE wallets (cash counted once)
+        @AuraEnabled public Decimal reportedWallet = 0; // same sum on the raw balance sheet figures
         @AuraEnabled public Decimal ourBalance = 0;
         @AuraEnabled public Decimal whitespace = 0;
         @AuraEnabled public Decimal share;             // ourBalance / expectedWallet
@@ -120,17 +136,22 @@ public with sharing class WalletShareService {
             view.latestDebtWallet = (statement.Bonds_Payable__c ?? 0) + (statement.Long_Term_Borrowings__c ?? 0);
             CorporateFinancialStatement__c prior = priorStatement(historyByAccount.get(accountId), rank(statement));
             if (prior != null) {
-                view.priorCashWallet = (prior.Short_Term_Financial_Instruments__c ?? 0) + (prior.Cash_And_Equivalents__c ?? 0);
+                // RadarScoreService reads this against FamilyWallet.wallet, which is addressable, so the
+                // prior figure has to sit on the same scale or every account reads as an 80% collapse.
+                // The factor cancels in the growth ratio, leaving the trend identical to the raw one.
+                view.priorCashWallet = addressable(
+                    (prior.Short_Term_Financial_Instruments__c ?? 0) + (prior.Cash_And_Equivalents__c ?? 0), 1);
+                // The debt pair is compared raw on both sides (latestDebtWallet below), so it stays raw.
                 view.priorDebtWallet = (prior.Bonds_Payable__c ?? 0) + (prior.Long_Term_Borrowings__c ?? 0);
             }
 
             Decimal cashWallet = (statement.Short_Term_Financial_Instruments__c ?? 0) + (statement.Cash_And_Equivalents__c ?? 0);
-            setWallet(view.byFamily.get(FAMILY_RP), cashWallet, '단기금융상품+현금');
-            setWallet(view.byFamily.get(FAMILY_CASH_MGMT), cashWallet, '단기금융상품+현금');
+            setWallet(view.byFamily.get(FAMILY_RP), cashWallet, '단기금융상품+현금', 1);
+            setWallet(view.byFamily.get(FAMILY_CASH_MGMT), cashWallet, '단기금융상품+현금', 1);
             if (statement.Bonds_Payable__c != null && statement.Bonds_Payable__c > 0) {
-                setWallet(view.byFamily.get(FAMILY_BOND), statement.Bonds_Payable__c, '사채');
+                setWallet(view.byFamily.get(FAMILY_BOND), statement.Bonds_Payable__c, '사채', 1);
             } else if (statement.Long_Term_Borrowings__c != null && statement.Long_Term_Borrowings__c > 0) {
-                setWallet(view.byFamily.get(FAMILY_BOND), statement.Long_Term_Borrowings__c, '장기차입금(폴백)');
+                setWallet(view.byFamily.get(FAMILY_BOND), statement.Long_Term_Borrowings__c, '장기차입금(폴백)', FALLBACK_REACH_FACTOR);
             }
         }
         for (AccountWallet view : views.values()) {
@@ -159,9 +180,24 @@ public with sharing class WalletShareService {
         return best;
     }
 
-    private static void setWallet(FamilyWallet familyWallet, Decimal amount, String basis) {
-        familyWallet.wallet = amount;
+    /**
+     * @param reported raw balance sheet figure
+     * @param reachFactor extra discount on top of the target share (1 = normal reach)
+     */
+    private static void setWallet(FamilyWallet familyWallet, Decimal reported, String basis, Decimal reachFactor) {
+        familyWallet.reportedWallet = reported;
+        familyWallet.wallet = addressable(reported, reachFactor);
         familyWallet.basis = basis;
+    }
+
+    /**
+     * @return the slice of a reported wallet we could plausibly hold, rounded to whole won
+     */
+    public static Decimal addressable(Decimal reported, Decimal reachFactor) {
+        if (reported == null) {
+            return null;
+        }
+        return (reported * (RadarSettings.targetSharePct() / 100) * reachFactor).setScale(0, System.RoundingMode.HALF_UP);
     }
 
     private static Long rank(CorporateFinancialStatement__c statement) {
@@ -169,8 +205,14 @@ public with sharing class WalletShareService {
         return (Long) statement.Fiscal_Year__c.intValue() * 10 + quarter;
     }
 
-    /** Sums Won amounts still outstanding at the reference date into the matching family. */
+    /**
+     * Sums Won amounts still outstanding at the reference date into the matching family, and
+     * records what is maturing soon / matured recently so the radar can propose a rollover.
+     */
     private static void applyOutstandingBalances(Map<Id, AccountWallet> views, Date asOf) {
+        Integer window = RadarSettings.maturityWindowDays();
+        Date upcomingEnd = asOf.addDays(window);
+        Date trailingStart = asOf.addDays(-window);
         for (Opportunity opportunity : [
             SELECT AccountId, Amount, CloseDate, RP_Maturity_Date__c, Primary_Product__r.Family
             FROM Opportunity
@@ -185,10 +227,28 @@ public with sharing class WalletShareService {
                 continue;
             }
             familyWallet.hasDeal = true;
+            Date maturity = maturityOf(opportunity, family);
             if (isOutstanding(opportunity, family, asOf)) {
                 familyWallet.ourBalance += opportunity.Amount;
+                if (maturity != null && maturity <= upcomingEnd) {
+                    familyWallet.maturingAmount += opportunity.Amount;
+                    familyWallet.nextMaturity = earlier(familyWallet.nextMaturity, maturity);
+                }
+            } else if (opportunity.CloseDate != null && opportunity.CloseDate <= asOf
+                       && maturity != null && maturity > trailingStart && maturity <= asOf) {
+                // matured while we were not looking: still the strongest rollover cue we have
+                familyWallet.maturedAmount += opportunity.Amount;
+                familyWallet.lastMaturedOn = later(familyWallet.lastMaturedOn, maturity);
             }
         }
+    }
+
+    private static Date earlier(Date current, Date candidate) {
+        return current == null || candidate < current ? candidate : current;
+    }
+
+    private static Date later(Date current, Date candidate) {
+        return current == null || candidate > current ? candidate : current;
     }
 
     /**
@@ -207,7 +267,14 @@ public with sharing class WalletShareService {
      */
     public static Date maturityOf(Opportunity opportunity, String family) {
         if (family == FAMILY_RP || family == FAMILY_CASH_MGMT) {
-            return opportunity.RP_Maturity_Date__c ?? opportunity.CloseDate.addDays(DEFAULT_RP_TENOR_DAYS);
+            Date stated = opportunity.RP_Maturity_Date__c;
+            // A maturity on or before the close date cannot exist. Such a value makes the deal look
+            // permanently repaid, which silently drops it out of the balance and out of any rollover
+            // proposal, so fall back to the standard tenor instead of trusting it.
+            if (stated != null && opportunity.CloseDate != null && stated <= opportunity.CloseDate) {
+                stated = null;
+            }
+            return stated ?? opportunity.CloseDate.addDays(DEFAULT_RP_TENOR_DAYS);
         }
         if (family == FAMILY_BOND) {
             return opportunity.CloseDate.addYears(BOND_TENOR_YEARS);
@@ -218,6 +285,7 @@ public with sharing class WalletShareService {
     private static void finalizeTotals(Map<Id, AccountWallet> views) {
         for (AccountWallet view : views.values()) {
             Decimal expected = 0;
+            Decimal reported = 0;
             Decimal ours = 0;
             Boolean cashCounted = false;
             for (FamilyWallet familyWallet : view.byFamily.values()) {
@@ -227,6 +295,7 @@ public with sharing class WalletShareService {
                     Boolean isCash = familyWallet.family == FAMILY_RP || familyWallet.family == FAMILY_CASH_MGMT;
                     if (!isCash || !cashCounted) {
                         expected += familyWallet.wallet;
+                        reported += familyWallet.reportedWallet;
                     }
                     if (isCash) {
                         cashCounted = true;
@@ -234,6 +303,7 @@ public with sharing class WalletShareService {
                 }
             }
             view.expectedWallet = expected;
+            view.reportedWallet = reported;
             view.ourBalance = ours;
             view.whitespace = Math.max(expected - ours, 0);
             view.share = expected > 0 ? ours / expected : null;

@@ -178,5 +178,21 @@ private class HomeDashboardControllerTest {
             news[0].Signal_Date__c >= news[news.size() - 1].Signal_Date__c,
             'News must be ordered by Signal_Date__c descending'
         );
+
+        // The linked party's industry must be selected so the 산업군 tab can
+        // group news by KSIC 대분류.
+        Boolean sawPartyIndustry = false;
+        for (ExternalSignal__c signal : news) {
+            if (signal.Account__r != null && signal.Account__r.Industry == INDUSTRY) {
+                sawPartyIndustry = true;
+            }
+            if (signal.Lead__r != null && signal.Lead__r.Industry == INDUSTRY) {
+                sawPartyIndustry = true;
+            }
+        }
+        System.assert(
+            sawPartyIndustry,
+            'Linked Account/Lead Industry must be selected for KSIC grouping'
+        );
     }
 }

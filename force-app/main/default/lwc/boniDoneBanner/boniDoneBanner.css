@@ -1,0 +1,67 @@
+.banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+.boni {
+    object-fit: contain;
+}
+.title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0;
+}
+.subtitle {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+}
+
+/* ── 팝업 모드 ── */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem 1.5rem;
+    border-radius: 0.5rem;
+}
+.title--modal {
+    font-size: 1.125rem;
+    margin-top: 0.75rem;
+}
+.subtitle--modal {
+    margin-top: 0.5rem;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+.confirm {
+    margin-top: 1.25rem;
+    min-width: 7rem;
+}
+.boni--pop {
+    animation: boni-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes boni-pop {
+    0%   { transform: scale(0.6) translateY(12px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 가로 가운데(기본 유지) + 세로 위쪽.
+   .slds-modal 자체가 화면 전체를 덮는 flex 컨테이너라, 세로 정렬만 위로 바꾼다.
+   ⚠️ !important 필수: SLDS 기본 .slds-modal 규칙 오버라이드용 */
+.modal-align-top.slds-modal {
+    align-items: flex-start !important;
+}
+.modal-align-top .slds-modal__container {
+    margin-top: 8vh !important;
+}
+
+/* .moda-align-top .slds-modal__container 부분 원래 코드는 아래와 같음
+.modal-align-top {
+    align-items: flex-start;
+}
+.modal-align-top .slds-modal__container {
+    margin-top: 6vh;
+} */

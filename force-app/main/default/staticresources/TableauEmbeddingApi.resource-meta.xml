@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>application/zip</contentType>
+    <description>Tableau Embedding API v3 (3.15.0, ES module) + Tableau JS API v2 (2.9.2, classic). 버전 고정 사본. LWC 임베드용.</description>
+</StaticResource>

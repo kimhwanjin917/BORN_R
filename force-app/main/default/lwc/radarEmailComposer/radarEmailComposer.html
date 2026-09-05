@@ -1,0 +1,132 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-assistive-text" role="status" aria-live="polite">메일 초안 생성 중...</div>
+    </template>
+
+    <template if:true={errorMessage}>
+        <div class="slds-p-around_medium">
+            <p class="slds-text-color_error slds-m-bottom_small">{errorMessage}</p>
+            <lightning-button label="닫기" onclick={handleClose}></lightning-button>
+        </div>
+    </template>
+
+    <template if:true={hasDraft}>
+        <div class="composer-shell">
+            <div class="composer-body">
+                <div class="composer-inner">
+                    <h2>Email</h2>
+
+                    <div class="field-spacing">
+                        <label class="field-label">From</label>
+                        <lightning-combobox
+                            label="From"
+                            variant="label-hidden"
+                            value={fromAddress}
+                            options={fromOptions}
+                            onchange={handleFromChange}
+                            class="field-control"
+                        ></lightning-combobox>
+                    </div>
+
+                    <div class="field-spacing">
+                        <label class="field-label">To</label>
+                        <div class="recipient-row">
+                            <template if:true={hasRecipients}>
+                                <div class="recipient-list" role="list">
+                                    <template for:each={recipients} for:item="recipient" for:index="index">
+                                        <span key={recipient.id} class="recipient-pill" role="listitem">
+                                            <span>{recipient.name}</span>
+                                            <button
+                                                class="recipient-pill__remove"
+                                                type="button"
+                                                data-index={index}
+                                                aria-label="받는 사람 삭제"
+                                                onclick={handleRemoveRecipient}
+                                            >×</button>
+                                        </span>
+                                    </template>
+                                </div>
+                            </template>
+                            <lightning-record-picker
+                                data-id="to-picker"
+                                label="받는 사람 추가"
+                                variant="label-hidden"
+                                placeholder="받는 사람 이름 검색..."
+                                object-api-name="Contact"
+                                onchange={handleAddRecipient}
+                                class="field-control"
+                            ></lightning-record-picker>
+                        </div>
+                    </div>
+
+                    <div class="field-spacing">
+                        <label class="field-label">Subject</label>
+                        <lightning-input
+                            label="Subject"
+                            variant="label-hidden"
+                            value={subject}
+                            onchange={handleSubjectChange}
+                            class="field-control"
+                        ></lightning-input>
+                    </div>
+
+                    <template if:true={bodyLoading}>
+                        <div class="body-loading" role="status" aria-live="polite">⏳ AI가 제목·본문 초안을 작성 중입니다...</div>
+                    </template>
+
+                    <lightning-input-rich-text value={htmlBody} onchange={handleBodyChange} class="rich-text"></lightning-input-rich-text>
+
+                    <div class="field-spacing">
+                        <label class="field-label">첨부</label>
+                        <template if:true={hasAttachments}>
+                            <div class="recipient-list" role="list">
+                                <template for:each={attachments} for:item="attachment">
+                                    <span key={attachment.id} class="recipient-pill" role="listitem">
+                                        <span title={attachment.name}>{attachment.name}</span>
+                                        <button
+                                            class="recipient-pill__remove"
+                                            type="button"
+                                            data-id={attachment.id}
+                                            aria-label="첨부 삭제"
+                                            onclick={handleRemoveAttachment}
+                                        >×</button>
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+                        <lightning-record-picker
+                            data-id="file-picker"
+                            label="파일 추가"
+                            variant="label-hidden"
+                            placeholder="파일 검색 후 추가..."
+                            object-api-name="ContentDocument"
+                            onchange={handleAddAttachment}
+                            class="field-control"
+                        ></lightning-record-picker>
+                    </div>
+
+                    <div class="related-field">
+                        <label class="field-label">Related To</label>
+                        <lightning-record-picker
+                            label="Related To"
+                            variant="label-hidden"
+                            placeholder="관련 고객사 검색..."
+                            object-api-name={accountObjectApiName}
+                            value={relatedToId}
+                            onchange={handleRelatedChange}
+                            class="field-control"
+                        ></lightning-record-picker>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="composer-footer slds-grid slds-grid_align-end slds-grid_vertical-align-center">
+                <template if:true={sending}>
+                    <span class="slds-text-body_small slds-text-color_weak slds-m-right_small">발송 중...</span>
+                </template>
+                <lightning-button label="Cancel" onclick={handleClose} disabled={sending} class="slds-m-right_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Send" onclick={handleSend} disabled={sendDisabled}></lightning-button>
+            </footer>
+        </div>
+    </template>
+</template>

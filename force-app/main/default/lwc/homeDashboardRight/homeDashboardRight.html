@@ -1,0 +1,11 @@
+<template>
+    <div class="right-panel">
+        <template lwc:if={isDashboard}>
+            <c-home-today-schedule flow-api-name={flowApiName} initial-tab="dashboard"></c-home-today-schedule>
+            <c-home-maturity-alerts initial-tab="dashboard"></c-home-maturity-alerts>
+        </template>
+        <template lwc:else>
+            <c-priority-list max-rows={maxRows} initial-tab="insight"></c-priority-list>
+        </template>
+    </div>
+</template>

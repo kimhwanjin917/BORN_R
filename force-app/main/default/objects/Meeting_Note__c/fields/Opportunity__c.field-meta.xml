@@ -8,6 +8,7 @@
     <relationshipLabel>Meeting Notes</relationshipLabel>
     <relationshipName>Meeting_Notes</relationshipName>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

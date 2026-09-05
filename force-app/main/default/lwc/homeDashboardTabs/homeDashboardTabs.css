@@ -1,0 +1,42 @@
+:host {
+    display: block;
+}
+
+.home-tabs {
+    width: 100%;
+}
+
+.home-tabs__panel {
+    padding-top: 0;
+}
+
+.home-tabs__panel:focus {
+    outline: none;
+}
+
+.home-tabs__card {
+    margin: 0;
+}
+
+.home-tabs__kpi-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    margin-top: 1rem;
+}
+
+.home-tabs__kpi-cell {
+    display: flex;
+    min-width: 0;
+}
+
+.home-tabs__kpi-cell > * {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .home-tabs__kpi-row {
+        grid-template-columns: 1fr;
+    }
+}

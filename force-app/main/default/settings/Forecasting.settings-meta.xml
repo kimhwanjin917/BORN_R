@@ -117,7 +117,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.AMOUNT</field>
@@ -300,6 +300,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -308,12 +312,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -340,8 +352,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -372,6 +400,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -382,6 +414,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -477,17 +513,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -495,9 +538,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -540,7 +585,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -723,6 +768,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -731,12 +780,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -763,8 +820,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -795,6 +868,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -805,6 +882,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -900,17 +981,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -918,9 +1006,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -963,7 +1053,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>SPLITAMOUNT</field>
@@ -1150,6 +1240,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -1158,12 +1252,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -1190,8 +1292,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -1222,6 +1340,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -1232,6 +1354,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -1328,17 +1454,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -1346,9 +1479,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -1391,7 +1526,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -1574,6 +1709,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -1582,12 +1721,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -1614,8 +1761,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -1646,6 +1809,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -1656,6 +1823,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -1751,17 +1922,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -1769,9 +1947,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -1814,7 +1994,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>SPLITAMOUNT</field>
@@ -2001,6 +2181,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -2009,12 +2193,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2041,8 +2233,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2073,6 +2281,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -2083,6 +2295,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -2179,17 +2395,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -2197,9 +2420,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -2242,7 +2467,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -2425,6 +2650,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -2433,12 +2662,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2465,8 +2702,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2497,6 +2750,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -2507,6 +2764,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -2602,17 +2863,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -2620,9 +2888,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -2665,7 +2935,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>SPLITAMOUNT</field>
@@ -2852,6 +3122,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -2860,12 +3134,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -2892,8 +3174,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -2924,6 +3222,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -2934,6 +3236,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -3030,17 +3336,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -3048,9 +3361,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -3093,7 +3408,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -3276,6 +3591,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -3284,12 +3603,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -3316,8 +3643,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -3348,6 +3691,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -3358,6 +3705,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -3453,17 +3804,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -3471,9 +3829,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -3516,7 +3876,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>SPLITAMOUNT</field>
@@ -3703,6 +4063,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -3711,12 +4075,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -3743,8 +4115,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -3775,6 +4163,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -3785,6 +4177,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -3881,17 +4277,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -3899,9 +4302,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -3944,7 +4349,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -4127,6 +4532,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -4135,12 +4544,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -4167,8 +4584,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -4199,6 +4632,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -4209,6 +4646,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -4304,17 +4745,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -4322,9 +4770,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -4367,7 +4817,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>SPLITAMOUNT</field>
@@ -4554,6 +5004,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -4562,12 +5016,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -4594,8 +5056,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -4626,6 +5104,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -4636,6 +5118,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -4732,17 +5218,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -4750,9 +5243,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -4795,7 +5290,7 @@
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>OPPORTUNITY.QUANTITY</field>
@@ -4978,6 +5473,10 @@
             <label>Slack 채널 링크</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8GpZ</field>
             <label>계약 시작일</label>
         </opportunityListFieldsLabelMappings>
@@ -4986,12 +5485,20 @@
             <label>고객 니즈</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsF1</field>
             <label>교차판매 여부</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005VGrDd</field>
             <label>단계 진입일</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005GpS3K</field>
@@ -5018,8 +5525,24 @@
             <label>수수료</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005V8Gpb</field>
             <label>수익률 구조</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005EmsEz</field>
@@ -5050,6 +5573,10 @@
             <label>주력 상품</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
             <field>00Naj00005GUp4X</field>
             <label>체결가격</label>
         </opportunityListFieldsLabelMappings>
@@ -5060,6 +5587,10 @@
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005OHsbW</field>
             <label>최근 에이전트 추천</label>
+        </opportunityListFieldsLabelMappings>
+        <opportunityListFieldsLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
         </opportunityListFieldsLabelMappings>
         <opportunityListFieldsLabelMappings>
             <field>00Naj00005FDxWv</field>
@@ -5155,17 +5686,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -5173,9 +5711,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>

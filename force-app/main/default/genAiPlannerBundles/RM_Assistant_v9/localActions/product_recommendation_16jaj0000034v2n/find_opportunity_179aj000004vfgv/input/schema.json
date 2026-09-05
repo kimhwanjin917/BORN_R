@@ -1,0 +1,14 @@
+{
+  "required" : [ "keyword" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "keyword" : {
+      "title" : "검색어",
+      "description" : "기회 이름 또는 고객사 이름의 일부. 사용자가 말한 회사명/딜 이름에서 핵심 단어만 넣는다. 예: 근본테스트",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

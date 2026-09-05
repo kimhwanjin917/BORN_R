@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Oppty Pipeline Dashboard</masterLabel>
+    <description>상담 및 영업 기회의 진행 단계를 홈 대시보드에서 보여주는 컴포넌트</description>
+    <targets>
+        <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage,lightning__AppPage">
+            <property name="accountName" type="String" label="계정 이름" default="ABC테크" />
+            <property name="opportunityTitle" type="String" label="기회 이름" default="AI 상담 솔루션 도입" />
+            <property name="ownerName" type="String" label="소유자" default="김영업" />
+            <property name="closeDate" type="String" label="예상 종료일" default="2026.09.30" />
+            <property name="amount" type="String" label="금액" default="₩120,000,000" />
+            <property name="probability" type="String" label="확률" default="70%" />
+            <property name="currentStage" type="String" label="현재 단계" default="조건협상" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

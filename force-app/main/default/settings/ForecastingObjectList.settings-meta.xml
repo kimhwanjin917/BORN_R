@@ -158,6 +158,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -258,6 +262,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -282,12 +290,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -299,15 +327,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -367,17 +403,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -385,9 +428,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -560,6 +605,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -660,6 +709,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -684,12 +737,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -701,15 +774,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -769,17 +850,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -787,9 +875,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -962,6 +1052,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOppQtyListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -1062,6 +1156,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -1086,12 +1184,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -1103,15 +1221,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -1171,17 +1297,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -1189,9 +1322,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -1368,6 +1503,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -1468,6 +1607,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -1492,12 +1635,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -1509,15 +1672,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -1578,17 +1749,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -1596,9 +1774,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -1771,6 +1951,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyOppQtyListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -1871,6 +2055,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -1895,12 +2083,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -1912,15 +2120,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -1980,17 +2196,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -1998,9 +2221,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -2177,6 +2402,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOpportunityRevenueProductDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -2277,6 +2506,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -2301,12 +2534,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -2318,15 +2571,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -2387,17 +2648,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -2405,9 +2673,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -2580,6 +2850,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOpportunityQuantityProductDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -2680,6 +2954,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -2704,12 +2982,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -2721,15 +3019,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -2789,17 +3095,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -2807,9 +3120,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -2986,6 +3301,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyRevenueProductDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -3086,6 +3405,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -3110,12 +3433,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -3127,15 +3470,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -3196,17 +3547,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -3214,9 +3572,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -3389,6 +3749,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyQuantityProductDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -3489,6 +3853,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -3513,12 +3881,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -3530,15 +3918,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -3598,17 +3994,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -3616,9 +4019,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -3795,6 +4200,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOpportunityRevenueScheduleDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -3895,6 +4304,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -3919,12 +4332,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -3936,15 +4369,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -4005,17 +4446,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -4023,9 +4471,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -4198,6 +4648,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingOpportunityQuantityScheduleDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -4298,6 +4752,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -4322,12 +4780,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -4339,15 +4817,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -4407,17 +4893,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -4425,9 +4918,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -4604,6 +5099,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyRevenueScheduleDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -4704,6 +5203,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -4728,12 +5231,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -4745,15 +5268,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -4814,17 +5345,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -4832,9 +5370,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>
@@ -5007,6 +5547,10 @@
             <label>__MISSING LABEL__ PropertyFile - val AgentActivity not found in section ForecastingProductFamilyQuantityScheduleDateOppListFilter</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XTWBp</field>
+            <label>담보비율</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>PARTNER.NAME</field>
             <label>Partner Account</label>
         </forecastingObjectListLabelMappings>
@@ -5107,6 +5651,10 @@
             <label>Meeting Prep Briefing Updated At V2</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005XMet3</field>
+            <label>승인대기 약정수익률</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>00Naj00005Tfl1V</field>
             <label>Meeting Prep Briefing Updated At</label>
         </forecastingObjectListLabelMappings>
@@ -5131,12 +5679,32 @@
             <label>Owner Last Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI5</field>
+            <label>고객 최종합의</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI7</field>
+            <label>중도환매</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI6</field>
+            <label>거래방향</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.FISCAL_YEAR</field>
             <label>Fiscal Year</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>OPPORTUNITY.RECORDTYPE</field>
             <label>영업기회 구분</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI9</field>
+            <label>수수료 방식</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOI8</field>
+            <label>수수료 부담 주체</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>Contacts</field>
@@ -5148,15 +5716,23 @@
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>ACCOUNT.NAME</field>
-            <label>법인 고객 Name</label>
+            <label>법인고객 Name</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005EmsEz</field>
             <label>승인 상태</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIA</field>
+            <label>특약</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
             <field>FORECAST_CATEGORY</field>
             <label>Forecast Category</label>
+        </forecastingObjectListLabelMappings>
+        <forecastingObjectListLabelMappings>
+            <field>00Naj00005VfOIB</field>
+            <label>수익률 기준</label>
         </forecastingObjectListLabelMappings>
         <forecastingObjectListLabelMappings>
             <field>00Naj00005FDJdd</field>
@@ -5216,17 +5792,24 @@
             <field>00Naj00005FDJdd</field>
             <field>00Naj00005TGZoF</field>
             <field>00Naj00005TGZoG</field>
+            <field>00Naj00005VfOI6</field>
             <field>00Naj00005V8GpZ</field>
             <field>00Naj00005EmsF0</field>
+            <field>00Naj00005VfOI5</field>
             <field>00Naj00005EmsF1</field>
             <field>00Naj00005VGrDd</field>
+            <field>00Naj00005XTWBp</field>
             <field>00Naj00005GpS3K</field>
             <field>00Naj00005FDvoT</field>
             <field>00Naj00005EmsFG</field>
             <field>00Naj00005TGZoD</field>
             <field>00Naj00005TGZoE</field>
             <field>00Naj00005V8Gpa</field>
+            <field>00Naj00005VfOI9</field>
+            <field>00Naj00005VfOI8</field>
             <field>00Naj00005V8Gpb</field>
+            <field>00Naj00005VfOIB</field>
+            <field>00Naj00005XMet3</field>
             <field>00Naj00005EmsEz</field>
             <field>00Naj00005GUkpd</field>
             <field>00Naj00005GUcfB</field>
@@ -5234,9 +5817,11 @@
             <field>00Naj00005UTA8D</field>
             <field>00Naj00005EmsF3</field>
             <field>00Naj00005EmsF2</field>
+            <field>00Naj00005VfOI7</field>
             <field>00Naj00005GUp4X</field>
             <field>00Naj00005GpS3J</field>
             <field>00Naj00005OHsbW</field>
+            <field>00Naj00005VfOIA</field>
             <field>00Naj00005FDxWv</field>
             <field>00Naj00005TGZoC</field>
             <field>00Naj00005TGZoH</field>

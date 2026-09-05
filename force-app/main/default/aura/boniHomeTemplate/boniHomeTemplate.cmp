@@ -1,0 +1,18 @@
+<!-- docs/60 별건(보니) — 홈 페이지 템플릿: 전체 폭 헤더 + 왼쪽(8) / 오른쪽(4). 되돌리기: RM_HomePage 를 home:desktopTemplate 으로 원복 -->
+<aura:component implements="lightning:homeTemplate" description="보니 홈 — 전체 폭 헤더와 8/4 두 컬럼">
+    <aura:attribute name="header" type="Aura.Component[]" />
+    <aura:attribute name="left" type="Aura.Component[]" />
+    <aura:attribute name="right" type="Aura.Component[]" />
+
+    <div class="boni-home">
+        <div class="boni-home__header">{!v.header}</div>
+        <lightning:layout multipleRows="true" horizontalAlign="spread">
+            <lightning:layoutItem size="12" mediumDeviceSize="8" padding="horizontal-small" class="boni-home__col">
+                {!v.left}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" mediumDeviceSize="4" padding="horizontal-small" class="boni-home__col">
+                {!v.right}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

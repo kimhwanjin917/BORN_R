@@ -99,16 +99,18 @@ public with sharing class PriorityScoreBatch implements Database.Batchable<SObje
 
     /**
      * 점수 산정 후보 레코드를 조회한다.
-     * Lead 는 미전환 전체, Account 는 전체를 조회한다(영업 진행 여부로 제외하지 않는다).
+     * Lead 는 미전환 중 점수 잠금(Priority_Score_Locked__c)이 아닌 것, Account 는 전체를 조회한다
+     * (영업 진행 여부로 제외하지 않는다).
      * @param context 배치 컨텍스트
      * @return 대상 레코드 QueryLocator
      */
     public Database.QueryLocator start(Database.BatchableContext context) {
         if (targetKind == Target.LEAD) {
+            // Priority_Score_Locked__c=true 인 리드는 수기로 고정한 점수라 재계산에서 제외한다.
             return Database.getQueryLocator([
                 SELECT Id, Priority_Score__c
                 FROM Lead
-                WHERE IsConverted = false
+                WHERE IsConverted = false AND Priority_Score_Locked__c = false
             ]);
         }
         return Database.getQueryLocator([

@@ -49,10 +49,12 @@ public with sharing class LeadKpiController {
     @AuraEnabled(cacheable=true)
     public static LeadKpi getLeadKpi() {
         try {
+            Id meId = UserInfo.getUserId();
             LeadKpi kpi = new LeadKpi();
             for (AggregateResult ar : [
                 SELECT Status status, IsConverted isConverted, COUNT(Id) total
                 FROM Lead
+                WHERE OwnerId = :meId
                 WITH USER_MODE
                 GROUP BY Status, IsConverted
             ]) {

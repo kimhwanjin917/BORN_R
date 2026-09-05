@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <description>docs/60 별건 — 보니 홈 페이지 템플릿(헤더 + 8/4 두 컬럼)</description>
+</AuraDefinitionBundle>

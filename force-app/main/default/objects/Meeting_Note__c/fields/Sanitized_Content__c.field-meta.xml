@@ -4,6 +4,7 @@
     <description>개인정보 치환이 완료된 미팅 메모 마스킹본(Sanitized).</description>
     <label>Sanitized Content</label>
     <length>32768</length>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>
     <visibleLines>25</visibleLines>

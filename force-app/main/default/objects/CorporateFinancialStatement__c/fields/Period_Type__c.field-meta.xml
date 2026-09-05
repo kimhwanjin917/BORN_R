@@ -3,6 +3,7 @@
     <fullName>Period_Type__c</fullName>
     <label>기간 구분</label>
     <required>false</required>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

@@ -227,7 +227,7 @@ private class MeetingPrepEmailComposerControllerTest {
 
         Test.startTest();
         MeetingPrepEmailComposerController.sendEmail(
-            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id });
+            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id }, null);
         System.Assert.areEqual(1, Limits.getEmailInvocations(), '이메일 발송이 1회 호출되어야 한다');
         Test.stopTest();
     }
@@ -239,7 +239,7 @@ private class MeetingPrepEmailComposerControllerTest {
 
         Test.startTest();
         MeetingPrepEmailComposerController.sendEmail(
-            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id, ct.Id });
+            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id, ct.Id }, null);
         System.Assert.areEqual(1, Limits.getEmailInvocations(), '이메일 발송이 1회 호출되어야 한다');
         Test.stopTest();
     }
@@ -262,7 +262,7 @@ private class MeetingPrepEmailComposerControllerTest {
 
         Test.startTest();
         MeetingPrepEmailComposerController.sendEmail(
-            '테스트 제목', '<p>테스트 본문</p>', account.Id, new List<String>{ recipient.Id }
+            '테스트 제목', '<p>테스트 본문</p>', account.Id, new List<String>{ recipient.Id }, null
         );
         System.assertEquals(1, Limits.getEmailInvocations(), 'Account 활동 메일 발송이 1회 호출되어야 한다');
         Test.stopTest();
@@ -276,7 +276,7 @@ private class MeetingPrepEmailComposerControllerTest {
         Test.startTest();
         try {
             MeetingPrepEmailComposerController.sendEmail(
-                '', '<p>본문</p>', ld.Id, new List<String>{ ld.Id });
+                '', '<p>본문</p>', ld.Id, new List<String>{ ld.Id }, null);
         } catch (AuraHandledException e) {
             thrown = true;
         }
@@ -291,7 +291,7 @@ private class MeetingPrepEmailComposerControllerTest {
         Test.startTest();
         try {
             MeetingPrepEmailComposerController.sendEmail(
-                '제목', '<p>본문</p>', null, new List<String>{ '00Q000000000000AAA' });
+                '제목', '<p>본문</p>', null, new List<String>{ '00Q000000000000AAA' }, null);
         } catch (AuraHandledException e) {
             thrown = true;
         }
@@ -308,7 +308,7 @@ private class MeetingPrepEmailComposerControllerTest {
         Test.startTest();
         try {
             MeetingPrepEmailComposerController.sendEmail(
-                '제목', '<p>본문</p>', ct.Id, new List<String>{ ct.Id });
+                '제목', '<p>본문</p>', ct.Id, new List<String>{ ct.Id }, null);
         } catch (AuraHandledException e) {
             thrown = true;
         }
@@ -325,7 +325,7 @@ private class MeetingPrepEmailComposerControllerTest {
         Test.startTest();
         try {
             MeetingPrepEmailComposerController.sendEmail(
-                '제목', '<p>본문</p>', ld.Id, new List<String>());
+                '제목', '<p>본문</p>', ld.Id, new List<String>(), null);
         } catch (AuraHandledException e) {
             thrown = true;
         }
@@ -334,120 +334,132 @@ private class MeetingPrepEmailComposerControllerTest {
         System.Assert.isTrue(thrown, '받는 사람이 없으면 예외가 발생해야 한다');
     }
 
-    // ─── RP 브로슈어 자동 첨부 ────────────────────────────────────
+    // ─── 첨부 파일 (카탈로그 자동 + 사용자 선택) ────────────────────
 
-    private static Product2 insertActiveRpProduct() {
-        Product2 product = new Product2(
-            Name = 'RP (환매조건부채권)',
-            Family = 'RP',
-            IsActive = true
-        );
-        insert product;
-        return product;
-    }
-
-    private static Id linkFileToEntity(Id linkedEntityId, String title, String pathOnClient) {
+    /** Files(ContentDocument)에 PDF 를 올리고 ContentDocumentId 를 돌려준다. */
+    private static Id insertFile(String title, String pathOnClient) {
         ContentVersion version = new ContentVersion(
             Title = title,
             PathOnClient = pathOnClient,
             VersionData = Blob.valueOf('PDF-CONTENT ' + title)
         );
         insert version;
-        Id documentId = [
+        return [
             SELECT ContentDocumentId FROM ContentVersion WHERE Id = :version.Id
         ].ContentDocumentId;
-        insert new ContentDocumentLink(
-            ContentDocumentId = documentId,
-            LinkedEntityId = linkedEntityId,
-            ShareType = 'V',
-            Visibility = 'AllUsers'
-        );
-        return documentId;
     }
 
     @IsTest
-    static void brochureAttachment_AttachesLatestPdfWhenBrochureExists() {
-        Product2 product = insertActiveRpProduct();
-        linkFileToEntity(product.Id, 'BORN_Securities_RP_Customer_Brochure_v4',
-            'BORN_Securities_RP_Customer_Brochure_v4.pdf');
+    static void getDefaultAttachments_ReturnsLatestCatalogPdf() {
+        insertFile('근본증권 상품 카탈로그',
+            'BORN_Securities_Corporate_Product_Catalogue_2026.pdf');
+
+        Test.startTest();
+        List<MeetingPrepEmailComposerController.AttachmentOption> options =
+            MeetingPrepEmailComposerController.getDefaultAttachments();
+        Test.stopTest();
+
+        System.Assert.areEqual(1, options.size(), '카탈로그 1건이 기본 첨부로 반환되어야 한다');
+        System.Assert.areEqual('근본증권 상품 카탈로그.pdf',
+            options[0].fileName, 'Title 기반 한글 파일명이 사용되어야 한다');
+        System.Assert.isNotNull(options[0].contentDocumentId, 'ContentDocumentId 가 채워져야 한다');
+    }
+
+    @IsTest
+    static void getDefaultAttachments_IgnoresNonCatalogFiles() {
+        insertFile('근본증권 상품 카탈로그',
+            'BORN_Securities_Corporate_Product_Catalogue_2026.pdf');
+        insertFile('Some_Other_Document', 'Some_Other_Document.pdf');
+
+        Test.startTest();
+        List<MeetingPrepEmailComposerController.AttachmentOption> options =
+            MeetingPrepEmailComposerController.getDefaultAttachments();
+        Test.stopTest();
+
+        System.Assert.areEqual(1, options.size(), '카탈로그 접두사 파일만 대상이어야 한다');
+        System.Assert.areEqual('근본증권 상품 카탈로그.pdf',
+            options[0].fileName, '카탈로그 파일만 반환되어야 한다');
+    }
+
+    @IsTest
+    static void getDefaultAttachments_ReturnsEmptyWhenNoCatalog() {
+        Test.startTest();
+        List<MeetingPrepEmailComposerController.AttachmentOption> options =
+            MeetingPrepEmailComposerController.getDefaultAttachments();
+        Test.stopTest();
+
+        System.Assert.areEqual(0, options.size(), '카탈로그가 없으면 빈 목록이어야 한다');
+    }
+
+    @IsTest
+    static void getFileInfo_ReturnsFileNamesForSelectedDocuments() {
+        Id documentId = insertFile('선택_자료', '선택_자료.pdf');
+
+        Test.startTest();
+        List<MeetingPrepEmailComposerController.AttachmentOption> options =
+            MeetingPrepEmailComposerController.getFileInfo(new List<String>{ documentId });
+        Test.stopTest();
+
+        System.Assert.areEqual(1, options.size(), '선택한 문서 1건의 메타가 반환되어야 한다');
+        System.Assert.areEqual('선택_자료.pdf', options[0].fileName, 'Title + 확장자 기반 파일명이 반환되어야 한다');
+        System.Assert.areEqual(documentId, options[0].contentDocumentId, 'ContentDocumentId 가 일치해야 한다');
+    }
+
+    @IsTest
+    static void getFileInfo_ReturnsEmptyForNullInput() {
+        Test.startTest();
+        List<MeetingPrepEmailComposerController.AttachmentOption> options =
+            MeetingPrepEmailComposerController.getFileInfo(null);
+        Test.stopTest();
+
+        System.Assert.areEqual(0, options.size(), 'null 입력은 빈 목록이어야 한다');
+    }
+
+    @IsTest
+    static void buildAttachments_BuildsEmailAttachmentFromDocumentId() {
+        Id documentId = insertFile('근본증권 상품 카탈로그',
+            'BORN_Securities_Corporate_Product_Catalogue_2026.pdf');
 
         Test.startTest();
         List<Messaging.EmailFileAttachment> attachments =
-            MeetingPrepEmailComposerController.buildBrochureAttachments();
+            MeetingPrepEmailComposerController.buildAttachments(new List<String>{ documentId });
         Test.stopTest();
 
-        System.Assert.areEqual(1, attachments.size(), '브로슈어 1개가 첨부되어야 한다');
-        System.Assert.areEqual('BORN_Securities_RP_Customer_Brochure_v4.pdf',
-            attachments[0].getFileName(), '실제 PDF 파일명이 유지되어야 한다');
-        System.Assert.areEqual('application/pdf', attachments[0].getContentType(),
-            'application/pdf ContentType 이어야 한다');
+        System.Assert.areEqual(1, attachments.size(), '문서 1건이 첨부로 변환되어야 한다');
+        System.Assert.areEqual('근본증권 상품 카탈로그.pdf',
+            attachments[0].getFileName(), 'Title 기반 한글 파일명이 사용되어야 한다');
     }
 
     @IsTest
-    static void brochureAttachment_AttachesOnlyLatestVersion() {
-        Product2 product = insertActiveRpProduct();
-        Id documentId = linkFileToEntity(product.Id, 'BORN_Securities_RP_Customer_Brochure_v4',
-            'BORN_Securities_RP_Customer_Brochure_v4.pdf');
-        // 동일 문서에 새 버전을 추가 → 최신 1건만 대상이 되어야 한다.
-        insert new ContentVersion(
-            ContentDocumentId = documentId,
-            Title = 'BORN_Securities_RP_Customer_Brochure_v4',
-            PathOnClient = 'BORN_Securities_RP_Customer_Brochure_v4.pdf',
-            VersionData = Blob.valueOf('PDF-CONTENT v2')
-        );
-
+    static void buildAttachments_ReturnsEmptyWhenNoDocuments() {
         Test.startTest();
         List<Messaging.EmailFileAttachment> attachments =
-            MeetingPrepEmailComposerController.buildBrochureAttachments();
+            MeetingPrepEmailComposerController.buildAttachments(new List<String>());
         Test.stopTest();
 
-        System.Assert.areEqual(1, attachments.size(),
-            '동일 브로슈어의 여러 버전 중 최신 1개만 첨부되어야 한다');
+        System.Assert.areEqual(0, attachments.size(), '선택 파일이 없으면 첨부 목록이 비어 있어야 한다');
     }
 
     @IsTest
-    static void brochureAttachment_IgnoresNonBrochureFiles() {
-        Product2 product = insertActiveRpProduct();
-        linkFileToEntity(product.Id, 'BORN_Securities_RP_Customer_Brochure_v4',
-            'BORN_Securities_RP_Customer_Brochure_v4.pdf');
-        // 브로슈어가 아닌 다른 파일도 같은 RP 상품에 연결.
-        linkFileToEntity(product.Id, 'RP_Internal_Memo', 'RP_Internal_Memo.pdf');
-
-        Test.startTest();
-        List<Messaging.EmailFileAttachment> attachments =
-            MeetingPrepEmailComposerController.buildBrochureAttachments();
-        Test.stopTest();
-
-        System.Assert.areEqual(1, attachments.size(), '브로슈어 파일만 첨부되어야 한다');
-        System.Assert.areEqual('BORN_Securities_RP_Customer_Brochure_v4.pdf',
-            attachments[0].getFileName(), '브로슈어 파일만 대상이어야 한다');
-    }
-
-    @IsTest
-    static void sendEmail_SucceedsWithoutBrochureWhenNoneExists() {
+    static void sendEmail_LeadPathAttachesSelectedDocument() {
         Lead ld = [SELECT Id FROM Lead LIMIT 1];
+        Id documentId = insertFile('근본증권 상품 카탈로그',
+            'BORN_Securities_Corporate_Product_Catalogue_2026.pdf');
 
         Test.startTest();
-        List<Messaging.EmailFileAttachment> attachments =
-            MeetingPrepEmailComposerController.buildBrochureAttachments();
         MeetingPrepEmailComposerController.sendEmail(
-            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id });
-        System.Assert.areEqual(0, attachments.size(),
-            '브로슈어가 없으면 첨부 목록이 비어 있어야 한다');
+            '테스트 제목', '<p>테스트 본문</p>', ld.Id,
+            new List<String>{ ld.Id }, new List<String>{ documentId });
         System.Assert.areEqual(1, Limits.getEmailInvocations(),
-            '브로슈어가 없어도 메일은 정상 발송되어야 한다');
+            '첨부가 있어도 Lead 메일이 1회 발송되어야 한다');
         Test.stopTest();
     }
 
     @IsTest
-    static void sendEmail_AccountPathDoesNotAttachBrochure() {
-        // RP 상품 + 브로슈어가 org 에 있어도 Account 경로에는 첨부되면 안 된다.
-        Product2 product = insertActiveRpProduct();
-        linkFileToEntity(product.Id, 'BORN_Securities_RP_Customer_Brochure_v4',
-            'BORN_Securities_RP_Customer_Brochure_v4.pdf');
-
+    static void sendEmail_AccountPathAttachesSelectedDocument() {
+        // 레이더(Account) 경로도 이제 첨부를 싣는다.
         Account account = new Account(
-            Name = '첨부 제외 테스트 고객사',
+            Name = '첨부 포함 테스트 고객사',
             Industry = '제조업',
             Business_Registration_Number__c = '9876543210'
         );
@@ -459,12 +471,27 @@ private class MeetingPrepEmailComposerControllerTest {
             Email = 'account-path@example.com'
         );
         insert recipient;
+        Id documentId = insertFile('근본증권 상품 카탈로그',
+            'BORN_Securities_Corporate_Product_Catalogue_2026.pdf');
 
         Test.startTest();
         MeetingPrepEmailComposerController.sendEmail(
-            '테스트 제목', '<p>테스트 본문</p>', account.Id, new List<String>{ recipient.Id });
+            '테스트 제목', '<p>테스트 본문</p>', account.Id,
+            new List<String>{ recipient.Id }, new List<String>{ documentId });
         System.Assert.areEqual(1, Limits.getEmailInvocations(),
-            'Account 경로 메일도 정상 발송되어야 한다 (첨부만 없음)');
+            'Account 경로도 첨부를 싣고 정상 발송되어야 한다');
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void sendEmail_SucceedsWithNullAttachments() {
+        Lead ld = [SELECT Id FROM Lead LIMIT 1];
+
+        Test.startTest();
+        MeetingPrepEmailComposerController.sendEmail(
+            '테스트 제목', '<p>테스트 본문</p>', ld.Id, new List<String>{ ld.Id }, null);
+        System.Assert.areEqual(1, Limits.getEmailInvocations(),
+            '첨부가 없어도 메일은 정상 발송되어야 한다');
         Test.stopTest();
     }
 }

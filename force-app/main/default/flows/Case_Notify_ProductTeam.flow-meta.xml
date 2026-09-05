@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Case 요약을 상품팀 검토 채널(#상품팀-검토)에 게시</description>
+        <name>Post_To_Slack</name>
+        <label>Slack 상품팀-검토 채널에 게시</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>SlackChannelMessageService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>channelId</name>
+            <value>
+                <stringValue>C0BRTMCTUN5</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <elementReference>fmtMessage</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>SlackChannelMessageService</nameSegment>
+    </actionCalls>
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>심사(Screening) 레코드타입 Case가 생성되면 Case 내용을 상품팀 검토 Slack 채널(#상품팀-검토, C0BRTMCTUN5)에 자동 게시한다. 상품팀이 이 요청의 판매 허가를 검토·결정한다. Slack 전송은 기존 SlackChannelMessageService(Invocable Apex) 재사용.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Case 레코드로 이동하는 절대 URL</description>
+        <name>fmtCaseUrl</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Api.Partner_Server_URL_260}, FIND(&quot;/services&quot;, {!$Api.Partner_Server_URL_260})) &amp; {!$Record.Id}</expression>
+    </formulas>
+    <formulas>
+        <description>상품팀 채널에 게시할 Case 요약 메시지</description>
+        <name>fmtMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;🗂 *판매 승인 요청* | &quot; &amp; BLANKVALUE({!$Record.Account.Name}, &quot;-&quot;) &amp; BR()
+&amp; &quot;• Case: &quot; &amp; {!$Record.CaseNumber} &amp; &quot; — &quot; &amp; BLANKVALUE({!$Record.Subject}, &quot;(제목 없음)&quot;) &amp; BR()
+&amp; &quot;• 약정수익률: &quot; &amp; IF(ISBLANK({!$Record.Agreed_Yield_Rate__c}), &quot;-&quot;, TEXT({!$Record.Agreed_Yield_Rate__c}) &amp; &quot;%&quot;) &amp; BR()
+&amp; &quot;• 계약기간: &quot; &amp; IF(ISBLANK({!$Record.Contract_Term_Months__c}), &quot;-&quot;, TEXT({!$Record.Contract_Term_Months__c}) &amp; &quot;개월&quot;) &amp; BR()
+&amp; &quot;• 우선순위: &quot; &amp; BLANKVALUE(TEXT({!$Record.Priority}), &quot;-&quot;) &amp; &quot; · 상태: &quot; &amp; BLANKVALUE(TEXT({!$Record.Status}), &quot;-&quot;) &amp; BR()
+&amp; &quot;• 요청 RM: &quot; &amp; BLANKVALUE({!$Record.CreatedBy.Name}, &quot;-&quot;) &amp; BR()
+&amp; &quot;• 상세: &quot; &amp; BLANKVALUE({!$Record.Description}, &quot;-&quot;) &amp; BR()
+&amp; &quot;👉 &quot; &amp; {!fmtCaseUrl}</expression>
+    </formulas>
+    <interviewLabel>Case_Notify_ProductTeam {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case 생성 → 상품팀 Slack 채널 게시</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterFormula>NOT(ISBLANK({!$Record.Agreed_Yield_Rate__c}))</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Post_To_Slack</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-p-around_medium">
+        <template lwc:if={done}>
+            <div class={resultClass}>
+                <lightning-icon icon-name={resultIcon} size="small" class="slds-m-right_x-small"></lightning-icon>
+                <span>{message}</span>
+            </div>
+            <div class="slds-m-top_medium slds-text-align_right">
+                <lightning-button variant="brand" label="확인" onclick={handleClose}></lightning-button>
+            </div>
+        </template>
+
+        <template lwc:elseif={isWorking}>
+            <div class="slds-align_absolute-center slds-p-vertical_large">
+                <lightning-spinner alternative-text="처리 중" size="small"></lightning-spinner>
+                <span class="slds-m-left_medium">RM에게 승인 결과를 전달하는 중…</span>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <p class="slds-m-bottom_medium">
+                매니저 승인이 완료된 딜의 <b>승인 결과와 확정 조건서</b>를 담당 RM에게 전달합니다.<br />
+                RM에게 Slack DM으로 통보되고 확정조건서가 함께 전송됩니다.
+            </p>
+            <div class="slds-text-align_right">
+                <lightning-button label="취소" onclick={handleClose} class="slds-m-right_x-small"></lightning-button>
+                <lightning-button variant="brand" label="RM에게 결과 보내기" onclick={handleConfirm}></lightning-button>
+            </div>
+        </template>
+    </div>
+</template>

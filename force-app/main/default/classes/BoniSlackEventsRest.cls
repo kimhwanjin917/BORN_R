@@ -26,8 +26,8 @@ global with sharing class BoniSlackEventsRest {
         String jsonBody;
         Boolean valid = false;
         if (String.isBlank(body) && req.params != null && req.params.containsKey('payload')) {
-            // Interactivity (form-urlencoded)
-            jsonBody = req.params.get('payload');
+            // Interactivity (form-urlencoded). params 분해가 UTF-8 을 Latin-1 로 잘못 읽어 한글이 깨지므로 복구한다(2026-08-31 실측).
+            jsonBody = fixEncoding(req.params.get('payload'));
             valid = isFresh(ts) && isValidToken(sec.Verification_Token__c, jsonBody);
         } else {
             // Events API (JSON)
@@ -60,6 +60,25 @@ global with sharing class BoniSlackEventsRest {
         if (String.isBlank(timestamp) || !timestamp.isNumeric()) return false;
         Long now = Datetime.now().getTime() / 1000;
         return Math.abs(now - Long.valueOf(timestamp)) <= MAX_SKEW_SECONDS;
+    }
+
+    /**
+     * params 분해 과정에서 UTF-8 바이트가 Latin-1 문자로 잘못 풀린 문자열을 복구한다.
+     * 모든 문자가 0xFF 이하일 때만(=깨진 상태의 특징) Latin-1 바이트로 되돌려 UTF-8 로 재해석하고,
+     * 재해석이 유효하지 않거나 진짜 한글(>0xFF)이 섞여 있으면 원본을 그대로 둔다. ASCII 는 어느 쪽이든 동일.
+     */
+    public static String fixEncoding(String s) {
+        if (String.isBlank(s)) return s;
+        for (Integer i = 0, n = s.length(); i < n; i++) {
+            if (s.charAt(i) > 255) return s; // 진짜 멀티바이트 문자가 있으면 이미 정상
+        }
+        try {
+            String repaired = EncodingUtil.urlDecode(EncodingUtil.urlEncode(s, 'ISO-8859-1'), 'UTF-8');
+            // UTF-8 재해석이 깨졌으면(치환문자 발생) 원본 유지
+            return repaired.contains('�') ? s : repaired;
+        } catch (Exception e) {
+            return s;
+        }
     }
 
     /** payload.token == Verification Token 이고 api_app_id 가 보니 앱이면 true */

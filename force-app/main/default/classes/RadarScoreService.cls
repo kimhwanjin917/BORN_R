@@ -2,8 +2,10 @@
  * Computes the 0-100 "성공 가능성" score per account × product family from org data only
  * (docs/55 §3.2, revised 2026-08-27). Components and default weights:
  *  - similarWon 30 : closed-opportunity win rate for industry × family (fallback industry, fallback 50)
- *  - signal     30 : recent funding-demand signals (ExternalSignal 수주/공시 = 100, 뉴스 = 50) or a maturity
- *                    inside the window (Asset / signal maturity) = 100 — maturity only counts for cash families
+ *  - signal     30 : a maturity of our own Won deals (or an Asset / ExternalSignal maturity, cash only)
+ *                    scores 100 on the maturity date and decays to 60 at either edge of the window —
+ *                    upcoming and just-passed maturities both count; otherwise recent funding-demand
+ *                    signals (ExternalSignal 수주=100, 공시=70, 뉴스=40, decayed by age)
  *  - financial  20 : year-over-year growth of the family wallet (cash for RP/자금운용, debt for 채권);
  *                    −20% → 0, +20% → 100, linear in between, 50 when no prior statement
  *  - priority   20 : Account.Priority_Score__c (RM priority, 0-100; 50 when empty)
@@ -33,6 +35,8 @@ public with sharing class RadarScoreService {
         @AuraEnabled public String signalNote;       // e.g. '9/8 RP 만기 도래'
         @AuraEnabled public String financialNote;    // e.g. '현금성 자산 전년 대비 +12%'
         @AuraEnabled public Date maturingOn;         // nearest maturity inside the window, if any
+        @AuraEnabled public Date maturedOn;          // maturity already passed inside the trailing window
+        @AuraEnabled public Integer maturityDays;    // days until maturity; negative once it has passed
         @AuraEnabled public Integer lastContactDays; // days since last meeting note / event (null = none)
     }
 
@@ -139,16 +143,45 @@ public with sharing class RadarScoreService {
         score.similarWonNote = stat.label + ' Won ' + stat.won + '/' + stat.total + ' (' + score.similarWon + '%)';
     }
 
+    /**
+     * A maturity outranks every other signal, and the closer it sits to today the louder it is.
+     * Upcoming and just-passed maturities are both treated as rollover cues — a maturity we missed
+     * is more urgent than one still ahead of us, not less.
+     */
     private static void applySignal(Score score, AccountContext context, String family) {
+        WalletShareService.FamilyWallet familyWallet = context.wallet?.byFamily?.get(family);
         Boolean isCashFamily = family == WalletShareService.FAMILY_RP || family == WalletShareService.FAMILY_CASH_MGMT;
-        if (isCashFamily && context.nearestMaturity != null) {
-            score.signal = 100;
-            score.signalNote = context.nearestMaturity.format() + ' 만기 도래';
-            score.maturingOn = context.nearestMaturity;
+        // Asset / ExternalSignal maturities only ever described cash, so keep them scoped that way.
+        Date upcoming = familyWallet?.nextMaturity;
+        if (isCashFamily) {
+            upcoming = nearer(upcoming, context.nearestMaturity);
+        }
+        Date passed = familyWallet?.lastMaturedOn;
+
+        if (upcoming != null) {
+            score.maturingOn = upcoming;
+            score.maturityDays = Date.today().daysBetween(upcoming);
+        } else if (passed != null) {
+            score.maturedOn = passed;
+            score.maturityDays = Date.today().daysBetween(passed);   // negative
+        }
+
+        if (score.maturityDays != null) {
+            score.signal = maturitySignal(score.maturityDays);
+            score.signalNote = (upcoming ?? passed).format() + ' 만기 ' + (score.maturityDays >= 0
+                ? '도래(D-' + score.maturityDays + ')'
+                : '경과(D+' + Math.abs(score.maturityDays) + ')');
         } else if (context.bestSignal > 0) {
             score.signal = context.bestSignal;
             score.signalNote = context.bestSignalNote;
         }
+    }
+
+    /** 100 on the maturity date itself, decaying to 60 at either edge of the window. */
+    private static Decimal maturitySignal(Integer daysFromMaturity) {
+        Integer window = Math.max(RadarSettings.maturityWindowDays(), 1);
+        Integer distance = Math.min(Math.abs(daysFromMaturity), window);
+        return (100 - 40.0 * distance / window).setScale(0, RoundingMode.HALF_UP);
     }
 
     private static void applyFinancial(Score score, AccountContext context, String family) {

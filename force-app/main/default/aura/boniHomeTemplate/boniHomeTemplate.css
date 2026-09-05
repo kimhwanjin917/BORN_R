@@ -1,0 +1,14 @@
+.THIS.boni-home {
+    display: block;
+}
+.THIS .boni-home__header {
+    margin: 0 0 0.75rem;
+}
+.THIS .boni-home__col {
+    box-sizing: border-box;
+}
+/* 표준 홈처럼 컬럼 좌우 여백은 SLDS 패딩, 컴포넌트 사이 간격은 각 컴포넌트가 가짐 */
+.THIS .slds-col {
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+}

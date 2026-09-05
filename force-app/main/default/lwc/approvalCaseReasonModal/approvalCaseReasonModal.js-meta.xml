@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>false</isExposed>
+    <description>약정수익률 상한 초과 시 판매 승인 요청 Case 사유 입력 모달</description>
+</LightningComponentBundle>

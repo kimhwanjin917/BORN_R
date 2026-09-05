@@ -129,3 +129,8 @@ force-app/main/default/callCenters/
 
 # Superpowers plugin working dir
 .superpowers/
+
+# Local machine artifacts (dated backups / snapshots / local config)
+org_backup_*/
+.baseline_*/
+.claude/

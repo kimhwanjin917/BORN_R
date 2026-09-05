@@ -1,0 +1,153 @@
+<template>
+    <article class="block">
+        <header class="block-head">
+            <span class="block-head__no">4</span>
+            <span class="block-head__title">리스크존 거래현황</span>
+            <span class="block-head__en">(Risk Zone Monitoring)</span>
+            <template lwc:if={periodLabel}>
+                <span class="block-head__period">{periodLabel}</span>
+            </template>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="state state_error">{error}</div>
+        </template>
+
+        <template lwc:else>
+            <section class="risk-list">
+                <h3 class="panel__title">리스크존 거래 리스트 <span class="panel__unit">(High &amp; Medium)</span></h3>
+                <template lwc:if={hasRisk}>
+                    <div class="risk-scroll">
+                        <table class="risk">
+                            <thead>
+                                <tr>
+                                    <th>위험도</th>
+                                    <th>거래명</th>
+                                    <th>담당 RM</th>
+                                    <th>단계</th>
+                                    <th class="risk__num">수수료</th>
+                                    <th class="risk__num">체류일</th>
+                                    <th class="risk__num">최근 활동</th>
+                                    <th class="risk__num">예상 클로징</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={riskRows} for:item="row">
+                                    <tr key={row.key}>
+                                        <td><span class={row.badgeClass}>{row.level}</span></td>
+                                        <td class="risk__name">{row.oppName}</td>
+                                        <td>{row.rmName}</td>
+                                        <td>{row.stageName}</td>
+                                        <td class="risk__num">{row.feeDisplay}</td>
+                                        <td class="risk__num">{row.dwellDisplay}</td>
+                                        <td class="risk__num">{row.contactDisplay}</td>
+                                        <td class="risk__num">
+                                            <template lwc:if={row.closeDate}>
+                                                <lightning-formatted-date-time
+                                                    value={row.closeDate}
+                                                    year="numeric"
+                                                    month="2-digit"
+                                                    day="2-digit"
+                                                ></lightning-formatted-date-time>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="state state_empty">리스크 거래가 없습니다.</div>
+                </template>
+            </section>
+
+            <div class="split">
+                <section class="panel">
+                    <h3 class="panel__title">거래 체류기간 분포</h3>
+                    <template lwc:if={hasDwell}>
+                        <ul class="dwell">
+                            <template for:each={dwellBars} for:item="bar">
+                                <li key={bar.key} class="dwell__item">
+                                    <span class="dwell__label">{bar.label}</span>
+                                    <span class="dwell__track"><span class="dwell__fill" style={bar.barStyle}></span></span>
+                                    <span class="dwell__count">{bar.count}건</span>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:else>
+                        <div class="state state_empty">데이터 없음</div>
+                    </template>
+                </section>
+
+                <section class="panel">
+                    <h3 class="panel__title">장기 체류 거래 TOP 5 <span class="panel__unit">(60일 이상)</span></h3>
+                    <template lwc:if={hasLongDwell}>
+                        <table class="longdwell">
+                            <thead>
+                                <tr>
+                                    <th>거래명</th>
+                                    <th>RM</th>
+                                    <th>단계</th>
+                                    <th class="longdwell__num">체류</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={longDwellRows} for:item="row">
+                                    <tr key={row.key}>
+                                        <td class="longdwell__name">{row.oppName}</td>
+                                        <td>{row.rmName}</td>
+                                        <td>{row.stageName}</td>
+                                        <td class="longdwell__num">{row.dwellDisplay}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template lwc:else>
+                        <div class="state state_empty">60일 이상 거래 없음</div>
+                    </template>
+                </section>
+
+                <section class="panel">
+                    <h3 class="panel__title">위험도 분포</h3>
+                    <template lwc:if={hasRiskDonut}>
+                        <div class="donut-wrap">
+                            <svg class="donut" viewBox="0 0 40 40" aria-hidden="true">
+                                <circle class="donut__track" cx="20" cy="20" r="15.9155"></circle>
+                                <template for:each={riskDonut} for:item="slice">
+                                    <circle
+                                        key={slice.key}
+                                        class="donut__slice"
+                                        cx="20"
+                                        cy="20"
+                                        r="15.9155"
+                                        stroke={slice.color}
+                                        stroke-dasharray={slice.dashArray}
+                                        stroke-dashoffset={slice.dashOffset}
+                                    ></circle>
+                                </template>
+                            </svg>
+                            <div class="donut__center">
+                                <span class="donut__center-value">{riskTotalDisplay}</span>
+                            </div>
+                        </div>
+                        <ul class="legend">
+                            <template for:each={riskDonut} for:item="slice">
+                                <li key={slice.key} class="legend__item">
+                                    <span class="legend__swatch" style={slice.swatchStyle}></span>
+                                    <span class="legend__name">{slice.level}</span>
+                                    <span class="legend__val">{slice.count}건 ({slice.percentDisplay})</span>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:else>
+                        <div class="state state_empty">데이터 없음</div>
+                    </template>
+                </section>
+            </div>
+        </template>
+    </article>
+</template>

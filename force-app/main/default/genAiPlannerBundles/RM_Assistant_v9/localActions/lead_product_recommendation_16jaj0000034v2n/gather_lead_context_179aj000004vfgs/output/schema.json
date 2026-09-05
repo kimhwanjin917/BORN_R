@@ -1,0 +1,94 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "annualRevenue" : {
+      "title" : "연매출",
+      "description" : "Lead.AnnualRevenue",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "candidateText" : {
+      "title" : "상품 후보 요약",
+      "description" : "활성 상품 후보(상품명·상품군·적격 규칙·수수료율) 요약 텍스트",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "company" : {
+      "title" : "회사명",
+      "description" : "Lead.Company",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "currentProductFamily" : {
+      "title" : "현재 추천 상품군",
+      "description" : "이미 기록된 추천 상품군(RP/회사채). 비어 있으면 미정",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "financialText" : {
+      "title" : "DART 재무 요약",
+      "description" : "최근 3개 기간의 매출·영업이익·총자산·총부채·현금성자산·단기금융상품·사채·현금자산비율 요약 텍스트",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "industry" : {
+      "title" : "산업군",
+      "description" : "Lead.Industry",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "isAccessible" : {
+      "title" : "접근 가능",
+      "description" : "false 면 Lead 를 찾지 못했거나 권한 없음/이미 전환됨",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "message" : {
+      "title" : "메시지",
+      "description" : "조회 요약",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "priorityRationale" : {
+      "title" : "우선순위 근거 요약",
+      "description" : "우선순위 산정 근거 텍스트",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "priorityScore" : {
+      "title" : "우선순위 점수",
+      "description" : "Lead.Priority_Score__c",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "signalText" : {
+      "title" : "외부시그널 요약",
+      "description" : "최근 10건 시그널(일자·유형·제목·요약·금액·만기) 요약 텍스트",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

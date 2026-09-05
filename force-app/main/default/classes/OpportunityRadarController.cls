@@ -38,7 +38,9 @@ public with sharing class OpportunityRadarController {
         @AuraEnabled public Decimal propensity;     // top recommendation score
         @AuraEnabled public String topType;
         @AuraEnabled public String topProduct;
-        @AuraEnabled public Decimal priority;       // whitespace × propensity
+        @AuraEnabled public Decimal priority;       // normalised whitespace (0..100) × propensity, held back for new logos
+        @AuraEnabled public Decimal whitespaceScore; // the 0..100 term above, exposed so the UI can explain the order
+        @AuraEnabled public Boolean hasDealHistory; // false when we have never traded with this account
         @AuraEnabled public List<RecommendationDTO> recommendations = new List<RecommendationDTO>();
         @AuraEnabled public List<RecommendationDTO> outcomes = new List<RecommendationDTO>();   // closed within Recent_Outcome_Days
         @AuraEnabled public List<WalletShareService.FamilyWallet> families = new List<WalletShareService.FamilyWallet>();
@@ -254,6 +256,43 @@ public with sharing class OpportunityRadarController {
         return recsByAccount;
     }
 
+    private static final Decimal EOK = 100000000;
+
+    /**
+     * Whitespace spans two orders of magnitude across the book while the propensity score spans two,
+     * so multiplying them raw makes the score irrelevant and sorts the radar by company size. A log
+     * scale against a fixed reference (Whitespace_Reference_Eok) compresses the money term back to the
+     * same range as the score, and being fixed rather than relative to the visible set keeps a customer's
+     * position from moving when a filter changes.
+     *
+     * @param whitespace addressable whitespace in won
+     * @return 0..100
+     */
+    @TestVisible
+    private static Decimal whitespaceScore(Decimal whitespace) {
+        Decimal eok = (whitespace ?? 0) / EOK;
+        if (eok <= 0) {
+            return 0;
+        }
+        Double reference = Math.log10(1 + RadarSettings.whitespaceReferenceEok().doubleValue());
+        Double scaled = Math.log10(1 + eok.doubleValue()) / reference * 100;
+        // a Decimal literal here would pick Math.min(Decimal, Decimal) and hand back a Decimal
+        Double capped = scaled > 100 ? 100 : scaled;
+        return Decimal.valueOf(capped).setScale(2, System.RoundingMode.HALF_UP);
+    }
+
+    /**
+     * @return true when any wallet family carries a Won deal of ours, past or present
+     */
+    private static Boolean hasDealHistory(WalletShareService.AccountWallet wallet) {
+        for (WalletShareService.FamilyWallet familyWallet : wallet.byFamily.values()) {
+            if (familyWallet.hasDeal == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static RadarDTO assemble(Set<Id> accountIds, Map<Id, List<Recommendation__c>> recsByAccount) {
         Map<Id, WalletShareService.AccountWallet> wallets = WalletShareService.compute(accountIds, Date.today());
         Map<Id, Integer> lastContact = RadarScoreService.lastContactDays(accountIds);
@@ -321,7 +360,12 @@ public with sharing class OpportunityRadarController {
                 row.topType = row.recommendations[0].type;
                 row.topProduct = row.recommendations[0].productName;
             }
-            row.priority = (row.whitespace ?? 0) * (row.propensity ?? 0);
+            row.whitespaceScore = whitespaceScore(row.whitespace);
+            row.hasDealHistory = hasDealHistory(wallet);
+            // A prospect with a huge balance sheet would otherwise outrank every live customer purely on
+            // size, which is not a queue an RM can work through today.
+            Decimal reach = row.hasDealHistory ? 1 : RadarSettings.newLogoPriorityPct() / 100;
+            row.priority = row.whitespaceScore * (row.propensity ?? 0) * reach;
             if (row.propensity != null && row.propensity >= 75 && row.whitespace > 0) {
                 dto.priorityCount++;
             }

@@ -86,7 +86,7 @@
                             <template for:each={yTicks} for:item="t">
                                 <text key={t.y} class="axis-tick" x="66" y={t.y} text-anchor="end" dominant-baseline="middle">{t.label}점</text>
                             </template>
-                            <text class="axis-title" x={xTitleX} y={xTitleY} text-anchor="middle">화이트스페이스 = 고객 지갑 − 우리 잔액 (억, 제곱근 스케일)</text>
+                            <text class="axis-title" x={xTitleX} y={xTitleY} text-anchor="middle">화이트스페이스 = 접근가능 지갑 − 우리 잔액 (억, 제곱근 스케일)</text>
                             <text class="axis-title" x="22" y={yTitleY} text-anchor="middle" transform={yTitleTransform}>성공 가능성 (점)</text>
                             <text class="zone-label zone-label_high" x={zoneLabelX} y={zoneLabelY} text-anchor="start">우선 공략 · 공백 크고 가능성 {priorityScore}점 이상</text>
                             <text class="zone-label zone-label_nurture" x={nurtureLabelX} y={nurtureLabelY} text-anchor="start">육성 · 관찰</text>
@@ -104,7 +104,7 @@
                             <span><i class="legend-dot upsell"></i>업셀 (거래 중, 점유율 확대)</span>
                             <span><i class="legend-dot crosssell"></i>크로스셀 (신규 상품)</span>
                             <span><i class="legend-dot rollover"></i>만기차환 (만기 도래)</span>
-                            <span><i class="legend-bubble"></i>버블 크기 = 예상 지갑</span>
+                            <span><i class="legend-bubble"></i>버블 크기 = 접근가능 지갑</span>
                             <span><i class="legend-dot selected"></i>선택됨</span>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                             <div id="account-summary-content" class={summaryContentClass}>
                                 <div class="detail-metrics">
                                     <div><span>지갑 점유율</span><strong>{detail.shareLabel}</strong></div>
-                                    <div><span>예상 지갑</span><strong>{detail.walletLabel}</strong></div>
+                                    <div><span>접근가능 지갑</span><strong title={detail.reportedWalletTitle}>{detail.walletLabel}</strong></div>
                                     <div><span>화이트스페이스</span><strong class="accent">{detail.whitespaceLabel}</strong></div>
                                     <div><span>성공 가능성</span><strong>{detail.propensityLabel}</strong></div>
                                 </div>
@@ -194,20 +194,20 @@
 
             <template lwc:if={isAppMode}>
                 <section class="account-list">
-                    <div class="panel-heading"><div><h2>기업별 기회 큐</h2><p>버블 또는 기업명을 클릭하면 추천 근거가 갱신됩니다.</p></div><span class="chart-count">정렬 기준: 공백 × 성공 가능성</span></div>
+                    <div class="panel-heading"><div><h2>기업별 기회 큐</h2><p>버블 또는 기업명을 클릭하면 추천 근거가 갱신됩니다.</p></div><span class="chart-count" title="화이트스페이스는 로그 정규화(0~100)해서 곱하므로 규모가 점수를 덮지 않습니다">정렬 기준: 공백(정규화) × 성공 가능성</span></div>
                     <div class="table-wrap">
                         <table class="queue">
-                            <thead><tr><th scope="col">순위</th><th scope="col">기업</th><th scope="col">산업군</th><th scope="col">지갑 점유율</th><th scope="col">예상 지갑</th><th scope="col">화이트스페이스</th><th scope="col">성공 가능성</th><th scope="col">추천</th><th scope="col">담당</th></tr></thead>
+                            <thead><tr><th scope="col">순위</th><th scope="col">기업</th><th scope="col">산업군</th><th scope="col" title="접근가능 지갑 대비 우리 잔액">지갑 점유율</th><th scope="col" class="num" title="재무제표 지갑 × 목표 점유율 — 우리가 현실적으로 가져올 수 있는 몫">접근가능 지갑</th><th scope="col" class="num" title="접근가능 지갑 − 우리 잔액">화이트스페이스</th><th scope="col" class="num">성공 가능성</th><th scope="col">추천</th><th scope="col">담당</th></tr></thead>
                             <tbody>
                                 <template for:each={tableRows} for:item="a">
                                     <tr key={a.accountId} class={a.rowClass}>
                                         <td>{a.rank}</td>
-                                        <th scope="row"><button class="row-button account-name" data-id={a.accountId} onclick={handleSelect}>{a.name}</button></th>
+                                        <th scope="row"><button class="row-button account-name" data-id={a.accountId} onclick={handleSelect}>{a.name}</button><template lwc:if={a.isNewLogo}><span class="new-logo" title="거래 이력이 없어 우선순위를 낮춰 배치합니다">신규</span></template></th>
                                         <td>{a.industry}</td>
-                                        <td><div class="share-cell"><span>{a.shareLabel}</span><span class="share-track"><span class="share-fill" style={a.shareStyle}></span></span></div></td>
-                                        <td>{a.walletLabel}</td>
-                                        <td class="whitespace">{a.whitespaceLabel}</td>
-                                        <td class="score">{a.propensityLabel}</td>
+                                        <td><div class="share-cell"><span>{a.shareLabel}</span><span class="share-track" title={a.shareTitle}><span class={a.shareFillClass} style={a.shareStyle}></span></span></div></td>
+                                        <td class="wallet num">{a.walletLabel}</td>
+                                        <td class="whitespace num">{a.whitespaceLabel}</td>
+                                        <td class="score num">{a.propensityLabel}</td>
                                         <td><span class={a.topPillClass}>{a.topType}</span> {a.topLabel}</td>
                                         <td>{a.ownerName}</td>
                                     </tr>
@@ -228,7 +228,7 @@
 
         <footer class="component-footer">
             <span><i class="legend-dot upsell"></i>업셀</span><span><i class="legend-dot crosssell"></i>크로스셀</span><span><i class="legend-dot rollover"></i>만기차환</span>
-            <span class="footer-note">지갑 = 최신 재무제표(DART) · 점수 = 유사 Won·접점·신호·관계 가중합</span>
+            <span class="footer-note">접근가능 지갑 = 최신 재무제표(DART) × 목표 점유율 · 점수 = 유사 Won·접점·신호·관계 가중합 · 순위 = 화이트스페이스(로그 정규화) × 성공 가능성 · 거래 이력 없는 기업은 50% 반영</span>
         </footer>
 
         <template lwc:if={emailComposerOpen}>

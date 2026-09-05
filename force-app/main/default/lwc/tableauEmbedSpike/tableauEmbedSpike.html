@@ -1,0 +1,23 @@
+<template>
+    <div class="wrap">
+        <div class="bar">
+            <span class="title">Tableau 임베드 스파이크</span>
+            <button class="btn" data-s="A" onclick={runA}>A. v3 모듈</button>
+            <button class="btn" data-s="B" onclick={runB}>B. v2 클래식</button>
+            <button class="btn" data-s="C" onclick={runC}>C. 순수 iframe</button>
+            <button class="btn ghost" onclick={reset}>초기화</button>
+        </div>
+
+        <div class="cols">
+            <div class="vizcol">
+                <div class="vizbox" lwc:dom="manual"></div>
+            </div>
+            <div class="logcol">
+                <div class="loghdr">로그</div>
+                <pre class="log">{logText}</pre>
+                <div class="loghdr">마지막 선택 페이로드</div>
+                <pre class="log payload">{payloadText}</pre>
+            </div>
+        </div>
+    </div>
+</template>

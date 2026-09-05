@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>보니 완료 배너</masterLabel>
+    <description>docs/60 별건 — 마스코트 보니(깃발 포즈)와 완료 메시지를 보여주는 배너. Flow 화면·레코드 페이지용. modal=true 면 팝업으로 뜨고 [확인] 시 Flow 종료(retURL 로 이동).</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="title" type="String" label="제목" default="완료되었습니다."/>
+            <property name="subtitle" type="String" label="부제"/>
+            <property name="pose" type="String" label="포즈(flag/main/chart/tablet)" default="flag"/>
+            <property name="size" type="Integer" label="이미지 크기(px)" default="96"/>
+            <property name="modal" type="Boolean" label="팝업으로 표시" default="false"/>
+            <property name="position" type="String" label="팝업 위치(center/top)" default="center"/>
+            <property name="buttonLabel" type="String" label="팝업 버튼 라벨(클릭 시 Flow 종료)" default="확인"/>
+            <!-- 미사용. Flow v13~15 가 참조 중이라 삭제 불가(구버전 삭제 후 제거 가능) -->
+            <property name="navigateToRecordId" type="String" label="(미사용) 이동 레코드 Id" role="inputOnly"/>
+            <property name="recordId" type="String" label="(미사용) 폴백 레코드 Id" role="inputOnly"/>
+        </targetConfig>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage">
+            <property name="title" type="String" label="제목" default="완료되었습니다."/>
+            <property name="subtitle" type="String" label="부제"/>
+            <property name="pose" type="String" label="포즈(flag/main/chart/tablet)" default="flag"/>
+            <property name="size" type="Integer" label="이미지 크기(px)" default="96"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

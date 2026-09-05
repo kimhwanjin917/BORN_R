@@ -1,0 +1,117 @@
+<template>
+    <article class="dashboard-card" aria-labelledby="dashboard-title">
+        <header class="card-header">
+            <div>
+                <p class="eyebrow">OPPORTUNITY PIPELINE</p>
+                <h2 id="dashboard-title">{opportunityTitle}</h2>
+            </div>
+            <div class="header-meta">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>현재 단계: <strong>{activeStage}</strong></span>
+            </div>
+        </header>
+
+        <div class="path-wrap">
+            <ol class="path" aria-label="기회 영업 단계">
+                <template for:each={stageItems} for:item="item">
+                    <li key={item.stage} class={item.itemClass}>
+                        <button
+                            class="stage-button"
+                            type="button"
+                            data-stage={item.stage}
+                            aria-current={item.ariaCurrent}
+                            onclick={handleStageClick}>
+                            <span class="stage-label">
+                                <template if:true={item.isComplete}>
+                                    <span class="check" aria-hidden="true">✓</span>
+                                </template>
+                                {item.stage}
+                            </span>
+                        </button>
+                    </li>
+                </template>
+            </ol>
+        </div>
+
+        <div class="main-grid">
+            <div>
+                <div class="summary" aria-label="기회 요약 정보">
+                    <div class="metric">
+                        <span class="metric-label">계정 이름</span>
+                        <strong class="metric-value accent">{accountName}</strong>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">기회 이름</span>
+                        <strong class="metric-value">{opportunityTitle}</strong>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">소유자</span>
+                        <strong class="metric-value accent">{ownerName}</strong>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">예상 종료일</span>
+                        <strong class="metric-value">{closeDate}</strong>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">금액</span>
+                        <strong class="metric-value">{amount}</strong>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">확률 (%)</span>
+                        <strong class="metric-value">{probability}</strong>
+                    </div>
+                </div>
+
+                <section class="panel" aria-labelledby="checklist-heading">
+                    <div class="panel-heading">
+                        <span class="panel-icon" aria-hidden="true">☷</span>
+                        <h3 id="checklist-heading">{activeStage} 단계 체크리스트</h3>
+                    </div>
+                    <div class="checklist">
+                        <div class="checklist-row">
+                            <span class="checklist-label">
+                                <span class="checklist-mark done" aria-hidden="true">✓</span>
+                                견적서 공유
+                            </span>
+                            <span class="badge done">완료</span>
+                        </div>
+                        <div class="checklist-row">
+                            <span class="checklist-label">
+                                <span class="checklist-mark progress" aria-hidden="true"></span>
+                                법무 검토
+                            </span>
+                            <span class="badge progress">진행 중</span>
+                        </div>
+                        <div class="checklist-row">
+                            <span class="checklist-label">
+                                <span class="checklist-mark" aria-hidden="true"></span>
+                                최종 의사결정자 미팅
+                            </span>
+                            <span class="badge">대기</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="panel next-panel" aria-labelledby="next-heading">
+                <div class="panel-heading">
+                    <span class="panel-icon" aria-hidden="true">⚑</span>
+                    <h3 id="next-heading">다음 단계</h3>
+                </div>
+                <div class="next-content">
+                    <div>
+                        <p class="next-label">{nextStage}</p>
+                        <p class="next-copy">{nextStageCopy}</p>
+                    </div>
+                    <lightning-button
+                        variant="brand"
+                        label={completionLabel}
+                        disabled={isClosed}
+                        onclick={handleComplete}
+                        class="complete-button">
+                    </lightning-button>
+                </div>
+            </section>
+        </div>
+    </article>
+</template>

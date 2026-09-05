@@ -43,6 +43,13 @@ export default class OpportunityKpiCard extends NavigationMixin(LightningElement
         }
     }
 
+    // 헤더 배지는 오늘 날짜 기준 분기를 자동으로 따라간다 (myKpiCard의
+    // periodLabel 배지와 같은 규격).
+    get periodLabel() {
+        const now = new Date();
+        return `${now.getFullYear()} ${Math.floor(now.getMonth() / 3) + 1}분기`;
+    }
+
     get totalDisplay() {
         return `${this.pipeline.totalCount}건`;
     }

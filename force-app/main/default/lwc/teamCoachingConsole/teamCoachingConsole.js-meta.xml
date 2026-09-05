@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>팀장 코칭 콘솔</masterLabel>
+    <description>Tableau 팀장 대시보드를 임베드하고, 마크 선택을 받아 Slack 코칭 발송·목표 수정을 수행한다. Opportunity 는 조회하지 않는다.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+</LightningComponentBundle>

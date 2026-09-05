@@ -26,6 +26,14 @@ public with sharing class LeadConvertService {
     @TestVisible
     private static final String DEFAULT_OPP_RECORD_TYPE = 'RP_Deal';
 
+    // 위 매핑의 역방향. 표준 Convert 화면은 RM 이 Opportunity RecordType 을 직접 고르는데,
+    // 그 선택에서 상품군을 되짚어 이름·기준 상품을 맞춘다 (추천값이 아니라 고른 RT 기준).
+    @TestVisible
+    private static final Map<String, String> RECOMMENDATION_BY_OPP_RECORD_TYPE = new Map<String, String>{
+        'RP_Deal' => 'RP',
+        'Deal' => '회사채'
+    };
+
     // docs/51: 추천 상품군 → Product2.Family. 전환된 Opportunity 의 기준 상품(Primary_Product__c)을
     // 같은 상품군의 대표 상품으로 채운다. Product_Family__c 는 Formula 라 자동으로 따라온다.
     @TestVisible
@@ -129,7 +137,16 @@ public with sharing class LeadConvertService {
             return responses;
         }
 
-        List<Database.LeadConvertResult> convertResults = Database.convertLead(conversions, false);
+        // 이 경로(「미팅 확정」·활동 이벤트 자동 전환)에는 RecordType 을 고를 화면이 없다.
+        // 그래서 아래 LeadConvertedTrigger 가 추천 상품군으로 RecordType 을 정해 준다.
+        // 표준 Convert 화면에서 온 전환은 RM 이 이미 골랐으므로 그 선택을 덮지 않는다.
+        List<Database.LeadConvertResult> convertResults;
+        codePathConversion = true;
+        try {
+            convertResults = Database.convertLead(conversions, false);
+        } finally {
+            codePathConversion = false;
+        }
 
         // Gather the created record Ids for the successful conversions.
         Map<Id, Id> accountIdByLeadId = new Map<Id, Id>();
@@ -225,6 +242,12 @@ public with sharing class LeadConvertService {
 
     private static Boolean defaultsInProgress = false;
 
+    // convertLeads Invocable 이 돌린 전환인지 표시한다. true 면 RecordType 을 고를 화면이
+    // 없었다는 뜻이라 추천 상품군으로 정해 주고, false(표준 Convert 버튼·API)면 이미 붙어
+    // 있는 RecordType 이 RM 의 선택이므로 그대로 둔다.
+    @TestVisible
+    private static Boolean codePathConversion = false;
+
     // ─── Private Helpers ─────────────────────────────────────────────────
 
     /**
@@ -247,19 +270,39 @@ public with sharing class LeadConvertService {
             Schema.SObjectType.Opportunity.getRecordTypeInfosByDeveloperName();
         Map<String, Product2> productByFamily = queryDefaultProductByFamily();
         Map<Id, String> accountNameById = queryAccountNames(accountIdByLeadId.values());
+        // 표준 Convert 화면 경로에서만 필요하다 — RM 이 고른 RecordType 을 읽기 위해서.
+        Map<Id, Opportunity> createdOpps = codePathConversion
+            ? new Map<Id, Opportunity>()
+            : queryOpportunityRecordTypes(opportunityIdByLeadId.values());
         List<Opportunity> updates = new List<Opportunity>();
         for (Id leadId : opportunityIdByLeadId.keySet()) {
             Lead sourceLead = leadsById.get(leadId);
+            Id opportunityId = opportunityIdByLeadId.get(leadId);
             String recommendation = sourceLead == null ? null : sourceLead.Recommended_Product_Family__c;
             if (!OPP_RECORD_TYPE_BY_FAMILY.containsKey(recommendation)) {
                 recommendation = DEFAULT_RECOMMENDATION;
             }
-            Schema.RecordTypeInfo rt = rtByDevName.get(OPP_RECORD_TYPE_BY_FAMILY.get(recommendation));
-            Opportunity opp = new Opportunity(Id = opportunityIdByLeadId.get(leadId));
+            Opportunity opp = new Opportunity(Id = opportunityId);
             Boolean changed = false;
-            if (rt != null && rt.isAvailable()) {
-                opp.RecordTypeId = rt.getRecordTypeId();
-                changed = true;
+
+            // 표준 Convert 화면에서 RP Deal 을 골랐는데 추천이 회사채라는 이유로 회사채 딜이
+            // 되던 문제(2026-09-01). RM 이 고른 RecordType 이 추천값보다 우선이다. 이름·기준
+            // 상품도 고른 RT 에서 되짚은 상품군으로 맞춰 셋이 서로 어긋나지 않게 한다.
+            Opportunity created = createdOpps.get(opportunityId);
+            if (created != null && created.RecordTypeId != null) {
+                String chosen = created.RecordType == null
+                    ? null
+                    : RECOMMENDATION_BY_OPP_RECORD_TYPE.get(created.RecordType.DeveloperName);
+                if (String.isNotBlank(chosen)) {
+                    recommendation = chosen;
+                }
+                // RecordTypeId 는 건드리지 않는다 — 매핑에 없는 RT 라도 RM 의 선택이다.
+            } else {
+                Schema.RecordTypeInfo rt = rtByDevName.get(OPP_RECORD_TYPE_BY_FAMILY.get(recommendation));
+                if (rt != null && rt.isAvailable()) {
+                    opp.RecordTypeId = rt.getRecordTypeId();
+                    changed = true;
+                }
             }
             Product2 product = productByFamily.get(PRODUCT_FAMILY_BY_RECOMMENDATION.get(recommendation));
             if (product != null) {
@@ -312,6 +355,37 @@ public with sharing class LeadConvertService {
         return assembled.length() > OPP_NAME_MAX_LENGTH
             ? assembled.left(OPP_NAME_MAX_LENGTH)
             : assembled;
+    }
+
+    /**
+     * RecordType just assigned to each created Opportunity. Only the standard Convert
+     * screen lets the RM pick one, so this is queried only on that path — 「미팅 확정」
+     * 같은 코드 경로에서는 고른 값이 없어 조회할 이유가 없다.
+     *
+     * 조회가 막히면(FLS·공유) 빈 Map 을 돌려준다. 그러면 호출부는 추천 상품군 기준의
+     * 예전 동작으로 떨어질 뿐, 전환 자체는 막지 않는다.
+     * @param opportunityIds Created Opportunity Ids
+     * @return Opportunity(Id, RecordTypeId, RecordType.DeveloperName) keyed by Id
+     */
+    private static Map<Id, Opportunity> queryOpportunityRecordTypes(List<Id> opportunityIds) {
+        Map<Id, Opportunity> oppById = new Map<Id, Opportunity>();
+        if (opportunityIds == null || opportunityIds.isEmpty()) {
+            return oppById;
+        }
+        try {
+            for (Opportunity opp : [
+                SELECT Id, RecordTypeId, RecordType.DeveloperName
+                FROM Opportunity
+                WHERE Id IN :opportunityIds
+                WITH USER_MODE
+            ]) {
+                oppById.put(opp.Id, opp);
+            }
+        } catch (Exception e) {
+            System.debug(LoggingLevel.ERROR,
+                'Opportunity RecordTypes not readable: ' + e.getMessage());
+        }
+        return oppById;
     }
 
     /**

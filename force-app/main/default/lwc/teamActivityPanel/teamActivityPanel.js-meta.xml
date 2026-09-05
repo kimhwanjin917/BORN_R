@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>체류 히트맵 &amp; RM KPI 현황</masterLabel>
+    <description>팀장 팀의 단계별 평균 체류 히트맵(RM×단계), RM KPI 상세 테이블, 활동량 대비 성과 산점도.</description>
+</LightningComponentBundle>

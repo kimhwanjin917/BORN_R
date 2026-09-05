@@ -1,0 +1,29 @@
+<template>
+    <template lwc:if={modal}>
+        <!-- 팝업 모드: 반투명 배경 + 가운데 카드. [확인] 으로 레코드 이동 -->
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="boni-done-title" class={modalClass}>
+            <div class="slds-modal__container">
+                <div class="slds-modal__content card">
+                    <img class="boni boni--pop" src={imageUrl} style={imageStyle} alt="보니" />
+                    <p id="boni-done-title" class="title title--modal">{title}</p>
+                    <template lwc:if={subtitle}>
+                        <p class="subtitle subtitle--modal">{subtitle}</p>
+                    </template>
+                    <button class="slds-button slds-button_brand confirm" onclick={handleConfirm}>{buttonLabel}</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template lwc:else>
+        <div class="banner">
+            <img class="boni" src={imageUrl} style={imageStyle} alt="보니" />
+            <div class="text">
+                <p class="title">{title}</p>
+                <template lwc:if={subtitle}>
+                    <p class="subtitle">{subtitle}</p>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>
